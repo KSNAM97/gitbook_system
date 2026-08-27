@@ -371,11 +371,17 @@ SELECT * FROM member WHERE last_login IS NULL;
 
 #### 🚨 시나리오 3. UPDATE 시 WHERE 절 누락으로 전체 데이터 수정
 
-- **증상:** `UPDATE member SET status='INACTIVE';` → 모든 회원 상태가 일괄 변경됨.
-- **원인:** WHERE 절 없이 UPDATE 실행 시 테이블 전체 행이 업데이트됨.
-- **해결/예방:**
-  - UPDATE 실행 전 반드시 `SELECT * FROM member WHERE 조건;` 으로 대상 확인.
-  - 운영 DB에서는 `SET sql_safe_updates=1;` 설정으로 WHERE 없는 UPDATE 차단.
+```sql
+-- 실수
+UPDATE member SET status = 'INACTIVE';   -- WHERE 없음 → 전체 회원 상태 일괄 변경
+
+-- 실행 전 반드시 SELECT로 대상 확인
+SELECT * FROM member WHERE 조건;
+-- 확인 후 UPDATE
+UPDATE member SET status = 'INACTIVE' WHERE 조건;
+```
+
+**예방:** 운영 DB에서는 `SET sql_safe_updates = 1;` 설정으로 WHERE 없는 UPDATE 차단.
 
 #### 🚨 시나리오 4. ORDER BY 별칭 참조 오류
 
@@ -400,4 +406,3 @@ SELECT * FROM member WHERE last_login IS NULL;
 > - ORDER BY: ASC(오름차순, 기본) / DESC(내림차순), 다중 정렬 시 쉼표 구분
 > - LIKE: `%`(0개 이상 임의 문자) / `_`(정확히 1자) / 대소문자 주의 → `LOWER()` 활용
 > - UPDATE·DELETE는 **반드시 WHERE 절로 대상 한정** — 없으면 전체 변경
-> - 관련: 🗄️ DB - 데이터와 데이터베이스 기초 · 🔧 DB - SQL 문법 (DDL·DML·DCL) · 📋 emp·dept 테이블 정의 및 데이터 · 📊 DB - GROUP BY·HAVING·집계함수
