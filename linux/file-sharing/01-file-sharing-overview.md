@@ -58,7 +58,9 @@ NFS는 UID/GID가 서버·클라이언트 간 일치해야 권한이 자연스�
 
 ## 2. 🛠️ 표준 확인 (Configuration)
 
-### 2-1. 설치 여부 확인
+> **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
+
+### Step 1. 설치 여부 확인
 
 ```bash
 rpm -qa | grep samba                       # Samba 관련 패키지 확인
@@ -67,7 +69,7 @@ rpm -qa | grep rpcbind                     # rpcbind 확인
 rpm -qa | grep cifs-utils                  # cifs 마운트 도구 확인
 ```
 
-### 2-2. 필요 패키지 설치
+### Step 2. 필요 패키지 설치
 
 ```bash
 dnf install -y samba samba-client samba-common cifs-utils   # Samba 서버·클라이언트

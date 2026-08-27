@@ -276,13 +276,17 @@ getfacl <경로>
 
 ## 2. 🛠️ 표준 설정 템플릿 (Configuration)
 
-### 2-1. 권한 확인
+> **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판. 본인 소유 객체는 일반 사용자 권한으로 충분하며, 타 소유 객체 변경은 `sudo`/root 권한이 필요하다.
+
+### Step 1. 권한 확인
 
 ```bash
 ls -l /path/to/file
 ls -ld /path/to/directory
 stat -c '%A %a %U:%G %n' /path/to/object
 ```
+
+> **참고:** `ls -l 디렉터리`는 디렉터리 **내부** 목록을, `ls -ld 디렉터리`는 디렉터리 **자체**의 권한을 보여준다. 둘을 혼동하면 잘못된 진단으로 이어지기 쉽다.
 
 차이:
 
@@ -293,7 +297,7 @@ ls -ld /net    # /net 디렉터리 자체
 
 ---
 
-### 2-2. 숫자 방식
+### Step 2. 숫자 방식
 
 ```text
 r = 4
@@ -326,7 +330,7 @@ chmod 770 team-directory
 
 ---
 
-### 2-3. 심볼릭 방식
+### Step 3. 심볼릭 방식
 
 대상:
 
@@ -358,13 +362,15 @@ chmod u=rw,g=r,o= config.conf
 
 ---
 
-### 2-4. 재귀 권한 변경
+### Step 4. 재귀 권한 변경
 
 모든 객체에 같은 권한:
 
 ```bash
 chmod -R 750 /project
 ```
+
+> **주의:** `chmod -R`은 파일과 디렉터리를 구분하지 않고 동일한 권한을 적용한다. 디렉터리에는 탐색용 `x`가 필요하지만 일반 파일에는 불필요한 경우가 많으므로, 대문자 `X` 또는 `find ... -type d/-type f` 조합으로 구분 적용을 권장한다.
 
 파일과 디렉터리를 구분:
 
@@ -383,7 +389,7 @@ chmod -R g+rX /project
 
 ---
 
-### 2-5. 기본 생성 권한과 umask
+### Step 5. 기본 생성 권한과 umask
 
 일반적인 생성 요청 모드:
 
@@ -415,7 +421,7 @@ umask -S
 
 ---
 
-### 2-6. 실습 — `777` 공유 디렉터리
+### Step 6. 실습 — `777` 공유 디렉터리
 
 root:
 
@@ -438,7 +444,7 @@ ls -l /net
 
 ---
 
-### 2-7. 실습 — 읽기 전용 파일 삭제
+### Step 7. 실습 — 읽기 전용 파일 삭제
 
 root:
 
@@ -465,7 +471,7 @@ chmod 1777 /net
 
 ---
 
-### 2-8. 실습 — Other가 `-wx`
+### Step 8. 실습 — Other가 `-wx`
 
 ```bash
 chmod 773 /net
@@ -489,7 +495,7 @@ cd·생성 가능
 
 ---
 
-### 2-9. 실습 — Other가 `r-x`
+### Step 9. 실습 — Other가 `r-x`
 
 ```bash
 chmod 775 /net
@@ -512,7 +518,7 @@ touch /net/GuestF
 
 ---
 
-### 2-10. 실습 — Other가 `rw-`
+### Step 10. 실습 — Other가 `rw-`
 
 ```bash
 mkdir -p /permission-test
@@ -533,7 +539,7 @@ touch /permission-test/new-file
 
 ---
 
-### 2-11. 목적별 권장 권한
+### Step 11. 목적별 권장 권한
 
 개인 전용:
 

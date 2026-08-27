@@ -19,7 +19,9 @@ MariaDB 계정 생성과 권한 부여는 `CREATE USER '사용자'@'호스트' I
 
 ## 2. 🛠️ 표준 설정 템플릿 (Configuration)
 
-### 2-1. MariaDB 설치 및 서비스 시작
+> **적용 환경:** MariaDB/MySQL 계열 RDBMS.
+
+### Step 1. MariaDB 설치 및 서비스 시작
 
 ```bash
 # 설치
@@ -36,7 +38,7 @@ systemctl enable mariadb
 systemctl status mariadb
 ```
 
-### 2-2. 보안 초기 설정 (`mysql_secure_installation`)
+### Step 2. 보안 초기 설정 (`mysql_secure_installation`)
 
 ```bash
 mysql_secure_installation
@@ -49,7 +51,7 @@ mysql_secure_installation
 # 7. 권한 테이블 리로드: y
 ```
 
-### 2-3. MariaDB 접속 및 계정·권한 설정
+### Step 3. MariaDB 접속 및 계정·권한 설정
 
 ```sql
 -- 접속
@@ -68,7 +70,7 @@ FLUSH PRIVILEGES;
 exit
 ```
 
-### 2-4. 방화벽 설정 (외부 접속 허용)
+### Step 4. 방화벽 설정 (외부 접속 허용)
 
 ```bash
 firewall-cmd --permanent --add-port=3306/tcp
@@ -80,7 +82,7 @@ firewall-cmd --list-port      # 3306/tcp 출력 확인
 firewall-cmd --list-service   # mysql 항목 확인
 ```
 
-### 2-5. 외부 접속 허용 설정 (bind-address)
+### Step 5. 외부 접속 허용 설정 (bind-address)
 
 ```bash
 # 설정 파일 편집
@@ -93,7 +95,7 @@ bind-address=0.0.0.0
 systemctl restart mariadb
 ```
 
-### 2-6. MySQL Workbench 설치
+### Step 6. MySQL Workbench 설치
 
 ```
 # 다운로드 경로

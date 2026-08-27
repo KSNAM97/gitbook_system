@@ -56,7 +56,9 @@ www  IN  AAAA  2001:43A1:9900:D3::871C:671
 
 ## 2. 🛠️ 표준 설정 템플릿 (Configuration)
 
-### 2-1. 레코드 조합 예시
+> **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
+
+### Step 1. 레코드 조합 예시
 
 ```text
 $TTL 1D
@@ -74,7 +76,7 @@ www     IN      A       192.168.10.100
 ftp     IN      A       192.168.10.200
 ```
 
-### 2-2. serial 갱신 습관
+### Step 2. serial 갱신 습관
 
 zone 파일을 수정할 때마다 serial 값을 반드시 증가시켜야 한다. 그렇지 않으면 Secondary 서버가 변경 사실을 인지하지 못한다.
 
@@ -83,7 +85,7 @@ vi /var/named/soldesk.com.db     # serial 값을 20260721 → 20260722로 증가
 systemctl restart named
 ```
 
-### 2-3. 문법 검증
+### Step 3. 문법 검증
 
 ```bash
 named-checkzone soldesk.com /var/named/soldesk.com.db

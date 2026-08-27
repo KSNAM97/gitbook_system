@@ -90,7 +90,9 @@ DHCP 서버 . . . . . . . . . : 192.168.10.254
 
 ## 2. 🛠️ 표준 설정 템플릿 (Configuration)
 
-### 2-1. 기존 DHCP 임대 주소 제거
+> **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
+
+### Step 1. 기존 DHCP 임대 주소 제거
 
 ```bash
 nmcli connection down ens160        # ens160 down 전환(SSH 접속 중이면 세션 즉시 끊김 주의)
@@ -107,7 +109,7 @@ C:\Users\aaa> ipconfig /renew       # 새 주소 요청(DHCP 서버가 없으면
 
 ---
 
-### 2-2. 패키지 설치 및 방화벽 개방
+### Step 2. 패키지 설치 및 방화벽 개방
 
 ```bash
 dnf install -y dhcp-server
@@ -130,7 +132,7 @@ firewall-cmd --list-service
 
 ---
 
-### 2-3. dhcpd.conf 작성
+### Step 3. dhcpd.conf 작성
 
 ```bash
 vi /etc/dhcp/dhcpd.conf
@@ -154,11 +156,11 @@ subnet 192.168.10.0 netmask 255.255.255.0 {          # 서비스할 네트워크
 }
 ```
 
-> `range`에는 서버·게이트웨이·프린터 등 고정 IP 장비의 주소가 포함되지 않도록 설계한다. 고정 IP 대역과 동적 대역을 분리하는 것이 관리에 유리하다.
+> **참고:** `range`에는 서버·게이트웨이·프린터 등 고정 IP 장비의 주소가 포함되지 않도록 설계한다. 고정 IP 대역과 동적 대역을 분리하는 것이 관리에 유리하다.
 
 ---
 
-### 2-4. 서비스 기동
+### Step 4. 서비스 기동
 
 ```bash
 systemctl status dhcpd               # 기동 전 상태(inactive)
@@ -181,7 +183,7 @@ DHCPACK on 192.168.10.150 to 00:0c:29:a1:c1:54
 
 ---
 
-### 2-5. 클라이언트 확인
+### Step 5. 클라이언트 확인
 
 Linux 클라이언트는 IP 주소가 없으면 SSH 접속이 불가능하므로 콘솔로 접속해야 한다.
 

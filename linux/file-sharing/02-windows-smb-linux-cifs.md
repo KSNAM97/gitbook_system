@@ -49,7 +49,9 @@ Windows 방화벽에서 "파일 및 프린터 공유"가 허용되어 있어야 
 
 ## 2. 🛠️ 표준 설정 템플릿 (Configuration)
 
-### 2-1. Linux에 클라이언트 패키지 설치
+> **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
+
+### Step 1. Linux에 클라이언트 패키지 설치
 
 ```bash
 dnf install -y samba-client samba-common samba-winbind cifs-utils
@@ -60,7 +62,7 @@ rpm -qa | grep samba                       # 설치 확인
 
 ---
 
-### 2-2. 공유 목록 확인 (smbclient)
+### Step 2. 공유 목록 확인 (smbclient)
 
 ```bash
 smbclient -L 192.168.10.131                # 공유 목록 조회
@@ -88,7 +90,7 @@ smbclient //192.168.10.131/winShare -U root   # ls, get, put 사용 가능
 
 ---
 
-### 2-3. 임시 마운트
+### Step 3. 임시 마운트
 
 ```bash
 mkdir /smbClient                                            # 마운트포인트 생성
@@ -113,7 +115,7 @@ df -h | grep smbClient                     # 용량 확인
 
 ---
 
-### 2-4. 파일 복사 테스트
+### Step 4. 파일 복사 테스트
 
 ```bash
 cp -r /etc/a* /smbClient/                  # 테스트 데이터 복사
@@ -124,7 +126,7 @@ CIFS 마운트에서는 Linux 퍼미션이 그대로 보이지 않고 `file_mode
 
 ---
 
-### 2-5. fstab 영구 마운트
+### Step 5. fstab 영구 마운트
 
 마운트는 서버 재부팅 시 해제되므로 자동 마운트를 설정한다.
 
@@ -156,7 +158,7 @@ findmnt /smbClient                         # 최종 확인
 
 ---
 
-### 2-6. credentials 파일로 비밀번호 분리(권장)
+### Step 6. credentials 파일로 비밀번호 분리(권장)
 
 `/etc/fstab`은 누구나 읽을 수 있으므로 비밀번호를 직접 적으면 노출된다.
 
@@ -175,7 +177,7 @@ fstab에는 credentials를 지정한다.
 //192.168.10.131/winShare  /smbClient  cifs  credentials=/root/.smbcred,iocharset=utf8,_netdev  0 0
 ```
 
-> 실습에서는 평문 비밀번호를 쓰더라도, 운영 환경에서는 반드시 credentials 파일(권한 600)을 사용한다.
+> **참고:** 실습에서는 평문 비밀번호를 쓰더라도, 운영 환경에서는 반드시 credentials 파일(권한 600)을 사용한다.
 
 ---
 

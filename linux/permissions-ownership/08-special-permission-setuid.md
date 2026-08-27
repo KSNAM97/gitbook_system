@@ -104,6 +104,8 @@ S → Set-UID는 있으나 Owner 실행 권한 없음
 
 ## 2. 🛠️ 설정 및 안전한 확인
 
+> **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
+
 Set-UID 설정:
 
 ```bash

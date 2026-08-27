@@ -37,7 +37,9 @@ ls -ld /home/guest/work/old
 
 ## 2. 🛠️ 표준 개념 정리 (Configuration)
 
-### 2-1. 경로 이동
+> **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
+
+### Step 1. 경로 이동
 
 ```bash
 pwd                                # 현재 위치
@@ -48,7 +50,7 @@ cd ~guest                          # guest 홈
 cd -                                # 직전 디렉터리
 ```
 
-### 2-2. 목록 조회
+### Step 2. 목록 조회
 
 ```bash
 ls                                 # 이름 목록
@@ -61,7 +63,7 @@ ls -lt | head                     # 최근 수정 항목
 ls -lS | head                     # 크기가 큰 항목
 ```
 
-### 2-3. 디렉터리 생성과 삭제
+### Step 3. 디렉터리 생성과 삭제
 
 ```bash
 mkdir /backup
@@ -73,7 +75,7 @@ rm -r directory                   # 디렉터리 재귀 삭제
 rm -rf -- directory               # 확인 없는 재귀 삭제
 ```
 
-### 2-4. 파일 복사
+### Step 4. 파일 복사
 
 ```bash
 cp source destination
@@ -84,7 +86,7 @@ cp -u source destination
 cp -n source destination
 ```
 
-### 2-5. 파일 이동과 이름 변경
+### Step 5. 파일 이동과 이름 변경
 
 ```bash
 mv old-name new-name
@@ -93,7 +95,7 @@ mv -n source destination
 mv -t /destination/ source1 source2
 ```
 
-### 2-6. 와일드카드
+### Step 6. 와일드카드
 
 ```text
 *       0개 이상의 문자
@@ -113,7 +115,7 @@ printf '%s\n' /etc/??????.conf
 cp -a /etc/skel/. /home/newuser/
 ```
 
-### 2-7. 덮어쓰기 옵션
+### Step 7. 덮어쓰기 옵션
 
 | 옵션 | `cp` | `mv` | 설명 |
 |---|---:|---:|---|
@@ -122,7 +124,7 @@ cp -a /etc/skel/. /home/newuser/
 | `-n` | O | O | 기존 파일 유지 |
 | `-u` | O | O | 원본이 최신일 때 처리 |
 
-### 2-8. 표준 실습 환경
+### Step 8. 표준 실습 환경
 
 ```bash
 mkdir -p /lab/linux/projectA/src

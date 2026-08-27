@@ -62,7 +62,9 @@ umask -S
 
 ## 2. 🛠️ 표준 설정 템플릿 (Configuration)
 
-### 2-1. 현재 셸에서 변경
+> **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
+
+### Step 1. 현재 셸에서 변경
 
 ```bash
 umask 0027
@@ -75,7 +77,7 @@ umask
 umask -S
 ```
 
-### 2-2. 생성 결과 검증
+### Step 2. 생성 결과 검증
 
 ```bash
 mkdir umask-test
@@ -94,7 +96,7 @@ stat -c '%a %A %n' testD testF
 644 -rw-r--r-- testF
 ```
 
-### 2-3. `umask 0002`
+### Step 3. `umask 0002`
 
 ```bash
 umask 0002
@@ -109,7 +111,7 @@ touch mode0002F
 664 mode0002F
 ```
 
-### 2-4. `umask 0011`
+### Step 4. `umask 0011`
 
 ```bash
 umask 0011
@@ -124,7 +126,7 @@ touch mode0011F
 666 mode0011F
 ```
 
-### 2-5. `umask 0033`
+### Step 5. `umask 0033`
 
 ```bash
 umask 0033
@@ -139,7 +141,7 @@ touch mode0033F
 644 mode0033F
 ```
 
-### 2-6. 영구 설정 위치
+### Step 6. 영구 설정 위치
 
 사용자별 후보:
 

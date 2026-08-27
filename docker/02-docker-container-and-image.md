@@ -32,6 +32,8 @@ COPY와 ADD도 자주 비교되는데, 둘 다 파일 복사는 지원하지만 
 
 ## 2. 🛠️ 표준 설정 템플릿 (Configuration)
 
+> **적용 환경:** Docker Engine (Compose V2 내장) 설치 환경.
+
 ### Q5. 실전 Dockerfile 예시 (Node.js)
 
 ```dockerfile

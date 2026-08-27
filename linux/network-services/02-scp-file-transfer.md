@@ -58,13 +58,15 @@ scp guest@192.168.10.100:/temp/sol-a* /client         # 와일드카드
 scp guest@192.168.10.100:/SHARE/{rpc,resolv.conf,subgid,subuid} /client  # 중괄호 확장
 ```
 
-> 중괄호 확장이나 여러 소스를 나열하는 방식은 파일마다 인증을 요구할 수 있다. 반복 입력이 번거로우면 공개키 인증을 설정하거나 `tar`로 묶어 한 번에 전송하는 방법을 검토한다.
+> **참고:** 중괄호 확장이나 여러 소스를 나열하는 방식은 파일마다 인증을 요구할 수 있다. 반복 입력이 번거로우면 공개키 인증을 설정하거나 `tar`로 묶어 한 번에 전송하는 방법을 검토한다.
 
 ---
 
 ## 2. 🛠️ 표준 설정 템플릿 (Configuration)
 
-### 2-1. 사전 확인 및 방화벽 개방
+> **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
+
+### Step 1. 사전 확인 및 방화벽 개방
 
 ```bash
 rpm -qa | grep openssh
@@ -81,7 +83,7 @@ firewall-cmd --list-services
 
 ---
 
-### 2-2. 다운로드 (Server → Client)
+### Step 2. 다운로드 (Server → Client)
 
 ```bash
 scp guest@192.168.10.100:/temp/aliases /client              # 단일 파일
@@ -102,7 +104,7 @@ ls -l /client
 
 ---
 
-### 2-3. 업로드 (Client → Server)
+### Step 3. 업로드 (Client → Server)
 
 ```bash
 scp /scpC/exports guest@192.168.10.100:/temp                 # 단일 파일
@@ -112,7 +114,7 @@ scp -r /scpC/project guest@192.168.10.100:/temp               # 디렉터리
 
 ---
 
-### 2-4. Windows에서 SCP 사용
+### Step 4. Windows에서 SCP 사용
 
 Windows 10 이상은 OpenSSH 클라이언트가 기본 포함되어 cmd·PowerShell에서 바로 사용할 수 있다. 리눅스는 경로 구분자로 `/`를, Windows는 `\`를 사용한다.
 

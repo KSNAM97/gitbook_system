@@ -55,14 +55,16 @@ Hardware RAID와 Software RAID를 비교하면, 연산 주체가 컨트롤러(Ha
 
 ## 2. 🛠️ 표준 설정 템플릿 (Configuration)
 
-### 2-1. mdadm 패키지 확인 및 설치
+> **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
+
+### Step 1. mdadm 패키지 확인 및 설치
 
 ```bash
 rpm -qa | grep mdadm          # mdadm 설치 여부 확인
 dnf install -y mdadm          # Rocky·RHEL 계열에서 mdadm 설치
 ```
 
-### 2-2. 현재 디스크·RAID 상태 확인
+### Step 2. 현재 디스크·RAID 상태 확인
 
 ```bash
 ls -ld /dev/sd*               # 인식된 디스크 장치 목록 확인
@@ -73,7 +75,7 @@ cat /proc/mdstat              # 현재 조립된 Software RAID 상태 확인
 mdadm --detail --scan         # 조립된 RAID 요약 정보 확인
 ```
 
-> 실습 환경에서는 신규 디스크(`/dev/sdb`, `/dev/sdc`…)가 파티션 테이블이 없는 **Raw 디스크** 상태로 인식됩니다. `fdisk`로 파티션을 먼저 생성한 뒤 RAID 멤버로 사용하는 것이 표준 흐름입니다.
+> **참고:** 실습 환경에서는 신규 디스크(`/dev/sdb`, `/dev/sdc`…)가 파티션 테이블이 없는 **Raw 디스크** 상태로 인식됩니다. `fdisk`로 파티션을 먼저 생성한 뒤 RAID 멤버로 사용하는 것이 표준 흐름입니다.
 
 ---
 

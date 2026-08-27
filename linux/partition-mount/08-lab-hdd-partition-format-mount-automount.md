@@ -70,6 +70,8 @@
 
 ## 2. 🛠️ 단계별 실습 (Configuration)
 
+> **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
+
 ### STEP 0. 작업 전 주의사항
 
 이 실습의 파티션·포맷 명령은 다음 디스크의 기존 데이터를 파괴한다.

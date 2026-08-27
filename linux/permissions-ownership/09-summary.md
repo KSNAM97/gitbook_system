@@ -43,6 +43,8 @@ Linux 접근 권한은 프로세스의 UID·GID, 상위 경로의 탐색 권한,
 
 ## 표준 구성 예시 (Configuration)
 
+> **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
+
 개인 디렉터리:
 
 ```bash

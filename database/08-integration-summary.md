@@ -33,7 +33,9 @@ GROUP BY · HAVING의 핵심 원리는, GROUP BY가 동일 값 행들을 그룹�
 
 ## 2. 🛠️ 표준 개념 정리 (Configuration)
 
-### 2-1. 10개 문서 요약 흐름도
+> **적용 환경:** MariaDB/MySQL 계열 RDBMS.
+
+### Step 1. 10개 문서 요약 흐름도
 
 ```text
 [1] 데이터와 DB 기초   → 데이터≠정보, DB 필요성, MariaDB 설치·보안 설정·계정·방화벽
@@ -55,7 +57,7 @@ GROUP BY · HAVING의 핵심 원리는, GROUP BY가 동일 값 행들을 그룹�
 [7] SQL 퀵 레퍼런스
 ```
 
-### 2-2. SQL 명령어 계층 한눈에 보기
+### Step 2. SQL 명령어 계층 한눈에 보기
 
 | DDL | DML | DCL |
 |---|---|---|
@@ -66,7 +68,7 @@ GROUP BY · HAVING의 핵심 원리는, GROUP BY가 동일 값 행들을 그룹�
 | TRUNCATE TABLE | — | — |
 | RENAME | — | — |
 
-### 2-3. SELECT 전체 확장 흐름
+### Step 3. SELECT 전체 확장 흐름
 
 ```sql
 -- [기본] SELECT
@@ -114,7 +116,7 @@ HAVING COUNT(o.order_id) >= 2
 ORDER BY order_count DESC;
 ```
 
-### 2-4. MariaDB 설치~운영 흐름 한눈에
+### Step 4. MariaDB 설치~운영 흐름 한눈에
 
 ```text
 ① dnf install -y mariadb-server
@@ -130,7 +132,7 @@ ORDER BY order_count DESC;
 ⑧ Workbench 설치 후 연결 테스트
 ```
 
-### 2-5. 자료형 · 제약조건 핵심 선택 기준
+### Step 5. 자료형 · 제약조건 핵심 선택 기준
 
 | 저장 데이터 | 자료형 | 제약조건 |
 |---|---|---|
@@ -141,7 +143,7 @@ ORDER BY order_count DESC;
 | 고정 길이 코드 | `CHAR(n)` | — |
 | 긴 텍스트 | `TEXT` | — |
 
-### 2-6. emp · dept 관계 요약
+### Step 6. emp · dept 관계 요약
 
 ```text
 dept (1)  ──────── (N)  emp
@@ -158,7 +160,7 @@ dept (1)  ──────── (N)  emp
 - 직무: PRESIDENT(1) · MANAGER(3) · ANALYST(2) · SALESMAN(4) · CLERK(4)
 - `comm` 값이 있는 사원: SALESMAN 4명만 (ALLEN·WARD·MARTIN·TURNER)
 
-### 2-7. customer · orders 관계 요약
+### Step 7. customer · orders 관계 요약
 
 ```text
 customer (1)  ──────── (N)  orders

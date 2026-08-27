@@ -69,7 +69,9 @@ time xz <복사본>
 
 ## 2. 🛠️ 표준 개념 정리 (Configuration)
 
-### 2-1. 단일 파일 압축
+> **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
+
+### Step 1. 단일 파일 압축
 
 gzip:
 
@@ -100,7 +102,7 @@ xz -t file.xz
 
 ---
 
-### 2-2. tar 핵심 옵션
+### Step 2. tar 핵심 옵션
 
 | 옵션 | 의미 |
 |---|---|
@@ -117,7 +119,7 @@ xz -t file.xz
 
 ---
 
-### 2-3. 순수 tar
+### Step 3. 순수 tar
 
 생성:
 
@@ -146,7 +148,7 @@ tar -xvf archive.tar -C /restore
 
 ---
 
-### 2-4. 압축 결합 tar
+### Step 4. 압축 결합 tar
 
 gzip:
 
@@ -182,7 +184,7 @@ tar -cavf archive.tar.xz source/
 
 ---
 
-### 2-5. 안전한 백업 템플릿
+### Step 5. 안전한 백업 템플릿
 
 백업 디렉터리 생성:
 

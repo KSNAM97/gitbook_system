@@ -32,6 +32,8 @@ Client-L (192.168.10.130)  NFS Client → /NFS_CLIENT
 
 ## 2. 🛠️ 단계별 실습 - 서버 (Configuration)
 
+> **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
+
 ### STEP 1. 디스크·파티션 확인
 
 ```bash

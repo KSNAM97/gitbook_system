@@ -15,7 +15,9 @@ RAID와 LVM을 관통하는 단 하나의 차이는, RAID는 **디스크 결함�
 
 ## 2. 🛠️ 표준 개념 정리 (Configuration)
 
-### 2-1. RAID 3대 명령 흐름
+> **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
+
+### Step 1. RAID 3대 명령 흐름
 ```text
 fdisk(fd) → mdadm --create → mkfs → mount → fstab
 mdadm --detail / --examine   → 상태 확인
@@ -23,20 +25,20 @@ mdadm --fail / --remove / --add → 장애 대응
 mdadm --stop / --zero-superblock → 해체
 ```
 
-### 2-2. LVM 3대 명령 흐름
+### Step 2. LVM 3대 명령 흐름
 ```text
 fdisk(8e) → pvcreate → vgcreate → lvcreate → mkfs → mount → fstab
 vgextend + lvextend + resize2fs/xfs_growfs → 확장
 umount + e2fsck + resize2fs + lvreduce → 축소(ext4 전용)
 ```
 
-### 2-3. 파티션 타입 구분 ★
+### Step 3. 파티션 타입 구분 ★
 | 용도 | 타입 코드 | 별칭 |
 |---|---|---|
 | RAID 멤버 | `fd` | `raid` |
 | LVM 멤버 | `8e` | `lvm` |
 
-### 2-4. RAID 레벨 요약
+### Step 4. RAID 레벨 요약
 | 레벨 | 최소 디스크 | 결함 허용 | 공간 효율 |
 |---|---|---|---|
 | Linear | 2 | 없음 | 매우 높음(합산) |
@@ -45,7 +47,7 @@ umount + e2fsck + resize2fs + lvreduce → 축소(ext4 전용)
 | RAID 5 | 3 | 있음(1개) | 높음(N−1) |
 | RAID 6 | 4 | 있음(2개) | 중간(N−2) |
 
-### 2-5. RAID vs LVM 비교
+### Step 5. RAID vs LVM 비교
 | 구분 | RAID | LVM |
 |---|---|---|
 | 목적 | 안정성·성능·장애 허용 | 유연한 용량 관리·확장 |

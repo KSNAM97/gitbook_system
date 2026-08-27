@@ -15,7 +15,9 @@
 
 ## 2. 🛠️ 표준 개념 정리 (Configuration)
 
-### 2-1. 계정 관리 3대 명령 흐름
+> **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
+
+### Step 1. 계정 관리 3대 명령 흐름
 ```properties
 useradd  → 생성 (5곳 기록: passwd·shadow·group·홈·메일박스)
 usermod  → 수정 (셸·홈·UID·그룹)
@@ -24,7 +26,7 @@ passwd   → 비밀번호·잠금 정책
 su -     → 관리자 권한 승격 (환경까지 root 로 전환)
 ```
 
-### 2-2. 참조·기록 위치 총정리
+### Step 2. 참조·기록 위치 총정리
 | 구분 | 위치 | 역할 |
 |---|---|---|
 | 기록 | `/etc/passwd` | 계정 기본정보(UID/GID/홈/셸) |
@@ -36,7 +38,7 @@ su -     → 관리자 권한 승격 (환경까지 root 로 전환)
 | 참조 | `/etc/login.defs` | UID/비밀번호 정책 |
 | 참조 | `/etc/skel/` | 초기 환경 템플릿 |
 
-### 2-3. 그룹 모델(UPG)과 -g / -aG 구분 ★
+### Step 3. 그룹 모델(UPG)과 -g / -aG 구분 ★
 ```bash
 # UPG: useradd 시 계정과 동일 이름·GID의 전용 그룹 자동 생성
 useradd user1                  # → group user1 자동 생성
@@ -47,7 +49,7 @@ usermod -aG wheel user1        # Secondary Group 추가 (기존 유지 append)
 # ⚠️ -a 없는 -G 는 기존 보조그룹 전체 소실 → 운영 금지
 ```
 
-### 2-4. 권한 위임 2방식
+### Step 4. 권한 위임 2방식
 ```bash
 # ① wheel 그룹 (RHEL 표준)
 usermod -aG wheel opsuser       # sudoers 의 %wheel ALL=(ALL) ALL 라인 전제

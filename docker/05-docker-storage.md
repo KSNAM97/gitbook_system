@@ -81,6 +81,8 @@ docker run -d --name web \
 
 ## 2. 🛠️ 표준 설정 템플릿 (Configuration)
 
+> **적용 환경:** Docker Engine (Compose V2 내장) 설치 환경.
+
 ### Q7. Nginx autoindex 설정 예시
 
 ```nginx

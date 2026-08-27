@@ -26,7 +26,7 @@ cp -p /etc/passwd /backup/passwd.orig
 cp -a /etc/skel/. /home/newuser/
 ```
 
-> 일반 사용자는 자신에게 허용되지 않은 소유권을 설정할 수 없다. 따라서 `cp -p`를 사용하더라도 Root 소유권 보존이 실패하거나 복사한 사용자 소유로 생성될 수 있다.
+> **참고:** 일반 사용자는 자신에게 허용되지 않은 소유권을 설정할 수 없다. 따라서 `cp -p`를 사용하더라도 Root 소유권 보존이 실패하거나 복사한 사용자 소유로 생성될 수 있다.
 
 와일드카드가 어디에서 처리되는지에 대해서는, Bash와 같은 셸이 먼저 패턴을 파일 목록으로 확장한 뒤 명령에 전달한다.
 
@@ -56,7 +56,9 @@ shopt -p nullglob failglob
 
 ## 2. 🛠️ 표준 사용 템플릿 (Configuration)
 
-### 2-1. `cp` 기본 복사
+> **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
+
+### Step 1. `cp` 기본 복사
 
 원본 이름 그대로 복사:
 
@@ -77,7 +79,7 @@ cp /backup/inittab ./
 cp /backup/passwd /home/guest/guestPasswd
 ```
 
-### 2-2. 속성 보존 복사
+### Step 2. 속성 보존 복사
 
 ```bash
 cp -p /home/guest/guestPasswd /backup/
@@ -89,7 +91,7 @@ cp -p /home/guest/guestPasswd /backup/
 cp -a /etc/skel/. /home/newuser/
 ```
 
-### 2-3. 최신 파일만 복사
+### Step 3. 최신 파일만 복사
 
 ```bash
 cp -u /etc/passwd /backup/passwd
@@ -103,7 +105,7 @@ cp -pu /backup/login.defs /home/guest/logout.defs
 
 `-u`는 원본의 수정 시간이 목적지보다 최신이거나 목적지가 없을 때 복사한다. 파일 내용 자체를 비교하는 옵션은 아니다.
 
-### 2-4. 덮어쓰기 옵션
+### Step 4. 덮어쓰기 옵션
 
 | 옵션 | 의미 |
 |---|---|
@@ -124,7 +126,7 @@ mv -n source destination
 mv -u source destination
 ```
 
-> `-i`는 명령의 기본값이 아니다. 프롬프트가 자동으로 표시된다면 alias를 확인한다.
+> **참고:** `-i`는 명령의 기본값이 아니다. 프롬프트가 자동으로 표시된다면 alias를 확인한다.
 
 ```bash
 type cp
@@ -133,7 +135,7 @@ alias cp
 alias mv
 ```
 
-### 2-5. 디렉터리 복사
+### Step 5. 디렉터리 복사
 
 ```bash
 cp -R /etc/ssh /backup/
@@ -157,7 +159,7 @@ cp -a /etc/skel/. /home/newuser/
 cp -R /etc/skel/* /home/newuser/
 ```
 
-### 2-6. 다중 파일 복사
+### Step 6. 다중 파일 복사
 
 여러 원본을 하나의 목적지 디렉터리로 복사한다.
 
@@ -179,7 +181,7 @@ cp /lab/backup/resolv.conf.orig /home/guest/work/a/ &&
 cp /lab/backup/resolv.conf.orig /home/guest/work/b/
 ```
 
-### 2-7. `mv` 이동과 이름 변경
+### Step 7. `mv` 이동과 이름 변경
 
 이름 변경:
 
@@ -212,9 +214,9 @@ mv /home/guest/work/a /home/guest/work/old/
 mv -t /home/guest/work/old/ /home/guest/work/a
 ```
 
-> 파일 이동에는 원본 파일 자체의 쓰기 권한보다 원본이 들어 있는 디렉터리와 목적지 디렉터리에 대한 적절한 권한이 중요하다.
+> **참고:** 파일 이동에는 원본 파일 자체의 쓰기 권한보다 원본이 들어 있는 디렉터리와 목적지 디렉터리에 대한 적절한 권한이 중요하다.
 
-### 2-8. 와일드카드
+### Step 8. 와일드카드
 
 #### `*` — 0개 이상의 문자
 
@@ -252,7 +254,7 @@ ls -la /etc/skel
 cp -a /etc/skel/. /home/newuser/
 ```
 
-### 2-9. 와일드카드 사전 검증
+### Step 9. 와일드카드 사전 검증
 
 ```bash
 printf '%s\n' /etc/a*
@@ -266,7 +268,7 @@ printf '%s\n' /lab/backup/*.orig
 echo /etc/a*
 ```
 
-### 2-10. 이름 기준 검색과 `grep` 구분
+### Step 10. 이름 기준 검색과 `grep` 구분
 
 다음 명령은 `ls -l` 출력 전체에서 문자 `a`를 검색하므로 파일명만 검사하지 않는다.
 

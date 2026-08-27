@@ -41,7 +41,9 @@ tail -F /var/log/app.log
 
 ## 표준 개념 정리 (Configuration)
 
-### 2-1. 조회 명령어 선택
+> **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
+
+### Step 1. 조회 명령어 선택
 
 | 상황 | 명령어 | 설명 |
 |---|---|---|
@@ -62,7 +64,7 @@ file <파일>
 wc -l <파일>
 ```
 
-### 2-2. 조회 명령어
+### Step 2. 조회 명령어
 
 ```bash
 cat /etc/passwd
@@ -80,7 +82,7 @@ nl file.txt
 nl -ba file.txt
 ```
 
-### 2-3. 리다이렉션
+### Step 3. 리다이렉션
 
 ```bash
 command > file                 # 생성 또는 덮어쓰기
@@ -108,7 +110,7 @@ set -o noclobber
 command >| file
 ```
 
-### 2-4. Heredoc
+### Step 4. Heredoc
 
 변수와 명령 치환 허용:
 
@@ -137,7 +139,7 @@ option=value
 EOF
 ```
 
-### 2-5. Root 권한 파일 기록
+### Step 5. Root 권한 파일 기록
 
 잘못된 예:
 
@@ -161,7 +163,7 @@ option2=value2
 EOF
 ```
 
-### 2-6. `find` 기본 골격
+### Step 6. `find` 기본 골격
 
 ```bash
 find [시작 경로] [조건] [액션]
@@ -176,7 +178,7 @@ find / -type f -perm -4000 2>/dev/null
 find /home \( -nouser -o -nogroup \) -print
 ```
 
-### 2-7. `find` 액션
+### Step 7. `find` 액션
 
 ```bash
 find /etc -type f -name '*.conf' -print
@@ -201,7 +203,7 @@ find /tmp/myapp -type f -mtime +7 -print
 find /tmp/myapp -type f -mtime +7 -delete
 ```
 
-### 2-8. 표준 안전 패턴
+### Step 8. 표준 안전 패턴
 
 #### 대용량 파일 조회
 

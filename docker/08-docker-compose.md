@@ -197,6 +197,8 @@ Named Volume의 이름 규칙은 `프로젝트이름_볼륨이름` 형식으로 
 
 ## 2. 🛠️ 표준 설정 템플릿 (Configuration)
 
+> **적용 환경:** Docker Engine (Compose V2 내장) 설치 환경.
+
 ### Q5. Reverse Proxy 구성 예시 (Nginx)
 
 ```yaml

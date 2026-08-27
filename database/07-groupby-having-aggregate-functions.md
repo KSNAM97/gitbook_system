@@ -21,7 +21,9 @@ HAVING 절에 서브쿼리를 사용하는 이유는 조건으로 사용할 값�
 
 ## 2. 🛠️ 표준 설정 템플릿 (Configuration)
 
-### 2-1. GROUP BY 기본 형식
+> **적용 환경:** MariaDB/MySQL 계열 RDBMS.
+
+### Step 1. GROUP BY 기본 형식
 
 ```sql
 SELECT  그룹기준컬럼, 집계함수(컬럼)
@@ -32,7 +34,7 @@ GROUP BY 그룹기준컬럼
 [ORDER BY 정렬기준];
 ```
 
-### 2-2. GROUP BY 실습 쿼리 (EX1~EX6, emp 테이블)
+### Step 2. GROUP BY 실습 쿼리 (EX1~EX6, emp 테이블)
 
 ```sql
 -- EX1) 부서별(deptno) 사원 수를 구하시오
@@ -99,7 +101,7 @@ GROUP BY deptno;
 --     30 | 1690.000000
 ```
 
-### 2-3. HAVING 실습 쿼리 (EX1~EX9, emp 테이블)
+### Step 3. HAVING 실습 쿼리 (EX1~EX9, emp 테이블)
 
 ```sql
 -- 잘못된 예) WHERE에 집계함수 사용 → 오류
@@ -216,7 +218,7 @@ HAVING AVG(sal) > (
 --     20 | 2175.000000 | 2073.214286
 ```
 
-### 2-4. EX9 서브쿼리 실행 순서 해설
+### Step 4. EX9 서브쿼리 실행 순서 해설
 
 | 단계 | 내용 |
 |---|---|

@@ -34,7 +34,7 @@ sudo tee -a /etc/example.conf > /dev/null
 
 ## 증상별 즉시 대응표 (Configuration)
 
-### 2-1. 파일 조회
+### 1. 파일 조회
 
 | 증상 | 원인 | 조치 |
 |---|---|---|
@@ -44,7 +44,7 @@ sudo tee -a /etc/example.conf > /dev/null
 | 바이너리 출력 후 터미널 깨짐 | 바이너리 제어문자 출력 | `reset`, `file`, `strings` |
 | 파일 크기와 디스크 사용량 불일치 | 희소 파일·블록 할당 | `ls -lh`, `du -h` 비교 |
 
-### 2-2. 리다이렉션과 Heredoc
+### 2. 리다이렉션과 Heredoc
 
 | 증상 | 원인 | 조치 |
 |---|---|---|
@@ -55,7 +55,7 @@ sudo tee -a /etc/example.conf > /dev/null
 | `noclobber`인데 덮어쓰기 됨 | `>|` 또는 다른 도구 사용 | 명령 기록 확인 |
 | Heredoc가 종료되지 않음 | 종료 구분자 불일치 | 구분자를 단독 행에 작성 |
 
-### 2-3. `find`
+### 3. `find`
 
 | 증상 | 원인 | 조치 |
 |---|---|---|
@@ -69,7 +69,7 @@ sudo tee -a /etc/example.conf > /dev/null
 | `-delete` 과다 삭제 | 범위·조건 미검증 | `-print` 리허설 |
 | `xargs`가 입력 없이 실행 | 빈 입력 처리 | GNU `xargs -r` |
 
-### 2-4. 핵심 진단 명령어
+### 4. 핵심 진단 명령어
 
 ```bash
 ls -lh <파일>

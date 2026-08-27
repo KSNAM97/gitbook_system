@@ -83,7 +83,7 @@ ext4:
 - 축소는 일반적으로 마운트 해제 후 수행
 - 다양한 Linux 환경에서 널리 지원
 
-> 최대 파일·파일시스템 크기는 블록 크기, 커널, 배포판 지원 범위와 도구 버전에 따라 달라지므로 운영 설계에서는 해당 배포판 공식 지원 범위를 확인한다.
+> **참고:** 최대 파일·파일시스템 크기는 블록 크기, 커널, 배포판 지원 범위와 도구 버전에 따라 달라지므로 운영 설계에서는 해당 배포판 공식 지원 범위를 확인한다.
 
 **Journaling이란?**
 
@@ -185,7 +185,9 @@ mkfs 실행
 
 ## 2. 🛠️ 표준 설정 템플릿 (Configuration)
 
-### 2-1. 포맷 전 필수 확인
+> **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
+
+### Step 1. 포맷 전 필수 확인
 
 ```bash
 lsblk -f /dev/sdb
@@ -203,11 +205,11 @@ lvs
 cat /proc/mdstat
 ```
 
-> 포맷 대상이 맞다는 확신이 없으면 `mkfs`, `wipefs -a` 또는 강제 포맷을 실행하지 않는다.
+> **참고:** 포맷 대상이 맞다는 확신이 없으면 `mkfs`, `wipefs -a` 또는 강제 포맷을 실행하지 않는다.
 
 ---
 
-### 2-2. XFS 파일시스템 생성
+### Step 2. XFS 파일시스템 생성
 
 ```bash
 mkfs.xfs /dev/sdb1
@@ -225,7 +227,7 @@ mkfs.xfs -L DATA /dev/sdb1
 mkfs.xfs -f /dev/sdb1
 ```
 
-> `-f`는 기존 파일시스템을 덮어쓸 수 있는 파괴적 옵션이다.
+> **참고:** `-f`는 기존 파일시스템을 덮어쓸 수 있는 파괴적 옵션이다.
 
 검증:
 
@@ -250,7 +252,7 @@ xfs_repair /dev/sdb1
 
 ---
 
-### 2-3. ext4 파일시스템 생성
+### Step 3. ext4 파일시스템 생성
 
 ```bash
 mkfs.ext4 /dev/sdb2
@@ -283,11 +285,11 @@ umount /dev/sdb2
 e2fsck -f /dev/sdb2
 ```
 
-> 읽기·쓰기로 마운트된 ext4에 `e2fsck`를 실행하지 않는다.
+> **참고:** 읽기·쓰기로 마운트된 ext4에 `e2fsck`를 실행하지 않는다.
 
 ---
 
-### 2-4. 파일시스템 레이블 관리
+### Step 4. 파일시스템 레이블 관리
 
 통합 확인:
 
@@ -324,11 +326,11 @@ mkdir -p /data
 mount LABEL=DATA /data
 ```
 
-> 같은 시스템에 중복 LABEL이 있으면 장치 식별이 모호해질 수 있다.
+> **참고:** 같은 시스템에 중복 LABEL이 있으면 장치 식별이 모호해질 수 있다.
 
 ---
 
-### 2-5. Swap 파티션 생성
+### Step 5. Swap 파티션 생성
 
 ```bash
 lsblk -f /dev/sdb2
@@ -358,7 +360,7 @@ UUID=<swap-uuid>  none  swap  defaults  0 0
 
 ---
 
-### 2-6. Swap 파일 생성 예시
+### Step 6. Swap 파일 생성 예시
 
 ```bash
 fallocate -l 4G /swapfile
@@ -380,11 +382,11 @@ fstab:
 /swapfile  none  swap  defaults  0 0
 ```
 
-> Copy-on-Write 파일시스템에서는 별도 절차가 필요할 수 있다.
+> **참고:** Copy-on-Write 파일시스템에서는 별도 절차가 필요할 수 있다.
 
 ---
 
-### 2-7. XFS 확장
+### Step 7. XFS 확장
 
 ```bash
 findmnt /data
@@ -398,11 +400,11 @@ df -Th /data
 xfs_info /data
 ```
 
-> 하위 블록 장치, 파티션 또는 LVM LV의 용량을 먼저 늘려야 한다.
+> **참고:** 하위 블록 장치, 파티션 또는 LVM LV의 용량을 먼저 늘려야 한다.
 
 ---
 
-### 2-8. ext4 확장·축소 개념
+### Step 8. ext4 확장·축소 개념
 
 확장:
 
@@ -422,11 +424,11 @@ resize2fs /dev/sdb2
 → 검증
 ```
 
-> 축소 순서를 잘못 처리하면 데이터가 손상될 수 있다.
+> **참고:** 축소 순서를 잘못 처리하면 데이터가 손상될 수 있다.
 
 ---
 
-### 2-9. 여러 파티션에 파일시스템 생성 실습
+### Step 9. 여러 파티션에 파일시스템 생성 실습
 
 구성 목표:
 
@@ -474,7 +476,7 @@ lsblk -f /dev/sdb
 blkid /dev/sdb1 /dev/sdb2 /dev/sdb5 /dev/sdb6 /dev/sdb7 /dev/sdb8
 ```
 
-> Extended 파티션 자체인 `/dev/sdb3`에는 파일시스템을 생성하지 않는다. 실제 파일시스템은 Logical 파티션에 생성한다.
+> **참고:** Extended 파티션 자체인 `/dev/sdb3`에는 파일시스템을 생성하지 않는다. 실제 파일시스템은 Logical 파티션에 생성한다.
 
 ---
 
@@ -516,7 +518,7 @@ wipefs -a /dev/sdb1
 mkfs.xfs -f /dev/sdb1
 ```
 
-> `wipefs -a`는 데이터 전체를 안전하게 삭제하지 않는다.
+> **주의:** `wipefs -a`는 데이터 전체를 안전하게 삭제하지 않는다.
 
 ---
 

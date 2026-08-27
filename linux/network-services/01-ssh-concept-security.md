@@ -67,7 +67,9 @@ AllowGroups sshGroup                   # sshGroup 소속만 허용
 
 ## 2. 🛠️ 표준 설정 템플릿 (Configuration)
 
-### 2-1. root 직접 로그인 허용/차단
+> **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
+
+### Step 1. root 직접 로그인 허용/차단
 
 ```bash
 vi /etc/ssh/sshd_config
@@ -94,7 +96,7 @@ systemctl status sshd                  # 프로세스 동작 상태 확인
 
 ---
 
-### 2-2. 접속 경고 배너(Banner) 설정
+### Step 2. 접속 경고 배너(Banner) 설정
 
 ```bash
 vi /etc/ssh/ssh-banner
@@ -138,7 +140,7 @@ guest@192.168.10.100's password:
 
 ---
 
-### 2-3. 포트 변경 (22 → 2002)
+### Step 3. 포트 변경 (22 → 2002)
 
 ```bash
 vi /etc/ssh/sshd_config
@@ -173,7 +175,7 @@ Last login: Thu Jul 16 11:07:48 2026 from 192.168.10.1
 
 ---
 
-### 2-4. 인증 시도·대기 시간 제한
+### Step 4. 인증 시도·대기 시간 제한
 
 ```bash
 vi /etc/ssh/sshd_config
@@ -209,7 +211,7 @@ guest@192.168.10.100's password:
 
 ---
 
-### 2-5. 특정 계정·네트워크·그룹만 접속 허용
+### Step 5. 특정 계정·네트워크·그룹만 접속 허용
 
 특정 계정만 허용:
 
@@ -257,7 +259,7 @@ systemctl restart sshd
 
 sshGroup에 속하지 않은 guest는 접속이 거부되고, sshUser1은 정상 접속된다.
 
-> 실습 종료 후에는 `AllowUsers`·`AllowGroups` 라인을 삭제하거나 주석 처리해 원복한다. 설정을 남겨두면 이후 추가되는 계정이 의도치 않게 차단될 수 있다.
+> **주의:** 실습 종료 후에는 `AllowUsers`·`AllowGroups` 라인을 삭제하거나 주석 처리해 원복한다. 설정을 남겨두면 이후 추가되는 계정이 의도치 않게 차단될 수 있다.
 
 ---
 

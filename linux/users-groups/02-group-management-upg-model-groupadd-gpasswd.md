@@ -14,7 +14,9 @@ RHEL 계열이 UPG(User Private Group) 방식을 표준으로 채택한 이유�
 
 ## 2. 🛠️ 표준 설정 템플릿 (Configuration)
 
-### 2-1. 그룹 생성 / 삭제 기본
+> **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
+
+### Step 1. 그룹 생성 / 삭제 기본
 
 ```bash
 # 그룹 생성 (GID 자동 할당)
@@ -28,7 +30,7 @@ groupadd -g 2040 GroupD
 # 그룹 삭제 (⚠️ 해당 그룹을 Primary로 쓰는 계정이 하나라도 있으면 삭제 불가)
 groupdel GroupD
 ```
-### 2-2. Primary Group 변경 (-g)
+### Step 2. Primary Group 변경 (-g)
 
 ```bash
 # 홈디렉터리 소유그룹을 부서 그룹으로 정렬할 때 사용
@@ -40,7 +42,7 @@ id userA1
 # uid=1013(userA1) gid=1022(GroupA) groups=1022(GroupA)
 ```
 
-### 2-3. Secondary Group 추가 (-aG) — 운영 표준
+### Step 3. Secondary Group 추가 (-aG) — 운영 표준
 
 ```bash
 # 기존 그룹 유지 + 신규 그룹 추가 (append)
@@ -53,7 +55,7 @@ usermod -aG GroupB,GroupD userD3
 gpasswd -d userD2 GroupD
 ```
 
-### 2-4. 그룹/계정 정보 확인 3종 세트
+### Step 4. 그룹/계정 정보 확인 3종 세트
 
 ```bash
 id userD3                                  # 통합 정보

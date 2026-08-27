@@ -21,7 +21,9 @@
 
 ## 2. 🛠️ 표준 설정 템플릿 (Configuration)
 
-### 2-1. 계정 관리 관련 파일 7종 (필수 암기)
+> **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
+
+### Step 1. 계정 관리 관련 파일 7종 (필수 암기)
 
 | 파일 / 디렉터리 | 역할 | 접근 |
 |-----------------|------|------|
@@ -33,7 +35,7 @@
 | `/etc/skel/` | 신규 계정 초기 환경 파일 템플릿 | 전체 읽기 |
 | `/var/spool/mail/` | 사용자별 메일박스 자동 생성 | 각 사용자 |
 
-### 2-2. `/etc/passwd` 필드 해석 (7개 필드)
+### Step 2. `/etc/passwd` 필드 해석 (7개 필드)
 
 ```bash
 # 형식 : 계정명:비밀번호:UID:GID:Comment:홈디렉터리:로그인셸
@@ -47,7 +49,7 @@ guest:x:1000:1000:guest:/home/guest:/bin/bash
 ⑥ /home/guest   홈 디렉터리 절대경로
 ⑦ /bin/bash     로그인 셸
 ```
-### 2-3. useradd 기본 옵션 조회 / 수정
+### Step 3. useradd 기본 옵션 조회 / 수정
 
 ```bash
 # 현재 기본값 조회 (2가지 방법 - 결과 동일)
@@ -70,7 +72,7 @@ useradd -D -f 30                 # 비밀번호 만료 후 계정 비활성 대�
 vi /etc/default/useradd
 ```
 
-### 2-4. useradd 옵션 6종 (실무 필수)
+### Step 4. useradd 옵션 6종 (실무 필수)
 
 ```bash
 # -c : Comment (실명/부서/닉네임)  → SSH 로그 추적 시 필수
@@ -92,7 +94,7 @@ useradd -u 1100 -c "HR-Kim" -s /bin/bash -md /home/hrkim  hrkim
 useradd -c "Sales-User" -mk /etc/skel-sales -d /saleshome/user8  user8
 ```
 
-### 2-5. 부서별 skel 디렉터리 표준화 (온보딩 자동화)
+### Step 5. 부서별 skel 디렉터리 표준화 (온보딩 자동화)
 
 ```bash
 # [1] 부서별 skel 디렉터리 생성
@@ -114,7 +116,7 @@ useradd -c "hr-minji"   -mk /etc/skel-insa                     user7
 useradd -c "sales-saja" -mk /etc/skel-sales -d /saleshome/user8 user8
 ```
 
-### 2-6. passwd — 비밀번호 정책 관리 4대 옵션
+### Step 6. passwd — 비밀번호 정책 관리 4대 옵션
 
 ```bash
 # [설정 / 변경]
@@ -144,7 +146,7 @@ chage -l user1                             # 정책 조회
 chage -M 90 user1                          # 90일마다 비밀번호 변경 강제
 chage -E 2026-12-31 user1                  # 계정 만료일 지정 (계약직 등)
 ```
-### 2-7. usermod — 기존 계정 수정 4대 시나리오
+### Step 7. usermod — 기존 계정 수정 4대 시나리오
 
 ```bash
 # [셸 변경]
@@ -166,7 +168,7 @@ usermod -u 2000 user1
 chown -R 2000:2000 /home/user1             # 소유권 재설정 필수
 ```
 
-### 2-8. userdel — 계정 삭제 2가지 모드
+### Step 8. userdel — 계정 삭제 2가지 모드
 
 ```bash
 # [기본 삭제 - passwd/shadow/group 항목만 제거]
@@ -181,7 +183,7 @@ userdel -r user6
 userdel -rf user6                          # ⚠️ 실행 중 프로세스 데이터 손실 위험
 ```
 
-### 2-9. su — 관리자 권한 승격 (`su` vs `su -`)
+### Step 9. su — 관리자 권한 승격 (`su` vs `su -`)
 
 ```bash
 # [su - 환경변수 유지 (권장 X)]
@@ -206,7 +208,7 @@ $ su -c 'systemctl restart nginx' -        # root 로 명령 하나만 실행 �
 # root# exit  또는  Ctrl+D
 ```
 
-### 2-10. 로그인 실습 워크플로우 (안전 접속 표준)
+### Step 10. 로그인 실습 워크플로우 (안전 접속 표준)
 
 ```bash
 # [1] SSH 로는 일반 계정으로만 접속 (root 직접 접속 금지)

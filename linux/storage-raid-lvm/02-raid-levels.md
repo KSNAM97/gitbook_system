@@ -77,13 +77,15 @@ RAID 레벨을 한눈에 비교하면 다음과 같습니다.
 | RAID 5 | 3 | 있음(1개) | 높음(N−1) | 패리티 1개, 대중적 |
 | RAID 6 | 4 | 있음(2개) | 중간(N−2) | 패리티 2개, 안정성 높음 |
 
-> 공간 효율과 결함 허용은 트레이드오프 관계입니다. 데이터 중요도가 낮고 성능이 중요하면 RAID 0, 중요도가 높으면 RAID 1·5·6을 검토합니다.
+> **참고:** 공간 효율과 결함 허용은 트레이드오프 관계입니다. 데이터 중요도가 낮고 성능이 중요하면 RAID 0, 중요도가 높으면 RAID 1·5·6을 검토합니다.
 
 ---
 
 ## 2. 🛠️ 표준 설정 참고 (Configuration)
 
-### 2-1. RAID용 파티션 타입 지정
+> **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
+
+### Step 1. RAID용 파티션 타입 지정
 
 ```bash
 fdisk /dev/sdb
@@ -102,9 +104,9 @@ lsblk                          # 파티션 생성 확인
 fdisk -l /dev/sdb | grep raid  # raid 타입 파티션 확인
 ```
 
-> 파티션 타입 `fd`(Linux raid autodetect)는 관례적인 표식이며, `mdadm`은 파티션 타입과 무관하게 슈퍼블록으로 RAID를 인식할 수 있습니다. LVM용 파티션(`8e`)과 혼동하지 않도록 주의합니다.
+> **주의:** 파티션 타입 `fd`(Linux raid autodetect)는 관례적인 표식이며, `mdadm`은 파티션 타입과 무관하게 슈퍼블록으로 RAID를 인식할 수 있습니다. LVM용 파티션(`8e`)과 혼동하지 않도록 주의합니다.
 
-### 2-2. 레벨별 생성 형식 요약
+### Step 2. 레벨별 생성 형식 요약
 
 ```bash
 mdadm --create /dev/md0 --level=linear --raid-devices=2 /dev/sdb1 /dev/sdc1

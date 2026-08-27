@@ -25,6 +25,8 @@ ns.soldesk.com   →  192.168.10.100 (DNS)
 
 ## 2. 🛠️ 단계별 실습 (Configuration)
 
+> **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
+
 ### STEP 1. Server-A를 HTTP 서버로 구성
 
 httpd는 가장 널리 사용되는 아파치 웹서버 패키지이다.

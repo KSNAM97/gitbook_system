@@ -31,6 +31,8 @@ Windows (192.168.10.131)  Client
 
 ## 2. 🛠️ 단계별 실습 (Configuration)
 
+> **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
+
 ### STEP 1. 공유 디렉터리·그룹·계정 준비
 
 ```bash

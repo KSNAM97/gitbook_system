@@ -23,7 +23,9 @@ CONCAT 함수는 여러 개의 문자열이나 컬럼 값을 하나의 문자열
 
 ## 2. 🛠️ 표준 설정 템플릿 (Configuration)
 
-### 2-1. SELECT 기본 패턴
+> **적용 환경:** MariaDB/MySQL 계열 RDBMS.
+
+### Step 1. SELECT 기본 패턴
 
 ```sql
 -- 모든 컬럼 조회
@@ -44,7 +46,7 @@ SELECT ename, CONCAT(ename, '_USA') FROM emp;
 SELECT ename, CONCAT(ename, ' 사원') FROM emp;
 ```
 
-### 2-2. WHERE 절 조건 패턴
+### Step 2. WHERE 절 조건 패턴
 
 ```sql
 -- 단일 조건
@@ -71,7 +73,7 @@ SELECT * FROM member WHERE status = 'ACTIVE' OR age >= 35;
 SELECT * FROM member WHERE (age >= 30 AND age < 35) OR status = 'INACTIVE';
 ```
 
-### 2-3. ORDER BY 정렬 패턴
+### Step 3. ORDER BY 정렬 패턴
 
 ```sql
 -- 오름차순 (기본값, ASC 생략 가능)
@@ -102,7 +104,7 @@ FROM emp
 ORDER BY annual_salary ASC;
 ```
 
-### 2-4. LIKE 패턴 검색
+### Step 4. LIKE 패턴 검색
 
 ```sql
 -- 기본 패턴
@@ -129,7 +131,7 @@ WHERE ename LIKE 'A%' OR ename LIKE '%N';    -- A로 시작하거나 N으로 끝
 SELECT * FROM emp WHERE LOWER(ename) LIKE 's%';
 ```
 
-### 2-5. member 테이블 DML 실습 패턴
+### Step 5. member 테이블 DML 실습 패턴
 
 ```sql
 -- INSERT
@@ -153,7 +155,7 @@ DELETE FROM member WHERE member_id = 1;
 DELETE FROM member WHERE status = 'INACTIVE';
 ```
 
-### 2-6. emp 테이블 대표 조회 쿼리 모음
+### Step 6. emp 테이블 대표 조회 쿼리 모음
 
 ```sql
 -- 월급이 2000이상 3000미만인 사원 정보
@@ -178,7 +180,7 @@ FROM emp ORDER BY annual_salary ASC;
 SELECT * FROM emp WHERE hiredate > '1981-12-31';
 ```
 
-### 2-7. product_catalog 테이블 생성 및 데이터
+### Step 7. product_catalog 테이블 생성 및 데이터
 
 LIKE 실습에 사용하는 상품 카탈로그 테이블이다. 아래 DDL + INSERT를 먼저 실행해야 EX1~EX18 실습 쿼리가 동작한다.
 
@@ -276,7 +278,7 @@ INSERT INTO product_catalog VALUES
  'Event', 'OFFICE_SET', 'Mixed', 'Notebook mouse and keyboard package');
 ```
 
-### 2-8. product_catalog LIKE 실습 쿼리 모음
+### Step 8. product_catalog LIKE 실습 쿼리 모음
 
 ```sql
 -- Samsung으로 시작하는 상품

@@ -14,7 +14,9 @@ root 직접 접속을 차단하고, `wheel` 그룹 또는 `/etc/sudoers` 를 통
 
 ## 2. 🛠️ 표준 설정 템플릿 (Configuration)
 
-### 2-1. SSH root 직접 로그인 차단
+> **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
+
+### Step 1. SSH root 직접 로그인 차단
 
 ```properties
 # /etc/ssh/sshd_config
@@ -25,7 +27,7 @@ MaxAuthTries 3              # 인증 실패 허용 3회 → brute force 방어
 # ------------------------------------------------------------
 # 설정 반영 systemctl restart sshd
 ```
-### 2-2. `su` 명령을 wheel 그룹으로 제한 (PAM)
+### Step 2. `su` 명령을 wheel 그룹으로 제한 (PAM)
 
 ```bash
 # /etc/pam.d/su 에서 아래 줄의 주석 해제
@@ -43,7 +45,7 @@ su - root   # → Authentication failure 확인
 
 ---
 
-### 2-4. sudo 권한 위임 — 방식 ① wheel 그룹 (RHEL 표준)
+### Step 4. sudo 권한 위임 — 방식 ① wheel 그룹 (RHEL 표준)
 
 ```bash
 # [1] 대상 계정을 wheel 그룹에 '보조 그룹'으로 추가
@@ -56,7 +58,7 @@ usermod -aG wheel subroot
 gpasswd -d subroot wheel
 ```
 
-### 2-5. sudo 권한 위임 — 방식 ② sudoers 개별 등록
+### Step 5. sudo 권한 위임 — 방식 ② sudoers 개별 등록
 
 ```bash
 # ⚠️ 반드시 visudo 로 편집 (문법 오류 시 sudo 자체 잠금 사고 방지)
@@ -73,7 +75,7 @@ rootsub  ALL=(ALL)   ALL                # 풀 권한 위임
 # opsuser  ALL=(root) NOPASSWD: /bin/systemctl restart nginx, /usr/bin/tail -f /var/log/*
 ```
 
-### 2-6. 비밀번호 잠금/해제 (퇴사자·휴직자 대응)
+### Step 6. 비밀번호 잠금/해제 (퇴사자·휴직자 대응)
 
 ```bash
 passwd -S <user>          # 상태 조회 (PS/LK/NP)

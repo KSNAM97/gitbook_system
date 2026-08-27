@@ -10,6 +10,8 @@
 
 ## 2. 🛠️ 표준 설정 템플릿 (Configuration)
 
+> **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
+
 ### Step 1. 사전 준비 — root 직접 로그인 차단 + guest에 sudo 위임
 
 먼저 root 계정에서 `vi` 로 SSH 설정 파일을 열어 root 직접 로그인을 차단합니다.
@@ -46,7 +48,7 @@
 [root@localhost ~]# id guest
 uid=1000(guest) gid=1000(guest) groups=1000(guest),10(wheel)
 ```
-> ⚠️ 로그의 주석("yes를 no로 변경")은 두 동작이 합쳐진 표현입니다. 정확한 목표는 **"`#PermitRootLogin yes` 의 `#` 주석을 제거하고, 값을 `no` 로 설정"** 이며, 최종 파일 상태는 `PermitRootLogin no` 입니다.
+> **참고:** ⚠️ 로그의 주석("yes를 no로 변경")은 두 동작이 합쳐진 표현입니다. 정확한 목표는 **"`#PermitRootLogin yes` 의 `#` 주석을 제거하고, 값을 `no` 로 설정"** 이며, 최종 파일 상태는 `PermitRootLogin no` 입니다.
 ### Step 2. 프로젝트 홈 루트 3개 생성
 
 ```bash
@@ -106,7 +108,7 @@ sudo useradd -u 1301 -c "gitB_User2" -s /bin/bash -mk /etc/skel-b -d /gitB/gitB_
 sudo useradd -u 1302 -c "gitB_User3" -s /bin/csh  -mk /etc/skel-b -d /gitB/gitB_User3 buser3
 ```
 
-> 💡 huser1~3 은 Step 3에서 `HOME=/gitHQ`, `SKEL=/etc/skel` 기본값이 설정된 상태이므로 `-d`, `-k` 옵션 없이도 `/gitHQ/userXXX` 에 기본 skel이 적용됩니다. 반면 auser/buser 는 홈 경로와 skel이 기본값과 다르므로 `-mk`, `-d` 를 명시해야 합니다.
+> **참고:** 💡 huser1~3 은 Step 3에서 `HOME=/gitHQ`, `SKEL=/etc/skel` 기본값이 설정된 상태이므로 `-d`, `-k` 옵션 없이도 `/gitHQ/userXXX` 에 기본 skel이 적용됩니다. 반면 auser/buser 는 홈 경로와 skel이 기본값과 다르므로 `-mk`, `-d` 를 명시해야 합니다.
 
 ### Step 6. 부서 그룹 생성 & Primary/Secondary 할당
 
@@ -128,7 +130,7 @@ sudo usermod -aG groupB           auser1     # A  + B 프로젝트 협업
 sudo usermod -aG groupHQ          buser1     # B  + HQ 협업
 ```
 
-> 📌 로그 확인 결과, 보조 그룹은 `groupHQ`, `groupA`, `groupB` 순서로 생성되어 각각 GID `1331`, `1332`, `1333` 이 자동 할당되었습니다(`id` 출력의 `groupA=1331`, `groupB=1332`, `groupHQ=1334` 참고 — 중간에 다른 GID 소비가 있었던 것으로 보이므로 실제 값은 `id` 명령으로 반드시 확인).
+> **참고:** 📌 로그 확인 결과, 보조 그룹은 `groupHQ`, `groupA`, `groupB` 순서로 생성되어 각각 GID `1331`, `1332`, `1333` 이 자동 할당되었습니다(`id` 출력의 `groupA=1331`, `groupB=1332`, `groupHQ=1334` 참고 — 중간에 다른 GID 소비가 있었던 것으로 보이므로 실제 값은 `id` 명령으로 반드시 확인).
 
 ---
 

@@ -157,6 +157,8 @@ pull → create → start → pause ↔ unpause
 
 ## 2. 🛠️ 표준 설정 템플릿 (Configuration)
 
+> **적용 환경:** Docker Engine (Compose V2 내장) 설치 환경.
+
 ### Docker 설치 요약 (Rocky Linux)
 
 ```bash

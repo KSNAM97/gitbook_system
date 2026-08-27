@@ -55,6 +55,8 @@ S, T → 특수 권한은 있지만 해당 위치의 x가 없음
 
 ## 2. 🛠️ 설정 및 해제
 
+> **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
+
 Set-UID:
 
 ```bash

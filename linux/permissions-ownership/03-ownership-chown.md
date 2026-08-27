@@ -174,7 +174,9 @@ chown :groupB myfile
 
 ## 2. 🛠️ 표준 설정 템플릿 (Configuration)
 
-### 2-1. 소유자만 변경
+> **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판. 소유자 변경에는 root 또는 `CAP_CHOWN`이 필요하며, 그룹 변경은 소유자 본인이면서 대상 그룹에 속해 있어야 한다.
+
+### Step 1. 소유자만 변경
 
 ```bash
 chown user1 file
@@ -187,7 +189,7 @@ chown user1 file
 
 ---
 
-### 2-2. 소유자와 그룹 변경
+### Step 2. 소유자와 그룹 변경
 
 ```bash
 chown user1:teamA file
@@ -207,7 +209,7 @@ chown user1:teamA file
 
 ---
 
-### 2-3. 그룹만 변경
+### Step 3. 그룹만 변경
 
 ```bash
 chown :teamA file
@@ -223,7 +225,7 @@ chgrp teamA file
 
 ---
 
-### 2-4. `chown user:` 형식
+### Step 4. `chown user:` 형식
 
 ```bash
 chown user1: file
@@ -239,7 +241,7 @@ id user1
 
 ---
 
-### 2-5. 재귀 소유권 변경
+### Step 5. 재귀 소유권 변경
 
 ```bash
 chown -R user1:teamA /project
@@ -257,7 +259,7 @@ find /project -printf '%u:%g %p\n'
 find /project -printf '%u:%g %p\n'
 ```
 
-> `chown -R`은 사용자별 소유권을 모두 변경할 수 있다. 전체 하위 객체의 사용자 소유자를 정말 통일해야 하는 경우에만 사용한다.
+> **주의:** `chown -R`은 사용자별 소유권을 모두 변경할 수 있다. 전체 하위 객체의 사용자 소유자를 정말 통일해야 하는 경우에만 사용한다.
 
 그룹만 재귀 변경:
 
@@ -267,7 +269,7 @@ chgrp -R teamA /project
 
 ---
 
-### 2-6. 기준 파일과 동일하게 변경
+### Step 6. 기준 파일과 동일하게 변경
 
 ```bash
 chown --reference=reference-file target-file
@@ -281,7 +283,7 @@ stat -c '%U:%G %n' reference-file target-file
 
 ---
 
-### 2-7. 실습 — 소유자와 그룹 변경
+### Step 7. 실습 — 소유자와 그룹 변경
 
 ```bash
 mkdir -p /home/imsi
@@ -305,7 +307,7 @@ ls -l /home/imsi/aliases
 
 ---
 
-### 2-8. 일반 사용자의 그룹 변경
+### Step 8. 일반 사용자의 그룹 변경
 
 root:
 

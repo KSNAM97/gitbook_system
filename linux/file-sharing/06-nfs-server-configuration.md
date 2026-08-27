@@ -68,7 +68,9 @@ firewall-cmd --reload                      # 영구 설정을 런타임에 적�
 
 ## 2. 🛠️ 표준 설정 템플릿 (Configuration)
 
-### 2-1. 패키지 설치·확인
+> **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
+
+### Step 1. 패키지 설치·확인
 
 ```bash
 dnf install -y nfs-utils                   # NFS 서버·클라이언트 도구
@@ -78,7 +80,7 @@ rpm -qa | grep rpcbind                     # rpcbind 확인
 
 ---
 
-### 2-2. 방화벽 영구 허용
+### Step 2. 방화벽 영구 허용
 
 ```bash
 firewall-cmd --permanent --add-service=nfs         # NFS 서비스
@@ -105,11 +107,11 @@ firewall-cmd --permanent --remove-port=1049/tcp
 firewall-cmd --reload
 ```
 
-> NFSv4만 사용한다면 `nfs` 서비스(2049)만으로 충분하다. `showmount`를 쓰려면 `rpc-bind`와 `mountd`도 열어야 한다.
+> **참고:** NFSv4만 사용한다면 `nfs` 서비스(2049)만으로 충분하다. `showmount`를 쓰려면 `rpc-bind`와 `mountd`도 열어야 한다.
 
 ---
 
-### 2-3. 공유 디렉터리 생성
+### Step 3. 공유 디렉터리 생성
 
 ```bash
 mkdir /NFSS                                # 단일 공유 예
@@ -145,7 +147,7 @@ findmnt --verify --verbose
 
 ---
 
-### 2-4. exports 작성·적용
+### Step 4. exports 작성·적용
 
 ```bash
 ls -l /etc/exports                         # 기본은 빈 파일
@@ -174,7 +176,7 @@ exportfs -v                                # 적용 결과 확인
 
 ---
 
-### 2-5. 서비스 실행·자동 시작
+### Step 5. 서비스 실행·자동 시작
 
 ```bash
 systemctl start nfs-server                 # NFS 서버 시작
@@ -196,7 +198,7 @@ systemctl restart nfs-server               # 필요 시 재시작
 
 ---
 
-### 2-6. 공유 목록 확인
+### Step 6. 공유 목록 확인
 
 ```bash
 showmount -e                               # 로컬 서버의 export 목록
@@ -214,7 +216,7 @@ Export list for Server-A:
 
 ---
 
-### 2-7. 디렉터리 퍼미션 조정
+### Step 7. 디렉터리 퍼미션 조정
 
 exports의 `rw`만으로는 부족하고 실제 디렉터리 퍼미션도 맞아야 한다.
 

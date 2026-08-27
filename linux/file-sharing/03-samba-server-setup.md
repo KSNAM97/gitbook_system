@@ -25,7 +25,7 @@ UDP 137   NetBIOS Name Service
 UDP 138   NetBIOS Datagram Service
 ```
 
-> IP로 직접 접속(`\\192.168.10.100\SHARE`)만 사용한다면 `nmbd` 없이 `smbd`만으로도 동작한다. 이름 탐색이 필요할 때 `nmbd`를 함께 켠다.
+> **참고:** IP로 직접 접속(`\\192.168.10.100\SHARE`)만 사용한다면 `nmbd` 없이 `smbd`만으로도 동작한다. 이름 탐색이 필요할 때 `nmbd`를 함께 켠다.
 
 Samba 접속용 계정은 반드시 Linux에 먼저 존재해야 하며, 그 계정을 `smbpasswd -a`로 Samba 사용자 데이터베이스에 추가하고 별도의 SMB 비밀번호를 설정한다. 즉 Linux 로그인 비밀번호와 Samba 접속 비밀번호는 서로 다른 값일 수 있다.
 
@@ -56,7 +56,9 @@ smb.conf의 주요 옵션은 다음과 같다.
 
 ## 2. 🛠️ 표준 설정 템플릿 (Configuration)
 
-### 2-1. 패키지 설치
+> **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
+
+### Step 1. 패키지 설치
 
 ```bash
 dnf install -y samba samba-client samba-common       # Samba 서버·클라이언트
@@ -65,7 +67,7 @@ rpm -qa | grep samba                                 # 설치 확인
 
 ---
 
-### 2-2. 공유 디렉터리·계정·그룹 준비
+### Step 2. 공유 디렉터리·계정·그룹 준비
 
 ```bash
 mkdir /SHARE                               # 공유 디렉터리 생성
@@ -78,11 +80,11 @@ chmod 777 /SHARE                           # 실습용 권한
 ls -l / | grep SHARE                       # 권한 확인
 ```
 
-> `usermod -G`는 기존 보조 그룹을 덮어쓴다. 기존 그룹을 유지하려면 `-aG`를 사용한다.
+> **참고:** `usermod -G`는 기존 보조 그룹을 덮어쓴다. 기존 그룹을 유지하려면 `-aG`를 사용한다.
 
 ---
 
-### 2-3. Samba 비밀번호 등록
+### Step 3. Samba 비밀번호 등록
 
 ```bash
 passwd samba                               # Linux 로그인 비밀번호
@@ -102,7 +104,7 @@ smbpasswd -x samba                         # Samba DB에서 삭제
 
 ---
 
-### 2-4. 방화벽 설정
+### Step 4. 방화벽 설정
 
 ```bash
 firewall-cmd --permanent --add-service=samba          # samba 서비스 일괄 허용
@@ -121,11 +123,11 @@ firewall-cmd --list-services               # 허용 서비스 확인
 firewall-cmd --list-all                    # 전체 확인
 ```
 
-> `--add-service=samba`만으로도 137·138·139·445가 함께 허용된다. 개별 포트 추가는 중복이지만 실습 확인용으로는 문제 없다. `--permanent` 없이 추가한 규칙은 `--reload`나 재부팅 시 사라진다.
+> **참고:** `--add-service=samba`만으로도 137·138·139·445가 함께 허용된다. 개별 포트 추가는 중복이지만 실습 확인용으로는 문제 없다. `--permanent` 없이 추가한 규칙은 `--reload`나 재부팅 시 사라진다.
 
 ---
 
-### 2-5. smb.conf 공유 섹션 설정
+### Step 5. smb.conf 공유 섹션 설정
 
 ```bash
 cp -a /etc/samba/smb.conf /etc/samba/smb.conf.bak     # 원본 백업
@@ -155,7 +157,7 @@ testparm -s                                # 요약 출력
 
 ---
 
-### 2-6. SELinux 설정 (RHEL·Rocky 필수 확인)
+### Step 6. SELinux 설정 (RHEL·Rocky 필수 확인)
 
 ```bash
 getenforce                                 # SELinux 상태 확인
@@ -166,11 +168,11 @@ ls -Zd /SHARE                                          # samba_share_t 확인
 
 `semanage`가 없으면 `dnf install -y policycoreutils-python-utils`로 설치한다.
 
-> 권한과 설정이 모두 맞는데도 접근이 거부된다면 대부분 SELinux 컨텍스트 문제다. `ausearch -m avc -ts recent`로 거부 로그를 확인한다.
+> **참고:** 권한과 설정이 모두 맞는데도 접근이 거부된다면 대부분 SELinux 컨텍스트 문제다. `ausearch -m avc -ts recent`로 거부 로그를 확인한다.
 
 ---
 
-### 2-7. 데몬 시작·자동 실행
+### Step 7. 데몬 시작·자동 실행
 
 ```bash
 systemctl start smb                        # SMB 데몬 시작
@@ -192,7 +194,7 @@ systemctl restart smb nmb                  # 설정 반영
 
 ---
 
-### 2-8. Windows에서 접속
+### Step 8. Windows에서 접속
 
 ```text
 파일 탐색기 → 내 PC → 컴퓨터 → 네트워크 드라이브 연결

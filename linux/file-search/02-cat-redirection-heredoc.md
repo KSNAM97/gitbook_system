@@ -22,7 +22,7 @@ command > file
 command >> file
 ```
 
-> `>`와 `>>`는 `cat` 전용 기능이 아니라 셸이 처리하는 리다이렉션 연산자이다. `echo`, `printf`, `ls`, `find` 등 다른 명령에도 사용할 수 있다.
+> **참고:** `>`와 `>>`는 `cat` 전용 기능이 아니라 셸이 처리하는 리다이렉션 연산자이다. `echo`, `printf`, `ls`, `find` 등 다른 명령에도 사용할 수 있다.
 
 `>`가 위험한 이유는 셸이 명령 실행 전에 목적지 파일을 먼저 열고 기존 내용을 비우기 때문이다.
 
@@ -58,7 +58,9 @@ MY_TEXT
 
 ## 2. 🛠️ 표준 사용 템플릿 (Configuration)
 
-### 2-1. `>` — 파일 생성 및 덮어쓰기
+> **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
+
+### Step 1. `>` — 파일 생성 및 덮어쓰기
 
 파일 내용을 다른 파일로 출력한다.
 
@@ -87,9 +89,9 @@ diff -- /etc/passwd /home/guest/newfile &&
 echo "내용 일치"
 ```
 
-> 파일 크기가 같다는 사실만으로 내용까지 동일하다고 확정할 수 없다. `diff` 또는 `sha256sum`으로 검증한다.
+> **참고:** 파일 크기가 같다는 사실만으로 내용까지 동일하다고 확정할 수 없다. `diff` 또는 `sha256sum`으로 검증한다.
 
-### 2-2. 키보드 입력으로 파일 생성
+### Step 2. 키보드 입력으로 파일 생성
 
 ```bash
 cat > /home/guest/newfile2
@@ -131,18 +133,18 @@ Ctrl + D
 cat /home/guest/newfile2
 ```
 
-### 2-3. 빈 파일 생성 또는 파일 내용 비우기
+### Step 3. 빈 파일 생성 또는 파일 내용 비우기
 
 빈 파일 생성:
 
 ```bash
-> /tmp/empty-file
+> **참고:** /tmp/empty-file
 ```
 
 기존 파일의 크기를 0으로 만든다.
 
 ```bash
-> /var/log/app.log
+> **참고:** /var/log/app.log
 ```
 
 명령을 명확하게 표시하려면:
@@ -151,9 +153,9 @@ cat /home/guest/newfile2
 : > /var/log/app.log
 ```
 
-> 운영 로그를 직접 비우기 전에 서비스 동작, logrotate 정책 및 감사 요구사항을 확인해야 한다.
+> **참고:** 운영 로그를 직접 비우기 전에 서비스 동작, logrotate 정책 및 감사 요구사항을 확인해야 한다.
 
-### 2-4. `>>` — 기존 파일 끝에 내용 추가
+### Step 4. `>>` — 기존 파일 끝에 내용 추가
 
 ```bash
 cat > /home/guest/newfile3
@@ -188,7 +190,7 @@ cat /home/guest/newfile3
 printf '%s\n' '새로운 내용을 추가합니다.' >> /home/guest/newfile3
 ```
 
-### 2-5. 여러 파일 병합
+### Step 5. 여러 파일 병합
 
 실습 파일 생성:
 
@@ -237,7 +239,7 @@ cat /home/guest/a /home/guest/b |
 diff - /home/guest/c
 ```
 
-### 2-6. 여러 명령의 결과를 한 파일에 저장
+### Step 6. 여러 명령의 결과를 한 파일에 저장
 
 덮어쓰기:
 
@@ -261,7 +263,7 @@ diff - /home/guest/c
 } >> /var/log/system-report.log
 ```
 
-### 2-7. Heredoc 기본 사용
+### Step 7. Heredoc 기본 사용
 
 변수와 명령 치환 허용:
 
@@ -279,7 +281,7 @@ EOF
 cat /tmp/motd.example
 ```
 
-### 2-8. Heredoc 변수 치환 억제
+### Step 8. Heredoc 변수 치환 억제
 
 종료 구분자를 따옴표로 감싸면 변수, 명령 및 산술 치환이 실행되지 않는다.
 
@@ -297,7 +299,7 @@ EOF
 
 `$uri`가 셸 변수로 치환되지 않고 그대로 저장된다.
 
-### 2-9. Heredoc으로 기존 파일에 내용 추가
+### Step 9. Heredoc으로 기존 파일에 내용 추가
 
 ```bash
 cat >> /home/guest/testfile <<'EOF'
@@ -312,7 +314,7 @@ EOF
 tail -n 5 /home/guest/testfile
 ```
 
-### 2-10. `<<-EOF` — 선행 탭 제거
+### Step 10. `<<-EOF` — 선행 탭 제거
 
 ```bash
 cat > /tmp/hello.sh <<-'EOF'
@@ -326,7 +328,7 @@ EOF
 - 공백 문자는 제거하지 않는다.
 - 위 예시는 구분자를 따옴표로 감쌌기 때문에 `$(date)`가 파일 생성 시 실행되지 않고 원문으로 저장된다.
 
-### 2-11. 표준 오류 리다이렉션
+### Step 11. 표준 오류 리다이렉션
 
 표준 출력:
 
@@ -358,7 +360,7 @@ command &> /tmp/all.log
 command > /tmp/out.log 2> /tmp/err.log
 ```
 
-### 2-12. `tee` — 화면 출력과 파일 저장
+### Step 12. `tee` — 화면 출력과 파일 저장
 
 덮어쓰기:
 
@@ -388,7 +390,7 @@ option2=value2
 EOF
 ```
 
-### 2-13. `noclobber`로 우발적 덮어쓰기 방지
+### Step 13. `noclobber`로 우발적 덮어쓰기 방지
 
 현재 셸에서 활성화:
 
@@ -414,7 +416,7 @@ echo "test" >| existing-file
 set +o noclobber
 ```
 
-> `noclobber`는 모든 형태의 파일 변경을 막는 보안 기능이 아니다. `>>`, `rm`, 편집기, `>|` 등으로 기존 파일은 여전히 변경될 수 있다.
+> **참고:** `noclobber`는 모든 형태의 파일 변경을 막는 보안 기능이 아니다. `>>`, `rm`, 편집기, `>|` 등으로 기존 파일은 여전히 변경될 수 있다.
 
 ---
 
@@ -457,7 +459,7 @@ cp -a /etc/example.conf \
 printf '%s\n' '설정 한 줄' >> /etc/example.conf
 ```
 
-> 설정 파일에 같은 지시문을 반복해서 추가하면 서비스에 따라 첫 번째 값 또는 마지막 값이 적용되거나 문법 오류가 발생할 수 있다. 가능하면 전용 설정 도구, drop-in 파일 또는 정확한 편집 방식을 사용한다.
+> **참고:** 설정 파일에 같은 지시문을 반복해서 추가하면 서비스에 따라 첫 번째 값 또는 마지막 값이 적용되거나 문법 오류가 발생할 수 있다. 가능하면 전용 설정 도구, drop-in 파일 또는 정확한 편집 방식을 사용한다.
 
 예를 들어 SSH 설정은 별도 drop-in 파일을 사용할 수 있다.
 

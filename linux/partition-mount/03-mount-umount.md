@@ -92,7 +92,9 @@ mount /dev/sdb1 /data
 
 ## 2. 🛠️ 표준 설정 템플릿 (Configuration)
 
-### 2-1. 마운트 전 확인
+> **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
+
+### Step 1. 마운트 전 확인
 
 ```bash
 lsblk -f
@@ -114,7 +116,7 @@ ls -la /data
 
 ---
 
-### 2-2. 기본 마운트
+### Step 2. 기본 마운트
 
 ```bash
 mount /dev/sdb1 /data
@@ -150,11 +152,11 @@ mount -o ro /dev/sdb1 /data
 mount -o rw,nosuid,nodev,noexec /dev/sdb1 /data
 ```
 
-> `noexec`는 일반적인 직접 실행을 제한하지만 모든 실행 상황을 완전히 차단하는 보안 경계는 아니다.
+> **참고:** `noexec`는 일반적인 직접 실행을 제한하지만 모든 실행 상황을 완전히 차단하는 보안 경계는 아니다.
 
 ---
 
-### 2-3. 마운트 상태 확인
+### Step 3. 마운트 상태 확인
 
 ```bash
 findmnt /data
@@ -180,7 +182,7 @@ rm /data/.mount-test
 
 ---
 
-### 2-4. 마운트 해제
+### Step 4. 마운트 해제
 
 마운트포인트 기준:
 
@@ -201,11 +203,11 @@ findmnt /data
 mountpoint /data
 ```
 
-> 명령은 `unmount`가 아니라 `umount`이다.
+> **참고:** 명령은 `unmount`가 아니라 `umount`이다.
 
 ---
 
-### 2-5. CD/DVD 마운트
+### Step 5. CD/DVD 마운트
 
 ```bash
 mkdir -p /media/cdrom
@@ -230,7 +232,7 @@ umount /media/cdrom
 
 ---
 
-### 2-6. 기존 데이터가 있는 마운트포인트 처리
+### Step 6. 기존 데이터가 있는 마운트포인트 처리
 
 새 파일시스템을 바로 마운트하면 기존 파일이 가려진다.
 
@@ -259,11 +261,11 @@ du -sh /data /mnt/newdata
 rsync -aHAX --numeric-ids --delete /data/ /mnt/newdata/
 ```
 
-> 애플리케이션 일관성, SELinux 컨텍스트, 열린 파일, 권한과 ACL을 함께 확인한다.
+> **참고:** 애플리케이션 일관성, SELinux 컨텍스트, 열린 파일, 권한과 ACL을 함께 확인한다.
 
 ---
 
-### 2-7. 여러 파일시스템 통합 마운트 실습
+### Step 7. 여러 파일시스템 통합 마운트 실습
 
 준비된 파일시스템:
 
@@ -336,7 +338,7 @@ mount LABEL=GUEST /linux/guest
 mount LABEL=NOBODY /linux/nobody
 ```
 
-> 장치명 방식과 LABEL 방식 중 하나만 사용한다. 이미 마운트된 장치를 중복으로 마운트하지 않는다.
+> **참고:** 장치명 방식과 LABEL 방식 중 하나만 사용한다. 이미 마운트된 장치를 중복으로 마운트하지 않는다.
 
 검증:
 
@@ -382,7 +384,7 @@ umount /cisco
 umount /sol
 ```
 
-> 부모·자식 경로에 각각 파일시스템을 마운트한다면 부모를 먼저 마운트하고 자식을 나중에 마운트한다. 해제할 때는 반대로 자식부터 해제한다.
+> **참고:** 부모·자식 경로에 각각 파일시스템을 마운트한다면 부모를 먼저 마운트하고 자식을 나중에 마운트한다. 해제할 때는 반대로 자식부터 해제한다.
 
 ---
 
@@ -442,7 +444,7 @@ umount -l /data
 umount -f /data
 ```
 
-> Lazy·강제 해제는 일반적인 첫 번째 해결책으로 사용하지 않는다.
+> **참고:** Lazy·강제 해제는 일반적인 첫 번째 해결책으로 사용하지 않는다.
 
 ---
 
@@ -564,7 +566,7 @@ df -i /data
 | 포맷 완료 | 디스크·파티션 표시 | FSTYPE·UUID 표시 | 마운트 전에는 표시 안 됨 |
 | 마운트 완료 | 마운트포인트 표시 | FSTYPE·UUID 표시 | 파일시스템 표시 |
 
-> `df`에 보이지 않는다는 이유만으로 디스크가 인식되지 않았다고 판단하지 않는다.
+> **참고:** `df`에 보이지 않는다는 이유만으로 디스크가 인식되지 않았다고 판단하지 않는다.
 
 > 📌 **핵심 요약**
 > - mount는 파일시스템을 디렉터리 트리에 연결

@@ -17,7 +17,9 @@
 
 ## 2. 🛠️ 표준 설정 템플릿 (Configuration)
 
-### 2-1. expr 기본 문법
+> **적용 환경:** Bash 기반 Linux 셸 환경 (RHEL 계열 기본 `/bin/bash`).
+
+### Step 1. expr 기본 문법
 
 ```bash
 expr 값1 연산자 값2
@@ -40,7 +42,7 @@ expr $a \* $b
 total=$(expr $a + $b)
 ```
 
-### 2-2. expr 비교 연산 (참=0, 거짓=1 반환)
+### Step 2. expr 비교 연산 (참=0, 거짓=1 반환)
 
 ```bash
 expr $x = $y             # 같으면 0(참), 아니면 1
@@ -48,7 +50,7 @@ expr $x \> $y             # 크면 0(참) — > 도 escape 필요
 expr $x \>= $y            # 크거나 같으면 0(참)
 ```
 
-### 2-3. expr 1 증가 패턴
+### Step 3. expr 1 증가 패턴
 
 ```bash
 i=7
@@ -56,7 +58,7 @@ i=$(expr $i + 1)
 echo $i        # 8
 ```
 
-### 2-4. let 기본 문법
+### Step 4. let 기본 문법
 
 ```bash
 let x=3+5                # 대입 (앞에 $ 불필요)
@@ -72,7 +74,7 @@ let "x = 5 + 3"          # 정상
 echo $x
 ```
 
-### 2-5. let 실전 패턴
+### Step 5. let 실전 패턴
 
 ```bash
 let x=10

@@ -67,7 +67,9 @@ chmod g+w file
 
 ## 2. 🛠️ 표준 설정 템플릿 (Configuration)
 
-### 2-1. 8진수 방식
+> **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판. `chmod` 실행 주체는 파일 소유자, root, 또는 관련 capability를 가진 프로세스여야 한다.
+
+### Step 1. 8진수 방식
 
 ```bash
 chmod 600 private.key
@@ -79,7 +81,7 @@ chmod 755 public-directory
 chmod 770 team-directory
 ```
 
-### 2-2. 심볼릭 방식
+### Step 2. 심볼릭 방식
 
 ```bash
 chmod u+x script.sh
@@ -96,7 +98,7 @@ chmod u=rw,g=r,o= file
 chmod u=rwx,g=rx,o= directory
 ```
 
-### 2-3. 여러 대상 동시 지정
+### Step 3. 여러 대상 동시 지정
 
 ```bash
 chmod ug+rw file
@@ -104,7 +106,7 @@ chmod go-rwx private
 chmod a-x document
 ```
 
-### 2-4. 대문자 `X`
+### Step 4. 대문자 `X`
 
 ```bash
 chmod -R g+rX /project
@@ -117,13 +119,13 @@ chmod -R g+rX /project
 
 일반 문서 파일에 불필요한 실행 권한을 주지 않으면서 디렉터리 탐색 권한을 추가할 때 유용하다.
 
-### 2-5. 재귀 변경
+### Step 5. 재귀 변경
 
 ```bash
 chmod -R 750 /project
 ```
 
-파일과 디렉터리 권한을 구분하려면:
+> **주의:** `chmod -R 777`처럼 재귀로 넓은 권한을 부여하면 모든 사용자에게 과도한 권한이 열리고, `chmod -R 644`처럼 파일 권한만 고려하면 디렉터리 `x`가 사라져 접근 자체가 막힌다. 파일과 디렉터리 권한을 구분하려면:
 
 ```bash
 find /project -type d -exec chmod 750 {} +
@@ -137,7 +139,7 @@ find /project -type d -exec chmod 2770 {} +
 find /project -type f -exec chmod 0660 {} +
 ```
 
-### 2-6. 기준 파일과 동일한 권한 적용
+### Step 6. 기준 파일과 동일한 권한 적용
 
 ```bash
 chmod --reference=reference-file target-file

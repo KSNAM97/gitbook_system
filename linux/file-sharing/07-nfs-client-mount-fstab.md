@@ -68,7 +68,9 @@ NFS의 기본 인증 방식(`sec=sys`)은 클라이언트가 보낸 UID/GID를 �
 
 ## 2. 🛠️ 표준 설정 템플릿 (Configuration)
 
-### 2-1. 클라이언트 패키지 설치
+> **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
+
+### Step 1. 클라이언트 패키지 설치
 
 ```bash
 dnf install -y nfs-utils                   # NFS 클라이언트 도구
@@ -78,7 +80,7 @@ rpm -qa | grep nfs                         # 설치 확인
 
 ---
 
-### 2-2. 호스트명·IP 확인
+### Step 2. 호스트명·IP 확인
 
 ```bash
 sudo hostnamectl set-hostname Client-L     # 호스트명 설정
@@ -91,7 +93,7 @@ ip -4 addr show | grep inet                # (권장) ip 명령
 
 ---
 
-### 2-3. 서버 공유 목록 확인
+### Step 3. 서버 공유 목록 확인
 
 ```bash
 showmount -e 192.168.10.100                # 서버가 제공하는 export 목록
@@ -100,7 +102,7 @@ ping -c 2 192.168.10.100                   # 네트워크 도달 확인
 
 ---
 
-### 2-4. 임시 마운트
+### Step 4. 임시 마운트
 
 ```bash
 sudo mkdir /NFSC                           # 마운트포인트 생성
@@ -126,7 +128,7 @@ findmnt /NFSC                              # 계층적 확인
 
 ---
 
-### 2-5. 읽기·쓰기 테스트
+### Step 5. 읽기·쓰기 테스트
 
 ```bash
 sudo cp -r /etc/a* /NFSC/                  # 테스트 복사
@@ -138,7 +140,7 @@ sudo touch /NFSC/testfile                  # 쓰기 테스트
 
 ---
 
-### 2-6. 마운트 해제
+### Step 6. 마운트 해제
 
 ```bash
 sudo umount /NFSC                          # 일반 해제
@@ -148,7 +150,7 @@ sudo fuser -mv /NFSC                       # 사용 중인 프로세스 확인
 
 ---
 
-### 2-7. fstab 자동 마운트
+### Step 7. fstab 자동 마운트
 
 재부팅하면 마운트가 해제되므로 fstab에 등록한다.
 
@@ -172,11 +174,11 @@ sudo mount -a                              # fstab 기준 마운트
 findmnt /NFSC                              # 최종 확인
 ```
 
-> NFS 서버가 꺼진 상태로 클라이언트를 재부팅하면 `_netdev`만으로는 부팅이 지연될 수 있다. 운영 환경에서는 `nofail`을 함께 지정하거나 autofs를 사용하는 것이 안전하다.
+> **참고:** NFS 서버가 꺼진 상태로 클라이언트를 재부팅하면 `_netdev`만으로는 부팅이 지연될 수 있다. 운영 환경에서는 `nofail`을 함께 지정하거나 autofs를 사용하는 것이 안전하다.
 
 ---
 
-### 2-8. (선택) autofs 자동 마운트
+### Step 8. (선택) autofs 자동 마운트
 
 접근할 때만 마운트하고 유휴 시 자동 해제하려면 autofs를 사용한다.
 

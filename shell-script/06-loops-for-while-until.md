@@ -23,7 +23,9 @@
 
 ## 2. 🛠️ 표준 설정 템플릿 (Configuration)
 
-### 2-1. for 문 5가지 목록 지정 방식 (동작 구조 주석 포함)
+> **적용 환경:** Bash 기반 Linux 셸 환경 (RHEL 계열 기본 `/bin/bash`).
+
+### Step 1. for 문 5가지 목록 지정 방식 (동작 구조 주석 포함)
 
 ```bash
 # (1) 기본 목록 반복
@@ -58,7 +60,7 @@ do
 done
 ```
 
-### 2-2. while / until 기본 형식 (동작 구조 주석 포함)
+### Step 2. while / until 기본 형식 (동작 구조 주석 포함)
 
 ```bash
 # while : 조건이 참인 동안 반복
@@ -74,7 +76,7 @@ do
 done
 ```
 
-### 2-3. break / continue 표준 사용법 (동작 구조 주석 포함)
+### Step 3. break / continue 표준 사용법 (동작 구조 주석 포함)
 
 ```bash
 for num in {1..10}          # 1~10을 순회
@@ -97,7 +99,7 @@ do
 done
 ```
 
-### 2-4. 로그인 재시도 표준 템플릿 (while + 카운터)
+### Step 4. 로그인 재시도 표준 템플릿 (while + 카운터)
 
 ```bash
 #!/bin/bash
@@ -127,7 +129,7 @@ echo "3회 실패하여 종료합니다."
 exit 1                           # 3회 모두 실패 시 exit code 1로 종료
 ```
 
-### 2-5. until 폴링(대기) 표준 템플릿
+### Step 5. until 폴링(대기) 표준 템플릿
 
 ```bash
 #!/bin/bash
@@ -145,7 +147,7 @@ done                           # 파일이 생성되어 조건이 참이 되는 
 echo "${file} 파일이 생성되었습니다."
 ```
 
-### 2-6. 대량 계정 점검/교정 표준 템플릿 (for + stat)
+### Step 6. 대량 계정 점검/교정 표준 템플릿 (for + stat)
 
 ```bash
 #!/bin/bash
@@ -179,7 +181,7 @@ do
 done
 ```
 
-### 2-7. 파일 크기/용량 점검 표준 템플릿 (for + continue)
+### Step 7. 파일 크기/용량 점검 표준 템플릿 (for + continue)
 
 ```bash
 #!/bin/bash

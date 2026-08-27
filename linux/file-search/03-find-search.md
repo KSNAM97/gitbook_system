@@ -28,7 +28,7 @@ DB를 수동 갱신할 수 있는 환경이라면 다음 명령을 사용한다.
 updatedb
 ```
 
-> `locate`의 DB 갱신 주기는 배포판과 타이머 설정에 따라 다르다. 항상 하루에 한 번 갱신된다고 단정할 수 없다. Rocky Linux 환경에서는 `plocate` 또는 관련 패키지 설치가 필요할 수 있다.
+> **참고:** `locate`의 DB 갱신 주기는 배포판과 타이머 설정에 따라 다르다. 항상 하루에 한 번 갱신된다고 단정할 수 없다. Rocky Linux 환경에서는 `plocate` 또는 관련 패키지 설치가 필요할 수 있다.
 
 `find`의 기본 문법은 다음과 같다.
 
@@ -93,13 +93,15 @@ find /var/log -type f -name '*.log' -mtime +30 -print
 find /var/log -type f -name '*.log' -mtime +30 -delete
 ```
 
-> `-mindepth 1`은 시작 경로 자체를 제외하는 데 도움이 되지만, 잘못된 시작 경로 또는 과도하게 넓은 검색 범위까지 자동으로 방어하지는 않는다.
+> **참고:** `-mindepth 1`은 시작 경로 자체를 제외하는 데 도움이 되지만, 잘못된 시작 경로 또는 과도하게 넓은 검색 범위까지 자동으로 방어하지는 않는다.
 
 ---
 
 ## 2. 🛠️ 표준 사용 템플릿 (Configuration)
 
-### 2-1. 기본 검색
+> **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
+
+### Step 1. 기본 검색
 
 조건 없이 실행하면 시작 경로와 그 아래의 모든 항목을 출력한다.
 
@@ -123,7 +125,7 @@ find /etc -mindepth 1 -maxdepth 2
 - `-maxdepth 1`: 시작 경로와 바로 아래 항목까지만
 - `-mindepth 1`: 시작 경로 자체는 액션 대상에서 제외
 
-### 2-2. `-name` — 이름 검색
+### Step 2. `-name` — 이름 검색
 
 전체 파일시스템에서 `passwd` 검색:
 
@@ -167,9 +169,9 @@ find /etc -name 'ens160.nmconnection'
 find /etc -name 'ens160*'
 ```
 
-> `-name` 뒤의 와일드카드는 셸이 먼저 확장하지 않도록 따옴표로 감싼다.
+> **참고:** `-name` 뒤의 와일드카드는 셸이 먼저 확장하지 않도록 따옴표로 감싼다.
 
-### 2-3. `-type` — 파일 종류
+### Step 3. `-type` — 파일 종류
 
 ```bash
 find /etc -type f                # 일반 파일
@@ -199,7 +201,7 @@ find /etc -type d -name 'b*'
 find / -xtype l 2>/dev/null
 ```
 
-### 2-4. `-newer` — 기준 파일보다 최신인 항목
+### Step 4. `-newer` — 기준 파일보다 최신인 항목
 
 ```bash
 find /etc -newer /etc/aliases
@@ -219,7 +221,7 @@ find /etc -type f -newer /etc/aliases
 find /etc -type d -newer /etc/aliases
 ```
 
-### 2-5. `-newermt` — 날짜와 수정 시간 비교
+### Step 5. `-newermt` — 날짜와 수정 시간 비교
 
 2026년 7월 5일 00:00:00보다 수정 시간이 이후인 일반 파일:
 
@@ -251,7 +253,7 @@ find /backup2 -type f \
   ! -newermt '2026-07-06 00:00:00'
 ```
 
-### 2-6. 상대 시간 검색
+### Step 6. 상대 시간 검색
 
 ```bash
 find /var/log -type f -mtime -1
@@ -270,9 +272,9 @@ find /home -type f -atime +30
 | `-mmin -30` | 완료된 분 단위가 30보다 작음 |
 | `-atime +30` | 접근 시간 기준 완료된 일수가 30보다 큼 |
 
-> `-mtime`은 달력 날짜가 아니라 현재 시각을 기준으로 24시간 단위를 계산하고 소수 부분을 버린다. 달력 날짜 기준 검색은 `-newermt`를 사용하는 것이 명확하다.
+> **참고:** `-mtime`은 달력 날짜가 아니라 현재 시각을 기준으로 24시간 단위를 계산하고 소수 부분을 버린다. 달력 날짜 기준 검색은 `-newermt`를 사용하는 것이 명확하다.
 
-### 2-7. 크기 검색
+### Step 7. 크기 검색
 
 ```bash
 find /var/log -type f -size +100M
@@ -301,9 +303,9 @@ find /home -type f -empty
 find /home -type d -empty
 ```
 
-> `-size 0`도 크기가 0인 파일을 찾는 데 사용할 수 있지만, 빈 파일과 빈 디렉터리를 의도적으로 구분하려면 `-empty`와 `-type` 조합이 명확하다.
+> **참고:** `-size 0`도 크기가 0인 파일을 찾는 데 사용할 수 있지만, 빈 파일과 빈 디렉터리를 의도적으로 구분하려면 `-empty`와 `-type` 조합이 명확하다.
 
-### 2-8. 권한 검색
+### Step 8. 권한 검색
 
 권한이 정확히 `4000`인 파일:
 
@@ -341,7 +343,7 @@ find / -type f -perm -0002 2>/dev/null
 find / -type d -perm -0002 2>/dev/null
 ```
 
-### 2-9. 소유자와 그룹 검색
+### Step 9. 소유자와 그룹 검색
 
 특정 사용자 소유:
 
@@ -373,9 +375,9 @@ find /home -nogroup 2>/dev/null
 find /home \( -nouser -o -nogroup \) -print 2>/dev/null
 ```
 
-> 괄호 없이 `-nouser -o -nogroup`을 사용하면 연산자 우선순위 때문에 뒤에 붙인 조건이나 액션이 예상과 다르게 적용될 수 있다.
+> **참고:** 괄호 없이 `-nouser -o -nogroup`을 사용하면 연산자 우선순위 때문에 뒤에 붙인 조건이나 액션이 예상과 다르게 적용될 수 있다.
 
-### 2-10. 조건 조합
+### Step 10. 조건 조합
 
 AND:
 
@@ -407,7 +409,7 @@ Root 소유가 아닌 일반 파일:
 find /home -type f ! -user root
 ```
 
-### 2-11. 출력 액션
+### Step 11. 출력 액션
 
 기본 경로 출력:
 
@@ -433,7 +435,7 @@ find /etc -type f -name '*.conf' -print0
 find /var/log -type f -printf '%s\t%TY-%Tm-%Td %TH:%TM\t%p\n'
 ```
 
-### 2-12. `-exec`
+### Step 12. `-exec`
 
 각 항목마다 한 번씩 실행:
 
@@ -456,9 +458,9 @@ find /var/log/myapp -type f -name '*.log' -mtime +30 \
   -exec gzip -- {} +
 ```
 
-> 현재 서비스가 사용 중인 로그를 직접 압축하면 장애가 발생할 수 있다. 운영 로그는 가능한 한 logrotate 정책으로 관리한다.
+> **주의:** 현재 서비스가 사용 중인 로그를 직접 압축하면 장애가 발생할 수 있다. 운영 로그는 가능한 한 logrotate 정책으로 관리한다.
 
-### 2-13. `-delete`
+### Step 13. `-delete`
 
 삭제 전 검증:
 
@@ -480,7 +482,7 @@ find /tmp -type f -mtime +7 -delete
 - 일반적으로 `-type f`처럼 삭제 대상을 제한한다.
 - 넓은 시작 경로에서는 사용하지 않는다.
 
-### 2-14. `xargs` 연동
+### Step 14. `xargs` 연동
 
 공백, 줄바꿈 등 특수문자가 있는 경로를 안전하게 처리한다.
 
@@ -502,7 +504,7 @@ xargs -0 -r rm -f --
 
 가능하면 단순 작업에는 `-exec ... {} +`를 우선 사용할 수 있다.
 
-### 2-15. 특정 디렉터리 제외
+### Step 15. 특정 디렉터리 제외
 
 `/proc`, `/sys` 제외:
 
@@ -687,7 +689,7 @@ find "$REAL_TARGET" \
 
 목록을 확인한 후 동일 조건에 `-delete`를 사용한다.
 
-> `set -euo pipefail`은 빈 변수나 일부 명령 실패를 처리하는 데 유용하지만, 잘못된 비어 있지 않은 경로를 자동으로 차단하지 않는다.
+> **참고:** `set -euo pipefail`은 빈 변수나 일부 명령 실패를 처리하는 데 유용하지만, 잘못된 비어 있지 않은 경로를 자동으로 차단하지 않는다.
 
 #### 🚨 시나리오 3. `Permission denied`가 대량으로 출력된다
 

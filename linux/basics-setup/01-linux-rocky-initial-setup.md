@@ -181,7 +181,9 @@ Fedora는 Red Hat이 후원하는 커뮤니티 기반 배포판이다. 최신 �
 
 ## 2. 🛠️ 표준 설정 템플릿 (Configuration)
 
-### 2-1. 네트워크 고정 IP 설정(NetworkManager keyfile 방식, RHEL 9 표준)
+> **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
+
+### Step 1. 네트워크 고정 IP 설정(NetworkManager keyfile 방식, RHEL 9 표준)
 
 RHEL 9 계열에서는 NetworkManager를 사용한다. 기존 `ifcfg-*` 형식은 더 이상 기본 방식이 아니며, NetworkManager keyfile 또는 `nmcli` 사용이 권장된다.
 
@@ -263,7 +265,7 @@ nmcli connection up ens160
 
 ---
 
-### 2-2. SELinux 비활성화(실습 환경 전용)
+### Step 2. SELinux 비활성화(실습 환경 전용)
 
 > **주의:** 운영 환경에서는 SELinux를 `enforcing`으로 유지하는 것을 권장한다. 다음 설정은 SELinux 동작을 제외한 기초 실습이 필요한 경우에만 사용한다.
 
@@ -315,7 +317,7 @@ SELINUXTYPE=targeted
 reboot
 ```
 
-> Rocky Linux 9 계열에서 SELinux를 완전히 비활성화하려면 커널 파라미터 `selinux=0` 방식이 명확하다.
+> **참고:** Rocky Linux 9 계열에서 SELinux를 완전히 비활성화하려면 커널 파라미터 `selinux=0` 방식이 명확하다.
 
 #### SELinux 다시 활성화
 
@@ -343,11 +345,11 @@ touch /.autorelabel
 reboot
 ```
 
-> 파일 수가 많으면 재레이블링에 오랜 시간이 걸릴 수 있다.
+> **참고:** 파일 수가 많으면 재레이블링에 오랜 시간이 걸릴 수 있다.
 
 ---
 
-### 2-3. SSH Root 원격 접속 허용(격리된 실습 환경 전용)
+### Step 3. SSH Root 원격 접속 허용(격리된 실습 환경 전용)
 
 > **보안 경고:** 운영 환경에서는 Root 계정의 직접 SSH 로그인과 비밀번호 인증을 허용하지 않는 것이 원칙이다. 일반 사용자로 접속한 뒤 `sudo` 또는 `su`를 사용하고, SSH 공개키 인증을 적용하는 것을 권장한다.
 
@@ -429,7 +431,7 @@ passwd -S root
 passwd root
 ```
 
-> 문서나 쉘 히스토리에 실제 비밀번호를 기록하지 않는다. `admin1234`처럼 예측 가능한 비밀번호는 실습 환경에서도 사용하지 않는 것이 좋다.
+> **참고:** 문서나 쉘 히스토리에 실제 비밀번호를 기록하지 않는다. `admin1234`처럼 예측 가능한 비밀번호는 실습 환경에서도 사용하지 않는 것이 좋다.
 
 #### 운영 환경 권장 설정
 
@@ -444,7 +446,7 @@ PubkeyAuthentication yes
 
 ---
 
-### 2-4. 시스템 종료/재부팅 표준 명령어
+### Step 4. 시스템 종료/재부팅 표준 명령어
 
 #### 서버 즉시 종료
 
@@ -523,7 +525,7 @@ shutdown -c
 
 ---
 
-### 2-5. 초기 구축 후 필수 패키지 및 업데이트
+### Step 5. 초기 구축 후 필수 패키지 및 업데이트
 
 전체 패키지를 업데이트한다.
 
@@ -569,7 +571,7 @@ reboot
 
 ---
 
-### 2-6. Server-B 초기 설정
+### Step 6. Server-B 초기 설정
 
 Server-B 콘솔에서 Root 계정으로 로그인한다.
 
@@ -634,7 +636,7 @@ Disabled
 
 ---
 
-### 2-7. Client-L 초기 설정
+### Step 7. Client-L 초기 설정
 
 현재 SELinux 상태를 확인한다.
 
@@ -684,7 +686,7 @@ Disabled
 
 ---
 
-### 2-8. 가상 콘솔 접속
+### Step 8. 가상 콘솔 접속
 
 - Rocky Linux를 포함한 대부분의 리눅스는 여러 개의 가상 콘솔(TTY)을 제공한다.
 - GUI에 문제가 발생했거나 텍스트 모드에서 시스템을 점검해야 할 때 사용할 수 있다.
@@ -1028,7 +1030,7 @@ journalctl -fu sshd
 ssh -vvv root@192.168.10.100
 ```
 
-> 운영 환경에서는 문제 해결 후 `PermitRootLogin no`, `PasswordAuthentication no`로 복구하고 공개키 기반 로그인을 사용하는 것이 좋다.
+> **주의:** 운영 환경에서는 문제 해결 후 `PermitRootLogin no`, `PasswordAuthentication no`로 복구하고 공개키 기반 로그인을 사용하는 것이 좋다.
 
 ---
 
@@ -1125,7 +1127,7 @@ Disabled
 
 ---
 
-> 💡 **아키텍트 Tip:** 초기 구축과 검증이 완료되면 VMware Workstation Pro에서 스냅샷을 생성한다.
+> **참고:** 💡 **아키텍트 Tip:** 초기 구축과 검증이 완료되면 VMware Workstation Pro에서 스냅샷을 생성한다.
 
 권장 스냅샷 이름:
 

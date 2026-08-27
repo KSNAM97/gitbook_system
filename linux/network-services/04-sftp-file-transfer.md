@@ -46,7 +46,9 @@ pwd
 
 ## 2. 🛠️ 표준 사용법 (Configuration)
 
-### 2-1. SSH 접속 방법
+> **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
+
+### Step 1. SSH 접속 방법
 
 ```bash
 ssh A.B.C.D                             # 현재 계정으로 접속
@@ -56,7 +58,7 @@ ssh 계정명@A.B.C.D                      # 계정 지정 방식 2
 
 ---
 
-### 2-2. SFTP 접속
+### Step 2. SFTP 접속
 
 ```bash
 sftp guest@192.168.10.100
@@ -74,7 +76,7 @@ sftp>
 
 ---
 
-### 2-3. 세션 내 기본 명령
+### Step 3. 세션 내 기본 명령
 
 ```text
 pwd            원격 현재 디렉터리
@@ -90,7 +92,7 @@ exit / quit    종료
 
 ---
 
-### 2-4. 업로드 실습
+### Step 4. 업로드 실습
 
 파일이 있는 로컬 디렉터리로 이동한 뒤 접속해야 업로드가 가능하다.
 
@@ -127,7 +129,7 @@ sftp> put  lo*   ./linux-A/
 
 ---
 
-### 2-5. 다운로드 실습
+### Step 5. 다운로드 실습
 
 다운로드는 원격 경로를 직접 지정할 수 있어 접속 위치와 무관하다.
 
@@ -152,7 +154,7 @@ sftp> get -r ./*                        # 파일 및 디렉터리 전체
 
 ---
 
-### 2-6. Windows에서 SFTP 사용
+### Step 6. Windows에서 SFTP 사용
 
 Windows 10 이상은 OpenSSH 클라이언트가 기본 포함되어 cmd·PowerShell에서 바로 사용할 수 있다.
 

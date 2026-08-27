@@ -7,7 +7,7 @@
 
 ## 1. 🛠️ 명령어 문법 (Configuration)
 
-### 1-1. useradd (계정 생성)
+### 1. useradd (계정 생성)
 
 ```bash
 useradd user1                           # 기본 설정으로 user1 생성
@@ -20,7 +20,7 @@ useradd -D                              # useradd 기본값 조회
 useradd -D -s /bin/tcsh                 # 이후 생성 계정의 기본 셸 변경
 ```
 
-### 1-2. usermod (계정 수정)
+### 2. usermod (계정 수정)
 
 ```bash
 usermod -s /bin/tcsh user1              # 로그인 셸 변경
@@ -37,7 +37,7 @@ UID 변경 후 확인:
 find / -xdev -uid <이전UID> -ls 2>/dev/null # 이전 UID 소유 파일 검색
 ```
 
-### 1-3. userdel / passwd
+### 3. userdel / passwd
 
 ```bash
 userdel user1                            # 계정만 삭제하고 홈·메일은 유지
@@ -57,7 +57,7 @@ chage -l user1                           # 계정·비밀번호 만료 정책 �
 
 > `passwd -l`은 비밀번호 인증을 잠근다. SSH 공개키, sudo 정책, 실행 중인 세션 등 다른 접근 경로까지 모두 차단한다고 가정하지 않는다.
 
-### 1-4. group / gpasswd
+### 4. group / gpasswd
 
 ```bash
 groupadd GroupA                          # GroupA 그룹 생성
@@ -68,7 +68,7 @@ gpasswd -d user1 GroupD                  # user1을 GroupD에서 제거
 getent group GroupD                      # NSS 기반 그룹 정보 조회
 ```
 
-### 1-5. su / sudo
+### 5. su / sudo
 
 ```bash
 su                                       # root로 전환하되 현재 환경 일부 유지
@@ -87,7 +87,7 @@ visudo -c                                # sudoers 전체 문법 검사
 
 ## 2. 🔢 빠른 조회표 (Configuration)
 
-### 2-1. `/etc/passwd` 7필드
+### 1. `/etc/passwd` 7필드
 
 ```properties
 계정명 : x : UID : GID : Comment : 홈디렉터리 : 로그인셸
@@ -95,7 +95,7 @@ guest  : x :1000 :1000 : guest   : /home/guest : /bin/bash
 #  ①      ②   ③     ④      ⑤          ⑥            ⑦
 ```
 
-### 2-2. `passwd -S` 상태값
+### 2. `passwd -S` 상태값
 
 | 코드 | 의미 |
 |---|---|
@@ -103,7 +103,7 @@ guest  : x :1000 :1000 : guest   : /home/guest : /bin/bash
 | LK | 비밀번호 잠금 |
 | NP | 비밀번호 없음 |
 
-### 2-3. UID 대역 (RHEL 계열 기본값)
+### 3. UID 대역 (RHEL 계열 기본값)
 
 | 대역 | 용도 |
 |---|---|
@@ -113,7 +113,7 @@ guest  : x :1000 :1000 : guest   : /home/guest : /bin/bash
 
 > 실제 범위는 `/etc/login.defs`의 `SYS_UID_MIN`, `SYS_UID_MAX`, `UID_MIN`, `UID_MAX` 설정에 따라 달라질 수 있다.
 
-### 2-4. `-g` vs `-aG`
+### 4. `-g` vs `-aG`
 
 ```properties
 -g   → Primary Group 교체

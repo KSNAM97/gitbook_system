@@ -15,7 +15,9 @@ emp 테이블의 각 컬럼은 `empno`(사원번호, PK), `ename`(사원이름),
 
 ## 2. 🛠️ 표준 설정 템플릿 (Configuration)
 
-### 2-1. dept 테이블 생성
+> **적용 환경:** MariaDB/MySQL 계열 RDBMS.
+
+### Step 1. dept 테이블 생성
 
 ```sql
 /* 부서 정보를 저장하는 테이블 */
@@ -27,7 +29,7 @@ CREATE TABLE dept (
 );
 ```
 
-### 2-2. emp 테이블 생성
+### Step 2. emp 테이블 생성
 
 ```sql
 /* 사원 정보를 저장하는 테이블 */
@@ -47,9 +49,9 @@ CREATE TABLE emp (
 );
 ```
 
-> ⚠️ **생성 순서:** `dept` 테이블 먼저 생성 → 이후 `emp` 테이블 생성. emp가 dept의 deptno를 외래키로 참조하기 때문에 dept가 먼저 존재해야 한다.
+> **참고:** ⚠️ **생성 순서:** `dept` 테이블 먼저 생성 → 이후 `emp` 테이블 생성. emp가 dept의 deptno를 외래키로 참조하기 때문에 dept가 먼저 존재해야 한다.
 
-### 2-3. dept 기본 데이터 (INSERT)
+### Step 3. dept 기본 데이터 (INSERT)
 
 ```sql
 INSERT INTO dept (deptno, dname, loc) VALUES (10, 'ACCOUNTING', 'NEW YORK');
@@ -67,7 +69,7 @@ INSERT INTO dept VALUES (40, 'OPERATIONS', 'BOSTON');
 | 30     | SALES      | CHICAGO  |
 | 40     | OPERATIONS | BOSTON   |
 
-### 2-4. emp 기본 데이터 (INSERT)
+### Step 4. emp 기본 데이터 (INSERT)
 
 ```sql
 INSERT INTO emp VALUES (7839, 'KING',   'PRESIDENT', NULL, '1981-11-17', 5000, NULL,   10);

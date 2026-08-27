@@ -21,7 +21,9 @@ DCL은 DB 보안·사용자 관리·데이터 안정성 유지를 위해 **접�
 
 ## 2. 🛠️ 표준 설정 템플릿 (Configuration)
 
-### 2-1. 데이터베이스 생성·삭제
+> **적용 환경:** MariaDB/MySQL 계열 RDBMS.
+
+### Step 1. 데이터베이스 생성·삭제
 
 ```sql
 -- 데이터베이스 생성
@@ -34,7 +36,7 @@ DROP DATABASE database이름;
 USE database이름;
 ```
 
-### 2-2. 테이블 생성 (CREATE TABLE)
+### Step 2. 테이블 생성 (CREATE TABLE)
 
 ```sql
 -- 기본 형식
@@ -68,7 +70,7 @@ CREATE TABLE member (
 );
 ```
 
-### 2-3. 테이블 삭제·데이터 전체 삭제
+### Step 3. 테이블 삭제·데이터 전체 삭제
 
 ```sql
 -- 테이블 완전 삭제 (구조 + 데이터 모두)
@@ -78,7 +80,7 @@ DROP TABLE 테이블명;
 TRUNCATE TABLE 테이블명;
 ```
 
-### 2-4. 테이블 구조 수정 (ALTER TABLE)
+### Step 4. 테이블 구조 수정 (ALTER TABLE)
 
 ```sql
 -- 1) 컬럼 추가 (ADD)
@@ -157,7 +159,7 @@ ALTER TABLE member ADD last_login DATETIME;
 ALTER TABLE member DROP COLUMN birth_date;
 ```
 
-> `birth_date` 컬럼이 목록에서 제거됨. 데이터도 함께 삭제되므로 주의.
+> **주의:** `birth_date` 컬럼이 목록에서 제거됨. 데이터도 함께 삭제되므로 주의.
 
 ```sql
 -- EX6) 나이 저장용 age 컬럼 추가 (3자리 정수)
@@ -178,7 +180,7 @@ ALTER TABLE member MODIFY age INT(3) DEFAULT 18;
 |---|---|---|---|---|
 | **age** | int(3) | YES | | **18** |
 
-> 최종 `member` 구조: `member_id`, `username`, `password`, `email`(NOT NULL), `smartPhone`, `join_date`, `status`(VARCHAR 10), `last_login`, `age`(DEFAULT 18)
+> **참고:** 최종 `member` 구조: `member_id`, `username`, `password`, `email`(NOT NULL), `smartPhone`, `join_date`, `status`(VARCHAR 10), `last_login`, `age`(DEFAULT 18)
 
 ### 2-4-2. member 테이블 데이터 삽입 실습
 
@@ -298,7 +300,7 @@ SELECT * FROM member WHERE age != 30;
 SELECT * FROM member WHERE age <> 30;
 ```
 
-### 2-5. 자료형 빠른 참조표
+### Step 5. 자료형 빠른 참조표
 
 | 분류 | 자료형 | 설명 | 사용 예 |
 |---|---|---|---|
@@ -317,7 +319,7 @@ SELECT * FROM member WHERE age <> 30;
 | 날짜 | `TIMESTAMP` | UNIX 시간 기반 | 로그 기록 |
 | 논리 | `BOOLEAN` | TRUE/FALSE | 활성화 여부 |
 
-### 2-6. 제약조건 빠른 참조
+### Step 6. 제약조건 빠른 참조
 
 ```sql
 -- PRIMARY KEY (중복 불가, NULL 불가, 테이블당 1개)
@@ -340,7 +342,7 @@ age INT CHECK (age >= 18 AND age <= 65)
 score INT CHECK (score BETWEEN 0 AND 100)
 ```
 
-### 2-7. DCL - 권한 부여·회수
+### Step 7. DCL - 권한 부여·회수
 
 ```sql
 -- 권한 부여
@@ -354,7 +356,7 @@ REVOKE ALL PRIVILEGES ON *.* FROM 'user1'@'%';
 FLUSH PRIVILEGES;
 ```
 
-### 2-8. 테이블 구조 확인
+### Step 8. 테이블 구조 확인
 
 ```sql
 -- 테이블 구조 확인 (컬럼, 타입, NULL 여부, 기본값 등)

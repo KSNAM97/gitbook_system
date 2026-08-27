@@ -104,7 +104,9 @@ anacron과 cron을 연동할 때는 `/usr/sbin/anacron`의 실행 권한 유무�
 
 ## 표준 설정 템플릿 (Configuration)
 
-### 2-1. crond 상태 확인 및 활성화
+> **적용 환경:** Bash 기반 Linux 셸 환경 (RHEL 계열 기본 `/bin/bash`).
+
+### Step 1. crond 상태 확인 및 활성화
 
 ```bash
 systemctl status crond
@@ -112,7 +114,7 @@ systemctl start crond
 systemctl enable crond    # 재부팅 후 자동 시작
 ```
 
-### 2-2. crontab 편집
+### Step 2. crontab 편집
 
 ```bash
 crontab -e    # 편집
@@ -120,7 +122,7 @@ crontab -l    # 목록 확인
 crontab -r    # 전체 삭제
 ```
 
-### 2-3. /etc/crontab 형식 (시스템 전체)
+### Step 3. /etc/crontab 형식 (시스템 전체)
 
 ```bash
 SHELL=/bin/bash
@@ -135,7 +137,7 @@ MAILTO=root
 @reboot              root  /script/hourly/reboot_check.sh
 ```
 
-### 2-4. 백업 스크립트 기본 템플릿
+### Step 4. 백업 스크립트 기본 템플릿
 
 ```bash
 #!/bin/bash
@@ -160,14 +162,14 @@ else
 fi
 ```
 
-### 2-5. 오래된 파일 자동 삭제 패턴
+### Step 5. 오래된 파일 자동 삭제 패턴
 
 ```bash
 # 수정된 지 7일 초과한 파일 목록 출력 후 삭제
 find /backup/log -type f -mtime +7 -print -delete >> /var/log/cleanup.log
 ```
 
-### 2-6. /etc/anacrontab 형식
+### Step 6. /etc/anacrontab 형식
 
 ```bash
 SHELL=/bin/sh
@@ -182,7 +184,7 @@ START_HOURS_RANGE=3-22
 @monthly    45       cron.monthly      nice run-parts /etc/cron.monthly
 ```
 
-### 2-7. /etc/cron.d 디렉터리 구조
+### Step 7. /etc/cron.d 디렉터리 구조
 
 ```bash
 ls -l /etc/ | grep cron
@@ -195,7 +197,7 @@ ls -l /etc/ | grep cron
 # /etc/anacrontab    : anacron 설정
 ```
 
-### 2-8. 접속자 모니터링 스크립트 (EX1)
+### Step 8. 접속자 모니터링 스크립트 (EX1)
 
 접속한 사용자 정보를 5분마다 자동으로 기록하는 패턴이다.
 
@@ -220,7 +222,7 @@ cat /var/log/login_user_check.log
 */5 * * * * root /script/hourly/login_user_check.sh
 ```
 
-### 2-9. 설정 파일 정기 백업 스크립트 (EX2)
+### Step 9. 설정 파일 정기 백업 스크립트 (EX2)
 
 지정 디렉터리를 tar.gz로 압축하고 결과를 로그에 기록하는 패턴이다.
 
@@ -265,7 +267,7 @@ tar tzf /backup/etc/temp_2026-07-30.tar.gz
 40 18 * * 1-5 root /script/hourly/temp_backup.sh
 ```
 
-### 2-10. 백업 + 자동 정리 조합 스크립트 (EX3)
+### Step 10. 백업 + 자동 정리 조합 스크립트 (EX3)
 
 백업 성공 시에만 오래된 파일을 삭제하는 조합 패턴이다. `find -print -delete`로 삭제 전 목록을 로그에 기록한 뒤 삭제한다.
 
@@ -310,7 +312,7 @@ cat /var/log/log_cleanup.log    # 삭제된 파일 목록 + 백업 성공 확인
 30 23 * * * root /script/hourly/log_backup.sh
 ```
 
-### 2-11. anacron · cron 연동 상세 패턴 (EX4)
+### Step 11. anacron · cron 연동 상세 패턴 (EX4)
 
 anacron 실행 권한 유무에 따라 daily 작업 주체를 자동으로 전환하고, 실행 주체를 로그로 확인하는 패턴이다.
 

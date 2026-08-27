@@ -28,13 +28,15 @@ lvextend (LV 확장)
 
 LV 축소가 위험한 이유는, 파일시스템을 먼저 줄이지 않고 LV를 줄이면 파일시스템이 존재하지 않는 영역을 참조하게 되어 **데이터가 깨질 수 있기** 때문입니다. ext4 축소는 반드시 **마운트 해제 → `e2fsck` 검사 → `resize2fs`로 파일시스템 축소 → `lvreduce`로 LV 축소** 순서를 지켜야 합니다. XFS는 축소 자체를 지원하지 않으므로, 줄여야 하면 백업 후 재생성해야 합니다.
 
-> ⚠️ XFS는 온라인 확장은 가능하지만 축소는 불가능합니다. 축소가 필요할 수 있는 볼륨은 ext4를 선택하거나 용량 설계를 신중히 합니다.
+> **참고:** ⚠️ XFS는 온라인 확장은 가능하지만 축소는 불가능합니다. 축소가 필요할 수 있는 볼륨은 ext4를 선택하거나 용량 설계를 신중히 합니다.
 
 ---
 
 ## 2. 🛠️ 표준 설정 템플릿 (Configuration)
 
-### 2-1. LVM 파티션 타입(8e) 생성
+> **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
+
+### Step 1. LVM 파티션 타입(8e) 생성
 
 ```bash
 fdisk /dev/sdb                             # sdc도 동일 반복
@@ -57,7 +59,7 @@ w       저장
 fdisk -l | grep 8e                         # 8e Linux LVM 파티션 확인
 ```
 
-### 2-2. PV 생성
+### Step 2. PV 생성
 
 ```bash
 pvcreate /dev/sdb1                          # 파티션을 PV로 초기화
@@ -66,7 +68,7 @@ pvdisplay                                  # PV 상세 확인
 pvs                                        # PV 요약 확인
 ```
 
-### 2-3. VG 생성
+### Step 3. VG 생성
 
 ```bash
 vgcreate SOLLVM /dev/sdb1 /dev/sdc1        # PV들을 묶어 VG(SOLLVM) 생성
@@ -74,7 +76,7 @@ vgs                                        # VG 요약(VSize·VFree) 확인
 vgdisplay SOLLVM                           # VG 상세 확인
 ```
 
-### 2-4. LV 생성
+### Step 4. LV 생성
 
 ```bash
 lvcreate --size 8G --name 8G_LV1 SOLLVM        # 8GB LV
@@ -90,7 +92,7 @@ ls -l /dev/SOLLVM/                          # LV 심볼릭 링크(dm-*) 확인
 lsblk -f                                    # LV 매핑 확인
 ```
 
-### 2-5. 파일시스템 생성·마운트
+### Step 5. 파일시스템 생성·마운트
 
 ```bash
 mkfs.ext4 /dev/SOLLVM/8G_LV1                # LV를 ext4로 포맷
@@ -111,9 +113,9 @@ UUID=$UUID_CU  /CU  ext4  defaults  0 0
 EOF
 ```
 
-> LVM LV는 `/dev/VG/LV` 또는 `/dev/mapper/VG-LV` 두 경로로 접근할 수 있습니다. fstab에는 안정적인 UUID 사용을 권장합니다.
+> **참고:** LVM LV는 `/dev/VG/LV` 또는 `/dev/mapper/VG-LV` 두 경로로 접근할 수 있습니다. fstab에는 안정적인 UUID 사용을 권장합니다.
 
-### 2-6. VG 확장(디스크 추가)
+### Step 6. VG 확장(디스크 추가)
 
 새 디스크를 8e 타입으로 만든 뒤 VG에 추가합니다.
 
@@ -124,7 +126,7 @@ vgextend SOLLVM /dev/sdd1                   # VG에 PV 추가
 vgs                                         # VFree 증가 확인
 ```
 
-### 2-7. LV 확장
+### Step 7. LV 확장
 
 ```bash
 lvextend --size +1G /dev/SOLLVM/8G_LV1     # LV를 1GB 확장
@@ -144,7 +146,7 @@ lvextend --size +1G /dev/SOLLVM/xfs_lv
 xfs_growfs /마운트포인트                    # XFS는 마운트포인트 기준 확장
 ```
 
-### 2-8. LV 축소 (ext4 전용)
+### Step 8. LV 축소 (ext4 전용)
 
 축소는 순서가 중요합니다.
 
@@ -163,7 +165,7 @@ lvs                                        # LV 크기 확인
 df -h                                      # 실제 용량 확인
 ```
 
-> ⚠️ 축소 전 반드시 백업합니다. 순서를 어기거나 파일시스템 축소 크기보다 LV를 더 작게 줄이면 데이터가 손상됩니다. XFS에는 이 절차를 적용할 수 없습니다.
+> **참고:** ⚠️ 축소 전 반드시 백업합니다. 순서를 어기거나 파일시스템 축소 크기보다 LV를 더 작게 줄이면 데이터가 손상됩니다. XFS에는 이 절차를 적용할 수 없습니다.
 
 ---
 

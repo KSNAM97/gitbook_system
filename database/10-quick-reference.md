@@ -50,7 +50,7 @@ SHOW GRANTS FOR 'user1'@'%';
 
 ## 2. 🛠️ DDL 문법 (Configuration)
 
-### 2-1. 데이터베이스
+### 1. 데이터베이스
 
 ```sql
 CREATE DATABASE mydb;
@@ -60,7 +60,7 @@ SHOW DATABASES;
 SELECT DATABASE();
 ```
 
-### 2-2. 테이블 생성 (CREATE TABLE)
+### 2. 테이블 생성 (CREATE TABLE)
 
 ```sql
 -- 기본 형식
@@ -94,7 +94,7 @@ CREATE TABLE emp (
 );
 ```
 
-### 2-3. 테이블 삭제 · 데이터 초기화
+### 3. 테이블 삭제 · 데이터 초기화
 
 ```sql
 DROP TABLE 테이블명;              -- 구조 + 데이터 완전 삭제 (롤백 불가)
@@ -104,7 +104,7 @@ DESC 테이블명;
 SHOW CREATE TABLE 테이블명;       -- FK 포함 전체 DDL 확인
 ```
 
-### 2-4. 테이블 구조 수정 (ALTER TABLE)
+### 4. 테이블 구조 수정 (ALTER TABLE)
 
 ```sql
 -- 컬럼 추가
@@ -128,7 +128,7 @@ ALTER TABLE member RENAME TO customer;
 
 ## 3. 🛠️ 자료형 빠른 참조 (Configuration)
 
-### 3-1. 숫자형
+### 1. 숫자형
 
 ```sql
 INT           -- 정수 (±21억). 나이, 수량, 번호
@@ -139,7 +139,7 @@ DECIMAL(p,s)  -- 정확한 소수. 돈·가격 필수 (p=전체자리, s=소수�
               -- 예: DECIMAL(7,2) → 12345.67
 ```
 
-### 3-2. 문자형
+### 2. 문자형
 
 ```sql
 CHAR(n)       -- 고정 길이 (항상 n바이트). 국가코드, 고정 코드값
@@ -148,7 +148,7 @@ TEXT          -- 긴 텍스트. 게시판 본문
 LONGTEXT      -- 매우 긴 텍스트. 로그, 대용량 문서
 ```
 
-### 3-3. 날짜/시간형
+### 3. 날짜/시간형
 
 ```sql
 DATE          -- 날짜만 (YYYY-MM-DD). 생년월일
@@ -230,7 +230,7 @@ SET sql_safe_updates = 1;
 
 ## 6. 🛠️ DML - SELECT (Configuration)
 
-### 6-1. 기본 SELECT + 산술 + 별칭
+### 1. 기본 SELECT + 산술 + 별칭
 
 ```sql
 SELECT * FROM emp;
@@ -249,7 +249,7 @@ SELECT ename, CONCAT(ename, ' 사원') FROM emp;
 SELECT CONCAT(IFNULL(comm, 0), '원') FROM emp;  -- NULL 처리 포함
 ```
 
-### 6-2. WHERE 조건
+### 2. WHERE 조건
 
 ```sql
 -- 비교 연산자
@@ -273,7 +273,7 @@ WHERE comm IS NULL
 WHERE comm IS NOT NULL
 ```
 
-### 6-3. ORDER BY 정렬
+### 3. ORDER BY 정렬
 
 ```sql
 ORDER BY sal ASC                  -- 오름차순 (기본값, 생략 가능)
@@ -283,7 +283,7 @@ ORDER BY 연봉 ASC                  -- 별칭으로 참조 (따옴표 없이)
 ORDER BY 1                        -- 컬럼 번호로 참조
 ```
 
-### 6-4. LIKE 패턴 검색
+### 4. LIKE 패턴 검색
 
 ```sql
 WHERE ename LIKE 'S%'           -- S로 시작
@@ -308,7 +308,7 @@ WHERE (description LIKE '%office%' OR description LIKE '%business%')
 ORDER BY product_name ASC
 ```
 
-### 6-5. INNER JOIN
+### 5. INNER JOIN
 
 ```sql
 -- 기본 INNER JOIN
@@ -353,7 +353,7 @@ HAVING COUNT(o.order_id) >= 2
 ORDER BY order_count DESC, order_sum DESC;
 ```
 
-### 6-6. GROUP BY · HAVING · 집계함수
+### 6. GROUP BY · HAVING · 집계함수
 
 ```sql
 -- 집계함수 5종
@@ -417,7 +417,7 @@ FLUSH PRIVILEGES;
 
 ## 8. 🔢 빠른 조회표 (Configuration)
 
-### 8-1. SQL 명령어 종류 요약
+### 1. SQL 명령어 종류 요약
 
 | DDL | DML | DCL |
 |---|---|---|
@@ -425,7 +425,7 @@ FLUSH PRIVILEGES;
 | ALTER / RENAME | INSERT | REVOKE |
 | TRUNCATE | UPDATE / DELETE | FLUSH PRIVILEGES |
 
-### 8-2. NULL 관련 비교
+### 2. NULL 관련 비교
 
 | 문법 | 결과 |
 |---|---|
@@ -435,7 +435,7 @@ FLUSH PRIVILEGES;
 | `IFNULL(컬럼, 기본값)` | NULL이면 기본값으로 대체 |
 | `CONCAT(NULL, '문자')` | NULL 반환 → IFNULL 사용 |
 
-### 8-3. LIKE 와일드카드
+### 3. LIKE 와일드카드
 
 | 와일드카드 | 의미 | 예 |
 |---|---|---|
@@ -443,7 +443,7 @@ FLUSH PRIVILEGES;
 | `_` | 정확히 1개 임의 문자 | `'_C%'` → 두 번째가 C |
 | `NOT LIKE` | 패턴에 해당하지 않음 | `NOT LIKE 'S%'` |
 
-### 8-4. ORDER BY 정렬 키워드
+### 4. ORDER BY 정렬 키워드
 
 | 키워드 | 의미 |
 |---|---|
@@ -451,7 +451,7 @@ FLUSH PRIVILEGES;
 | `DESC` | 내림차순 |
 | `,` | 다중 정렬 구분자 |
 
-### 8-5. 혼동하기 쉬운 항목
+### 5. 혼동하기 쉬운 항목
 
 | 비슷한 문법 | 차이 |
 |---|---|
@@ -470,7 +470,7 @@ FLUSH PRIVILEGES;
 | `ON DELETE CASCADE` vs (기본) | 부모 삭제 시 자식 함께 삭제 vs 부모 삭제 차단 |
 | `COUNT(*)` vs `COUNT(컬럼)` | NULL 포함 전체 건수 vs NULL 제외 건수 |
 
-### 8-6. GROUP BY 처리 순서
+### 6. GROUP BY 처리 순서
 
 | 순서 | 절 | 집계함수 사용 |
 |---|---|---|
@@ -481,7 +481,7 @@ FLUSH PRIVILEGES;
 | 5 | `SELECT` | ✅ 가능 |
 | 6 | `ORDER BY` | ✅ 가능 |
 
-### 8-7. emp · dept 테이블 컬럼 요약
+### 7. emp · dept 테이블 컬럼 요약
 
 ```sql
 -- dept

@@ -44,7 +44,7 @@ blkid /dev/sdb1
 lsblk -f
 ```
 
-> `/dev/sdX` 사용이 항상 금지되는 것은 아니지만 이동식 장치나 여러 디스크가 있는 환경에서는 UUID가 더 안정적이다.
+> **참고:** `/dev/sdX` 사용이 항상 금지되는 것은 아니지만 이동식 장치나 여러 디스크가 있는 환경에서는 UUID가 더 안정적이다.
 
 fstab의 "Automount"와 autofs는 같지 않다.
 
@@ -63,7 +63,9 @@ autofs
 
 ## 2. 🛠️ 표준 설정 템플릿 (Configuration)
 
-### 2-1. UUID와 파일시스템 타입 확인
+> **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
+
+### Step 1. UUID와 파일시스템 타입 확인
 
 ```bash
 lsblk -f
@@ -100,7 +102,7 @@ umount /data
 
 ---
 
-### 2-2. fstab 백업
+### Step 2. fstab 백업
 
 ```bash
 cp -a /etc/fstab "/etc/fstab.bak.$(date +%F-%H%M%S)"
@@ -115,7 +117,7 @@ sudoedit /etc/fstab
 
 ---
 
-### 2-3. fstab 기본 예시
+### Step 3. fstab 기본 예시
 
 XFS 데이터 볼륨:
 
@@ -147,11 +149,11 @@ UUID=<uuid>  /archive  xfs  defaults,nofail,x-systemd.device-timeout=10s  0 0
 server:/export  /mnt/nfs  nfs  defaults,_netdev,nofail  0 0
 ```
 
-> `/home`, `/var`, 데이터베이스 볼륨처럼 서비스에 필수적인 파일시스템에 `nofail`을 무조건 적용하면 마운트 실패 상태로 시스템과 서비스가 기동해 더 큰 데이터 장애를 만들 수 있다. 필수 여부에 따라 선택한다.
+> **주의:** `/home`, `/var`, 데이터베이스 볼륨처럼 서비스에 필수적인 파일시스템에 `nofail`을 무조건 적용하면 마운트 실패 상태로 시스템과 서비스가 기동해 더 큰 데이터 장애를 만들 수 있다. 필수 여부에 따라 선택한다.
 
 ---
 
-### 2-4. fstab 6개 필드
+### Step 4. fstab 6개 필드
 
 | 필드 | 의미 | 예 |
 |---|---|---|
@@ -187,7 +189,7 @@ man systemd.mount
 
 ---
 
-### 2-5. 변경 후 검증
+### Step 5. 변경 후 검증
 
 문법·구조 검증:
 
@@ -214,7 +216,7 @@ findmnt /data
 df -Th /data
 ```
 
-> `mount -a`가 아무 출력 없이 종료되어도 원하는 장치가 올바른 위치와 옵션으로 마운트되었는지 `findmnt`로 확인한다.
+> **참고:** `mount -a`가 아무 출력 없이 종료되어도 원하는 장치가 올바른 위치와 옵션으로 마운트되었는지 `findmnt`로 확인한다.
 
 이미 수동으로 마운트된 상태라면 fstab 항목 자체를 충분히 시험하지 못할 수 있다.
 
@@ -228,7 +230,7 @@ findmnt /data
 
 ---
 
-### 2-6. systemd automount 옵션
+### Step 6. systemd automount 옵션
 
 접근할 때 마운트하도록 구성:
 
@@ -260,7 +262,7 @@ ls /archive
 findmnt /archive
 ```
 
-> `x-systemd.automount`는 `/etc/fstab`에서 systemd automount unit을 생성하는 방식이며 전통적인 `autofs` 서비스와 구현이 다르다.
+> **참고:** `x-systemd.automount`는 `/etc/fstab`에서 systemd automount unit을 생성하는 방식이며 전통적인 `autofs` 서비스와 구현이 다르다.
 
 ---
 
@@ -334,7 +336,7 @@ systemctl daemon-reload
 reboot
 ```
 
-> 루트 파일시스템 구조, initramfs, 암호화, systemd emergency 환경에 따라 복구 명령이 달라질 수 있다.
+> **주의:** 루트 파일시스템 구조, initramfs, 암호화, systemd emergency 환경에 따라 복구 명령이 달라질 수 있다.
 
 ### 3-4. 재포맷 후 UUID가 달라졌다
 

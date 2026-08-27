@@ -19,7 +19,9 @@ FOREIGN KEY(외래키)는 다른 테이블의 PRIMARY KEY(또는 UNIQUE 키)를 
 
 ## 2. 🛠️ 표준 설정 템플릿 (Configuration)
 
-### 2-1. PRIMARY KEY 설정 예제
+> **적용 환경:** MariaDB/MySQL 계열 RDBMS.
+
+### Step 1. PRIMARY KEY 설정 예제
 
 ```sql
 -- 인라인 방식
@@ -44,10 +46,10 @@ CREATE TABLE product (
 );
 ```
 
-> ⚠️ 같은 `student_no`로 INSERT 시도 → `Duplicate entry` 오류
-> ⚠️ `student_no = NULL` INSERT 시도 → `Column cannot be null` 오류
+> **참고:** ⚠️ 같은 `student_no`로 INSERT 시도 → `Duplicate entry` 오류
+> **참고:** ⚠️ `student_no = NULL` INSERT 시도 → `Column cannot be null` 오류
 
-### 2-2. UNIQUE 설정 예제
+### Step 2. UNIQUE 설정 예제
 
 ```sql
 CREATE TABLE member (
@@ -61,7 +63,7 @@ CREATE TABLE member (
 - `member_id`: 테이블 대표 식별자 (PK)
 - `username`, `email`: 각각 중복 불가 (UNIQUE) — 여러 개 설정 가능
 
-### 2-3. FOREIGN KEY 설정 예제
+### Step 3. FOREIGN KEY 설정 예제
 
 ```sql
 -- 부모 테이블 먼저 생성
@@ -88,9 +90,9 @@ CREATE TABLE emp (
 );
 ```
 
-> ⚠️ dept에 없는 deptno로 emp INSERT → `Cannot add or update a child row: a foreign key constraint fails` 오류
+> **참고:** ⚠️ dept에 없는 deptno로 emp INSERT → `Cannot add or update a child row: a foreign key constraint fails` 오류
 
-### 2-4. ON DELETE CASCADE (연쇄 삭제)
+### Step 4. ON DELETE CASCADE (연쇄 삭제)
 
 ```sql
 CREATE TABLE emp (
@@ -108,7 +110,7 @@ CREATE TABLE emp (
 | `ON DELETE CASCADE` | 부모 삭제 시 자식 행도 **함께 삭제** |
 | `ON DELETE SET NULL` | 부모 삭제 시 자식의 FK 컬럼을 **NULL**로 설정 |
 
-### 2-5. 제약조건 전체 비교 참조표
+### Step 5. 제약조건 전체 비교 참조표
 
 | 제약조건 | 중복 | NULL | 테이블당 개수 | 주요 용도 |
 |---|---|---|---|---|

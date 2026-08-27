@@ -70,13 +70,15 @@ exports의 주요 옵션은 다음과 같다.
 | `sync` | 변경 사항을 디스크에 기록한 뒤 응답(안전) |
 | `async` | 메모리에 먼저 기록하고 응답(빠르지만 위험) |
 
-> `no_root_squash`는 클라이언트 root가 서버 파일을 무제한 조작할 수 있게 하는 매우 강력한 옵션이다. 실습 편의를 위해 사용하되, 운영 환경에서는 기본값인 `root_squash`를 유지하는 것이 안전하다.
+> **참고:** `no_root_squash`는 클라이언트 root가 서버 파일을 무제한 조작할 수 있게 하는 매우 강력한 옵션이다. 실습 편의를 위해 사용하되, 운영 환경에서는 기본값인 `root_squash`를 유지하는 것이 안전하다.
 
 ---
 
 ## 2. 🛠️ 표준 확인 (Configuration)
 
-### 2-1. 패키지 확인
+> **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
+
+### Step 1. 패키지 확인
 
 ```bash
 rpm -qa | grep nfs                         # nfs-utils 등 확인
@@ -84,7 +86,7 @@ rpm -qa | grep rpc                         # rpcbind 확인
 dnf install -y nfs-utils                   # 미설치 시 설치
 ```
 
-### 2-2. RPC 서비스 확인
+### Step 2. RPC 서비스 확인
 
 ```bash
 systemctl status rpcbind                   # rpcbind 상태

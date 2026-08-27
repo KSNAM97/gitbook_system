@@ -858,6 +858,8 @@ loginctl enable-linger rocky
 
 ## 커스텀 서비스 설정
 
+> **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
+
 파일: `/etc/systemd/system/myapp.service`
 
 ```ini

@@ -104,7 +104,7 @@ SOA(Start Of Authority)는 권한의 시작이며 zone 파일이 시작된다는
                 3H )       ; minimum
 ```
 
-> 관리자 이메일을 표기할 때 `admin.soldesk.com.`처럼 마지막 점을 포함하는 것이 원칙이다. 도메인이 아닌 다른 조직의 이메일 표기(예: 실습 중 실수로 입력한 `admin.naver.com`)를 그대로 두면 SOA 레코드의 의미가 왜곡되므로, 반드시 자신이 관리하는 도메인의 관리자 주소로 통일해야 한다.
+> **참고:** 관리자 이메일을 표기할 때 `admin.soldesk.com.`처럼 마지막 점을 포함하는 것이 원칙이다. 도메인이 아닌 다른 조직의 이메일 표기(예: 실습 중 실수로 입력한 `admin.naver.com`)를 그대로 두면 SOA 레코드의 의미가 왜곡되므로, 반드시 자신이 관리하는 도메인의 관리자 주소로 통일해야 한다.
 
 | 값 | 역할 |
 |---|---|
@@ -149,7 +149,9 @@ Failed password for 192.168.10.200
 
 ## 2. 🛠️ 표준 설정 템플릿 (Configuration)
 
-### 2-1. 기본 named.conf 확인
+> **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
+
+### Step 1. 기본 named.conf 확인
 
 ```bash
 vi /etc/named.conf
@@ -190,7 +192,7 @@ named-checkconf                # named.conf 문법 검사
 
 ---
 
-### 2-2. Zone 파일 준비 및 작성
+### Step 2. Zone 파일 준비 및 작성
 
 ```bash
 ls -l /var/named
@@ -247,7 +249,7 @@ ftp     IN      A       192.168.10.200
 
 ---
 
-### 2-3. 문법 검증 및 권한 설정
+### Step 3. 문법 검증 및 권한 설정
 
 ```bash
 named-checkzone soldesk.com /var/named/soldesk.com.db
@@ -261,11 +263,11 @@ chmod 640 /var/named/soldesk.com.db
 ls -l /var/named/
 ```
 
-> named 데몬은 `named` 사용자로 실행되므로 그룹 읽기 권한이 필요하다. other에 권한을 주지 않는 것이 보안상 바람직하다.
+> **참고:** named 데몬은 `named` 사용자로 실행되므로 그룹 읽기 권한이 필요하다. other에 권한을 주지 않는 것이 보안상 바람직하다.
 
 ---
 
-### 2-4. 역방향 Zone 등록
+### Step 4. 역방향 Zone 등록
 
 ```bash
 vi /etc/named.conf
@@ -310,7 +312,7 @@ chmod 640 /var/named/soldesk.com.rev
 
 ---
 
-### 2-5. 서비스 반영 및 클라이언트 DNS 지정
+### Step 5. 서비스 반영 및 클라이언트 DNS 지정
 
 ```bash
 systemctl restart named
@@ -329,7 +331,7 @@ search localdomain
 nameserver 192.168.10.100      # 구축한 DNS 서버 지정
 ```
 
-> `/etc/resolv.conf`는 NetworkManager가 재작성할 수 있다. 영구 적용하려면 `nmcli con mod ens160 ipv4.dns 192.168.10.100` 후 연결을 재적용하는 방식을 사용한다.
+> **참고:** `/etc/resolv.conf`는 NetworkManager가 재작성할 수 있다. 영구 적용하려면 `nmcli con mod ens160 ipv4.dns 192.168.10.100` 후 연결을 재적용하는 방식을 사용한다.
 
 ---
 
@@ -343,11 +345,11 @@ nslookup 192.168.10.100 127.0.0.1        # 서버 자체에서 역방향 검증
 ```
 
 ```text
-> www.soldesk.com
+> **참고:** www.soldesk.com
 Name:   www.soldesk.com
 Address: 192.168.10.100
 
-> 192.168.10.100 127.0.0.1
+> **참고:** 192.168.10.100 127.0.0.1
 100.10.168.192.in-addr.arpa     name = www.soldesk.com.
 ```
 

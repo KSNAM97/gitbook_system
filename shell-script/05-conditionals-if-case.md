@@ -21,7 +21,9 @@
 
 ## 2. 🛠️ 표준 설정 템플릿 (Configuration)
 
-### 2-1. if 조건문 3대 형식 (동작 구조 주석 포함)
+> **적용 환경:** Bash 기반 Linux 셸 환경 (RHEL 계열 기본 `/bin/bash`).
+
+### Step 1. if 조건문 3대 형식 (동작 구조 주석 포함)
 
 ```bash
 # 형식 1) 단순 if
@@ -49,7 +51,7 @@ else                # ③ 조건1, 조건2 모두 거짓일 때 진입
 fi                  # if-elif-else 블록 종료 (elif는 필요한 만큼 추가 가능)
 ```
 
-### 2-2. 조건식 유형별 예시
+### Step 2. 조건식 유형별 예시
 
 ```bash
 # 숫자 비교
@@ -72,7 +74,7 @@ else
 fi
 ```
 
-### 2-3. 스크립트 파일 표준 골격
+### Step 3. 스크립트 파일 표준 골격
 
 ```bash
 vi ./script/check_hosts.sh
@@ -92,7 +94,7 @@ chmod +x ./script/check_hosts.sh
 ./script/check_hosts.sh
 ```
 
-### 2-4. case 문 기본 형식 (동작 구조 주석 포함)
+### Step 4. case 문 기본 형식 (동작 구조 주석 포함)
 
 ```bash
 case 변수 in            # 검사할 대상(변수/값)을 지정, in으로 패턴 목록 시작
@@ -107,7 +109,7 @@ case 변수 in            # 검사할 대상(변수/값)을 지정, in으로 패
 esac                     # case 종료 키워드 (case를 거꾸로 읽은 형태)
 ```
 
-### 2-5. read + case 조합 실전 템플릿
+### Step 5. read + case 조합 실전 템플릿
 
 ```bash
 #!/bin/bash
@@ -138,7 +140,7 @@ case "$cmd" in
 esac
 ```
 
-### 2-6. read 입력 검증 표준 패턴 (잘못된 입력 조기 종료)
+### Step 6. read 입력 검증 표준 패턴 (잘못된 입력 조기 종료)
 
 ```bash
 #!/bin/bash

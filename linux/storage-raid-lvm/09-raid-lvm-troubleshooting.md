@@ -15,7 +15,7 @@ RAID·LVM 장애에서 가장 먼저 봐야 할 것은 ① **`mdadm --detail` / 
 
 ## 2. 🛠️ 증상별 즉시 대응표 (Configuration)
 
-### 2-1. RAID
+### 1. RAID
 | 증상 | 원인 | 조치 |
 |---|---|---|
 | 재부팅 후 `/dev/md127`로 잡힘 | 이전 RAID 슈퍼블록 잔존 | `mdadm --stop` → `--zero-superblock` → 재생성 → `/etc/mdadm.conf` + `dracut -fv` |
@@ -24,7 +24,7 @@ RAID·LVM 장애에서 가장 먼저 봐야 할 것은 ① **`mdadm --detail` / 
 | RAID 5 디스크 2개 동시 장애 | 결함 허용 초과(패리티 1개) | 복구 불가 → 백업에서 복원, 향후 RAID 6·10 검토 |
 | `wipefs`/`--zero-superblock` 실행 후 데이터 손실 | 대상 디스크 착오 | 실행 전 `lsblk`, `mdadm --detail`로 재확인(예방) |
 
-### 2-2. LVM
+### 2. LVM
 | 증상 | 원인 | 조치 |
 |---|---|---|
 | `lvextend` 후에도 `df -h` 용량 그대로 | 파일시스템 확장 누락 | `resize2fs`(ext4) / `xfs_growfs`(XFS) 실행 |
@@ -33,7 +33,7 @@ RAID·LVM 장애에서 가장 먼저 봐야 할 것은 ① **`mdadm --detail` / 
 | XFS LV 축소 시도가 실패함 | XFS는 축소 미지원 | 백업 후 더 작은 LV로 재생성, 또는 애초에 ext4 채택 |
 | ext4 축소 후 마운트 실패·데이터 손상 | `umount → e2fsck → resize2fs → lvreduce` 순서 위반 | 백업에서 복원, 이후 순서 엄수 |
 
-### 2-3. 핵심 진단 명령어
+### 3. 핵심 진단 명령어
 ```bash
 # RAID
 cat /proc/mdstat                # 현재 RAID 상태·진행률

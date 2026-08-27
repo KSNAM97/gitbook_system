@@ -82,7 +82,9 @@ vsftpd는 보안상의 이유로 chroot 최상위 디렉터리에 쓰기 권한�
 
 ## 2. 🛠️ 표준 설정 템플릿 (Configuration)
 
-### 2-1. 설치 및 기동
+> **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
+
+### Step 1. 설치 및 기동
 
 ```bash
 rpm -qa | grep ftp                         # 설치 여부 확인
@@ -98,7 +100,7 @@ systemctl status vsftpd                    # 상태 확인
 
 ---
 
-### 2-2. 방화벽 개방
+### Step 2. 방화벽 개방
 
 ```bash
 firewall-cmd --permanent --add-service=ftp
@@ -118,7 +120,7 @@ ftp: connect :연결 시간 초과
 
 ---
 
-### 2-3. 설정 파일 백업 및 익명 접속 제어
+### Step 3. 설정 파일 백업 및 익명 접속 제어
 
 ```bash
 cp /etc/vsftpd/vsftpd.conf /backup         # 변경 전 원본 백업
@@ -153,7 +155,7 @@ systemctl restart vsftpd
 
 ---
 
-### 2-4. 업로드 제어
+### Step 4. 업로드 제어
 
 ```text
 write_enable=NO               # 모든 계정 업로드 차단(다운로드만 허용)
@@ -173,7 +175,7 @@ ftp> get aliases
 
 ---
 
-### 2-5. 전송 로그 활성화 (xferlog)
+### Step 5. 전송 로그 활성화 (xferlog)
 
 ```text
 dirmessage_enable=YES
@@ -204,7 +206,7 @@ Thu Jul 16 17:48:15 2026 1 ::ffff:192.168.10.131 58 /home/guest/abc.txt a _ i r 
 
 ---
 
-### 2-6. 특정 사용자 차단 (user_list, 기본 정책)
+### Step 6. 특정 사용자 차단 (user_list, 기본 정책)
 
 ```bash
 vi /etc/vsftpd/user_list
@@ -233,7 +235,7 @@ systemctl restart vsftpd
 
 ---
 
-### 2-7. 계정별 개별 설정 (user_config_dir)
+### Step 7. 계정별 개별 설정 (user_config_dir)
 
 ```bash
 mkdir /etc/vsftpd/userconfig            # 계정별 설정 보관 디렉터리
@@ -280,7 +282,7 @@ systemctl restart vsftpd
 
 ---
 
-### 2-8. chroot 적용
+### Step 8. chroot 적용
 
 ```text
 chroot_local_user=YES                    # 모든 로컬 사용자에게 chroot 적용

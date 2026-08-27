@@ -46,7 +46,7 @@ echo $0                        # 현재 사용 중인 쉘 / 스크립트 이름
 
 ## Metacharacters 문법 (Configuration)
 
-### 2-1. 글롭(패턴 매칭)
+### 1. 글롭(패턴 매칭)
 
 ```bash
 *                # 0글자 이상 임의 문자열
@@ -56,7 +56,7 @@ echo $0                        # 현재 사용 중인 쉘 / 스크립트 이름
 [!abc] [^abc]    # 부정 (a,b,c 제외)
 ```
 
-### 2-2. 중괄호 확장
+### 2. 중괄호 확장
 
 ```bash
 {a,b,c}            # 나열
@@ -66,7 +66,7 @@ echo $0                        # 현재 사용 중인 쉘 / 스크립트 이름
 {A,B}{1,2}         # 중첩 조합
 ```
 
-### 2-3. 변수 · 치환 · 산술
+### 3. 변수 · 치환 · 산술
 
 ```bash
 $변수              # 변수 참조
@@ -78,7 +78,7 @@ $((산술식))         # 산술 확장 (값 반환)
 ~계정명             # 특정 계정 홈 디렉터리
 ```
 
-### 2-4. 리다이렉션 / 파이프
+### 4. 리다이렉션 / 파이프
 
 ```bash
 명령 > 파일          # 표준 출력 덮어쓰기
@@ -92,7 +92,7 @@ $((산술식))         # 산술 확장 (값 반환)
 명령1 | 명령2        # 파이프 (명령1 출력 -> 명령2 입력)
 ```
 
-### 2-5. 명령 연결 / 제어
+### 5. 명령 연결 / 제어
 
 ```bash
 명령1; 명령2          # 무조건 순차 실행
@@ -204,7 +204,7 @@ continue     # 이번 회차만 건너뛰고 다음 회차로
 
 ## 배열 · RANDOM 문법 (Configuration)
 
-### 7-1. 선언 · 조회
+### 1. 선언 · 조회
 
 ```bash
 arr=("값1" "값2" "값3")        # 배열 선언 (요소는 공백 구분)
@@ -221,7 +221,7 @@ echo "${arr[@]:1:2}"           # 1번부터 2개 슬라이싱
 echo "${arr[-1]}"              # 마지막 요소 (Bash 4.3+)
 ```
 
-### 7-2. 추가 · 수정 · 삭제
+### 2. 추가 · 수정 · 삭제
 
 ```bash
 arr[4]="값"                    # 인덱스 지정 추가
@@ -232,7 +232,7 @@ arr=("${arr[@]}")              # 인덱스 재정렬 (구멍 제거)
 unset arr                      # 배열 전체 삭제
 ```
 
-### 7-3. 순회 · RANDOM
+### 3. 순회 · RANDOM
 
 ```bash
 for item in "${arr[@]}"; do 명령; done       # 값 기준 순회
@@ -279,7 +279,7 @@ set -- a b c  # 위치 매개변수를 강제 재설정
 ${1:-기본값}   # 인자가 없으면 기본값 사용
 ```
 
-### 8-1. 인자 검증 표준 3단 (복붙용)
+### 1. 인자 검증 표준 3단 (복붙용)
 
 ```bash
 # ① 개수
@@ -294,7 +294,7 @@ done
 [ -d "$1" ] || { echo "디렉터리가 없습니다 : $1"; exit 1; }
 ```
 
-### 8-2. 가변 인자 처리
+### 2. 가변 인자 처리
 
 ```bash
 for arg in "$@"; do echo "$arg"; done           # 전체 순회
@@ -306,7 +306,7 @@ action="$1"; shift; targets=("$@")              # 첫 인자 소비 후 나머�
 
 ## ⏰ cron · anacron 문법 (Configuration)
 
-### 9-1. cron 스케줄 형식
+### 1. cron 스케줄 형식
 
 ```bash
 # 분  시  일  월  요일  [user]  command
@@ -325,7 +325,7 @@ action="$1"; shift; targets=("$@")              # 첫 인자 소비 후 나머�
 @monthly   명령    # 매월 1일 00:00
 ```
 
-### 9-2. crontab 관리 명령
+### 2. crontab 관리 명령
 
 ```bash
 systemctl status crond           # crond 실행 상태 확인
@@ -338,7 +338,7 @@ crontab -r                       # 현재 사용자 cron 전체 삭제
 tail -f /var/log/cron            # cron 실행 로그 실시간 모니터링
 ```
 
-### 9-3. 백업 스크립트 + cron 등록 패턴 (복붙용)
+### 3. 백업 스크립트 + cron 등록 패턴 (복붙용)
 
 ```bash
 #!/bin/bash
@@ -351,14 +351,14 @@ tar czf "${DEST}backup_${DATE}.tar.gz" -C "$SRC" . >> "$LOG" 2>&1
 # 0 3 * * * root /script/backup.sh >> /var/log/backup.log 2>&1
 ```
 
-### 9-4. 오래된 파일 자동 삭제
+### 4. 오래된 파일 자동 삭제
 
 ```bash
 # 7일 초과 파일 목록 출력 후 삭제
 find /backup -type f -mtime +7 -print -delete >> /var/log/cleanup.log
 ```
 
-### 9-5. anacron 관리
+### 5. anacron 관리
 
 ```bash
 # /etc/anacrontab 주요 필드
@@ -373,7 +373,7 @@ run-parts --test /etc/cron.daily/   # 실행 대상 파일 사전 확인
 ls /var/spool/anacron/              # 마지막 실행 날짜 기록 위치
 ```
 
-### 9-6. cron·anacron 연동 패턴
+### 6. cron·anacron 연동 패턴
 
 ```bash
 # /etc/crontab : anacron 불가 시 cron이 daily 직접 실행
@@ -386,7 +386,7 @@ echo "$(date '+%F %T') - 실행 주체 : ${RUN_BY:-UNKNOWN}" >> /var/log/daily_t
 # ${RUN_BY:-UNKNOWN} : 환경변수 RUN_BY가 없으면 UNKNOWN 출력
 ```
 
-### 9-7. tar 압축 관련
+### 7. tar 압축 관련
 
 ```bash
 tar czf backup.tar.gz -C /src .    # 압축 생성 (-C: 기준 디렉터리 변경)
@@ -395,7 +395,7 @@ tar xzf backup.tar.gz -C /dest    # 압축 해제 (-x)
 # c=create  z=gzip  f=파일명  t=list  x=extract  C=change dir
 ```
 
-### 9-8. 테스트용 파일 생성
+### 8. 테스트용 파일 생성
 
 ```bash
 touch -d "8 days ago"  /backup/log/oldFile8.log    # 8일 전 타임스탬프로 파일 생성
@@ -408,7 +408,7 @@ find /backup/log -type f -mtime +7 -delete          # 삭제 실행
 
 ## 빠른 조회표 (Configuration)
 
-### 10-1. 산술 연산자
+### 1. 산술 연산자
 
 ```bash
 +  -  *  /  %  **        # 사칙연산, 나머지, 거듭제곱 (/ 는 정수 나눗셈)
@@ -417,14 +417,14 @@ find /backup/log -type f -mtime +7 -delete          # 삭제 실행
 +=  -=  *=  /=  %=       # 복합 대입
 ```
 
-### 10-2. 비교/논리 연산자 (`$(( ))`, `(( ))` 안에서)
+### 2. 비교/논리 연산자 (`$(( ))`, `(( ))` 안에서)
 
 ```bash
 <  >  <=  >=  ==  !=      # 비교 (참=1, 거짓=0 값 반환)
 &&  ||  !                  # 논리 AND/OR/NOT
 ```
 
-### 10-3. 파일 디스크립터 번호
+### 3. 파일 디스크립터 번호
 
 | 번호 | 이름 |
 | --- | --- |
@@ -432,7 +432,7 @@ find /backup/log -type f -mtime +7 -delete          # 삭제 실행
 | `1` | 표준 출력(stdout) |
 | `2` | 표준 오류(stderr) |
 
-### 10-4. 세미콜론 vs && vs ||
+### 4. 세미콜론 vs && vs ||
 
 ```bash
 ;    : 무조건 다음 명령 실행               → 단순 순차 실행
@@ -440,7 +440,7 @@ find /backup/log -type f -mtime +7 -delete          # 삭제 실행
 ||   : 앞 명령 실패(exit 1 이상) 시 실행     → 조건 기반 OR
 ```
 
-### 10-5. 혼동하기 쉬운 항목
+### 5. 혼동하기 쉬운 항목
 
 | 비슷한 문법 | 차이 |
 | --- | --- |

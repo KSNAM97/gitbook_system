@@ -15,7 +15,7 @@ DB 오류를 진단할 때 가장 먼저 확인해야 할 것은 네 가지다. 
 
 ## 2. 🛠️ 증상별 즉시 대응표 (Configuration)
 
-### 2-1. MariaDB 설치 · 접속
+### 1. MariaDB 설치 · 접속
 
 | 증상 | 원인 | 조치 |
 |---|---|---|
@@ -25,7 +25,7 @@ DB 오류를 진단할 때 가장 먼저 확인해야 할 것은 네 가지다. 
 | 서비스 재부팅 후 MariaDB 미시작 | `systemctl enable` 미실행 | `systemctl enable --now mariadb` |
 | `FLUSH PRIVILEGES` 없이 계정 설정 후 접속 안 됨 | 권한 테이블이 메모리에 반영 안 됨 | `FLUSH PRIVILEGES;` 실행 |
 
-### 2-2. DDL (CREATE · ALTER · DROP · TRUNCATE)
+### 2. DDL (CREATE · ALTER · DROP · TRUNCATE)
 
 | 증상 | 원인 | 조치 |
 |---|---|---|
@@ -36,7 +36,7 @@ DB 오류를 진단할 때 가장 먼저 확인해야 할 것은 네 가지다. 
 | `TRUNCATE` 후 AUTO_INCREMENT 초기화됨 | TRUNCATE는 AUTO_INCREMENT도 1로 초기화 | 의도치 않은 경우 `DELETE FROM 테이블;` 사용 |
 | `CHECK` 제약조건이 MariaDB에서 동작 안 함 | MariaDB 일부 버전에서 CHECK 비강제 | 애플리케이션 레이어에서 유효성 검사 로직 추가 |
 
-### 2-3. DML (SELECT · INSERT · UPDATE · DELETE)
+### 3. DML (SELECT · INSERT · UPDATE · DELETE)
 
 | 증상 | 원인 | 조치 |
 |---|---|---|
@@ -48,7 +48,7 @@ DB 오류를 진단할 때 가장 먼저 확인해야 할 것은 네 가지다. 
 | `AND`/`OR` 혼용 결과가 예상과 다름 | AND가 OR보다 우선순위 높음 | 괄호로 명시: `(조건1 AND 조건2) OR 조건3` |
 | `SELECT sal * 12` 원본 데이터가 바뀐 줄 앎 | SELECT는 조회만, 원본 불변 | 실제 변경은 `UPDATE` 사용 |
 
-### 2-4. WHERE · ORDER BY
+### 4. WHERE · ORDER BY
 
 | 증상 | 원인 | 조치 |
 |---|---|---|
@@ -57,7 +57,7 @@ DB 오류를 진단할 때 가장 먼저 확인해야 할 것은 네 가지다. 
 | `WHERE hiredate = '1981-12'` 결과 없음 | DATE 타입에 부분 날짜 문자열 비교 | `WHERE hiredate LIKE '1981-12%'` 또는 `BETWEEN '1981-12-01' AND '1981-12-31'` |
 | `!=` 사용 시 NULL 행이 결과에 포함 안 됨 | `!=` 는 NULL을 false로 취급 | `WHERE 컬럼 != 'X' OR 컬럼 IS NULL` |
 
-### 2-5. LIKE · CONCAT
+### 5. LIKE · CONCAT
 
 | 증상 | 원인 | 조치 |
 |---|---|---|
@@ -67,7 +67,7 @@ DB 오류를 진단할 때 가장 먼저 확인해야 할 것은 네 가지다. 
 | `CONCAT(ename, '사원')` 공백 없이 붙음 | CONCAT 인자에 공백 미포함 | `CONCAT(ename, ' 사원')` — 공백을 문자열로 추가 |
 | `CONCAT(NULL, '사원')` 결과가 NULL | NULL이 포함되면 CONCAT 전체가 NULL | `CONCAT(IFNULL(컬럼, ''), '사원')` |
 
-### 2-6. 자료형 · 제약조건
+### 6. 자료형 · 제약조건
 
 | 증상 | 원인 | 조치 |
 |---|---|---|
@@ -77,7 +77,7 @@ DB 오류를 진단할 때 가장 먼저 확인해야 할 것은 네 가지다. 
 | `PRIMARY KEY` 중복 삽입 오류 | 동일 PK 값 재삽입 | `INSERT IGNORE` 또는 `ON DUPLICATE KEY UPDATE` 사용 |
 | `DEFAULT NOW()` 설정했는데 값이 NULL | 컬럼명을 명시하고 값을 직접 NULL로 넣음 | 해당 컬럼을 INSERT 컬럼 목록에서 제외하면 DEFAULT 적용 |
 
-### 2-7. 제약조건 심화 (PK · UNIQUE · FK)
+### 7. 제약조건 심화 (PK · UNIQUE · FK)
 
 | 증상 | 원인 | 조치 |
 |---|---|---|
@@ -88,7 +88,7 @@ DB 오류를 진단할 때 가장 먼저 확인해야 할 것은 네 가지다. 
 | 자식 테이블 DROP 시 FK 오류 | 다른 테이블에서 자식을 또 참조 중 | `SHOW CREATE TABLE` 로 참조 체인 전체 확인 |
 | FK 설정 후 `ON DELETE CASCADE` 동작 안 함 | FK 생성 당시 옵션 미지정 | 테이블 재생성 또는 `ALTER TABLE DROP FK → ADD FK WITH CASCADE` |
 
-### 2-8. INNER JOIN
+### 8. INNER JOIN
 
 | 증상 | 원인 | 조치 |
 |---|---|---|
@@ -98,7 +98,7 @@ DB 오류를 진단할 때 가장 먼저 확인해야 할 것은 네 가지다. 
 | 여러 JOIN 조건이 필요한데 결과 이상 | AND/OR 조건을 ON 절과 WHERE 절에 혼용 | JOIN의 연결 조건은 ON, 행 필터는 WHERE로 명확히 분리 |
 | 집계 결과가 예상과 다름 (중복 집계) | 1:N 관계에서 N쪽 행이 여러 개 → JOIN 후 COUNT 시 의도치 않게 중복 | `GROUP BY` 기준 컬럼을 정확히 지정 (ID 단위로) |
 
-### 2-9. GROUP BY · HAVING
+### 9. GROUP BY · HAVING
 
 | 증상 | 원인 | 조치 |
 |---|---|---|

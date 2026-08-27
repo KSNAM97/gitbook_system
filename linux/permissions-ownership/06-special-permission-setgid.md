@@ -49,7 +49,9 @@ umask 0022 → 파일 644, 디렉터리 755
 
 ## 2. 🛠️ 표준 설정 템플릿 (Configuration)
 
-### 2-1. 그룹과 사용자 준비
+> **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
+
+### Step 1. 그룹과 사용자 준비
 
 ```bash
 groupadd solGroup
@@ -73,7 +75,7 @@ id userSol3
 
 그룹 추가 후 사용자는 재로그인해야 한다.
 
-### 2-2. Set-GID 공유 디렉터리
+### Step 2. Set-GID 공유 디렉터리
 
 ```bash
 mkdir -p /homesol/sol_tmp1
@@ -93,7 +95,7 @@ ls -ld /homesol/sol_tmp1
 drwxrws--- root solGroup /homesol/sol_tmp1
 ```
 
-### 2-3. 그룹 상속 확인
+### Step 3. 그룹 상속 확인
 
 `userSol1`:
 
@@ -111,7 +113,7 @@ ls -l /homesol/sol_tmp1
 drwxrwsr-x userSol1 solGroup userSol1D
 ```
 
-### 2-4. 그룹 구성원의 삭제 정책
+### Step 4. 그룹 구성원의 삭제 정책
 
 `2770` 디렉터리에서 그룹 구성원은 상위 디렉터리에 `w+x`가 있으므로 다른 그룹 구성원이 만든 파일도 삭제하거나 이름 변경할 수 있다.
 
@@ -126,7 +128,7 @@ rm /homesol/sol_tmp1/renamed
 chmod 3770 /homesol/sol_tmp1
 ```
 
-### 2-5. 기본 ACL 사용
+### Step 5. 기본 ACL 사용
 
 팀 파일에 그룹 쓰기 권한을 안정적으로 적용하려면 기본 ACL을 사용할 수 있다.
 

@@ -7,7 +7,7 @@
 
 ## 1. 🛠️ 명령어 문법 (Configuration)
 
-### 1-1. 파티션 준비
+### 1. 파티션 준비
 
 ```bash
 fdisk /dev/sdb                          # 파티션 생성/타입 지정 (n → t → w)
@@ -17,7 +17,7 @@ lsblk                                    # 파티션 결과 확인
 fdisk -l | grep -E 'raid|LVM'            # 타입 지정 결과 확인
 ```
 
-### 1-2. mdadm (RAID 생성/관리)
+### 2. mdadm (RAID 생성/관리)
 
 ```bash
 mdadm --create /dev/md0 --level=0 --raid-devices=2 /dev/sdb1 /dev/sdc1
@@ -48,7 +48,7 @@ mdadm --detail --scan > /etc/mdadm.conf  # RAID 설정 영구 저장
 dracut -fv                               # initramfs 갱신 (md127 방지)
 ```
 
-### 1-3. LVM (PV·VG·LV 생성/관리)
+### 3. LVM (PV·VG·LV 생성/관리)
 
 ```bash
 pvcreate /dev/sdb1                       # PV 초기화
@@ -77,7 +77,7 @@ vgremove vg_project                       # VG 삭제
 pvremove /dev/sdb1                        # PV 삭제
 ```
 
-### 1-4. 파일시스템·마운트·fstab
+### 4. 파일시스템·마운트·fstab
 
 ```bash
 mkfs.ext4 /dev/md0                        # ext4 포맷
@@ -99,13 +99,13 @@ mount -a                                  # fstab 기반 전체 마운트
 
 ## 2. 🔢 빠른 조회표 (Configuration)
 
-### 2-1. 파티션 타입 코드
+### 1. 파티션 타입 코드
 | 코드 | 별칭 | 용도 |
 |---|---|---|
 | `fd` | raid | Linux raid autodetect (RAID 멤버) |
 | `8e` | lvm | Linux LVM (LVM 멤버) |
 
-### 2-2. RAID 레벨 최소 디스크·결함 허용
+### 2. RAID 레벨 최소 디스크·결함 허용
 | 레벨 | 최소 디스크 | 결함 허용 | 공간 효율 |
 |---|---|---|---|
 | Linear | 2 | 없음 | 매우 높음(합산) |
@@ -114,20 +114,20 @@ mount -a                                  # fstab 기반 전체 마운트
 | RAID 5 | 3 | 있음(1개) | N−1 |
 | RAID 6 | 4 | 있음(2개) | N−2 |
 
-### 2-3. RAID `State` 값
+### 3. RAID `State` 값
 | State | 의미 |
 |---|---|
 | clean | 정상 |
 | degraded | 디스크 부족(장애) |
 | recovering | 복구(rebuild) 진행 중 |
 
-### 2-4. LVM `-L`/`-l` 옵션 구분
+### 4. LVM `-L`/`-l` 옵션 구분
 ```text
 -L, --size     → 절대 용량 (예: -L 8G)
 -l, --extents  → PE 개수/비율 (예: -l 100%FREE)
 ```
 
-### 2-5. ext4 vs XFS 확장·축소
+### 5. ext4 vs XFS 확장·축소
 | 파일시스템 | 확장 | 축소 |
 |---|---|---|
 | ext4 | O (`resize2fs`) | O (`umount`+`e2fsck`+`resize2fs`+`lvreduce`) |

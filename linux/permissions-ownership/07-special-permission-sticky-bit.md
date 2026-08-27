@@ -45,7 +45,9 @@ Sticky-bit 디렉터리에서는 일반적으로 다음 주체만 엔트리를 �
 
 ## 2. 🛠️ 표준 설정 템플릿 (Configuration)
 
-### 2-1. 공개 임시 공유 디렉터리
+> **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
+
+### Step 1. 공개 임시 공유 디렉터리
 
 ```bash
 mkdir /share
@@ -72,7 +74,7 @@ drwxrwxrwt 1777 root:root /share
 ls -ld /tmp
 ```
 
-### 2-2. 팀 전용 Sticky 디렉터리
+### Step 2. 팀 전용 Sticky 디렉터리
 
 그룹 생성:
 
@@ -117,7 +119,7 @@ drwxrws--T root soldesk /solhome/sol_tmp
 
 Other에 `x`가 없으므로 Sticky 위치가 대문자 `T`로 표시된다.
 
-### 2-3. 사용자별 검증
+### Step 3. 사용자별 검증
 
 `solUser1`:
 

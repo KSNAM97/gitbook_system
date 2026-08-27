@@ -28,7 +28,9 @@ GROUP BY와 HAVING은 JOIN 이후 만들어진 결과 테이블에 `GROUP BY`로
 
 ## 2. 🛠️ 표준 설정 템플릿 (Configuration)
 
-### 2-1. customer 테이블 생성
+> **적용 환경:** MariaDB/MySQL 계열 RDBMS.
+
+### Step 1. customer 테이블 생성
 
 ```sql
 -- customer 테이블 (고객 기본 정보 저장)
@@ -50,7 +52,7 @@ CREATE TABLE customer (
 );
 ```
 
-### 2-2. customer 데이터 삽입 (30명)
+### Step 2. customer 데이터 삽입 (30명)
 
 ```sql
 INSERT INTO customer VALUES
@@ -86,7 +88,7 @@ INSERT INTO customer VALUES
 ('serin39',   '홍세린', 'F', 39, '010-2001-0030', '광주', '2023-12-20');
 ```
 
-### 2-3. orders 테이블 생성
+### Step 3. orders 테이블 생성
 
 ```sql
 -- orders 테이블 (고객 주문 정보 저장)
@@ -109,7 +111,7 @@ CREATE TABLE orders (
 );
 ```
 
-### 2-4. orders 데이터 삽입 (50건)
+### Step 4. orders 데이터 삽입 (50건)
 
 ```sql
 INSERT INTO orders VALUES
@@ -165,7 +167,7 @@ INSERT INTO orders VALUES
 (50, 'gayoung31', '스마트워치 충전기','IT기기',   29000,   'PAID',   '2024-03-18');
 ```
 
-### 2-5. INNER JOIN 실습 쿼리 (EX1~EX12)
+### Step 5. INNER JOIN 실습 쿼리 (EX1~EX12)
 
 ```sql
 -- EX1) 고객 이름(name)과 주문 상품명(product)을 INNER JOIN으로 조회

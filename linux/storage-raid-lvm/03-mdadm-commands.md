@@ -49,7 +49,9 @@ dracut -fv                                 # initramfs 갱신
 
 ## 2. 🛠️ 표준 설정 템플릿 (Configuration)
 
-### 2-1. RAID 생성과 확인
+> **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
+
+### Step 1. RAID 생성과 확인
 
 ```bash
 mdadm --create /dev/md0 --level=5 --raid-devices=4 /dev/sdb1 /dev/sdc1 /dev/sdd1 /dev/sde1
@@ -59,9 +61,9 @@ mdadm --detail /dev/md0                    # 상세 정보 확인
 lsblk -f                                   # RAID 멤버·UUID 확인
 ```
 
-> RAID 생성 시 `write-intent bitmap` 활성화 여부를 묻는 경우 `y`를 선택하면 복구 속도 최적화에 도움이 됩니다.
+> **주의:** RAID 생성 시 `write-intent bitmap` 활성화 여부를 묻는 경우 `y`를 선택하면 복구 속도 최적화에 도움이 됩니다.
 
-### 2-2. Spare(예비) 디스크 포함 생성
+### Step 2. Spare(예비) 디스크 포함 생성
 
 ```bash
 mdadm --create /dev/md5 \
@@ -73,7 +75,7 @@ mdadm --create /dev/md5 \
 
 Spare 디스크는 평소 대기하다가 활성 디스크 장애 시 자동으로 투입되어 복구(rebuild)를 시작합니다.
 
-### 2-3. RAID 모니터링
+### Step 3. RAID 모니터링
 
 ```text
 형식: mdadm --monitor --scan
@@ -81,7 +83,7 @@ Spare 디스크는 평소 대기하다가 활성 디스크 장애 시 자동으�
 
 디스크 장애 감지, RAID Sync 진행률 감시, 로그 기록(`/var/log/messages` 등)이 주요 기능이며, 상태 변화 시 이메일 발송·syslog 기록을 설정할 수 있습니다.
 
-### 2-4. 장애 주입·제거·추가
+### Step 4. 장애 주입·제거·추가
 
 ```bash
 mdadm --fail /dev/md5 /dev/sdc1            # 해당 디스크를 논리적 장애로 표시
@@ -91,7 +93,7 @@ mdadm --add /dev/md5 /dev/sdc1             # 디스크를 RAID에 다시 추가
 
 `--fail`은 장애 상황을 인위적으로 만들어 결함 허용을 테스트할 때, `--remove`는 실제 RAID에서 디스크를 분리할 때 사용합니다. 슈퍼블록이 남아 있으면 `--add`로 다시 추가할 수 있습니다.
 
-### 2-5. RAID 중지·해체·슈퍼블록 초기화
+### Step 5. RAID 중지·해체·슈퍼블록 초기화
 
 ```bash
 umount /RAID5                              # 마운트되어 있으면 먼저 해제
@@ -101,9 +103,9 @@ mdadm --zero-superblock --force /dev/sdb1  # 강제 초기화
 wipefs -a /dev/sdb                         # 디스크 전체 시그니처 삭제
 ```
 
-> ⚠️ **파괴적 명령 주의:** `wipefs -a`와 `--zero-superblock`은 데이터 접근을 파괴할 수 있습니다. 실행 전 반드시 `lsblk`, `mdadm --detail`로 대상 디스크가 맞는지 확인합니다. `--stop`은 현재 조립된 RAID의 **동작만 중지**하며 구성 자체를 삭제하지 않습니다.
+> **주의:** ⚠️ **파괴적 명령 주의:** `wipefs -a`와 `--zero-superblock`은 데이터 접근을 파괴할 수 있습니다. 실행 전 반드시 `lsblk`, `mdadm --detail`로 대상 디스크가 맞는지 확인합니다. `--stop`은 현재 조립된 RAID의 **동작만 중지**하며 구성 자체를 삭제하지 않습니다.
 
-### 2-6. RAID 복구(assemble)
+### Step 6. RAID 복구(assemble)
 
 ```bash
 mdadm --assemble --scan                    # 슈퍼블록을 읽어 자동 재조립
@@ -165,7 +167,7 @@ dracut -fv
 umount → mdadm --stop → mdadm --zero-superblock → wipefs -a → fstab 정리
 ```
 
-> RAID 관련 자동 마운트를 `/etc/fstab`에 등록한 채 디스크를 제거하면 재부팅 시 emergency mode로 진입할 수 있습니다. RAID를 해체할 때는 관련 fstab 항목도 함께 정리합니다.
+> **참고:** RAID 관련 자동 마운트를 `/etc/fstab`에 등록한 채 디스크를 제거하면 재부팅 시 emergency mode로 진입할 수 있습니다. RAID를 해체할 때는 관련 fstab 항목도 함께 정리합니다.
 
 > 📌 **핵심 요약**
 > - `--create`로 생성, `--detail`·`--examine`으로 확인
