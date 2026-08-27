@@ -1,0 +1,176 @@
+# ⌨️ HTML - 입력태그
+
+> **Tag:** #HTML #input #form #select #textarea #입력태그 #부트캠프
+> **핵심 요약:** `<input>`(type별 단일 입력), `<select>`(드롭다운), `<form>`(서버 전송 컨테이너)으로 사용자 입력을 처리한다.
+
+---
+
+## 1. 📖 개요 (Overview)
+
+`<input>` 태그의 주요 type은 다음과 같다.
+
+| type | 설명 |
+|---|---|
+| `text` | 일반 텍스트 입력 (기본값) |
+| `password` | 비밀번호 입력 (문자 숨김) |
+| `button` | 버튼 |
+| `color` | 색상 선택기 |
+| `date` | 날짜 선택기 |
+| `range` | 슬라이더 (min/max/step 설정 가능) |
+| `number` | 숫자 입력 |
+| `checkbox` | 체크박스 |
+| `radio` | 라디오 버튼 |
+| `file` | 파일 선택 |
+| `email` | 이메일 형식 검증 입력 |
+
+```html
+id   <input name="id"     type="text"     placeholder="아이디"   autofocus> <br>
+pw   <input name="passwd" type="password" placeholder="비밀번호"> <br>
+     <input type="button" value="로그인">
+     <button>회원가입</button>
+```
+
+`name` 속성은 여러 `input` 이 있을 때 **각각의 데이터를 구분하는 식별자** 역할을 한다.
+
+```html
+<!-- name이 없으면 아이디와 비밀번호를 구분 못 함 -->
+<input name="id"     type="text"     placeholder="아이디">
+<input name="passwd" type="password" placeholder="비밀번호">
+```
+
+주요 input 속성은 다음과 같다.
+
+| 속성 | 설명 |
+|---|---|
+| `placeholder` | 입력 전 힌트 텍스트 (회색으로 표시) |
+| `autofocus` | 페이지 로딩 시 자동으로 포커스 |
+| `readonly` | 읽기 전용 (수정 불가) |
+| `value` | 기본값 설정 |
+| `max` / `min` | 최대/최소값 (number, range, date) |
+| `step` | 증감 단위 (range, number) |
+
+```html
+color  : <input type="color"> <br>
+date   : <input type="date"> <br>
+range  : <input type="range" max="100" min="0" step="5"> <br>
+phone  : <input type="number" value="010" readonly>
+         <input type="number">
+         <input type="number">
+```
+
+`<select>` 태그는 드롭다운 선택 메뉴를 만드는 태그이다. 내부 선택지는 `<option>` 으로 표시한다.
+
+```html
+<select name="menu">
+    <option value="" selected disabled>점심 메뉴</option>
+    <option value="hamburger">햄버거</option>
+    <option value="pasta">파스타</option>
+    <option value="pizza">피자</option>
+    <option value="jjajang">짜장면</option>
+    <option value="jjampong">짬뽕</option>
+</select>
+```
+
+`selected`는 기본으로 선택된 옵션을, `disabled`는 선택 불가 옵션(안내 문구용)을, `multiple`은 다중 선택 허용을 의미한다.
+
+```html
+<!-- 다중 선택 -->
+<select name="menu" multiple>
+    <option value="hamburger">햄버거</option>
+    <option value="pasta">파스타</option>
+</select>
+```
+
+`<form>` 태그는 사용자가 입력한 데이터를 **서버로 전송**하기 위한 양식 컨테이너 태그이다.
+
+```
+클라이언트 --- 로그인 요청 (ID, PW) ---> 웹 서버
+클라이언트 <-- 로그인 성공/실패 응답 --- 웹 서버
+```
+
+```html
+<form action="/login" method="post">
+    <input name="id"     type="text"     placeholder="아이디"> <br>
+    <input name="passwd" type="password" placeholder="비밀번호"> <br>
+    <input type="submit" value="로그인">
+</form>
+```
+
+| 속성 | 설명 |
+|---|---|
+| `action` | 데이터를 전송할 서버 URL |
+| `method` | 전송 방식 (`get` / `post`) |
+
+---
+
+## 🖥️ 실습 예제
+
+```html
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>입력 태그 실습</title>
+</head>
+<body>
+    <div>
+        <h3>로그인 하세요</h3>
+        id <input name="id"     type="text"     placeholder="아이디"   autofocus> <br>
+        pw <input name="passwd" type="password" placeholder="비밀번호"> <br>
+        <input type="button" value="로그인">
+        <button>회원가입</button>
+    </div>
+
+    <hr>
+
+    <div>
+        color  : <input type="color"> <br>
+        date   : <input type="date"> <br>
+        range  : <input type="range" max="100" min="0" step="5"> <br>
+                 <button>음량+</button><button>음량-</button> <br>
+        phone1 : 010 <input type="number"> <input type="number"> <br>
+        phone2 : <input type="number" value="010" readonly>
+                 <input type="number"> <input type="number">
+    </div>
+
+    <hr>
+
+    <h1>오늘의 점심 메뉴</h1>
+    <select name="menu">
+        <option value="" selected disabled>점심 메뉴</option>
+        <option value="hamburger">햄버거</option>
+        <option value="pasta">파스타</option>
+        <option value="pizza">피자</option>
+        <option value="jjajang">짜장면</option>
+        <option value="jjampong">짬뽕</option>
+    </select>
+</body>
+</html>
+```
+
+---
+
+## ⚠️ 자주 하는 실수
+
+| 실수 | 올바른 방법 |
+|---|---|
+| `name` 속성 누락 | 서버에서 데이터 구분 불가 — 반드시 `name` 작성 |
+| `<option>` 에 `value` 미작성 | 서버에 전송되는 실제 값은 `value` — 빈 문자열 주의 |
+| `<form>` 없이 `submit` 버튼 사용 | 데이터 전송은 `<form>` 안에서 이루어져야 함 |
+| `type="button"` vs `type="submit"` 혼동 | `button`=단순 클릭, `submit`=form 데이터 전송 |
+
+---
+
+## 🔗 관련 문서
+
+- 1. 🌐 HTML - HTML 기초와 기본구조
+- 5. 📦 HTML - 컨테이너 태그
+- 6. 🔗 HTML - 링크
+
+> 📌 **핵심 요약**
+> - `<input>`: 인라인+단일 태그, type으로 형태 변화 (text/password/button/color/date/range/number...)
+> - `name` 속성: 여러 input 데이터를 구분하는 식별자 (서버 전송 시 필수)
+> - `<select>` + `<option>`: 드롭다운 선택 메뉴
+> - `<form>`: 서버 전송 컨테이너, action(URL)·method(get/post) 속성 사용
+> - 관련: 5. 📦 HTML - 컨테이너 태그 · 6. 🔗 HTML - 링크
