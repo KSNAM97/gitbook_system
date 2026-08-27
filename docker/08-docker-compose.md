@@ -199,7 +199,7 @@ Named Volume의 이름 규칙은 `프로젝트이름_볼륨이름` 형식으로 
 
 > **적용 환경:** Docker Engine (Compose V2 내장) 설치 환경.
 
-### Q5. Reverse Proxy 구성 예시 (Nginx)
+### Reverse Proxy 구성 예시 (Nginx)
 
 ```yaml
 # /compose-lab/step3-1/docker-compose.yaml
@@ -261,7 +261,7 @@ upstream backend {
 }
 ```
 
-### Q6. MySQL + phpMyAdmin Compose 예시
+### MySQL + phpMyAdmin Compose 예시
 
 ```yaml
 services:
@@ -299,7 +299,7 @@ volumes:
 
 ## 3. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
-### Q7. Docker Compose 설치 방법 (Rocky Linux)
+### Docker Compose 설치 방법 (Rocky Linux)
 
 ```bash
 # 1. 기존 패키지 제거 (선택)

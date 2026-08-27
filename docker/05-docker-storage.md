@@ -83,7 +83,7 @@ docker run -d --name web \
 
 > **적용 환경:** Docker Engine (Compose V2 내장) 설치 환경.
 
-### Q7. Nginx autoindex 설정 예시
+### Nginx autoindex 설정 예시
 
 ```nginx
 # /nginx_config/default.conf
@@ -113,7 +113,7 @@ docker run -d --name web \
   nginx:latest
 ```
 
-### Q8. 웹 서버 2대 + DB 1대 구조는?
+### 웹 서버 2대 + DB 1대 구조는?
 
 ```
 Rocky Linux (web1, mydb) ← 호스트 /mysqldb:/var/lib/mysql

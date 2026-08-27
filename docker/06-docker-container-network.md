@@ -99,7 +99,7 @@ curl http://db:3306
 
 ## 3. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
-### Q9. 네트워크 구조 확인 실습 명령어
+### 네트워크 구조 확인 실습 명령어
 
 ```bash
 # 호스트 네트워크 인터페이스 확인

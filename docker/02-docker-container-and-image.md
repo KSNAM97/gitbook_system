@@ -34,7 +34,7 @@ COPY와 ADD도 자주 비교되는데, 둘 다 파일 복사는 지원하지만 
 
 > **적용 환경:** Docker Engine (Compose V2 내장) 설치 환경.
 
-### Q5. 실전 Dockerfile 예시 (Node.js)
+### 실전 Dockerfile 예시 (Node.js)
 
 ```dockerfile
 FROM node:18-alpine
@@ -51,7 +51,7 @@ EXPOSE 3000
 CMD ["node", "server.js"]
 ```
 
-### Q6. 실전 Dockerfile 예시 (Rocky Linux + httpd)
+### 실전 Dockerfile 예시 (Rocky Linux + httpd)
 
 ```dockerfile
 FROM rockylinux:9.3
@@ -69,7 +69,7 @@ CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]
 
 ## 3. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
-### Q7. Docker 이미지 빌드 및 관리 명령어
+### Docker 이미지 빌드 및 관리 명령어
 
 ```bash
 # 이미지 빌드 (현재 디렉터리의 Dockerfile 사용)
@@ -88,7 +88,7 @@ docker image prune -a -f
 docker inspect 이미지명
 ```
 
-### Q8. 컨테이너 실행 주요 옵션
+### 컨테이너 실행 주요 옵션
 
 ```bash
 docker run [옵션] 이미지명 [명령]
@@ -105,7 +105,7 @@ docker run [옵션] 이미지명 [명령]
 | `--rm` | 종료 시 자동 삭제 | `--rm` |
 | `-it` | 대화형 터미널 | `-it /bin/bash` |
 
-### Q9. Registry에서 이미지 push/pull
+### Registry에서 이미지 push/pull
 
 ```bash
 # Docker Hub 로그인
