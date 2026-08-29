@@ -1,0 +1,492 @@
+# 🌐 Kubernetes - Ingress 기초와 준비
+
+> **Tag:** #Kubernetes #Ingress #IngressController #부트캠프
+> **핵심 요약:** Ingress와 Ingress Controller(nginx)의 개념, Ingress Controller 설치, host/path 기반 Ingress 실습을 위한 웹 서비스 이미지·소스 준비 정리
+
+---
+
+## 1. 📖 개요 (Overview)
+
+쿠버네티스에서 파드는 외부에서 직접 접근할 수 없기 때문에 ClusterIP(내부 통신용), NodePort, LoadBalancer 같은 방법을 사용해야 한다.
+
+처음에는 NodePort 하나만으로도 충분하지만 서비스가 늘어나면 문제가 생길 수 있다. 예를 들어 웹 서비스가 3개 있다고 가정해보자.
+
+- web 서비스 : NodePort 30001
+- api 서비스 : NodePort 30002
+- admin 서비스 : NodePort 30003
+
+이 방식은 다음과 같은 문제가 있다.
+
+- 포트 번호를 사용자가 직접 기억해야 한다.
+- URL 기반 분기가 불가능하다 (`/api`, `/admin` 같은 경로 처리 불가).
+- 서비스가 많아질수록 포트 관리가 어려워진다.
+- HTTPS 인증서를 서비스마다 따로 관리해야 한다.
+
+이 문제를 해결하기 위해 등장한 개념이 **Ingress**다.
+
+### Ingress란
+
+Ingress는 외부에서 들어오는 HTTP/HTTPS 요청을 받아서, 규칙에 따라 내부의 여러 Service로 연결해주는 라우팅 규칙 집합이다.
+
+Ingress 자체는 규칙 정의이고 실제로 트래픽을 처리하는 주체는 **Ingress Controller**다. 즉, Ingress는 설정서이고 Ingress Controller는 실제 일하는 로드밸런서라고 생각하면 된다.
+
+### Ingress와 Ingress Controller의 관계
+
+**Ingress**
+
+- Ingress는 쿠버네티스 리소스다.
+- 어떤 도메인으로 들어오면 어떤 Service로 보낼지, 어떤 경로로 들어오면 어떤 Service로 보낼지를 정의만 한다.
+- 외부에서 들어오는 HTTP/HTTPS 요청을 어떤 Service로 전달할지에 대한 라우팅 규칙을 정의한다.
+- Ingress는 주로 도메인(Host)과 경로(Path)를 기준으로 라우팅 규칙을 설정한다.
+
+예를 들어 다음과 같이 설정할 수 있다.
+
+- `example.com` → web-service
+- `example.com/api` → api-service
+- `example.com/admin` → admin-service
+
+즉, Ingress는 다음을 정의한다.
+
+- 어떤 도메인으로 들어왔는가?
+- 어떤 경로로 들어왔는가?
+- 조건에 맞는 Service는 무엇인가?
+
+Ingress는 라우팅 규칙을 정의할 뿐 실제 HTTP/HTTPS 트래픽을 처리하지 않는다. 따라서 Ingress만 만들어서는 실제 트래픽이 라우팅되지 않는다.
+
+**Ingress Controller**
+
+Ingress Controller는 Ingress에 정의된 규칙을 실제로 실행하여 트래픽을 처리하는 프로그램이다.
+
+- Ingress → 어디로 보낼지 적어놓은 규칙
+- Ingress Controller → 그 규칙을 보고 실제로 보내는 주체
+
+Ingress Controller의 역할은 다음과 같다.
+
+- 클러스터 외부에서 들어오는 HTTP/HTTPS 요청을 받는다.
+- Kubernetes의 Ingress 리소스를 감시한다.
+- Ingress에 정의된 Host와 Path 등의 라우팅 규칙을 확인한다.
+- 요청 조건에 맞는 Service를 찾는다.
+- 해당 Service로 트래픽을 전달한다.
+- 필요에 따라 여러 Pod로 트래픽을 분산한다.
+- 즉, Ingress Controller가 실제 HTTP/HTTPS 트래픽을 처리하는 주체다.
+
+### Ingress가 해결해주는 문제
+
+**포트가 아닌 URL 기반 접근**
+
+- 사용자는 포트 번호를 몰라도 된다.
+- `http://example.com` → web 서비스
+- `http://example.com/api` → api 서비스
+- `http://example.com/admin` → admin 서비스
+- 외부에서는 하나의 주소만 보이고 내부에서만 서비스가 분기된다.
+
+**단일 진입 지점 (Single Entry Point)**
+
+- Ingress는 클러스터의 정문 역할을 한다.
+- 외부 트래픽은 무조건 Ingress로 들어온다.
+- 내부 서비스는 외부에 직접 노출되지 않는다.
+
+**HTTPS 처리 중앙화**
+
+- 모든 서비스에 공통 HTTPS 적용
+- 인증서 관리 위치를 한 곳으로 통합
+- 서비스 내부는 HTTP만 사용 가능
+- 운영 환경에서는 거의 필수 구조다.
+
+**Ingress의 동작 흐름**
+
+1. 사용자가 브라우저에서 `http://example.com/api`를 요청한다.
+2. 요청은 클러스터 외부 IP 또는 LoadBalancer IP로 들어온다.
+3. 이 요청은 Ingress Controller로 전달된다.
+4. Ingress Controller는 Ingress 규칙을 확인한다.
+5. `/api` 경로에 매칭되는 Service를 찾는다.
+6. 해당 Service 뒤에 연결된 Pod 중 하나로 트래픽을 전달한다.
+
+**중요 포인트**
+
+- Ingress는 Pod를 직접 모른다.
+- Ingress는 Service까지만 연결한다.
+- 실제 Pod 선택은 Service가 담당한다.
+
+### Ingress와 Service의 역할 분리
+
+- Ingress: 외부 요청 → 어떤 Service로 보낼지 결정
+- Service: 내부 요청 → 어떤 Pod로 보낼지 결정
+
+즉, Ingress는 길 안내, Service는 최종 목적지 선택이며 이렇게 역할이 완전히 분리되어 있다.
+
+**Ingress 사용 예**
+
+- 웹 서비스가 여러 개 존재할 때
+- URL 기반 라우팅이 필요할 때
+- HTTPS를 적용해야 할 때
+- 외부 노출 지점을 하나로 통합하고 싶을 때
+- 운영 환경(실무)에 가까운 구조를 만들 때
+
+### 웹 주소의 기본 구조
+
+웹 주소는 두 부분으로 나뉜다. 예시: `http://example.com/api`
+
+- **도메인(host)**: `example.com`
+- **경로(path)**: `/api`
+
+Ingress는 이 두 가지를 보고 판단한다. Ingress는 같은 웹 주소로 들어온 요청을 주소 뒤의 경로에 따라 서로 다른 Service로 보내는 규칙이다.
+
+**Ingress 기본 예제 (경로 기반)**
+
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: web-ingress
+spec:
+  rules:
+  - host: example.com
+    http:
+      paths:
+      - path: /api
+        pathType: Prefix
+        backend:
+          service:
+            name: api-service
+            port:
+              number: 80
+      - path: /web
+        pathType: Prefix
+        backend:
+          service:
+            name: web-service
+            port:
+              number: 80
+```
+
+이 규칙은 `example.com`으로 들어오는 요청에만 적용된다.
+
+- 주소의 경로가 `/api`로 시작하면 `api-service`로 보낸다.
+- 주소의 경로가 `/web`로 시작하면 `web-service`로 보낸다.
+
+```
+path: /api
+pathType: Prefix
+```
+
+이 설정은 경로가 `/api`로 시작하면 이 규칙을 적용한다는 뜻이다. Ingress는 `/api`라는 문자열까지만 판단한다.
+
+**Ingress가 실제로 판단하는 순서**
+
+1. 도메인이 `example.com`인가?
+2. 경로가 `/api`로 시작하는가? 또는 경로가 `/web`로 시작하는가?
+3. 조건에 맞는 Service로 전달
+
+Ingress는 이 외의 일은 하지 않는다.
+
+### Ingress와 Service의 역할 차이
+
+- **Ingress**: 웹 요청을 보고 어느 Service로 보낼지 결정
+- **Service**: 요청을 받아 Pod 중 하나로 전달
+
+Ingress는 앞에서 길을 고르는 역할이고 Service는 뒤에서 나눠 주는 역할이다.
+
+### Ingress 동작과정 (예시)
+
+실무에서는 페이지 기준이 아니라 업무 책임(도메인) 기준으로 서비스를 나눈다.
+
+- **auth-service**: 로그인 / 로그아웃 / 회원가입 / 토큰 발급(JWT 발급/갱신)
+- **user-service**: 회원 프로필 조회/수정 / 비밀번호 변경 / 주소·연락처 관리
+- **product-service**: 상품 목록 조회 / 상품 상세 조회 / 상품 등록·수정(관리자) / 재고 조회(간단하면 포함)
+- **order-service**: 주문 생성 / 주문 조회(내 주문 목록/상세) / 결제 요청 생성(결제 준비 단계) / 주문 상태 변경(결제대기/결제완료/취소 등)
+- **payment-service**: 외부 PG 연동(카카오페이/토스/이니시스 등) / 결제 승인·실패 콜백 처리 / 결제 결과를 order-service에 통보
+
+이 단위가 실무에서 흔한 서비스 분리다.
+
+**각 서비스는 Pod 1개가 아니라 Pod 여러 개다**
+
+각 서비스는 하나의 코드(애플리케이션)이고, 그 애플리케이션을 쿠버네티스에서 여러 번 실행한다.
+
+- auth-service Deployment → auth Pod 3개
+- user-service Deployment → user Pod 2개
+- product-service Deployment → product Pod 4개 (트래픽이 많으면 더 많은 pod를 사용해야 한다.)
+- order-service Deployment → order Pod 3개
+- payment-service Deployment → payment Pod 2개
+
+로그인 Pod, 로그아웃 Pod 이렇게 API별로 쪼개는 게 아니라 auth-service 하나에 로그인/로그아웃/회원가입/토큰 발급이 다 들어 있고 그 auth-service를 Pod 3개로 확장하는 방식이다.
+
+**Service(ClusterIP)가 Pod들을 묶어서 내부 주소를 만든다**
+
+Pod는 IP가 바뀌고(재시작/재배치) 개수가 늘었다 줄었다 한다. 그래서 Pod에 직접 접속하지 않는다. 각 Deployment 앞에 Service를 1개씩 둔다.
+
+```
+auth-service Service
+type: ClusterIP
+selector: app=auth
+```
+
+역할: auth Pod 3개로 로드밸런싱 + 고정 내부 DNS 제공
+
+```
+user-service Service
+type: ClusterIP
+selector:
+  app: user
+
+-------------------------------------
+product-service Service
+type: ClusterIP
+selector:
+  app: product
+
+------------------------------------
+order-service Service
+type: ClusterIP
+selector:
+  app: order
+
+------------------------------------
+payment-service Service
+type: ClusterIP
+selector:
+  app: payment
+```
+
+이 상태가 되면, 클러스터 내부에서는 서비스 이름으로 통신한다. order-service가 payment-service를 호출할 때 payment-service(ClusterIP)로 호출한다.
+
+**Ingress는 단일 진입점에서 여러 ClusterIP로 분기한다**
+
+지금까지 만든 ClusterIP들은 외부에서 직접 접근이 안 된다. 외부 트래픽을 받는 입구가 필요한데 그 입구가 Ingress다.
+
+Ingress는 외부에서 들어오는 HTTP/HTTPS 요청을 한 곳에서 받고 규칙(host/path)에 따라 내부 Service(ClusterIP)로 전달한다.
+
+예시 규칙(개념):
+
+```
+example.com/auth/*      ---> auth-service(ClusterIP)
+example.com/users/*     ---> user-service(ClusterIP)
+example.com/products/*  ---> product-service(ClusterIP)
+example.com/orders/*    ---> order-service(ClusterIP)
+example.com/payments/*  ---> payment-service(ClusterIP)
+```
+
+```
+외부 사용자
+-> Ingress Controller(nginx 같은 것)
+-> Ingress Rules 확인
+-> 해당 Service(ClusterIP)
+-> Service가 Pod들 중 하나로 분산
+-> Pod
+```
+
+Ingress는 Pod로 직접 보내지 않고, 반드시 Service(ClusterIP)로 보낸다.
+
+---
+
+## 2. 🛠️ Ingress Controller (nginx) 설치
+
+참고 사이트:
+
+```
+https://kubernetes.io/
+https://kubernetes.github.io/ingress-nginx/
+```
+
+**설치**
+
+```
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.15.1/deploy/static/provider/baremetal/deploy.yaml
+```
+
+**다운로드(오프라인/커스텀 적용 시)**
+
+```
+curl  -O  https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.15.1/deploy/static/provider/baremetal/deploy.yaml
+```
+
+설치 후 `ingress-nginx` 네임스페이스에 Ingress Controller Service가 생성되며, 이 Service의 NodePort(예: `80:32181/TCP,443:30366/TCP`)를 통해 외부에서 접근한다. 자세한 확인 방법은 3장의 실습에서 다룬다.
+
+---
+
+## 3. 📦 실습 준비 — 웹 서비스 이미지 및 소스 준비
+
+### 파일 전송 (Windows → k8s-master)
+
+```
+C:\WINDOWS\system32> scp  C:\tmp\soldeskweb.zip   guest@192.168.10.100:/home/guest
+guest@192.168.10.100's password:
+soldeskweb.zip                                                         100%   25KB  24.8MB/s   00:00
+```
+
+### 전송 확인 및 압축 해제
+
+```
+[root@k8s-master ~]# ls  -l  /home/guest/
+합계 68
+drwxr-xr-x  2 guest guest         6  8월 14 16:57 exec-liveness-lab
+-rw-r--r--  1 root  root        246  8월 13 12:15 mynginx.yaml
+-rw-r--r--  1 root  root        152  8월 13 12:15 nginx-pod.yaml
+-rw-r--r--  1 root  root        514  8월 13 12:15 nginx.yaml
+-rw-r--r--  1 root  root        593  8월 13 12:15 rq-step-3-2-request-mem-pod.yaml
+-rw-r--r--  1 root  root        114  8월 13 12:15 rq-step2-qouta.yaml
+-rw-r--r--  1 root  root        133  8월 13 12:15 rq-step3-2-request-quota.yaml
+-rw-r--r--  1 root  root        587  8월 13 12:15 rq-step3-request-pod.yaml
+-rw-r--r--  1 root  root        124  8월 13 12:15 rq-step3-requests-qouta.yaml
+-rw-r--r--  1 root  root         57  8월 13 12:15 sol-namespace.yaml
+-rw-r--r--  1 guest guest   26045  8월 24 10:47 soldeskweb.zip	<-----
+-rw-r--r--  1 root  root       517  8월 13 12:15 step1-baseline.yaml
+
+[root@k8s-master ~]# ls  -l  /home/guest/soldeskweb.zip
+-rw-r--r-- 1 guest guest 26045  8월 24 10:47 /home/guest/soldeskweb.zip
+
+[root@k8s-master ~]# cp  /home/guest/soldeskweb.zip  /root/
+
+[root@k8s-master ~]# ls  -l  soldeskweb.zip
+-rw-r--r-- 1 root root 26045  8월 24 10:50 soldeskweb.zip
+
+[root@k8s-master ~]# unzip  soldeskweb.zip
+Archive:  soldeskweb.zip
+   creating: webserver-demo/
+   creating: webserver-demo/curriculum/
+  inflating: webserver-demo/curriculum/Dockerfile
+  inflating: webserver-demo/curriculum/index.html
+   creating: webserver-demo/ingress/
+  inflating: webserver-demo/ingress/curriculum.yaml
+  inflating: webserver-demo/ingress/ingress.yaml
+  inflating: webserver-demo/ingress/sol-home.yaml
+   creating: webserver-demo/sol-collection/
+  inflating: webserver-demo/sol-collection/Dockerfile
+   creating: webserver-demo/sol-collection/html/
+   creating: webserver-demo/sol-collection/html/images/
+  inflating: webserver-demo/sol-collection/html/images/sol_logo.jpg
+  inflating: webserver-demo/sol-collection/html/images/soldesk.jpg
+  inflating: webserver-demo/sol-collection/html/index.html
+```
+
+압축을 풀면 다음과 같은 디렉터리 구조가 만들어진다.
+
+```
+-soldeskweb/
+      └─webserver-demo/
+	├─ curriculum/
+	│  ├─ Dockerfile
+	│  └─ index.html
+	│
+	├─ ingress/
+	│      ├─ curriculum.yaml
+	│      ├─ ingress.yaml
+	│      └─ sol-home.yaml
+	│
+	└─ sol-collection/
+		├─ Dockerfile
+		└─ html/
+		    ├─ index.html
+		    └─ images/
+		        ├─ sol_logo.jpg
+		        └─ soldesk.jpg
+```
+
+```
+[root@k8s-master ~]# ls -l webserver-demo/sol-collection/
+합계 4
+-rw-r--r-- 1 root root 151 12월 19  2025 Dockerfile
+drwxr-xr-x 3 root root  38 12월 19  2025 html
+
+[root@k8s-master ~]# ls -l webserver-demo/sol-collection/html/
+합계 4
+drwxr-xr-x 2 root root  45 12월 19  2025 images
+-rw-r--r-- 1 root root 341  1월 13  2026 index.html
+
+[root@k8s-master ~]# ls -l webserver-demo/sol-collection/html/images/
+합계 24
+-rw-r--r-- 1 root root  5132 12월 19  2025 sol_logo.jpg
+-rw-r--r-- 1 root root 15874 12월 19  2025 soldesk.jpg
+```
+
+### 메인 웹서비스(sol-collection) 이미지 생성
+
+```
+[root@k8s-master ~]# cat webserver-demo/sol-collection/Dockerfile
+FROM nginx:1.29.1
+LABEL maintainer="NGINX Front-end container <soldesk@gmail.com>"
+
+COPY html /usr/share/nginx/html
+
+CMD ["nginx", "-g", "daemon off;"]
+```
+
+```
+[root@k8s-master ~]# cd  /root/webserver-demo/sol-collection/
+
+[root@k8s-master sol-collection]# pwd
+/root/webserver-demo/sol-collection
+
+[root@k8s-master sol-collection]# ls -l
+합계 4
+-rw-r--r-- 1 root root 151 12월 19  2025 Dockerfile
+drwxr-xr-x 3 root root  38 12월 19  2025 html
+
+[root@k8s-master sol-collection]# docker  build  -t  konan7979/sol-collection:1.0  .
+[+] Building 7.4s (8/8) FINISHED                                                    			docker:default
+ => [internal] load build definition from Dockerfile                                          		0.0s
+ => => transferring dockerfile: 190B                                                          			0.0s
+ => [internal] load metadata for docker.io/library/nginx:1.29.1                               		3.0s
+ => [auth] library/nginx:pull token for registry-1.docker.io                                  		0.0s
+ => [internal] load .dockerignore                                                             			0.0s
+ => => transferring context: 2B                                                               			0.0s
+ => [internal] load build context                                                             			0.0s
+ => => transferring context: 21.56kB                                                          			0.0s
+ => [1/2] FROM docker.io/library/nginx:1.29.1@sha256:8adbdcb969e2676478ee2c7ad333956f0c8e0e4  	4.2s
+ => => resolve docker.io/library/nginx:1.29.1@sha256:8adbdcb969e2676478ee2c7ad333956f0c8e0e4  	0.0s
+ => => sha256:16d05858bb8d98a948d273ef83ff992f7eb4b7b50b9d92dcb186ec02d6cd1089 955B / 955B    	1.1s
+ => => sha256:4f4e50e2076584d483a45b2db7718a03e941045e8dcd0023b6d326b743b282 1.40kB / 1.40kB  	0.4s
+ => => sha256:08cfef42fd24116711bc1e323e83d40e6145937250f876e0342c2c90426c3bfb 404B / 404B    	0.8s
+ => => sha256:3cc5fdd1317a723bde90305759b954dda6335ade70354d860e82c59588df4e 1.21kB / 1.21kB  	1.1s
+ => => sha256:5f825f15e2e0140c77e43d026664718f274284e907b3dbfea8af5c3f2e843673 629B / 629B    	0.7s
+ => => sha256:375a694db7346a00da49aac62757cec58667d0c90874d4b08edef1814161 44.07MB / 44.07MB	1.7s
+ => => sha256:5c32499ab806884c5725c705c2bf528662d034ed99de13d3205309e0d9ef 28.23MB / 28.23MB	1.8s
+ => => extracting sha256:5c32499ab806884c5725c705c2bf528662d034ed99de13d3205309e0d9ef0375     	0.6s
+ => => extracting sha256:375a694db7346a00da49aac62757cec58667d0c90874d4b08edef1814161f8f2     	0.7s
+ => => extracting sha256:5f825f15e2e0140c77e43d026664718f274284e907b3dbfea8af5c3f2e843673     	0.0s
+ => => extracting sha256:16d05858bb8d98a948d273ef83ff992f7eb4b7b50b9d92dcb186ec02d6cd1089     	0.0s
+ => => extracting sha256:08cfef42fd24116711bc1e323e83d40e6145937250f876e0342c2c90426c3bfb     	0.0s
+ => => extracting sha256:3cc5fdd1317a723bde90305759b954dda6335ade70354d860e82c59588df4e4b     	0.0s
+ => => extracting sha256:4f4e50e2076584d483a45b2db7718a03e941045e8dcd0023b6d326b743b282a1     	0.0s
+ => [2/2] COPY html /usr/share/nginx/html                                                     		0.1s
+ => exporting to image                                                                        			0.1s
+ => => exporting layers                                                                       			0.0s
+ => => exporting manifest sha256:514baf95ea3c7510077620851fdc2919af5fb9db03dbe18cdeae9d759c8  	0.0s
+ => => exporting config sha256:aaf41cd0dacc0877cf10c02b814430d2d6624e078e874d24fed8e2a8cbfef  	0.0s
+ => => exporting attestation manifest sha256:1c1425037be73e3abe6e9db3bca48adcc89d7da24ce702f  	0.0s
+ => => exporting manifest list sha256:e1edbbc89fd853725eae8ff7ce8b7ad94fbec11be2fb76a99b1fc6  	0.0s
+ => => naming to docker.io/konan7979/sol-collection:latest                                    		0.0s
+ => => unpacking to docker.io/konan7979/sol-collection:latest                                 		0.0s
+
+[root@k8s-master sol-collection]# docker  images
+IMAGE                               	ID             	DISK USAGE   CONTENT SIZE   EXTRA
+custom-nginx-web:1.31               	02218a3d52d6        	348MB            97MB
+konan7979/custom-nginx-web:1.31     	02218a3d52d6        	348MB            97MB
+konan7979/nginx-exec-liveness:1.0   	caeb48d1c8b7        	235MB            63.1MB
+konan7979/nginx-liveness:1.0        	75edbab6ae2a        	235MB            63.1MB
+konan7979/sol-collection:1.0     	e1edbbc89fd8        	276MB            72.3MB
+konan7979/ssh-probe:1.0             	6578cbc133e3       	321MB            81.9MB
+
+[root@k8s-master sol-collection]# docker  push  konan7979/sol-collection:1.0
+The push refers to repository [docker.io/konan7979/sol-collection]
+e8b1cc07af8d: Pushed
+44136fa355b3: Mounted from konan7979/ssh-probe
+375a694db734: Pushed
+5c32499ab806: Pushed
+5f825f15e2e0: Pushed
+16d05858bb8d: Pushed
+08cfef42fd24: Pushed
+3cc5fdd1317a: Pushed
+4f4e50e20765: Pushed
+ba54b4289f64: Pushed
+1.0: digest: sha256:571a4a896a75278579d6b575aebaf986e5ccf420ac21beddf10f0793af30af72 size: 856
+```
+
+---
+
+> 📌 **핵심 요약**
+> - Ingress는 외부 HTTP/HTTPS 요청을 host/path 규칙에 따라 여러 Service로 라우팅하는 규칙 정의이며, 실제 트래픽 처리는 Ingress Controller(예: nginx)가 담당한다
+> - Ingress는 Pod를 직접 모르고 Service까지만 연결하며, Pod 선택은 Service가 담당한다 — 역할이 Ingress(길 안내)와 Service(목적지 선택)로 완전히 분리되어 있다
+> - Ingress Controller(nginx)는 공식 배포 매니페스트(`kubectl apply -f .../deploy.yaml`)로 설치하며, `ingress-nginx` 네임스페이스에 NodePort Service가 생성되어 외부 접근 지점이 된다
+> - host/path 기반 Ingress 실습을 위해 웹 서비스 이미지(Dockerfile, HTML)와 Deployment/Service YAML을 준비하고 Docker Hub에 이미지를 push해 실습 환경을 구성한다
+> - 관련: 22. 🌐 Kubernetes - host·path 기반 Ingress · 23. 🌐 Kubernetes - 정규표현식 Ingress·Canary 배포 · 18. 🔌 Kubernetes - Service 기초와 ClusterIP
