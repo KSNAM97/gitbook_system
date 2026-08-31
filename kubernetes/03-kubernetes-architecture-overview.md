@@ -14,6 +14,10 @@
 
 개발자는 `kubectl`이나 API 요청을 통해 원하는 상태만 선언하고, 쿠버네티스는 이 상태를 계속 유지하도록 자동으로 동작한다.
 
+Kubernetes 이전에는 여러 서버의 컨테이너를 Overlay Network(GRE 터널)로만 묶는 멀티호스트 도커 플랫폼 구조를 사용했는데, 이 구조에는 중앙 제어 시스템이 없어 장애 복구·오토스케일링·롤링 업데이트를 사람이 직접 처리해야 했다. Kubernetes의 Control Plane은 바로 이 중앙 제어 시스템 역할을 한다.
+
+![멀티호스트 도커 플랫폼 (GRE 터널) — Kubernetes 이전 구조](assets/multihost-docker-gre-tunnel.jpeg)
+
 ---
 
 ## 2. 핵심 컴포넌트와 동작 흐름

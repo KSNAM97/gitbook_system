@@ -188,6 +188,7 @@
 
 ## Kubernetes
 
+* [Kubernetes - 입문 기초이론](kubernetes/00-kubernetes-intro-basics.md)
 * [Kubernetes - 설치](kubernetes/01-kubernetes-installation.md)
 * [Kubernetes - Pod 생성](kubernetes/02-kubernetes-pod-creation.md)
 * [Kubernetes - 아키텍처 개요와 핵심 컴포넌트](kubernetes/03-kubernetes-architecture-overview.md)
