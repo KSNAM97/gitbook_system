@@ -219,3 +219,6 @@
 * [Kubernetes - ConfigMap](kubernetes/29-kubernetes-configmap.md)
 * [Kubernetes - Secret](kubernetes/30-kubernetes-secret.md)
 * [Kubernetes - AutoScaling](kubernetes/31-kubernetes-autoscaling.md)
+* [Kubernetes - 통합 정리](kubernetes/32-kubernetes-integration-summary.md)
+* [Kubernetes - 트러블슈팅 치트시트](kubernetes/33-kubernetes-troubleshooting-cheatsheet.md)
+* [Kubernetes - 퀵 레퍼런스](kubernetes/34-kubernetes-quick-reference.md)
