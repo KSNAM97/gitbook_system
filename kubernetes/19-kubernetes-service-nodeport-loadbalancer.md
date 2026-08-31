@@ -1,11 +1,11 @@
-# 🚪 Kubernetes - NodePort·LoadBalancer
+# Kubernetes - NodePort·LoadBalancer
 
 > **Tag:** #Kubernetes #Service #NodePort #LoadBalancer #부트캠프
 > **핵심 요약:** 외부에서 Service에 접근할 수 있도록 Node 포트를 여는 NodePort 타입과, 클라우드 환경의 외부 Load Balancer와 연동하는 LoadBalancer 타입을 실습으로 정리
 
 ---
 
-## 1. 🚪 NodePort 실습
+## 1. NodePort 실습
 
 - 모든 노드를 대상으로 외부 접속 가능한 포트를 예약한다.
 - Default NodePort 범위: 30000–32767
@@ -118,7 +118,7 @@ k8s-worker2   Ready    <none>          	9d      v1.35.7      192.168.10.102     
 
 ---
 
-## 2. ☁️ LoadBalancer 실습
+## 2. LoadBalancer 실습
 
 - Public 클라우드(AWS, Azure, GCP 등)에서 운영 가능하다.
 - LoadBalancer를 자동으로 구성 요청한다.
@@ -161,7 +161,7 @@ service "loadbalancer-service" deleted from default namespace
 
 ---
 
-## 3. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 3. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 - `kubectl get svc`의 EXTERNAL-IP가 `<pending>`으로 계속 남아있으면(LoadBalancer 타입) 클러스터가 클라우드 Load Balancer를 프로비저닝할 수 없는 온프레미스 환경이라는 뜻이다. 실제 클라우드 환경에서만 정상적으로 외부 IP가 할당된다.
 - `kubectl describe svc <이름>`의 `Endpoints` 필드가 비어 있다면 Service의 `selector`와 Pod의 `labels`가 일치하지 않는 것이므로, `kubectl get pods --show-labels`로 라벨을 확인하고 selector를 맞추거나 `kubectl label pod <이름> <key>=<value> --overwrite`로 라벨을 수정한다.
@@ -171,9 +171,9 @@ service "loadbalancer-service" deleted from default namespace
 
 ---
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - **NodePort**는 모든 Node의 30000~32767 범위 포트를 열어 `Node IP:NodePort → Service → Pod` 흐름으로 외부 접근을 허용하며, `kubectl get svc`에는 `서비스포트:노드포트` 형태로 표시된다
 > - **LoadBalancer**는 클라우드 환경의 외부 Load Balancer와 연동하는 타입으로, `외부 사용자 → Cloud Load Balancer → Service → Pod` 흐름을 가지며 내부적으로 NodePort도 함께 예약한다
 > - 온프레미스 환경에서는 LoadBalancer 타입을 생성해도 EXTERNAL-IP가 `<pending>`으로 남는데, 이는 클라우드 컨트롤러가 없어 외부 IP를 프로비저닝할 수 없기 때문이며 정상 동작이다
 > - 운영 환경에서는 NodePort를 직접 외부에 노출하기보다 LoadBalancer나 Ingress를 함께 사용하는 경우가 많다
-> - 관련: 18. 🔌 Kubernetes - Service 기초와 ClusterIP · 10. 🎛️ Kubernetes - Controller 개념과 ReplicationController · 21. 🌐 Kubernetes - Ingress 기초와 준비
+> - 관련: 18.  Kubernetes - Service 기초와 ClusterIP · 10.  Kubernetes - Controller 개념과 ReplicationController · 21.  Kubernetes - Ingress 기초와 준비

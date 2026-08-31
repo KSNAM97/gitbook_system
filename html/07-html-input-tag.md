@@ -1,11 +1,11 @@
-# ⌨️ HTML - 입력태그
+# ⌨ HTML - 입력태그
 
 > **Tag:** #HTML #input #form #select #textarea #입력태그 #부트캠프
 > **핵심 요약:** `<input>`(type별 단일 입력), `<select>`(드롭다운), `<form>`(서버 전송 컨테이너)으로 사용자 입력을 처리한다.
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 `<input>` 태그의 주요 type은 다음과 같다.
 
@@ -103,7 +103,7 @@ phone  : <input type="number" value="010" readonly>
 
 ---
 
-## 🖥️ 실습 예제
+## 실습 예제
 
 ```html
 <!DOCTYPE html>
@@ -151,7 +151,7 @@ phone  : <input type="number" value="010" readonly>
 
 ---
 
-## ⚠️ 자주 하는 실수
+## 자주 하는 실수
 
 | 실수 | 올바른 방법 |
 |---|---|
@@ -162,15 +162,15 @@ phone  : <input type="number" value="010" readonly>
 
 ---
 
-## 🔗 관련 문서
+## 관련 문서
 
-- 1. 🌐 HTML - HTML 기초와 기본구조
-- 5. 📦 HTML - 컨테이너 태그
-- 6. 🔗 HTML - 링크
+- 1.  HTML - HTML 기초와 기본구조
+- 5.  HTML - 컨테이너 태그
+- 6.  HTML - 링크
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - `<input>`: 인라인+단일 태그, type으로 형태 변화 (text/password/button/color/date/range/number...)
 > - `name` 속성: 여러 input 데이터를 구분하는 식별자 (서버 전송 시 필수)
 > - `<select>` + `<option>`: 드롭다운 선택 메뉴
 > - `<form>`: 서버 전송 컨테이너, action(URL)·method(get/post) 속성 사용
-> - 관련: 5. 📦 HTML - 컨테이너 태그 · 6. 🔗 HTML - 링크
+> - 관련: 5.  HTML - 컨테이너 태그 · 6.  HTML - 링크

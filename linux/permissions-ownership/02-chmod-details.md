@@ -1,11 +1,11 @@
-# 🔧 허가권 상세 (chmod & 8진수 · 심볼릭 표기)
+# 허가권 상세 (chmod & 8진수 · 심볼릭 표기)
 
 > **Tag:** #Linux #Permission #chmod #Octal #SymbolicMode  
 > **핵심 요약:** `chmod`는 파일과 디렉터리의 권한 비트를 변경한다. 8진수 방식은 전체 권한을 한 번에 설정하고, 심볼릭 방식은 기존 권한을 기준으로 필요한 권한만 추가·제거·재설정한다.
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 **`chmod`의 기본 형식은?**
 
@@ -65,7 +65,7 @@ chmod g+w file
 
 기존 권한은 유지하고 Group 쓰기 권한만 추가한다.
 
-## 2. 🛠️ 표준 설정 템플릿 (Configuration)
+## 2. 표준 설정 템플릿 (Configuration)
 
 > **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판. `chmod` 실행 주체는 파일 소유자, root, 또는 관련 capability를 가진 프로세스여야 한다.
 
@@ -153,7 +153,7 @@ stat -c '%a %n' reference-file target-file
 
 ---
 
-## 3. 🔍 검증 및 트러블슈팅
+## 3. 검증 및 트러블슈팅
 
 ### 3-1. 권한 확인
 
@@ -195,9 +195,9 @@ lsattr <경로>
 findmnt -T <경로>
 ```
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - 숫자 방식은 전체 권한 재설정
 > - 심볼릭 방식은 필요한 권한만 변경
 > - 재귀 적용 시 파일과 디렉터리를 구분
 > - 디렉터리는 내부 접근을 위해 `x` 필요
-> - 관련: 🔐 허가권 (Permission) — chmod & rwx·UGO 모델 · 🧮Chmod 계산기 · ⚡ 허가권·소유권 명령어 퀵 레퍼런스
+> - 관련:  허가권 (Permission) — chmod & rwx·UGO 모델 · Chmod 계산기 ·  허가권·소유권 명령어 퀵 레퍼런스

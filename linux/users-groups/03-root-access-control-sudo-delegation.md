@@ -4,7 +4,7 @@ root 직접 접속을 차단하고, `wheel` 그룹 또는 `/etc/sudoers` 를 통
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 `PermitRootLogin no` 를 모든 운영 서버의 기본값으로 강제해야 하는 이유는 **감사 추적성(Audit Trail)** 확보와 **폭발 반경 최소화** 때문이다. root 직접 로그인은 "누가" 명령을 실행했는지 추적이 불가능하고, 비밀번호 하나 유출로 시스템 전체를 잃게 된다. `root` 는 이름이 아니라 **UID=0** 으로 정의되며, `/etc/passwd` 편집으로 다른 계정을 UID 0으로 바꾸면 그 계정도 root가 되므로, 감사 시 `awk -F: '$3==0 {print $1}' /etc/passwd` 로 UID=0 계정을 반드시 점검해야 한다. 개인 계정으로 로그인 후 `sudo` 를 쓰면 `/var/log/secure` 에 **"누가 어떤 명령을 실행했는지"** 남아 사고 추적이 가능하다.
 
@@ -12,7 +12,7 @@ root 직접 접속을 차단하고, `wheel` 그룹 또는 `/etc/sudoers` 를 통
 
 ---
 
-## 2. 🛠️ 표준 설정 템플릿 (Configuration)
+## 2. 표준 설정 템플릿 (Configuration)
 
 > **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
 
@@ -52,7 +52,7 @@ su - root   # → Authentication failure 확인
 usermod -aG wheel subroot
 
 # [2] /etc/sudoers 에 아래 라인이 활성화돼 있는지 확인 (RHEL 기본값)
-#     %wheel  ALL=(ALL)  ALL
+# %wheel ALL=(ALL) ALL
 
 # [3] 권한 회수
 gpasswd -d subroot wheel
@@ -61,33 +61,33 @@ gpasswd -d subroot wheel
 ### Step 5. sudo 권한 위임 — 방식 ② sudoers 개별 등록
 
 ```bash
-# ⚠️ 반드시 visudo 로 편집 (문법 오류 시 sudo 자체 잠금 사고 방지)
+# 반드시 visudo 로 편집 (문법 오류 시 sudo 자체 잠금 사고 방지)
 visudo
 ```
 
 ```properties
 # /etc/sudoers
-# 형식 :  사용자  호스트=(실행권한자)  허용명령
+# 형식 : 사용자 호스트=(실행권한자) 허용명령
 root     ALL=(ALL)   ALL
 rootsub  ALL=(ALL)   ALL                # 풀 권한 위임
 
 # [실무 권장] 최소 권한 원칙 - 특정 명령만 허용
-# opsuser  ALL=(root) NOPASSWD: /bin/systemctl restart nginx, /usr/bin/tail -f /var/log/*
+# opsuser ALL=(root) NOPASSWD: /bin/systemctl restart nginx, /usr/bin/tail -f /var/log/*
 ```
 
 ### Step 6. 비밀번호 잠금/해제 (퇴사자·휴직자 대응)
 
 ```bash
 passwd -S <user>          # 상태 조회 (PS/LK/NP)
-passwd -l <user>          # 잠금 (계정 유지 + 로그인만 차단) ★ 실무 표준
+passwd -l <user>          # 잠금 (계정 유지 + 로그인만 차단)  실무 표준
 passwd -u <user>          # 잠금 해제
-# passwd -d <user>        # ⚠️ 비밀번호 삭제 → 무비번 로그인 위험, 실무 사용 금지
+# passwd -d <user> # 비밀번호 삭제 → 무비번 로그인 위험, 실무 사용 금지
 chage -l <user>           # 만료일/최근 변경일 확인
 ```
 
 ---
 
-## 3. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 3. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 ### 3-1. 필수 검증 명령어
 
@@ -103,7 +103,7 @@ journalctl _COMM=sudo -e                             # sudo 실행 로그 (누�
 
 ### 3-2. 트러블슈팅 시나리오
 
-#### 🚨 시나리오 1. wheel 그룹에 넣었는데도 `"<user>은(는) sudoers 파일에 없습니다"`
+#### 시나리오 1. wheel 그룹에 넣었는데도 `"<user>은(는) sudoers 파일에 없습니다"`
 
 - **원인 후보:**
     1. `/etc/sudoers` 의 `%wheel ALL=(ALL) ALL` 라인이 주석 처리돼 있음.
@@ -115,7 +115,7 @@ journalctl _COMM=sudo -e                             # sudo 실행 로그 (누�
     3. `visudo -c` 로 문법 검증. 오류 시 백업본으로 복구.
     4. 여전히 실패 시 `/var/log/secure` 로 거부 사유 확인.
 
-#### 🚨 시나리오 2. `PermitRootLogin no` 를 반영했더니 자동화 스크립트가 전부 실패
+#### 시나리오 2. `PermitRootLogin no` 를 반영했더니 자동화 스크립트가 전부 실패
 
 - **원인:** CI/배포 스크립트가 root SSH 로그인을 전제로 작성돼 있음.
 - **해결 절차:**
@@ -129,9 +129,9 @@ journalctl _COMM=sudo -e                             # sudo 실행 로그 (누�
     3. 스크립트 내 `ssh root@host` → `ssh deploy@host "sudo ..."` 로 교체.
     4. 감사 로그(`journalctl _COMM=sudo`)에 배포 이력이 남는지 확인.
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - 직접 root 로그인 차단: `/etc/ssh/sshd_config` → `PermitRootLogin no` + `sshd` 재시작
 > - `/etc/pam.d/su` → `auth required pam_wheel.so` 로 `su` 도 wheel 그룹만 허용
 > - sudo 권한: `usermod -aG wheel user` 또는 `visudo` 에서 사용자·명령 단위 제한 설정
 > - sudo 로그 확인: `journalctl _COMM=sudo`, `grep sudo /var/log/secure`
-> - 관련: 5-1. 👤 리눅스 사용자 계정 관리 (useradd & usermod & userdel) · 5-2. 👥 리눅스 그룹 관리 & UPG 모델(groupadd &usermod & gpasswd) · 5-4. 🧩 사용자·그룹·권한 통합 정리 · 5-5. 🚑 사용자·그룹·권한 트러블슈팅 치트시트 · 5-6. ⚡ 사용자·그룹·권한 명령어 퀵 레퍼런스
+> - 관련: 5-1.  리눅스 사용자 계정 관리 (useradd & usermod & userdel) · 5-2.  리눅스 그룹 관리 & UPG 모델(groupadd &usermod & gpasswd) · 5-4.  사용자·그룹·권한 통합 정리 · 5-5.  사용자·그룹·권한 트러블슈팅 치트시트 · 5-6.  사용자·그룹·권한 명령어 퀵 레퍼런스

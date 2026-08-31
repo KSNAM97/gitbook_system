@@ -1,11 +1,11 @@
-# 🔗 VI Shell 연동 & Swap 파일 복구
+# VI Shell 연동 & Swap 파일 복구
 
 > **Tag:** #Linux #Vi #Vim #Shell #Recovery #SwapFile  
 > **핵심 요약:** VI/Vim 내부에서 `:!`로 외부 명령을 실행하고, `:read !`로 결과를 삽입하며, `:[범위]!`로 버퍼 내용을 외부 명령으로 필터링할 수 있다. Swap 경고가 발생하면 동시 편집 여부를 먼저 확인하고 복구 후에만 잔존 Swap을 삭제한다.
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 VI/Vim 내부에서 셸 명령을 실행하는 이유는 편집 화면을 유지하면서 파일 목록을 확인하고, 다른 파일 내용을 참고하고, 문법 검사를 실행하고, 백업 파일과 현재 내용을 비교하고, 로그 및 서비스 상태를 확인하고, 외부 명령 결과를 문서에 삽입하고, 선택한 줄을 정렬·필터링할 수 있기 때문이다.
 
@@ -22,7 +22,7 @@ Swap 파일 경고는 몇 가지 원인으로 발생할 수 있다. 다른 Vim �
 
 ---
 
-## 2. 🛠️ 표준 사용 템플릿 (Configuration)
+## 2. 표준 사용 템플릿 (Configuration)
 
 > **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
 
@@ -431,7 +431,7 @@ Vim의 E325 화면에서 확실한 경우 `D`를 선택할 수도 있다.
 
 ---
 
-## 3. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 3. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 ### 3-1. Vim 내부 확인
 
@@ -461,7 +461,7 @@ find /home -type f -name '.*.sw?' 2>/dev/null
 
 ### 3-3. 대표 트러블슈팅
 
-#### 🚨 시나리오 1. E325 Swap 경고가 발생한다
+#### 시나리오 1. E325 Swap 경고가 발생한다
 
 경고 예:
 
@@ -488,7 +488,7 @@ fuser -v /etc/nginx/nginx.conf
 vim -r /etc/nginx/nginx.conf
 ```
 
-#### 🚨 시나리오 2. `E212: Can't open file for writing`
+#### 시나리오 2. `E212: Can't open file for writing`
 
 가능한 원인을 확인한다.
 
@@ -511,7 +511,7 @@ df -i /path/to/file
 :set nomodified
 ```
 
-#### 🚨 시나리오 3. `:%!sort` 후 전체 내용이 재정렬되었다
+#### 시나리오 3. `:%!sort` 후 전체 내용이 재정렬되었다
 
 즉시 실행 취소:
 
@@ -537,7 +537,7 @@ u
 :w !diff -u /tmp/file.bak -
 ```
 
-#### 🚨 시나리오 4. SSH 연결이 종료되었다
+#### 시나리오 4. SSH 연결이 종료되었다
 
 SSH 연결이 끊겨도 Vim 프로세스가 즉시 종료된다고 단정할 수 없다. `tmux`, `screen`, 셸의 SIGHUP 처리 방식 등에 따라 프로세스가 남아 있을 수 있다.
 
@@ -560,7 +560,7 @@ vim -r /path/to/file
 :w /tmp/file.recovered
 ```
 
-#### 🚨 시나리오 5. `:10!ls -l /root`를 실행했더니 10번째 줄이 사라졌다
+#### 시나리오 5. `:10!ls -l /root`를 실행했더니 10번째 줄이 사라졌다
 
 `:[범위]!명령`은 해당 범위를 명령 출력으로 교체한다.
 
@@ -576,7 +576,7 @@ u
 :10read !ls -l /root
 ```
 
-#### 🚨 시나리오 6. `:!diff backup %`에 저장하지 않은 변경이 보이지 않는다
+#### 시나리오 6. `:!diff backup %`에 저장하지 않은 변경이 보이지 않는다
 
 `%`는 현재 파일의 디스크 경로로 확장된다. 아직 `:w`하지 않은 버퍼 변경은 디스크 파일에 없다.
 
@@ -586,7 +586,7 @@ u
 :w !diff -u /tmp/backup -
 ```
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - 셸 명령: `:!명령`
 > - 결과 삽입: `:read !명령`
 > - 범위 필터: `:[범위]!명령`

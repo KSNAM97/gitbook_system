@@ -1,11 +1,11 @@
-# 📊 RAID 레벨별 특징 (Linear·0·1·5·6)
+# RAID 레벨별 특징 (Linear·0·1·5·6)
 
 > **Tag:** #Linux #RAID #RAID0 #RAID1 #RAID5 #RAID6 #Parity #FaultTolerance
 > **핵심 요약:** Software RAID의 대표 레벨은 Linear, RAID 0, RAID 1, RAID 5, RAID 6이며 성능(Performance)·안정성(Reliability)·공간 효율성(Storage Efficiency)에서 차이가 있다. Linear·RAID 0은 결함 허용이 없고, RAID 1은 미러링으로 안정성이 높으며, RAID 5는 패리티 1개로 디스크 1개, RAID 6은 패리티 2개로 디스크 2개 장애까지 복구할 수 있다.
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 Linear RAID는 최소 2개 이상의 디스크를 하나의 논리 디스크로 묶되, 데이터를 **첫 번째 디스크부터 순차적으로 채워 나가는** 방식입니다. 결함 허용(Fault-tolerance)을 제공하지 않으며 읽기·쓰기 처리 능력도 낮은 편이지만, 디스크 용량을 **손실 없이 100% 합산**해서 사용할 수 있다는 것이 장점입니다.
 
@@ -81,7 +81,7 @@ RAID 레벨을 한눈에 비교하면 다음과 같습니다.
 
 ---
 
-## 2. 🛠️ 표준 설정 참고 (Configuration)
+## 2. 표준 설정 참고 (Configuration)
 
 > **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
 
@@ -118,7 +118,7 @@ mdadm --create /dev/md6 --level=6      --raid-devices=4 /dev/sdb1 /dev/sdc1 /dev
 
 ---
 
-## 3. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 3. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 ### 3-1. 레벨과 상태 확인
 
@@ -144,10 +144,10 @@ RAID 6 사용 가능 용량 ≈ (디스크 개수 - 2) × 최소 디스크 용�
 | RAID 5에서 디스크 2개 동시 장애 대비 안 함 | 복구 불가 | 중요도 높으면 RAID 6·10 검토 |
 | RAID를 백업으로 오해 | 논리적 손상·삭제 대응 불가 | RAID + 별도 백업 병행 |
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - Linear·RAID 0은 결함 허용 없음
 > - RAID 1은 미러링, 안정성 높고 효율 낮음
 > - RAID 5는 패리티 1개로 디스크 1개 장애 복구(N−1)
 > - RAID 6는 패리티 2개로 디스크 2개 장애 복구(N−2)
 > - 공간 효율과 결함 허용은 트레이드오프
-> - 관련: 🧩 RAID 개념 & Hardware vs Software RAID · ⚙️ mdadm 명령어 & RAID 관리 · 🏗️ 종합실습 RAID 5 + Spare 구성 & 장애 복구
+> - 관련:  RAID 개념 & Hardware vs Software RAID ·  mdadm 명령어 & RAID 관리 ·  종합실습 RAID 5 + Spare 구성 & 장애 복구

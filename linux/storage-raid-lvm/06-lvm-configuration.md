@@ -1,11 +1,11 @@
-# ⚙️ LVM 구성 & 확장·축소 (pvcreate·vgcreate·lvcreate)
+# LVM 구성 & 확장·축소 (pvcreate·vgcreate·lvcreate)
 
 > **Tag:** #Linux #LVM #pvcreate #vgcreate #lvcreate #lvextend #lvreduce #resize2fs
 > **핵심 요약:** LVM은 `pvcreate`로 PV를 만들고, `vgcreate`로 VG를 묶고, `lvcreate`로 LV를 나눈 뒤 파일시스템을 포맷·마운트한다. 용량이 부족하면 `vgextend`로 디스크를 추가하고 `lvextend` + `resize2fs`(ext4)/`xfs_growfs`(XFS)로 확장한다. 축소는 ext4에서만 가능하며 반드시 마운트 해제 → `e2fsck` → 파일시스템 축소 → LV 축소 순서를 지켜야 하고, XFS는 축소를 지원하지 않는다.
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 LVM 생성 명령의 흐름은 `파티션(8e) → pvcreate → vgcreate → lvcreate → mkfs → mount → fstab` 순서로 진행합니다. `pvcreate`는 파티션을 PV로 초기화하고, `vgcreate`는 PV들을 묶어 VG를 만들며, `lvcreate`는 VG 안에서 원하는 크기로 LV를 만듭니다. LV는 일반 블록 장치처럼 `mkfs.ext4`, `mkfs.xfs`로 포맷해 사용합니다.
 
@@ -28,11 +28,11 @@ lvextend (LV 확장)
 
 LV 축소가 위험한 이유는, 파일시스템을 먼저 줄이지 않고 LV를 줄이면 파일시스템이 존재하지 않는 영역을 참조하게 되어 **데이터가 깨질 수 있기** 때문입니다. ext4 축소는 반드시 **마운트 해제 → `e2fsck` 검사 → `resize2fs`로 파일시스템 축소 → `lvreduce`로 LV 축소** 순서를 지켜야 합니다. XFS는 축소 자체를 지원하지 않으므로, 줄여야 하면 백업 후 재생성해야 합니다.
 
-> **참고:** ⚠️ XFS는 온라인 확장은 가능하지만 축소는 불가능합니다. 축소가 필요할 수 있는 볼륨은 ext4를 선택하거나 용량 설계를 신중히 합니다.
+> **참고:**  XFS는 온라인 확장은 가능하지만 축소는 불가능합니다. 축소가 필요할 수 있는 볼륨은 ext4를 선택하거나 용량 설계를 신중히 합니다.
 
 ---
 
-## 2. 🛠️ 표준 설정 템플릿 (Configuration)
+## 2. 표준 설정 템플릿 (Configuration)
 
 > **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
 
@@ -165,11 +165,11 @@ lvs                                        # LV 크기 확인
 df -h                                      # 실제 용량 확인
 ```
 
-> **참고:** ⚠️ 축소 전 반드시 백업합니다. 순서를 어기거나 파일시스템 축소 크기보다 LV를 더 작게 줄이면 데이터가 손상됩니다. XFS에는 이 절차를 적용할 수 없습니다.
+> **참고:**  축소 전 반드시 백업합니다. 순서를 어기거나 파일시스템 축소 크기보다 LV를 더 작게 줄이면 데이터가 손상됩니다. XFS에는 이 절차를 적용할 수 없습니다.
 
 ---
 
-## 3. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 3. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 ### 3-1. 확장 후 용량이 그대로다
 
@@ -206,10 +206,10 @@ vgextend VGNAME /dev/sdX1                   # VG에 추가
 lvremove → vgremove → pvremove
 ```
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - 파티션(8e) → pvcreate → vgcreate → lvcreate → mkfs → mount
 > - LV 확장은 lvextend 후 resize2fs(ext4)/xfs_growfs(XFS) 필수
 > - VG 확장은 pvcreate + vgextend
 > - ext4 축소는 umount → e2fsck → resize2fs → lvreduce 순서
 > - XFS는 확장만 가능, 축소 불가
-> - 관련: 🧱 LVM 개념 & 구조 (PV·VG·LV·PE) · 🏗️ 종합실습 LVM 구성 → 확장 → 축소 · 🧩 RAID·LVM 통합 정리
+> - 관련:  LVM 개념 & 구조 (PV·VG·LV·PE) ·  종합실습 LVM 구성 → 확장 → 축소 ·  RAID·LVM 통합 정리

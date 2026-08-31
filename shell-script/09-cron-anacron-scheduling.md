@@ -129,7 +129,7 @@ SHELL=/bin/bash
 PATH=/sbin:/bin:/usr/sbin:/usr/bin
 MAILTO=root
 
-# 분  시  일  월  요일  사용자  명령
+# 분 시 일 월 요일 사용자 명령
 */5  *  *  *  *  root  /script/hourly/login_user_check.sh
 0    3  *  *  *  root  /home/user/backup.sh >> /var/log/backup.log 2>&1
 40  18  *  *  1-5 root  /script/hourly/temp_backup.sh
@@ -178,7 +178,7 @@ MAILTO=root
 RANDOM_DELAY=45
 START_HOURS_RANGE=3-22
 
-# 주기(일)  지연(분)  작업식별자        명령
+# 주기(일) 지연(분) 작업식별자 명령
 1           5        cron.daily        nice run-parts /etc/cron.daily
 7           25       cron.weekly       nice run-parts /etc/cron.weekly
 @monthly    45       cron.monthly      nice run-parts /etc/cron.monthly
@@ -188,13 +188,13 @@ START_HOURS_RANGE=3-22
 
 ```bash
 ls -l /etc/ | grep cron
-# /etc/cron.d        : 패키지별 개별 cron 파일
-# /etc/cron.hourly   : 매시간 실행 스크립트
-# /etc/cron.daily    : 매일 실행 스크립트
-# /etc/cron.weekly   : 매주 실행 스크립트
-# /etc/cron.monthly  : 매월 실행 스크립트
-# /etc/crontab       : 시스템 전체 cron 설정
-# /etc/anacrontab    : anacron 설정
+# /etc/cron.d : 패키지별 개별 cron 파일
+# /etc/cron.hourly : 매시간 실행 스크립트
+# /etc/cron.daily : 매일 실행 스크립트
+# /etc/cron.weekly : 매주 실행 스크립트
+# /etc/cron.monthly : 매월 실행 스크립트
+# /etc/crontab : 시스템 전체 cron 설정
+# /etc/anacrontab : anacron 설정
 ```
 
 ### Step 8. 접속자 모니터링 스크립트 (EX1)
@@ -331,7 +331,7 @@ run-parts --test /etc/cron.daily/    # 실제 실행 없이 실행 대상 파일
 
 ```bash
 # 2. /etc/anacrontab 설정 추가
-# 주기(일)  지연(분)  식별자            명령
+# 주기(일) 지연(분) 식별자 명령
 1           1        cron.daily_test   env RUN_BY=ANACRON run-parts /etc/cron.daily
 
 anacron -T              # anacrontab 문법 검사
@@ -374,7 +374,7 @@ test -x /usr/sbin/anacron; echo $?       # anacron 실행 권한 확인 (0=있�
 
 ### 3-2. 트러블슈팅 시나리오
 
-#### 🚨 시나리오 1. 스크립트를 수동 실행하면 되는데 cron에서는 실행되지 않음
+#### 시나리오 1. 스크립트를 수동 실행하면 되는데 cron에서는 실행되지 않음
 
 - **원인:** cron 환경의 PATH가 제한적이어서 명령어 경로를 찾지 못함.
 - **해결:** 스크립트 내 또는 crontab에 명시적 경로 지정.
@@ -385,7 +385,7 @@ test -x /usr/sbin/anacron; echo $?       # anacron 실행 권한 확인 (0=있�
   /usr/bin/find /backup -type f -mtime +7 -delete
   ```
 
-#### 🚨 시나리오 2. cron 작업 결과를 확인할 수 없음
+#### 시나리오 2. cron 작업 결과를 확인할 수 없음
 
 - **원인:** cron은 백그라운드 실행이라 화면 출력이 없음.
 - **해결:** stdout·stderr를 파일로 리다이렉션 후 확인.
@@ -396,7 +396,7 @@ test -x /usr/sbin/anacron; echo $?       # anacron 실행 권한 확인 (0=있�
   tail -f /var/log/script.log
   ```
 
-#### 🚨 시나리오 3. `run-parts`가 스크립트를 실행하지 않음
+#### 시나리오 3. `run-parts`가 스크립트를 실행하지 않음
 
 - **원인:** 스크립트 파일명에 `.sh` 확장자가 있거나 실행 권한이 없음.
 - **해결:**
@@ -407,7 +407,7 @@ test -x /usr/sbin/anacron; echo $?       # anacron 실행 권한 확인 (0=있�
   run-parts --test /etc/cron.daily/    # 실행 대상에 포함됐는지 확인
   ```
 
-#### 🚨 시나리오 4. cron 작업이 등록됐는데도 실행되지 않음
+#### 시나리오 4. cron 작업이 등록됐는데도 실행되지 않음
 
 - **원인 진단 순서:**
   1. `systemctl status crond` — crond 실행 중인지 확인
@@ -416,7 +416,7 @@ test -x /usr/sbin/anacron; echo $?       # anacron 실행 권한 확인 (0=있�
   4. 스크립트에 실행 권한(`chmod +x`) 있는지 확인
   5. 스크립트 내 경로가 모두 절대 경로인지 확인
 
-#### 🚨 시나리오 5. anacron 작업이 이미 실행된 날 재실행이 안 됨
+#### 시나리오 5. anacron 작업이 이미 실행된 날 재실행이 안 됨
 
 - **원인:** anacron은 마지막 실행 날짜를 `/var/spool/anacron/` 에 기록하고, 같은 날은 재실행하지 않음.
 - **해결:** 강제 실행 옵션 사용.
@@ -424,16 +424,16 @@ test -x /usr/sbin/anacron; echo $?       # anacron 실행 권한 확인 (0=있�
   anacron -n -f    # 지연 생략 + 날짜 무관 강제 실행
   ```
 
-#### 🚨 시나리오 6. 로그 파일에 날짜 대신 `%f` 문자 또는 마이크로초가 출력됨
+#### 시나리오 6. 로그 파일에 날짜 대신 `%f` 문자 또는 마이크로초가 출력됨
 
 - **원인:** `date` 포맷에서 대문자 `%F`(YYYY-MM-DD) 대신 소문자 `%f`를 사용하면 마이크로초(또는 플랫폼에 따라 문자 그대로) 출력.
   ```bash
-  DATE=$(date +%f)    # ❌ → '%f' 또는 마이크로초 (의도와 다름)
-  DATE=$(date +%F)    # ✅ → 2026-07-30 (YYYY-MM-DD)
+  DATE=$(date +%f)    #  → '%f' 또는 마이크로초 (의도와 다름)
+  DATE=$(date +%F)    #  → 2026-07-30 (YYYY-MM-DD)
   ```
 - **해결:** 백업 파일명과 로그 날짜에는 반드시 대문자 `%F` 사용. 날짜+시간 전체는 `date '+%F %T'`.
 
-#### 🚨 시나리오 7. 오래된 파일 삭제를 테스트할 파일이 없음
+#### 시나리오 7. 오래된 파일 삭제를 테스트할 파일이 없음
 
 - **원인:** 실제 7일 이상 된 파일이 없어서 `find -mtime +7` 이 아무것도 반환하지 않음.
 - **해결:** `touch -d`로 과거 타임스탬프를 가진 테스트 파일을 즉시 생성.
@@ -447,11 +447,11 @@ test -x /usr/sbin/anacron; echo $?       # anacron 실행 권한 확인 (0=있�
 ---
 
 ## 요약
-- 📌 **핵심 요약**
+-  **핵심 요약**
 - cron 구성: `crond`(데몬) + `crontab`(설정) — crond가 중지되면 작업 미실행
 - 스케줄 형식: `분 시 일 월 요일 [user] command` — `*/N`으로 N단위 반복, `@daily` 등 예약어 사용 가능
 - 필수 3원칙: **절대 경로** · **실행 권한(`chmod +x`)** · **출력 리다이렉션(`>> log 2>&1`)**
 - anacron: 시스템이 꺼져 있는 동안 놓친 일·주·월 작업을 부팅 후 보완 실행 (`anacron -n -f`로 강제 실행)
 - cron·anacron 연동: `test -x /usr/sbin/anacron || run-parts /etc/cron.daily`
-- 관련: **8. 🎯 Shell Script - 위치 매개변수 (Positional Parameters)** · **5. 🔀 Shell Script - 조건문 (if · case)** · **6. 🔁 Shell Script - 반복문 (for · while · until)** · **10. 🧩 Shell Script - 통합 정리**
+- 관련: **8.  Shell Script - 위치 매개변수 (Positional Parameters)** · **5.  Shell Script - 조건문 (if · case)** · **6.  Shell Script - 반복문 (for · while · until)** · **10.  Shell Script - 통합 정리**
 

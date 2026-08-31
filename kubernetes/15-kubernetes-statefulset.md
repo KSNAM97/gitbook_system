@@ -1,11 +1,11 @@
-# ☸️ Kubernetes - StatefulSet
+# Kubernetes - StatefulSet
 
 > **Tag:** #Kubernetes #StatefulSet #Controller #HeadlessService #부트캠프
 > **핵심 요약:** 상태(State)가 있는 애플리케이션을 위한 컨트롤러 StatefulSet의 개념, Headless Service와의 관계, scale-out/scale-in 및 롤링 업데이트 실습 정리
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 StatefulSet은 상태(State)가 있는 애플리케이션을 안정적으로 운영하기 위한 Kubernetes 컨트롤러이다.
 
@@ -97,7 +97,7 @@ StatefulSet이라면 mysql-1이라는 이름 그대로 다시 살아난다. mysq
 
 ---
 
-## 2. 🛠️ 실습
+## 2. 실습
 
 ### StatefulSet YAML 예제
 
@@ -342,7 +342,7 @@ StatefulSet의 롤링 업데이트는 scale-in과 마찬가지로 가장 높은 
 
 ---
 
-## 3. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 3. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 - `kubectl get pods -o wide --watch`로 관찰 시, StatefulSet의 생성/롤링 업데이트는 항상 낮은 번호부터(`0 → 1 → 2`), 삭제/롤링 업데이트 시 종료는 높은 번호부터(`2 → 1 → 0`) 순서대로 진행되는지 확인한다. 순서가 지켜지지 않으면 `podManagementPolicy`가 `Parallel`로 설정되어 있는지 점검한다.
 - `kubectl scale statefulset <이름> --replicas=N`으로 축소했을 때 PVC는 자동 삭제되지 않는다. 재확장 시 이전 데이터가 그대로 붙게 되므로, 완전 초기화가 필요하면 PVC를 직접 삭제해야 한다(`persistentVolumeClaimRetentionPolicy` 설정으로 동작을 제어할 수 있다).
@@ -352,9 +352,9 @@ StatefulSet의 롤링 업데이트는 scale-in과 마찬가지로 가장 높은 
 
 ---
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - StatefulSet은 상태(State)가 있는 애플리케이션(DB, 메시지큐, 분산 클러스터)을 위해 Pod의 이름·저장소·생성삭제 순서를 고정하여 관리하는 컨트롤러다
 > - Pod 이름은 `db-0, db-1, db-2`처럼 고정되고, 각 Pod마다 전용 PVC가 생성되어 재생성되어도 같은 데이터가 다시 붙는다
 > - 생성은 `0 → 1 → 2` 순서, 삭제/축소/롤링 업데이트는 `2 → 1 → 0` 역순으로 진행되며, `podManagementPolicy`(OrderedReady/Parallel)로 이 동작을 제어할 수 있다
 > - StatefulSet은 Headless Service(serviceName)와 함께 사용해 각 Pod에 고정된 DNS 주소를 부여하며, Pod 삭제 후에도 PVC는 남아 데이터가 유지된다
-> - 관련: 2. 📦 Kubernetes - Pod 생성 · 14. ☸️ Kubernetes - DaemonSet · 20. 🌐 Kubernetes - ExternalName·Headless Service
+> - 관련: 2.  Kubernetes - Pod 생성 · 14.  Kubernetes - DaemonSet · 20.  Kubernetes - ExternalName·Headless Service

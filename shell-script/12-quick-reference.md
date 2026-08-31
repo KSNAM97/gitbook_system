@@ -309,7 +309,7 @@ action="$1"; shift; targets=("$@")              # 첫 인자 소비 후 나머�
 ### 1. cron 스케줄 형식
 
 ```bash
-# 분  시  일  월  요일  [user]  command
+# 분 시 일 월 요일 [user] command
   *   *   *   *    *           명령     # 매 분마다
   0   3   *   *    *           명령     # 매일 03:00
   0   3   *   *    1           명령     # 매주 월요일 03:00
@@ -362,10 +362,10 @@ find /backup -type f -mtime +7 -print -delete >> /var/log/cleanup.log
 
 ```bash
 # /etc/anacrontab 주요 필드
-# 주기(일)  지연(분)  식별자         명령
-# 1         5        cron.daily     nice run-parts /etc/cron.daily
-# 7         25       cron.weekly    nice run-parts /etc/cron.weekly
-# @monthly  45       cron.monthly   nice run-parts /etc/cron.monthly
+# 주기(일) 지연(분) 식별자 명령
+# 1 5 cron.daily nice run-parts /etc/cron.daily
+# 7 25 cron.weekly nice run-parts /etc/cron.weekly
+# @monthly 45 cron.monthly nice run-parts /etc/cron.monthly
 
 anacron -T              # anacrontab 문법 검사
 anacron -n -f           # 지연 생략 + 날짜 무관 강제 실행
@@ -392,7 +392,7 @@ echo "$(date '+%F %T') - 실행 주체 : ${RUN_BY:-UNKNOWN}" >> /var/log/daily_t
 tar czf backup.tar.gz -C /src .    # 압축 생성 (-C: 기준 디렉터리 변경)
 tar tzf backup.tar.gz              # 압축 풀지 않고 목록만 확인 (-t)
 tar xzf backup.tar.gz -C /dest    # 압축 해제 (-x)
-# c=create  z=gzip  f=파일명  t=list  x=extract  C=change dir
+# c=create z=gzip f=파일명 t=list x=extract C=change dir
 ```
 
 ### 8. 테스트용 파일 생성
@@ -480,10 +480,10 @@ echo $BASH_VERSION              # Bash 버전 확인 (연관 배열 4.0+)
 ---
 
 ## 요약
-- 📌 **핵심 요약**
+-  **핵심 요약**
 - 변수 계산: `$(( ))` / `expr` / `let` — 문자열 그대로는 계산 불가
 - 조건 판단: 항상 종료 코드 기준, `[ ]` 양쪽 공백 필수
 - 반복 목록에 변수 범위가 필요하면 `for (( ))` 사용
 - 배열·인자 전개는 예외 없이 `"${arr[@]}"` / `"$@"`, 개수는 `${#arr[@]}` / `$#`
 - 스크립트 첫 로직은 인자 3단 검증(개수 → 형식 → 존재) + `exit 1`
-- 관련: **10. 🧩 Shell Script - 통합 정리** · **11. 🚑 Shell Script - 트러블슈팅 치트시트** · **9. ⏰ Shell Script - cron · anacron (스케줄 자동화)** · **1. 🐚 Shell Script - 변수와 환경변수 (커널·쉘 개념 포함)** · **2. 🧩 Shell Script - Metacharacters (메타문자)** · **3. 🔢 Shell Script - expr · let (산술 연산)** · **4. 🚦 Shell Script - exit 상태와 test 명령** · **5. 🔀 Shell Script - 조건문 (if · case)** · **6. 🔁 Shell Script - 반복문 (for · while · until)** · **7. 📦 Shell Script - 배열(Array)과 RANDOM** · **8. 🎯 Shell Script - 위치 매개변수 (Positional Parameters)**
+- 관련: **10.  Shell Script - 통합 정리** · **11.  Shell Script - 트러블슈팅 치트시트** · **9. ⏰ Shell Script - cron · anacron (스케줄 자동화)** · **1.  Shell Script - 변수와 환경변수 (커널·쉘 개념 포함)** · **2.  Shell Script - Metacharacters (메타문자)** · **3.  Shell Script - expr · let (산술 연산)** · **4.  Shell Script - exit 상태와 test 명령** · **5.  Shell Script - 조건문 (if · case)** · **6.  Shell Script - 반복문 (for · while · until)** · **7.  Shell Script - 배열(Array)과 RANDOM** · **8.  Shell Script - 위치 매개변수 (Positional Parameters)**

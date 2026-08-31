@@ -205,9 +205,9 @@ echo $?                                   # ⑤ 종료 코드로 성공/실패 �
 ---
 
 ## 요약
-- 📌 **핵심 요약**
+-  **핵심 요약**
 - 모든 판정은 **문자열(값) + 종료 코드(조건)** 두 축으로 귀결
 - 계산은 항상 별도 구문(`$(( ))`/`expr`/`let`) 경유
 - `"$@"` 와 `"${arr[@]}"` 는 동일 구조(개별 전개), `"$*"`/`"${arr[*]}"` 는 문자열 결합
 - 실무 설계 순서 : 입력 → 검증 → `exit 1` → 값 확보 → 계산 → 조건 → 분기 → 반복 → exit 코드
-- 관련: **1. 🐚 Shell Script - 변수와 환경변수 (커널·쉘 개념 포함)** · **2. 🧩 Shell Script - Metacharacters (메타문자)** · **3. 🔢 Shell Script - expr · let (산술 연산)** · **4. 🚦 Shell Script - exit 상태와 test 명령** · **5. 🔀 Shell Script - 조건문 (if · case)** · **6. 🔁 Shell Script - 반복문 (for · while · until)** · **7. 📦 Shell Script - 배열(Array)과 RANDOM** · **8. 🎯 Shell Script - 위치 매개변수 (Positional Parameters)** · **9. ⏰ Shell Script - cron · anacron (스케줄 자동화)** · **11. 🚑 Shell Script - 트러블슈팅 치트시트** · **12. ⚡ Shell Script - 명령어 퀵 레퍼런스**
+- 관련: **1.  Shell Script - 변수와 환경변수 (커널·쉘 개념 포함)** · **2.  Shell Script - Metacharacters (메타문자)** · **3.  Shell Script - expr · let (산술 연산)** · **4.  Shell Script - exit 상태와 test 명령** · **5.  Shell Script - 조건문 (if · case)** · **6.  Shell Script - 반복문 (for · while · until)** · **7.  Shell Script - 배열(Array)과 RANDOM** · **8.  Shell Script - 위치 매개변수 (Positional Parameters)** · **9. ⏰ Shell Script - cron · anacron (스케줄 자동화)** · **11.  Shell Script - 트러블슈팅 치트시트** · **12.  Shell Script - 명령어 퀵 레퍼런스**

@@ -1,11 +1,11 @@
-# ⚓ Automount
+# Automount
 
 > **Tag:** #Linux #fstab #Automount #UUID #Mount #Boot #systemd  
 > **핵심 요약:** `/etc/fstab`은 부팅 시 또는 `mount -a` 실행 시 파일시스템을 정해진 위치에 마운트하기 위한 정적 설정 파일이다. 일반적으로 UUID를 사용하고, 편집 후 `findmnt --verify --verbose`, `systemctl daemon-reload`, `mount -a` 및 실제 마운트 상태를 검증해야 한다. `/etc/fstab`의 부팅 마운트와 접근 시점에 연결하는 `autofs`는 서로 다른 개념이다.
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 `/etc/fstab`은 다음 정보를 저장한다.
 
@@ -61,7 +61,7 @@ autofs
 
 ---
 
-## 2. 🛠️ 표준 설정 템플릿 (Configuration)
+## 2. 표준 설정 템플릿 (Configuration)
 
 > **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
 
@@ -266,7 +266,7 @@ findmnt /archive
 
 ---
 
-## 3. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 3. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 ### 3-1. 필수 검증 명령어
 
@@ -354,11 +354,11 @@ systemctl daemon-reload
 mount -a
 ```
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - fstab은 정적 영구 마운트 설정
 > - UUID 사용 권장
 > - 변경 전 백업
 > - 변경 후 `findmnt --verify --verbose`
 > - systemd 환경에서는 `daemon-reload`
 > - `mount -a` 후 실제 위치·장치·옵션 확인
-> - 관련: 8-1. 💽 디스크 타입 & 파티션 구조 · 8-2. 🗂️ 파일 시스템 & Format · 8-3. 🔗 마운트 & umount
+> - 관련: 8-1.  디스크 타입 & 파티션 구조 · 8-2.  파일 시스템 & Format · 8-3.  마운트 & umount

@@ -1,11 +1,11 @@
-# 🏷️ Kubernetes - Label
+# Kubernetes - Label
 
 > **Tag:** #Kubernetes #Label #Selector #nodeSelector #부트캠프
 > **핵심 요약:** Pod/Node에 Key=Value 형태로 붙이는 Label의 개념과 구조, Label Selector를 이용한 조회·추가·변경·삭제, Service/Deployment에서의 활용, Node Label과 nodeSelector를 이용한 Pod 배치까지 실습 전체 정리
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 Label은 쿠버네티스의 오브젝트(Pod, Service, Deployment 등)에 키(Key)와 값(Value) 형태의 정보를 붙이는 기능이다. Label 형식은 `Key = Value`이다.
 
@@ -15,10 +15,10 @@ metadata:
     app: web
     env: prod
 
-# app 	= Label의 Key
-# web 	= Label의 Value
-# env 	= Label의 Key
-# prod 	= Label의 Value
+# app = Label의 Key
+# web = Label의 Value
+# env = Label의 Key
+# prod = Label의 Value
 ```
 
 **Label을 사용하는 이유**
@@ -144,7 +144,7 @@ metadata:
 
 ---
 
-## 2. 🛠️ Pod Label 실습
+## 2. Pod Label 실습
 
 ### Label 확인하기
 
@@ -187,13 +187,13 @@ db-pod  	1/1          Running     app=db,env=prod
 ### Label 추가, 변경, 삭제
 
 ```
-# app이 없을 때  -->  추가
+# app이 없을 때 --> 추가
 [root@k8s-master ~]# kubectl label pod web-pod app=web
 
-# app=web이 있을 때  -->  에러
+# app=web이 있을 때 --> 에러
 [root@k8s-master ~]# kubectl label pod web-pod app=api
 
-# app=web이 있을 때  -->  변경
+# app=web이 있을 때 --> 변경
 [root@k8s-master ~]# kubectl label pod web-pod app=api  --overwrite
 
 # app=web이 있을 때 stage는 없으므로 새로운 Label 추가
@@ -208,7 +208,7 @@ Label 삭제시에는 Label의 Key 뒤에 `-`를 붙인다.
 
 ---
 
-## 3. 🧪 10개 Pod로 Label 실습 (EX1 ~ EX20)
+## 3. 10개 Pod로 Label 실습 (EX1 ~ EX20)
 
 ### 10개의 Pod 생성
 
@@ -694,7 +694,7 @@ Selector: app=web
 
 ---
 
-## 4. 🖥️ Kubernetes Worker Node Label
+## 4. Kubernetes Worker Node Label
 
 ### Node Label이란?
 
@@ -932,7 +932,7 @@ spec:
 
 ---
 
-## 5. 🧪 Node Label 실습 (EX1 ~ EX19)
+## 5. Node Label 실습 (EX1 ~ EX19)
 
 **EX1) 현재 Kubernetes 클러스터에 등록된 Node를 확인**
 
@@ -1212,7 +1212,7 @@ k8s-worker2	Ready      <none>          	10d     v1.35.7     gpu              dev
 
 ---
 
-## 6. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 6. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 - 라벨 key 또는 value가 조금이라도 다르면 매칭되지 않으므로, `kubectl get pod --show-labels`로 정확한 표기를 항상 먼저 확인한다.
 - `kubectl label pod <이름> <key>=<value>`를 이미 해당 key가 존재하는 상태에서 실행하면 에러가 발생한다. 값을 바꾸려면 반드시 `--overwrite`를 붙여야 한다.
@@ -1224,10 +1224,10 @@ k8s-worker2	Ready      <none>          	10d     v1.35.7     gpu              dev
 
 ---
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - Label은 `Key=Value` 형태로 Pod/Node 등 오브젝트를 분류·선택하기 위한 메타데이터이며, Name(개별 식별)과 달리 여러 오브젝트에 동일하게 부여할 수 있다
 > - `kubectl get/label` 명령에 `-l`(Selector)을 사용해 조회하며, 쉼표(`,`)는 AND, `in (a,b)` 구문은 OR 조건을 표현한다
 > - Label 추가/변경은 `kubectl label`, 변경 시 `--overwrite` 필수, 삭제는 `<key>-` 형태
 > - Service의 `selector`와 Deployment/ReplicaSet의 `matchLabels`는 Pod의 Label을 기준으로 대상을 선택한다
 > - Node Label + Pod의 `nodeSelector`를 조합하면 특정 특성(SSD, GPU 등)을 가진 Node에만 Pod를 배치할 수 있으며, 조건을 만족하는 Node가 없으면 Pod는 Pending 상태로 남는다
-> - 관련: 2. 📦 Kubernetes - Pod 생성 · 25. 📍 Kubernetes - Pod Scheduling (nodeSelector·Affinity) · 26. 🚧 Kubernetes - Pod Scheduling (Taint·Toleration)
+> - 관련: 2.  Kubernetes - Pod 생성 · 25.  Kubernetes - Pod Scheduling (nodeSelector·Affinity) · 26.  Kubernetes - Pod Scheduling (Taint·Toleration)

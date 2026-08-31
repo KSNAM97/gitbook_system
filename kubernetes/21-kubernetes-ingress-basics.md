@@ -1,11 +1,11 @@
-# 🌐 Kubernetes - Ingress 기초와 준비
+# Kubernetes - Ingress 기초와 준비
 
 > **Tag:** #Kubernetes #Ingress #IngressController #부트캠프
 > **핵심 요약:** Ingress와 Ingress Controller(nginx)의 개념, Ingress Controller 설치, host/path 기반 Ingress 실습을 위한 웹 서비스 이미지·소스 준비 정리
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 쿠버네티스에서 파드는 외부에서 직접 접근할 수 없기 때문에 ClusterIP(내부 통신용), NodePort, LoadBalancer 같은 방법을 사용해야 한다.
 
@@ -279,7 +279,7 @@ Ingress는 Pod로 직접 보내지 않고, 반드시 Service(ClusterIP)로 보�
 
 ---
 
-## 2. 🛠️ Ingress Controller (nginx) 설치
+## 2. Ingress Controller (nginx) 설치
 
 참고 사이트:
 
@@ -304,7 +304,7 @@ curl  -O  https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-
 
 ---
 
-## 3. 📦 실습 준비 — 웹 서비스 이미지 및 소스 준비
+## 3. 실습 준비 — 웹 서비스 이미지 및 소스 준비
 
 ### 파일 전송 (Windows → k8s-master)
 
@@ -484,9 +484,9 @@ ba54b4289f64: Pushed
 
 ---
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - Ingress는 외부 HTTP/HTTPS 요청을 host/path 규칙에 따라 여러 Service로 라우팅하는 규칙 정의이며, 실제 트래픽 처리는 Ingress Controller(예: nginx)가 담당한다
 > - Ingress는 Pod를 직접 모르고 Service까지만 연결하며, Pod 선택은 Service가 담당한다 — 역할이 Ingress(길 안내)와 Service(목적지 선택)로 완전히 분리되어 있다
 > - Ingress Controller(nginx)는 공식 배포 매니페스트(`kubectl apply -f .../deploy.yaml`)로 설치하며, `ingress-nginx` 네임스페이스에 NodePort Service가 생성되어 외부 접근 지점이 된다
 > - host/path 기반 Ingress 실습을 위해 웹 서비스 이미지(Dockerfile, HTML)와 Deployment/Service YAML을 준비하고 Docker Hub에 이미지를 push해 실습 환경을 구성한다
-> - 관련: 22. 🌐 Kubernetes - host·path 기반 Ingress · 23. 🌐 Kubernetes - 정규표현식 Ingress·Canary 배포 · 18. 🔌 Kubernetes - Service 기초와 ClusterIP
+> - 관련: 22.  Kubernetes - host·path 기반 Ingress · 23.  Kubernetes - 정규표현식 Ingress·Canary 배포 · 18.  Kubernetes - Service 기초와 ClusterIP

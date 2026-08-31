@@ -1,11 +1,11 @@
-# 📚 종합정리 Samba & NFS
+# 종합정리 Samba & NFS
 
 > **Tag:** #Linux #Summary #Samba #NFS #SMB #CIFS #FileSharing #Review  
 > **핵심 요약:** Samba와 NFS는 모두 네트워크로 서버의 디스크 공간을 공유하는 기술이지만, Samba는 SMB 프로토콜 기반의 계정 인증 방식이고 NFS는 RPC 기반의 IP·UID 신뢰 방식이다. Samba는 `smbd`·`nmbd` 데몬과 `smb.conf`, `smbpasswd`로 구성하고, NFS는 `nfs-server`·`rpcbind`와 `/etc/exports`, `exportfs`로 구성한다. 두 기술 모두 방화벽 `--permanent` 설정과 fstab 영구 마운트, 디렉터리 퍼미션 정합성이 성공의 핵심이다.
 
 ---
 
-## 1. 🎯 전체 구조 한눈에 보기
+## 1. 전체 구조 한눈에 보기
 
 ### 1-1. 기술 계층 비교
 
@@ -52,7 +52,7 @@ nfsd (커널 스레드)  +  rpcbind  +  mountd
 
 ---
 
-## 2. 🛠️ 구축 절차 요약
+## 2. 구축 절차 요약
 
 ### 2-1. Samba 서버 구축 8단계
 
@@ -100,7 +100,7 @@ fstab 영구화:
 
 ---
 
-## 3. 🔍 개념 핵심 정리
+## 3. 개념 핵심 정리
 
 ### 3-1. 자주 헷갈리는 포인트
 
@@ -140,7 +140,7 @@ Windows 계정 인증 → Linux 계정 매핑
 
 ---
 
-## 4. ✅ 통합 체크리스트
+## 4. 통합 체크리스트
 
 ```text
 [공통]
@@ -168,10 +168,10 @@ Windows 계정 인증 → Linux 계정 매핑
 [ ] UID/GID 매핑 정합성 확인
 ```
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - Samba는 계정 인증 기반, NFS는 IP·UID 신뢰 기반
 > - 설정 반영은 Samba `restart smb`, NFS `exportfs -ra`
 > - 확인은 Samba `smbclient -L`, NFS `showmount -e`
 > - 방화벽 `--permanent`와 fstab 등록이 실습 성패를 가른다
 > - 권한 문제는 퍼미션 → 설정 옵션 → UID/계정 → SELinux 순으로 점검
-> - 관련: ⚡ Samba·NFS 퀵 레퍼런스 · 🚨 Samba·NFS 트러블슈팅 치트시트
+> - 관련:  Samba·NFS 퀵 레퍼런스 ·  Samba·NFS 트러블슈팅 치트시트

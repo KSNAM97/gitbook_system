@@ -1,11 +1,11 @@
-# 📝 Docker - YAML 문법
+# Docker - YAML 문법
 
 > **Tag:** #Docker #YAML #문법 #DockerCompose #부트캠프
 > **핵심 요약:** Docker Compose 작성의 기초, YAML 데이터 표현 방식 핵심 정리
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 YAML(YAML Ain't Markup Language)은 사람이 읽기 쉽게 만든 데이터 표현 형식이다. Docker Compose(docker-compose.yml), Kubernetes(deployment.yaml), Ansible(site.yml), GitHub Actions(.github/workflows/*.yml) 등 다양한 인프라 도구에서 공통 설정 언어로 사용된다.
 
@@ -148,10 +148,10 @@ prod:
 
 ---
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - YAML = 사람이 읽기 쉬운 데이터 표현 형식, 탭 금지(공백만 사용)
 > - 3가지 타입: 스칼라(단일 값) / 맵(key:value) / 리스트(- 항목)
 > - `|`: 줄바꿈 그대로 유지 / `>`: 줄바꿈을 공백으로 합침
 > - `&앵커` / `*별칭` / `<<: *merge` — 반복 설정 재사용
 > - Docker Compose, Kubernetes, Ansible 등 인프라 도구의 공통 설정 언어
-> - 관련: 8. 🔧 Docker - Docker Compose · 9. 🧩 Docker - 통합 정리
+> - 관련: 8.  Docker - Docker Compose · 9.  Docker - 통합 정리

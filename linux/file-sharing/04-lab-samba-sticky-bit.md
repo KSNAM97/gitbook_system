@@ -1,11 +1,11 @@
-# 🏗️ 종합실습 Samba 공유 & 권한 제어(Sticky Bit)
+# 종합실습 Samba 공유 & 권한 제어(Sticky Bit)
 
 > **Tag:** #Linux #Lab #Samba #StickyBit #Permission #ForceGroup #smbconf  
 > **핵심 요약:** Samba 공유 디렉터리를 777로 열어 두면 Windows 사용자가 다른 사람이 만든 파일까지 삭제할 수 있다. 이때 Sticky Bit(`chmod 1777`)를 적용하면 파일의 소유자와 디렉터리 소유자, root만 삭제·이름 변경이 가능하고 다른 사용자는 읽기·복사만 할 수 있다. 이 실습은 Samba 공유 생성부터 그룹 연동, Sticky Bit 적용, 실제 삭제 차단 검증까지 진행한다.
 
 ---
 
-## 1. 🎯 실습 목표 (Scenario)
+## 1. 실습 목표 (Scenario)
 
 ### 1-1. 요구사항
 
@@ -29,7 +29,7 @@ Windows (192.168.10.131)  Client
 
 ---
 
-## 2. 🛠️ 단계별 실습 (Configuration)
+## 2. 단계별 실습 (Configuration)
 
 > **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
 
@@ -196,7 +196,7 @@ Windows 측에서도 `user2`로 접속해 `user1_file.txt` 삭제를 시도하�
 
 ---
 
-## 3. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 3. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 ### 3-1. 접속·세션 확인
 
@@ -227,7 +227,7 @@ journalctl -u smb -n 50                    # 인증 실패 로그
 
 ---
 
-## 4. ✅ 최종 체크리스트
+## 4. 최종 체크리스트
 
 ```text
 [ ] samba 패키지 설치 및 smb·nmb 데몬 enable
@@ -242,12 +242,12 @@ journalctl -u smb -n 50                    # 인증 실패 로그
 [ ] 타 사용자 읽기·복사 정상 확인
 ```
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - 파일 삭제 권한은 상위 디렉터리의 쓰기 권한에 좌우된다
 > - `chmod 1777`(Sticky Bit)로 소유자만 삭제 가능하게 제한
 > - Sticky Bit는 읽기·복사는 허용하고 삭제·이름 변경만 차단
 > - `force group`으로 공유 파일의 그룹 소유권 통일
 > - Windows 자격 증명 캐시 때문에 테스트가 왜곡될 수 있음
-> - 관련: 🐧 Linux Samba 서버 구축 · 📚 종합정리 Samba & NFS · 🚨 Samba·NFS 트러블슈팅 치트시트
+> - 관련:  Linux Samba 서버 구축 ·  종합정리 Samba & NFS ·  Samba·NFS 트러블슈팅 치트시트
 
 ---

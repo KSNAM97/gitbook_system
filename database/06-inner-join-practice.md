@@ -1,11 +1,11 @@
-# 🔗 DB - INNER JOIN 실습 (customer · orders)
+# DB - INNER JOIN 실습 (customer · orders)
 
 > **Tag:** #SQL #JOIN #INNERJOIN #집계함수 #GROUPBY #HAVING #COUNT #SUM #테이블조인
 > **핵심 요약:** INNER JOIN은 두 테이블에서 **조건이 일치하는 행만** 결합해 조회하는 방식이다. `ON A.컬럼 = B.컬럼` 으로 연결 기준을 지정하며, 한쪽에만 존재하는 행은 결과에서 제외된다. customer(고객)·orders(주문) 실습 테이블로 INNER JOIN + WHERE + ORDER BY + LIKE + BETWEEN + IN + COUNT/SUM/GROUP BY/HAVING 전 개념을 통합 연습한다.
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 실무 DB는 데이터를 여러 테이블에 나눠 저장한다. "회원 이름 + 주문 상품명 + 결제 금액"처럼 한 테이블만으로 조회할 수 없는 정보를 한 화면에 보여주려면 JOIN이 반드시 필요하다. 쇼핑몰 DB를 예로 들면 회원 정보는 `member`, 주문 정보는 `orders`, 상품 정보는 `product`에 나뉘어 있는데, 이 세 테이블을 **한 번에** 조회하는 것이 JOIN이다. JOIN을 사용할 때 가장 중요한 것은 **두 테이블을 연결할 기준(컬럼)**을 `ON` 절에 지정하는 것이며, `member.member_id = orders.member_id`처럼 FK 관계가 JOIN의 연결 고리가 된다.
 
@@ -26,7 +26,7 @@ GROUP BY와 HAVING은 JOIN 이후 만들어진 결과 테이블에 `GROUP BY`로
 
 ---
 
-## 2. 🛠️ 표준 설정 템플릿 (Configuration)
+## 2. 표준 설정 템플릿 (Configuration)
 
 > **적용 환경:** MariaDB/MySQL 계열 RDBMS.
 
@@ -282,7 +282,7 @@ ORDER BY order_count DESC, order_sum DESC;
 
 ---
 
-## 3. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 3. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 ### 3-1. 필수 검증 명령어
 
@@ -304,32 +304,32 @@ LIMIT 10;
 
 ### 3-2. 트러블슈팅 시나리오
 
-#### 🚨 시나리오 1. ON 절 없이 JOIN → 카티션 곱 발생
+#### 시나리오 1. ON 절 없이 JOIN → 카티션 곱 발생
 
 - **증상:** `FROM customer c INNER JOIN orders o;` → 30 × 50 = 1500행 출력
 - **원인:** ON 절 없이 INNER JOIN 시 모든 행 조합이 출력됨
 - **해결:** 반드시 `ON c.customer_id = o.customer_id` 지정
 
-#### 🚨 시나리오 2. 어느 테이블 컬럼인지 모호 오류
+#### 시나리오 2. 어느 테이블 컬럼인지 모호 오류
 
 - **증상:** `SELECT customer_id FROM customer INNER JOIN orders ON ...` → `Ambiguous column name` 오류
 - **원인:** 두 테이블 모두 `customer_id` 컬럼을 가지고 있어 어느 것인지 불명확
 - **해결:** 테이블 별칭으로 명확히 지정 → `SELECT c.customer_id`
 
-#### 🚨 시나리오 3. HAVING에서 WHERE 사용 오류
+#### 시나리오 3. HAVING에서 WHERE 사용 오류
 
 - **증상:** `WHERE COUNT(o.order_id) >= 2` → 오류
 - **원인:** 집계함수는 GROUP BY 이후에 계산되므로 WHERE에서 사용 불가
 - **해결:** `HAVING COUNT(o.order_id) >= 2` 로 변경
 
-#### 🚨 시나리오 4. IN 연산자 vs OR 성능 차이
+#### 시나리오 4. IN 연산자 vs OR 성능 차이
 
 - `WHERE c.city = '부산' OR c.city = '대구'` 와 `WHERE c.city IN ('부산', '대구')` 는 동일한 결과
 - 항목이 많을수록 `IN` 이 가독성 측면에서 유리
 
 ---
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - INNER JOIN = 두 테이블에서 ON 조건이 **일치하는 행만** 결합 (한쪽에만 있으면 제외)
 > - `FROM A INNER JOIN B ON A.키 = B.키` — ON 절 필수
 > - 조건 추가: JOIN 후 WHERE로 추가 필터 / BETWEEN으로 범위 / IN으로 복수 조건

@@ -1,11 +1,11 @@
-# 🎭  Umask — 기본 권한 마스크 (User Mask)
+# Umask — 기본 권한 마스크 (User Mask)
 
 > **Tag:** #Linux #Umask #Permission #DefaultPermission #Security  
 > **핵심 요약:** `umask`는 새 파일과 디렉터리를 생성할 때 프로그램이 요청한 권한에서 특정 권한 비트를 제거한다. 일반적인 요청 모드는 파일 `0666`, 디렉터리 `0777`이며 최종 권한은 `요청 권한 & ~umask`로 결정된다.
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 **umask란?**
 
@@ -60,7 +60,7 @@ umask -S
 
 `umask 0011`의 경우 파일 요청 권한 `0666`에는 실행 비트가 원래 없으므로 최종 파일 권한은 `0666`이다.
 
-## 2. 🛠️ 표준 설정 템플릿 (Configuration)
+## 2. 표준 설정 템플릿 (Configuration)
 
 > **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
 
@@ -183,7 +183,7 @@ systemctl restart <서비스>
 
 ---
 
-## 3. 🔍 검증 및 트러블슈팅
+## 3. 검증 및 트러블슈팅
 
 ### 3-1. root와 일반 사용자의 값 비교
 
@@ -237,10 +237,10 @@ useradd -D
 
 `HOME_MODE`가 설정되어 있으면 새 홈 디렉터리 권한에 우선 사용될 수 있다.
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - 파일 요청 모드: 일반적으로 `0666`
 > - 디렉터리 요청 모드: 일반적으로 `0777`
 > - 최종 권한: 요청 모드에서 umask 비트 제거
 > - 기존 파일에는 적용되지 않음
 > - 영구 설정은 로그인 방식과 서비스 환경을 구분
-> - 관련: 6-1. 🔐 허가권 (Permission) — chmod & rwx·UGO 모델 · 6-6. 👥 특수권한 Set-GID — 소유 그룹 자동 상속 (2XXX)
+> - 관련: 6-1.  허가권 (Permission) — chmod & rwx·UGO 모델 · 6-6.  특수권한 Set-GID — 소유 그룹 자동 상속 (2XXX)

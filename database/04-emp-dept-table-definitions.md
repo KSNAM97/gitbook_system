@@ -1,11 +1,11 @@
-# 📋 emp · dept 테이블 정의 및 샘플 데이터
+# emp · dept 테이블 정의 및 샘플 데이터
 
 > **Tag:** #SQL #emp #dept #샘플데이터 #DDL #INSERT #FOREIGNKEY #PRIMARYKEY #실습테이블
 > **핵심 요약:** `dept`(부서)와 `emp`(사원) 테이블은 SQL 실습의 표준 예제 테이블이다. `dept.deptno`를 `emp.deptno`가 외래키로 참조하는 **1:N 관계** 구조이며, 부서 4개·사원 14명 데이터가 포함된다. 이 테이블로 SELECT, WHERE, ORDER BY, JOIN, 집계함수 등 모든 DML 실습을 수행한다.
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 `dept` 테이블의 `deptno`(부서 번호)를 `emp` 테이블의 `deptno` 컬럼이 외래키(FOREIGN KEY)로 참조하는 **1:N 관계**다. 부서 1개에 여러 사원이 소속될 수 있다. `FOREIGN KEY (deptno) REFERENCES dept(deptno)`는 emp의 deptno가 반드시 dept 테이블에 존재하는 deptno 값이어야 함을 의미하는 참조 무결성 제약이다. `CONSTRAINT pk_dept PRIMARY KEY (deptno)`처럼 제약조건에 이름(`pk_dept`)을 붙이면 나중에 제약조건을 삭제·수정할 때 이름으로 참조할 수 있다. 사원 `KING`(7839)은 `mgr`(직속 상관) 컬럼이 NULL인데, 이는 최상위 관리자(사장)임을 의미한다. `mgr` 컬럼은 같은 `emp` 테이블의 `empno`를 참조하는 **자기 참조(Self-referencing)** 구조다.
 
@@ -13,7 +13,7 @@ emp 테이블의 각 컬럼은 `empno`(사원번호, PK), `ename`(사원이름),
 
 ---
 
-## 2. 🛠️ 표준 설정 템플릿 (Configuration)
+## 2. 표준 설정 템플릿 (Configuration)
 
 > **적용 환경:** MariaDB/MySQL 계열 RDBMS.
 
@@ -49,7 +49,7 @@ CREATE TABLE emp (
 );
 ```
 
-> **참고:** ⚠️ **생성 순서:** `dept` 테이블 먼저 생성 → 이후 `emp` 테이블 생성. emp가 dept의 deptno를 외래키로 참조하기 때문에 dept가 먼저 존재해야 한다.
+> **참고:**  **생성 순서:** `dept` 테이블 먼저 생성 → 이후 `emp` 테이블 생성. emp가 dept의 deptno를 외래키로 참조하기 때문에 dept가 먼저 존재해야 한다.
 
 ### Step 3. dept 기본 데이터 (INSERT)
 
@@ -117,7 +117,7 @@ INSERT INTO emp VALUES (7934, 'MILLER', 'CLERK',     7782, '1982-01-23', 1300, N
 
 ---
 
-## 3. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 3. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 ### 3-1. 필수 검증 명령어
 
@@ -145,7 +145,7 @@ SELECT MIN(sal), MAX(sal), AVG(sal) FROM emp;
 
 ### 3-2. 트러블슈팅 시나리오
 
-#### 🚨 시나리오 1. emp INSERT 시 외래키 오류
+#### 시나리오 1. emp INSERT 시 외래키 오류
 
 - **증상:** `INSERT INTO emp VALUES (9999, 'TEST', 'CLERK', NULL, NOW(), 1000, NULL, 99);` 실행 시 오류.
 - **원인:** deptno 99는 dept 테이블에 존재하지 않아 외래키 제약 위반.
@@ -159,13 +159,13 @@ SELECT MIN(sal), MAX(sal), AVG(sal) FROM emp;
   INSERT INTO emp VALUES (9999, 'TEST', 'CLERK', NULL, NOW(), 1000, NULL, 10);
   ```
 
-#### 🚨 시나리오 2. dept 테이블 없이 emp 테이블 생성 시 오류
+#### 시나리오 2. dept 테이블 없이 emp 테이블 생성 시 오류
 
 - **증상:** `CREATE TABLE emp (...)` 실행 시 `Can't create table ... foreign key constraint fails` 오류.
 - **원인:** FOREIGN KEY `REFERENCES dept(deptno)` 에서 dept 테이블이 아직 존재하지 않음.
 - **해결:** 반드시 **dept 먼저 생성 → emp 생성** 순서 준수.
 
-#### 🚨 시나리오 3. dept 레코드 삭제 시 오류
+#### 시나리오 3. dept 레코드 삭제 시 오류
 
 - **증상:** `DELETE FROM dept WHERE deptno = 10;` 실행 시 오류.
 - **원인:** deptno=10을 참조하는 emp 행(KING, CLARK, MILLER)이 존재해 참조 무결성 위반.
@@ -180,9 +180,9 @@ SELECT MIN(sal), MAX(sal), AVG(sal) FROM emp;
 
 ---
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - dept(부서) → emp(사원): **1:N 관계**, emp의 deptno는 FK로 dept.deptno 참조
 > - 생성 순서: **dept 먼저, emp 나중에** (FK 참조 대상이 먼저 존재해야 함)
 > - 삭제 순서: **emp 먼저, dept 나중에** (참조하는 자식 테이블 먼저 처리)
 > - KING만 mgr이 NULL → 최상위 관리자. comm은 SALESMAN만 값이 있음
-> - 관련: 🗄️ DB - 데이터와 데이터베이스 기초 · 🔧 DB - SQL 문법 (DDL·DML·DCL) · 🔍 DB - SELECT·WHERE·ORDER BY·LIKE 실습
+> - 관련:  DB - 데이터와 데이터베이스 기초 ·  DB - SQL 문법 (DDL·DML·DCL) ·  DB - SELECT·WHERE·ORDER BY·LIKE 실습

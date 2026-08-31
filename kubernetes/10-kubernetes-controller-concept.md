@@ -1,11 +1,11 @@
-# 🎛️ Kubernetes - Controller 개념과 ReplicationController
+# Kubernetes - Controller 개념과 ReplicationController
 
 > **Tag:** #Kubernetes #Controller #ReplicationController #ReconciliationLoop #부트캠프
 > **핵심 요약:** Pod 생성 시 API Server-Controller-Scheduler-kubelet이 협력하는 동작 순서, Controller의 Reconciliation Loop 개념, ReplicationController의 YAML 구조와 실습
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 ### 파드 3개 요청시 쿠버네티스 동작 순서
 
@@ -118,7 +118,7 @@ Controller는 보통 직접 Pod를 관리하지 않고, Pod를 관리하는 상�
 
 ---
 
-## 2. 🛠️ ReplicationController (RC)
+## 2. ReplicationController (RC)
 
 ReplicationController는 Pod의 개수를 항상 일정하게 유지해주는 Controller이다. 즉, Pod가 죽거나 삭제되면 자동으로 다시 생성해서 지정한 개수(replicas)를 보장한다.
 
@@ -719,7 +719,7 @@ No resources found in default namespace.
 
 ---
 
-## 3. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 3. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 - `template.metadata.labels`가 `selector`와 다르면 RC가 자신이 만든 Pod를 인식하지 못해 Pod를 무한 생성할 수 있다. 두 값이 반드시 일치하는지 항상 확인한다.
 - RC의 selector와 같은 라벨을 가진 Pod를 별도로(`kubectl apply`, `kubectl run` 등) 만들면 RC가 초과분으로 인식해 즉시 삭제한다. 관리 대상과 겹치지 않는 라벨 설계가 필요하다.
@@ -729,9 +729,9 @@ No resources found in default namespace.
 
 ---
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - Pod 생성은 API Server(요청 접수·기록) → Controller(개수 판단) → API Server(Pod 객체 생성) → Scheduler(노드 배치 결정) → API Server(배치 기록) → kubelet(실제 실행) 순서로 진행된다
 > - Controller는 Reconciliation Loop(감시 → 비교 → 조정)를 무한 반복하며 원하는 상태(desired state)를 유지하는 관리자다
 > - ReplicationController는 replicas(목표 개수)·selector(관리 대상 라벨)·template(생성 설계도)로 구성되며, template.labels는 selector와 반드시 일치해야 한다
 > - RC는 라벨 기반 관리이므로 template의 image를 바꿔도 기존 Pod는 그대로이며, 실무에서는 Rolling Update가 부족해 ReplicaSet/Deployment로 대체된다
-> - 관련: 11. 🎛️ Kubernetes - ReplicaSet
+> - 관련: 11.  Kubernetes - ReplicaSet

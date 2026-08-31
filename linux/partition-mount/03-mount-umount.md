@@ -1,11 +1,11 @@
-# 🔗 마운트 & umount
+# 마운트 & umount
 
 > **Tag:** #Linux #Mount #umount #FileSystem #findmnt #blkid  
 > **핵심 요약:** 마운트는 파일시스템을 Linux 디렉터리 트리에 연결하는 작업이다. 명령으로 수행한 마운트는 현재 셸에만 한정되는 것이 아니라 해제하거나 시스템을 재부팅할 때까지 유지되며, 재부팅 후에도 자동으로 연결하려면 `/etc/fstab` 등에 영구 설정을 구성한다.
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 **마운트란?**
 
@@ -90,7 +90,7 @@ mount /dev/sdb1 /data
 
 실제 사용 가능한 용량은 파일시스템 메타데이터, 예약 공간 및 단위 차이 때문에 파티션의 표시 용량보다 작을 수 있다.
 
-## 2. 🛠️ 표준 설정 템플릿 (Configuration)
+## 2. 표준 설정 템플릿 (Configuration)
 
 > **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
 
@@ -388,7 +388,7 @@ umount /sol
 
 ---
 
-## 3. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 3. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 ### 3-1. 필수 진단
 
@@ -568,11 +568,11 @@ df -i /data
 
 > **참고:** `df`에 보이지 않는다는 이유만으로 디스크가 인식되지 않았다고 판단하지 않는다.
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - mount는 파일시스템을 디렉터리 트리에 연결
 > - 디렉터리에 용량을 직접 부여하는 것이 아니라 파일시스템을 연결하는 것
 > - 수동 mount는 재부팅 후 유지되지 않음
 > - 기존 파일이 있는 경로에 마운트하면 내용이 가려짐
 > - busy 오류는 `cd /` → `fuser` → 정상 종료 → `umount`
 > - 신규 디스크 확인은 `lsblk`부터 시작
-> - 관련: 8-1. 💽 디스크 타입 & 파티션 구조 · 8-2. 🗂️ 파일 시스템 & Format · 8-4. ⚓ Automount
+> - 관련: 8-1.  디스크 타입 & 파티션 구조 · 8-2.  파일 시스템 & Format · 8-4.  Automount

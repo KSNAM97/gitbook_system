@@ -1,11 +1,11 @@
-# 🎚️ Kubernetes - ResourceQuota·LimitRange
+# Kubernetes - ResourceQuota·LimitRange
 
 > **Tag:** #Kubernetes #ResourceQuota #LimitRange #부트캠프
 > **핵심 요약:** ResourceQuota로 namespace 전체의 자원 총량을 제한하고 LimitRange로 개별 파드/컨테이너의 최소·최대·기본 자원값을 제한하는 방법, CPU/Memory Limit 초과 시 실제 동작(throttling vs OOMKilled) 정리
 
 ---
 
-## 1. 🎚️ ResourceQuota와 LimitRange로 자원 제한하기
+## 1. ResourceQuota와 LimitRange로 자원 제한하기
 
 ### 왜 자원 제한이 필요한가
 
@@ -1216,7 +1216,7 @@ spec:
 ---
 
 
-## 2. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 2. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 ### CPU / Memory Limit 초과 동작 확인
 
@@ -1345,11 +1345,11 @@ Events:
 
 # pid,ppid,comm,args,%cpu,%mem
 
-# pid    	= 프로세스 ID
-# ppid   	= 부모 프로세스 ID
-# comm 	= 실행 중인 명령어 이름
-# args   	= 실제 실행 명령어와 옵션
-# %cpu   	= CPU 사용률
+# pid = 프로세스 ID
+# ppid = 부모 프로세스 ID
+# comm = 실행 중인 명령어 이름
+# args = 실제 실행 명령어와 옵션
+# %cpu = CPU 사용률
 # %mem	= 메모리 사용률
 
 
@@ -1421,9 +1421,9 @@ limit-test-pod   0/    1     OOMKilled   4 (67s ago)      116s     10.244.1.3   
 
 ---
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - ResourceQuota는 namespace 전체의 CPU/Memory/Pod 개수 등 자원 총량을 제한하고, LimitRange는 개별 파드/컨테이너의 최소/최대/기본(default, defaultRequest) 자원값을 제한한다 — 둘을 함께 써서 운영 단위를 통제한다
 > - ResourceQuota가 requests/limits 항목을 관리 중인 namespace에서는 파드에 `resources`를 명시하지 않으면 생성 자체가 Forbidden으로 거부되므로, LimitRange의 default/defaultRequest를 설정하거나 파드에 직접 resources를 명시해야 한다
 > - `kubectl get resourcequotas`의 REQUEST/LIMIT 컬럼에서 `used/hard` 형식으로 현재 사용량과 한도를 바로 확인할 수 있다. 파드 생성이 Forbidden으로 거부되면 먼저 이 값을 확인한다
 > - CPU Limit 초과는 컨테이너가 죽지 않고 CPU 사용량만 제한(throttling)되지만, Memory Limit 초과는 커널의 OOM Killer가 컨테이너를 강제 종료시켜 Pod STATUS가 `OOMKilled`로 표시된다 — 이 둘의 동작 차이가 결정적이다
-> - 관련: 1. 🔧 Kubernetes - 설치 · 2. 📦 Kubernetes - Pod 생성 · 4. 📦 Kubernetes - Namespace
+> - 관련: 1.  Kubernetes - 설치 · 2.  Kubernetes - Pod 생성 · 4.  Kubernetes - Namespace

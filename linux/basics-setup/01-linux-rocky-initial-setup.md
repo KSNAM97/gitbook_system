@@ -4,7 +4,7 @@
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 실무에서 CentOS Linux가 종료된 지금, Rocky Linux는 CentOS Linux의 대안으로 등장한 무료 엔터프라이즈 리눅스 배포판으로, **RHEL과의 높은 호환성**을 목표로 하는 것이 RHEL 대체재로 선택되는 핵심 이유다. 기존 CentOS/RHEL 기반 운영 환경을 비교적 적은 변경으로 이전할 수 있다는 점이 가장 큰 장점이며, Rocky Linux는 CentOS 공동 창립자인 **Gregory Kurtzer**가 개발을 주도했고 현재는 Rocky Enterprise Software Foundation(RESF)을 중심으로 운영된다. Rocky Linux는 RHEL과의 **Bug-for-Bug Compatibility**를 목표로 설명하고 있지만, 실제 도입 시에는 패키지 호환성과 별개로 해당 소프트웨어 벤더가 Rocky Linux를 공식 지원하는지 반드시 확인해야 한다. RHEL용 프로그램이 Rocky Linux에서 기술적으로 동작하더라도, Oracle DB·SAP·백신·백업 솔루션·스토리지 드라이버 등의 **공식 기술 지원 및 HCL 인증이 자동으로 보장되는 것은 아니다.**
 
@@ -179,7 +179,7 @@ Fedora는 Red Hat이 후원하는 커뮤니티 기반 배포판이다. 최신 �
 
 ---
 
-## 2. 🛠️ 표준 설정 템플릿 (Configuration)
+## 2. 표준 설정 템플릿 (Configuration)
 
 > **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
 
@@ -737,7 +737,7 @@ multi-user.target
 
 ---
 
-## 3. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 3. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 ### 3-1. 필수 검증 명령어
 
@@ -840,7 +840,7 @@ lsblk
 
 ### 3-2. 대표 장애 시나리오 및 트러블슈팅
 
-#### 🚨 시나리오 1. `.nmconnection` 파일을 수정했는데 IP가 반영되지 않는다
+#### 시나리오 1. `.nmconnection` 파일을 수정했는데 IP가 반영되지 않는다
 
 **증상:**  
 IP 주소를 `192.168.10.100`으로 변경했지만 `ip addr`에서 기존 DHCP 주소인 `192.168.10.128`이 계속 출력된다.
@@ -941,7 +941,7 @@ ip -4 addr show ens160
 
 ---
 
-#### 🚨 시나리오 2. `PermitRootLogin yes`를 설정했는데도 Root SSH 접속이 거부된다
+#### 시나리오 2. `PermitRootLogin yes`를 설정했는데도 Root SSH 접속이 거부된다
 
 **증상:**
 
@@ -1034,7 +1034,7 @@ ssh -vvv root@192.168.10.100
 
 ---
 
-#### 🚨 시나리오 3. 고정 IP 설정 후 외부 통신이 되지 않는다
+#### 시나리오 3. 고정 IP 설정 후 외부 통신이 되지 않는다
 
 ##### 1단계. IP 주소 확인
 
@@ -1080,7 +1080,7 @@ dig naver.com
 
 ---
 
-#### 🚨 시나리오 4. SELinux를 비활성화했는데 `getenforce`가 계속 Enforcing으로 출력된다
+#### 시나리오 4. SELinux를 비활성화했는데 `getenforce`가 계속 Enforcing으로 출력된다
 
 ##### 1단계. 설정 파일 확인
 
@@ -1127,7 +1127,7 @@ Disabled
 
 ---
 
-> **참고:** 💡 **아키텍트 Tip:** 초기 구축과 검증이 완료되면 VMware Workstation Pro에서 스냅샷을 생성한다.
+> **참고:**  **아키텍트 Tip:** 초기 구축과 검증이 완료되면 VMware Workstation Pro에서 스냅샷을 생성한다.
 
 권장 스냅샷 이름:
 

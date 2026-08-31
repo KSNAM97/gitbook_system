@@ -1,11 +1,11 @@
-# 🔐 허가권 (Permission) — chmod & rwx·UGO 모델
+# 허가권 (Permission) — chmod & rwx·UGO 모델
 
 > **Tag:** #Linux #Permission #chmod #rwx #UGO #Security  
 > **핵심 요약:** Linux 허가권은 파일과 디렉터리에 대해 소유자(Owner), 소유 그룹(Group), 그 외 사용자(Other)가 수행할 수 있는 작업을 `r`, `w`, `x`로 구분한다. 같은 권한 문자라도 파일과 디렉터리에서 의미가 다르며, 파일 삭제·이름 변경은 파일 자체 권한이 아니라 상위 디렉터리의 `w+x` 권한과 Sticky-bit 정책을 중심으로 판정한다.
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 Linux는 여러 사용자가 동시에 접속해 같은 파일시스템을 사용하는 멀티유저 운영체제이다.
 
@@ -274,7 +274,7 @@ getfacl <경로>
 
 ---
 
-## 2. 🛠️ 표준 설정 템플릿 (Configuration)
+## 2. 표준 설정 템플릿 (Configuration)
 
 > **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판. 본인 소유 객체는 일반 사용자 권한으로 충분하며, 타 소유 객체 변경은 `sudo`/root 권한이 필요하다.
 
@@ -584,7 +584,7 @@ chmod 1777 /public-tmp
 
 ---
 
-## 3. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 3. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 ### 3-1. 필수 진단
 
@@ -793,7 +793,7 @@ sudo -u <사용자> rm <디렉터리>/test-file
 
 ---
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - 파일 `r`: 내용 읽기
 > - 파일 `w`: 내용 수정
 > - 파일 `x`: 실행
@@ -802,4 +802,4 @@ sudo -u <사용자> rm <디렉터리>/test-file
 > - 디렉터리 `x`: 경로 탐색
 > - 삭제·이름 변경은 상위 디렉터리의 `w+x` 확인
 > - `chmod`는 이전 권한을 저장하지 않으므로 재귀 권한 사고 전 백업 필요
-> - 관련: 🔧 허가권 상세 (chmod & 8진수 · 심볼릭 표기) · 👤  소유권 (Ownership) — chown & UID·GID 소유 모델 · 🎭  Umask — 기본 권한 마스크 (User Mask) · 👥 특수권한 Set-GID — 소유 그룹 자동 상속 (2XXX) · 📌 특수권한 Sticky-bit — 공유 디렉터리 삭제 방지 (1XXX) · 🧩 허가권·소유권 통합 정리 · 🚑 허가권·소유권 트러블슈팅 치트시트 · ⚡ 허가권·소유권 명령어 퀵 레퍼런스
+> - 관련:  허가권 상세 (chmod & 8진수 · 심볼릭 표기) ·   소유권 (Ownership) — chown & UID·GID 소유 모델 ·   Umask — 기본 권한 마스크 (User Mask) ·  특수권한 Set-GID — 소유 그룹 자동 상속 (2XXX) ·  특수권한 Sticky-bit — 공유 디렉터리 삭제 방지 (1XXX) ·  허가권·소유권 통합 정리 ·  허가권·소유권 트러블슈팅 치트시트 ·  허가권·소유권 명령어 퀵 레퍼런스

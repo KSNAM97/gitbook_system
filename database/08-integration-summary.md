@@ -1,11 +1,11 @@
-# 🧩 DB - 통합 정리 (데이터 기초부터 INNER JOIN·GROUP BY·HAVING까지 한눈에)
+# DB - 통합 정리 (데이터 기초부터 INNER JOIN·GROUP BY·HAVING까지 한눈에)
 
 > **Tag:** #Database #MariaDB #SQL #Summary #통합정리 #제약조건 #INNERJOIN #GROUPBY #HAVING
 > **핵심 요약:** DB는 **데이터 → 정보 가치 창출**을 목적으로 하고, SQL은 **DDL(구조 정의) → DML(데이터 조작) → DCL(권한 제어)** 세 계층으로 나뉜다. 조회 문법은 `SELECT → WHERE → ORDER BY → LIKE → GROUP BY → HAVING → JOIN` 순으로 확장되고, 제약조건(PK·UNIQUE·FK)으로 데이터 무결성을 보장한다. 이 문서는 1~4번·8~10번 문서를 한 장으로 닫는 색인이다.
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 DB와 SQL 전체를 관통하는 원리는, 모든 작업이 **"어느 테이블(FROM)에서, 어떤 조건(WHERE)으로, 어떤 컬럼(SELECT)을"**이라는 세 축으로 귀결된다는 것이다. 구조를 먼저 정의(DDL)하고, 그 안의 데이터를 다루며(DML), 접근 권한을 제어(DCL)하는 순서로 계층이 쌓인다. 데이터(raw)를 의미 있는 정보로 변환하는 것이 DB의 본질적 목적이다. DDL은 **실행 즉시 반영, 롤백 불가**이고, DML은 **COMMIT/ROLLBACK**으로 되돌릴 수 있다. SELECT는 원본을 바꾸지 않으며, 산술 연산·별칭(AS)·CONCAT은 **출력 시에만** 적용된다. WHERE 없는 UPDATE/DELETE는 테이블 전체를 변경하므로 **항상 WHERE로 범위를 한정해야 한다.**
 
@@ -31,7 +31,7 @@ GROUP BY · HAVING의 핵심 원리는, GROUP BY가 동일 값 행들을 그룹�
 
 ---
 
-## 2. 🛠️ 표준 개념 정리 (Configuration)
+## 2. 표준 개념 정리 (Configuration)
 
 > **적용 환경:** MariaDB/MySQL 계열 RDBMS.
 
@@ -179,7 +179,7 @@ customer (1)  ──────── (N)  orders
 
 ---
 
-## 3. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 3. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 ### 3-1. 설치 후 공통 검증 순서
 
@@ -219,7 +219,7 @@ SELECT COUNT(*) FROM orders;      -- orders: 50건
 
 ---
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - DB 목적 = **데이터 → 정보 가치 창출** / 단순 저장이 목적이 아님
 > - DDL(구조, 롤백 불가) · DML(데이터, COMMIT/ROLLBACK 가능) · DCL(권한)
 > - SELECT 전체 처리 순서: `FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY`

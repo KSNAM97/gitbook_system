@@ -1,11 +1,11 @@
-# 📦 Kubernetes - Pod 생성
+# Kubernetes - Pod 생성
 
 > **Tag:** #Kubernetes #Pod #Deployment #kubectl #부트캠프
 > **핵심 요약:** kubectl run으로 Pod를 직접 생성하는 방법과 Deployment로 Pod를 관리하는 방법, Pod의 개념과 생명주기 정리
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 Pod는 Kubernetes에서 컨테이너를 실행하기 위한 가장 작은 단위이며, 쿠버네티스에서 실제 애플리케이션이 실행되는 가장 작은 실행 단위이다. 컨테이너를 담는 상자, 또는 하나의 서비스(웹 서버 등)가 동작하는 기본 단위로 볼 수 있다. Docker에서는 컨테이너가 직접 실행되지만, Kubernetes에서는 컨테이너가 Pod 안에서 실행되며, 쿠버네티스는 Pod 단위로 관리한다.
 
@@ -35,7 +35,7 @@ Pod가 Running이어도 내부 컨테이너는 계속 재시작될 수 있다.
 
 ---
 
-## 2. 🛠️ Pod 직접 생성과 Deployment를 통한 관리
+## 2. Pod 직접 생성과 Deployment를 통한 관리
 
 ### 노드 상태 확인
 
@@ -350,7 +350,7 @@ No resources found in default namespace
 
 ---
 
-## 3. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 3. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 - `kubectl get pods`의 STATUS가 `ContainerCreating`에서 멈춰 있으면 이미지 pull이 진행 중이거나 실패한 것이므로 `kubectl describe pods <이름>`의 Events 섹션을 확인한다.
 - Pod를 `kubectl run`으로 직접 생성한 경우 삭제하면 그대로 사라지지만, Deployment가 관리하는 Pod는 삭제해도 즉시 새 Pod가 재생성되므로 개수 유지를 확인하려면 Deployment 자체를 삭제해야 한다(`kubectl delete deployments.apps <이름>`).
@@ -358,9 +358,9 @@ No resources found in default namespace
 
 ---
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - Pod는 Kubernetes 최소 실행 단위이며 IP를 가지고, 네트워크·파일시스템을 공유하며, 언제든 재생성될 수 있는 일회성 존재
 > - Pod 생명주기: `Pending → ContainerCreating → Running → Succeeded / Failed / CrashLoopBackOff`
 > - `kubectl run`으로 Pod를 직접 생성하는 것은 테스트용이며, 자동 복구·확장·롤링 업데이트가 불가능
 > - 실무에서는 `kubectl create deployment`로 Deployment를 생성해 Pod 개수(`--replicas`)를 유지·자동 복구하며 관리
-> - 관련: 1. 🔧 Kubernetes - 설치 · 3. 🏗️ Kubernetes - 아키텍처 개요와 핵심 컴포넌트 · 10. 🎛️ Kubernetes - Controller 개념과 ReplicationController
+> - 관련: 1.  Kubernetes - 설치 · 3.  Kubernetes - 아키텍처 개요와 핵심 컴포넌트 · 10.  Kubernetes - Controller 개념과 ReplicationController

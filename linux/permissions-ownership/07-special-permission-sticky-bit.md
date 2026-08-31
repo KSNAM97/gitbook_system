@@ -1,11 +1,11 @@
-# 📌 특수권한 Sticky-bit — 공유 디렉터리 삭제 방지 (1XXX)
+# 특수권한 Sticky-bit — 공유 디렉터리 삭제 방지 (1XXX)
 
 > **Tag:** #Linux #StickyBit #SharedDirectory #Security  
 > **핵심 요약:** Sticky-bit는 여러 사용자가 쓰기 가능한 공유 디렉터리에서 일반 사용자가 다른 사용자의 파일과 디렉터리 엔트리를 삭제하거나 이름 변경하지 못하게 한다. 파일 읽기와 내용 수정은 파일 자체의 `r`, `w` 권한으로 별도 판정한다.
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 **`777` 공유 디렉터리의 문제점은?**
 
@@ -43,7 +43,7 @@ Sticky-bit 디렉터리에서는 일반적으로 다음 주체만 엔트리를 �
 | 파일 삭제 | 상위 디렉터리 `w+x` + Sticky |
 | 파일명 변경 | 상위 디렉터리 `w+x` + Sticky |
 
-## 2. 🛠️ 표준 설정 템플릿 (Configuration)
+## 2. 표준 설정 템플릿 (Configuration)
 
 > **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
 
@@ -156,7 +156,7 @@ Other가 `---`이므로 거부된다.
 
 ---
 
-## 3. 🔍 검증 및 트러블슈팅
+## 3. 검증 및 트러블슈팅
 
 Sticky-bit 확인:
 
@@ -170,7 +170,7 @@ Sticky 디렉터리 검색:
 find / -xdev -type d -perm -1000 -ls 2>/dev/null
 ```
 
-### 🚨 Sticky-bit인데 다른 사용자가 파일 내용을 수정했다
+### Sticky-bit인데 다른 사용자가 파일 내용을 수정했다
 
 Sticky-bit는 내용 수정을 막지 않는다.
 
@@ -186,7 +186,7 @@ ls -l /share/file
 chmod go-w /share/file
 ```
 
-### 🚨 디렉터리 소유자가 다른 사용자의 파일을 삭제했다
+### 디렉터리 소유자가 다른 사용자의 파일을 삭제했다
 
 Sticky-bit 디렉터리의 소유자는 내부 엔트리를 삭제할 수 있다. 디렉터리 소유자를 일반 사용자로 지정할 때 이 점을 고려한다.
 
@@ -197,9 +197,9 @@ chown root:root /share
 chmod 1777 /share
 ```
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - Sticky-bit 숫자: `1XXX`
 > - 공개 임시 디렉터리: `1777`
 > - 그룹 제한 + 그룹 상속 + 삭제 보호: `3770`
 > - 읽기·수정은 파일 권한으로 별도 판정
-> - 관련: 6-1. 🔐 허가권 (Permission) — chmod & rwx·UGO 모델 · 6-6. 👥 특수권한 Set-GID — 소유 그룹 자동 상속 (2XXX)
+> - 관련: 6-1.  허가권 (Permission) — chmod & rwx·UGO 모델 · 6-6.  특수권한 Set-GID — 소유 그룹 자동 상속 (2XXX)

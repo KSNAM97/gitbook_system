@@ -1,11 +1,11 @@
-# 🔧 Docker - Docker Compose
+# Docker - Docker Compose
 
 > **Tag:** #Docker #DockerCompose #YAML #멀티컨테이너 #부트캠프
 > **핵심 요약:** 여러 컨테이너를 하나의 YAML 파일로 관리하는 Compose 사용법 핵심 정리
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 Docker Compose는 여러 개의 컨테이너를 하나의 `docker-compose.yaml` 파일로 정의하고 한 번에 실행/중지하는 도구이다. 기존 방식에서는 컨테이너마다 `docker run` 명령을 따로 실행하고 실행 순서를 직접 관리하며 네트워크와 볼륨도 수동으로 설정해야 했지만, Compose 방식에서는 `docker compose up -d` 한 번으로 전체를 실행하고, `depends_on`으로 실행 순서를 자동 관리하며, 네트워크와 볼륨도 자동으로 생성된다.
 
@@ -195,7 +195,7 @@ Named Volume의 이름 규칙은 `프로젝트이름_볼륨이름` 형식으로 
 
 ---
 
-## 2. 🛠️ 표준 설정 템플릿 (Configuration)
+## 2. 표준 설정 템플릿 (Configuration)
 
 > **적용 환경:** Docker Engine (Compose V2 내장) 설치 환경.
 
@@ -297,7 +297,7 @@ volumes:
 
 ---
 
-## 3. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 3. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 ### Docker Compose 설치 방법 (Rocky Linux)
 
@@ -324,10 +324,10 @@ docker compose version
 
 ---
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - Docker Compose = 멀티 컨테이너를 단일 YAML 파일로 정의·실행하는 도구
 > - `docker compose up -d` / `docker compose down` — 전체 환경 시작/삭제
 > - `depends_on + healthcheck` — DB가 실제 준비 완료된 후 앱 시작 보장
 > - Named Volume: `프로젝트이름_볼륨이름` 형식으로 자동 생성
 > - Reverse Proxy + 로드밸런싱: Nginx upstream 블록에 컨테이너 이름으로 설정
-> - 관련: 7. 📝 Docker - YAML 문법 · 6. 🌐 Docker - 컨테이너 네트워크 · 10. 🚑 Docker - 트러블슈팅 치트시트
+> - 관련: 7.  Docker - YAML 문법 · 6.  Docker - 컨테이너 네트워크 · 10.  Docker - 트러블슈팅 치트시트

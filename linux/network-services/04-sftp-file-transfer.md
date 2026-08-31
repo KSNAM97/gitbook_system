@@ -1,11 +1,11 @@
-# 🔒 SFTP 파일 전송
+# SFTP 파일 전송
 
 > **Tag:** #Linux #SFTP #SSH #TCP22 #put #get #lcd #FileTransfer
 > **핵심 요약:** SFTP는 SSH(TCP 22) 세션 안에서 동작하는 파일 전송 전용 프로토콜로, 기존 FTP(TCP 20·21)와 구조적으로 완전히 다르며 vsftpd와도 무관하다. SSH가 설치되어 있으면 `internal-sftp` 또는 `sftp-server`를 통해 자동으로 SFTP 기능이 제공되므로 별도 포트 개방이 필요 없다. 인증 정보와 파일 내용이 모두 암호화 터널 안에서 전송되어 안전하며, 업로드(`put`)는 로컬 현재 디렉터리 기준, 다운로드(`get`)는 원격 경로 지정이 가능하다.
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 FTP는 TCP/IP 기반으로 Client와 Server가 상호 간 파일을 전송하기 위해 사용하는 오래된 파일 전송 프로토콜이다. 암호화되지 않은 평문 전송 방식이기 때문에 보안에 취약하며 포트 20(데이터)·21(제어)을 사용한다.
 
@@ -44,7 +44,7 @@ pwd
 
 ---
 
-## 2. 🛠️ 표준 사용법 (Configuration)
+## 2. 표준 사용법 (Configuration)
 
 > **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
 
@@ -99,7 +99,7 @@ exit / quit    종료
 ```bash
 cd /temp
 ls -l passwd
-# -rw-r--r-- 1 sol sol 2206  7월 20 11:10 passwd
+# -rw-r--r-- 1 sol sol 2206 7월 20 11:10 passwd
 ```
 
 ```bash
@@ -168,7 +168,7 @@ sftp> get  -r  ./*                      # 파일 및 디렉터리 다운로드
 
 ---
 
-## 3. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 3. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 ### 3-1. 업로드 시 파일을 못 찾을 때
 
@@ -198,7 +198,7 @@ ssh-keygen -R 192.168.10.100            # known_hosts에서 해당 항목 제거
 
 ### 3-4. 트러블슈팅 시나리오
 
-#### 🚨 시나리오 1. `stat passwd: No such file or directory` 오류
+#### 시나리오 1. `stat passwd: No such file or directory` 오류
 
 - **원인:** sol 계정의 현재 위치(홈 디렉터리)에 업로드할 파일이 없음. SFTP는 SSH 로그인 시점의 계정 홈 디렉터리를 기준으로 로컬 파일을 찾는다.
 - **해결:** SFTP 접속 전에 파일이 있는 디렉터리로 먼저 이동한다.
@@ -214,15 +214,15 @@ sftp guest@192.168.10.100
 sftp> put passwd
 ```
 
-#### 🚨 시나리오 2. 다운로드 위치를 헷갈려 파일이 엉뚱한 곳에 저장됨
+#### 시나리오 2. 다운로드 위치를 헷갈려 파일이 엉뚱한 곳에 저장됨
 
 - **원인:** `get`은 원격 경로를 지정할 수 있지만 로컬 저장 위치는 지정하지 않으면 현재 로컬 디렉터리가 기본값.
 - **해결:** 대상 디렉터리를 명시적으로 지정한다(`get /temp/host* ./solLinux-A/`).
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - SFTP는 SSH(TCP 22) 기반 파일 전송으로 vsftpd와 무관
 > - 인증·파일 내용이 모두 암호화되어 안전
 > - 업로드는 로컬 현재 디렉터리 기준, `lcd`로 변경 가능
 > - 다운로드는 원격 경로 지정 가능, 접속 위치와 무관
 > - Windows cmd·PowerShell에서도 동일한 세션 명령 사용 가능
-> - 관련: 🖥️ SSH 개념 & 프로세스·보안 설정 · 📤 SCP 파일 전송 (Linux·Windows) · 📁 vsFTP 설치 & 접근 제어 (user_list·chroot)
+> - 관련:  SSH 개념 & 프로세스·보안 설정 ·  SCP 파일 전송 (Linux·Windows) ·  vsFTP 설치 & 접근 제어 (user_list·chroot)

@@ -1,11 +1,11 @@
-# 💻 NFS 클라이언트 마운트 & fstab 영구화
+# NFS 클라이언트 마운트 & fstab 영구화
 
 > **Tag:** #Linux #NFS #mount #fstab #autofs #nfsutils #_netdev  
 > **핵심 요약:** NFS 클라이언트는 `nfs-utils`를 설치하고 마운트포인트를 만든 뒤 `mount -t nfs 서버IP:/공유디렉터리 /마운트포인트`로 연결한다. 이 마운트는 재부팅 시 해제되므로 `/etc/fstab`에 등록해 자동 마운트를 구성해야 한다. NFS는 네트워크 자원이므로 `_netdev` 옵션을 함께 쓰는 것이 안전하며, 서버 장애 시 부팅이 멈추지 않도록 `nofail` 사용을 검토한다.
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 클라이언트 마운트 흐름은 다음과 같다.
 
@@ -66,7 +66,7 @@ NFS의 기본 인증 방식(`sec=sys`)은 클라이언트가 보낸 UID/GID를 �
 
 ---
 
-## 2. 🛠️ 표준 설정 템플릿 (Configuration)
+## 2. 표준 설정 템플릿 (Configuration)
 
 > **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
 
@@ -192,7 +192,7 @@ ls /NFSC                                   # 접근 시 자동 마운트
 
 ---
 
-## 3. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 3. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 ### 3-1. 점검 명령
 
@@ -227,10 +227,10 @@ dmesg | tail -20                           # 커널 NFS 오류
 6) dmesg / journalctl 확인
 ```
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - 클라이언트는 `nfs-utils` 설치 후 마운트포인트를 먼저 생성
 > - `mount -t nfs 서버IP:/공유 /마운트포인트`로 연결
 > - 재부팅 유지에는 fstab + `_netdev`(운영은 `nofail` 권장)
 > - `sec=sys`는 UID/GID를 신뢰하므로 계정 UID 통일이 중요
 > - 접근 거부 시 exports IP → 퍼미션 → UID → SELinux 순 점검
-> - 관련: ⚙️ NFS 서버 구성 · 🏗️ 종합실습 다중 클라이언트 NFS 구성 · 🚨 Samba·NFS 트러블슈팅 치트시트
+> - 관련:  NFS 서버 구성 ·  종합실습 다중 클라이언트 NFS 구성 ·  Samba·NFS 트러블슈팅 치트시트

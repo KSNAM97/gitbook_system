@@ -1,11 +1,11 @@
-# 🪟 Windows SMB 서버 & Linux CIFS 클라이언트
+# Windows SMB 서버 & Linux CIFS 클라이언트
 
 > **Tag:** #Windows #SMB #CIFS #smbclient #mount #fstab #netuser  
 > **핵심 요약:** Windows는 Samba 데몬(smbd)을 갖고 있지 않아 Linux처럼 Samba 서버를 직접 구성할 수는 없지만, Windows의 공유 폴더 자체가 SMB 프로토콜을 사용하므로 결과적으로 Windows가 SMB 서버 역할을 수행한다. Linux에서는 `smbclient -L`로 공유 목록을 확인하고 `mount -t cifs`로 마운트한다. 재부팅 후에도 유지하려면 `/etc/fstab`에 `cifs` 항목과 `_netdev` 옵션을 등록하며, 비밀번호는 credentials 파일로 분리하는 것이 안전하다.
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 Windows에는 Samba 데몬이 없지만 공유 폴더 기능 자체가 SMB 서버 구현이다. 따라서 Windows에서 폴더를 공유하고 계정 권한을 부여하면, Linux는 그 공유 폴더에 CIFS(SMB) 클라이언트로 접속할 수 있다.
 
@@ -47,7 +47,7 @@ Windows 방화벽에서 "파일 및 프린터 공유"가 허용되어 있어야 
 
 ---
 
-## 2. 🛠️ 표준 설정 템플릿 (Configuration)
+## 2. 표준 설정 템플릿 (Configuration)
 
 > **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
 
@@ -181,7 +181,7 @@ fstab에는 credentials를 지정한다.
 
 ---
 
-## 3. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 3. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 ### 3-1. 상태 확인 명령
 
@@ -212,12 +212,12 @@ dmesg | tail -20                           # CIFS 커널 오류 메시지 확인
 5) mount | grep cifs 로 옵션 검증
 ```
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - Windows는 공유 폴더 자체가 SMB 서버 역할
 > - Linux 클라이언트는 `samba-client` + `cifs-utils` 필요
 > - `smbclient -L`로 공유 확인, `mount -t cifs`로 마운트
 > - fstab 등록 시 `_netdev`와 `iocharset=utf8` 사용
 > - 비밀번호는 credentials 파일(600)로 분리 권장
-> - 관련: 🔗 파일 공유 개요 (NFS vs Samba/SMB) · 🐧 Linux Samba 서버 구축 · 🚨 Samba·NFS 트러블슈팅 치트시트
+> - 관련:  파일 공유 개요 (NFS vs Samba/SMB) ·  Linux Samba 서버 구축 ·  Samba·NFS 트러블슈팅 치트시트
 
 ---

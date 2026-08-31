@@ -1,11 +1,11 @@
-# 📡 NFS 개념 & RPC 동작 원리
+# NFS 개념 & RPC 동작 원리
 
 > **Tag:** #Linux #NFS #RPC #rpcbind #NFSv4 #Storage #Mount  
 > **핵심 요약:** NFS는 TCP/IP 네트워크를 통해 다른 컴퓨터의 파일 시스템 일부를 원격 마운트하여 로컬 디렉터리처럼 사용하게 해주는 기술이다. 실제 데이터는 항상 서버 디스크에 저장되며 클라이언트는 원격 접근만 한다. NFS는 RPC(Remote Procedure Call) 기반으로 동작하고, NFSv3까지는 여러 보조 포트를 rpcbind(TCP/UDP 111)가 관리하지만 NFSv4는 주로 TCP 2049 하나로 통신하도록 설계되어 방화벽 설정이 단순하다.
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 NFS(Network File System)는 서버의 디스크 일부(특정 디렉터리)를 클라이언트가 네트워크를 통해 마치 자신의 디렉터리처럼 접근할 수 있게 하는 기술이다.
 
@@ -74,7 +74,7 @@ exports의 주요 옵션은 다음과 같다.
 
 ---
 
-## 2. 🛠️ 표준 확인 (Configuration)
+## 2. 표준 확인 (Configuration)
 
 > **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
 
@@ -96,7 +96,7 @@ rpcinfo -p 192.168.10.100                  # 원격 서버 RPC 조회
 
 ---
 
-## 3. 🔍 동작 흐름 정리 (Verification)
+## 3. 동작 흐름 정리 (Verification)
 
 ```text
 [NFSv4 마운트 흐름]
@@ -114,10 +114,10 @@ rpcinfo -p 192.168.10.100                  # 원격 서버 RPC 조회
 3) nfsd(2049)로 실제 I/O 수행
 ```
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - NFS는 서버 디렉터리를 원격 마운트해 로컬처럼 사용하는 기술
 > - 공유되는 것은 메모리가 아니라 디스크 공간
 > - RPC 기반이며 rpcbind는 TCP/UDP 111 사용
 > - NFSv4는 TCP 2049 단일 포트로 방화벽 설정이 단순
 > - exports의 `rw`와 디렉터리 퍼미션이 모두 맞아야 쓰기 가능
-> - 관련: 🔗 파일 공유 개요 (NFS vs Samba/SMB) · ⚙️ NFS 서버 구성 · 💻 NFS 클라이언트 마운트 & fstab
+> - 관련:  파일 공유 개요 (NFS vs Samba/SMB) ·  NFS 서버 구성 ·  NFS 클라이언트 마운트 & fstab

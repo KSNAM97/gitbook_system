@@ -1,11 +1,11 @@
-# 🐳 Docker - 도커와 컨테이너의 이해
+# Docker - 도커와 컨테이너의 이해
 
 > **Tag:** #Docker #컨테이너 #개념 #부트캠프
 > **핵심 요약:** Docker의 등장 배경, 컨테이너 개념, Image/Container 관계, 격리 기술 핵심 정리
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 Docker는 애플리케이션을 컨테이너(Container) 단위로 패키징하여 어디서든 동일하게 실행할 수 있도록 해주는 오픈소스 플랫폼이다. 개발사는 Docker Inc.이며, 핵심 개념은 컨테이너 기반 가상화이고, OCI(Open Container Initiative) 표준을 따른다. 이를 이해하는 데는 해상 컨테이너 비유가 유용한데, 배(선박)는 서버(운영 환경)에, 컨테이너는 소프트웨어 실행 단위에 해당한다. 컨테이너 규격이 통일되어 어느 배에나 실을 수 있듯, Docker 컨테이너도 규격이 통일되어 있어 어느 서버에서나 실행 가능하다.
 
@@ -32,10 +32,10 @@ Docker Registry는 Docker Image를 저장하고 배포하는 저장소이다. Do
 
 ---
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - Docker = 컨테이너 기반 오픈소스 플랫폼, OCI 표준 준수
 > - Image(읽기 전용 템플릿) → docker run → Container(실행 인스턴스)
 > - 이미지는 레이어 구조, 중복 레이어 재사용으로 효율적
 > - 격리 기술: Linux Namespaces(프로세스/네트워크 격리) + cgroups(리소스 제한)
 > - Container는 VM보다 가볍고(OS 공유), 기동 시간이 매우 빠름(초 단위)
-> - 관련: 2. 📦 Docker - 컨테이너와 이미지 · 3. 🔄 Docker - 컨테이너 사용하기 · 9. 🧩 Docker - 통합 정리
+> - 관련: 2.  Docker - 컨테이너와 이미지 · 3.  Docker - 컨테이너 사용하기 · 9.  Docker - 통합 정리

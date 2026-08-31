@@ -1,11 +1,11 @@
-# 📁 vsFTP 설치 & 접근 제어 (user_list·chroot)
+# vsFTP 설치 & 접근 제어 (user_list·chroot)
 
 > **Tag:** #Linux #FTP #vsFTP #vsftpd #TCP20 #TCP21 #userlist_deny #chroot #xferlog
 > **핵심 요약:** FTP는 TCP 21(제어)·20(데이터) 포트를 사용하는 평문 파일 전송 프로토콜이며, vsftpd(Very Secure FTP Daemon)는 Rocky·RHEL 등 대부분 배포판에서 기본으로 제공되는 FTP 서버다. `anonymous_enable`로 익명 접속을, `write_enable`로 업로드 권한을, `userlist_enable`·`userlist_deny`로 접속 허용/차단 대상을, `user_config_dir`로 계정별 예외 설정을, `chroot_local_user`로 홈 디렉터리 격리를 제어한다. 모든 설정 변경 후에는 `systemctl restart vsftpd`로 반영해야 한다.
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 FTP는 네트워크를 통해 파일을 송수신(업로드·다운로드)하기 위한 TCP/IP 기반의 표준 프로토콜로, 사용자가 원격 서버에 접속해 파일을 주고받는 전용 통신 규칙이다. FTP는 TCP 포트 20·21을 사용한다.
 
@@ -80,7 +80,7 @@ vsftpd는 보안상의 이유로 chroot 최상위 디렉터리에 쓰기 권한�
 
 ---
 
-## 2. 🛠️ 표준 설정 템플릿 (Configuration)
+## 2. 표준 설정 템플릿 (Configuration)
 
 > **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
 
@@ -226,7 +226,7 @@ guest                          # 차단할 계정 추가
 ```text
 pam_service_name=vsftpd
 userlist_enable=YES
-# userlist_deny=YES            # 명시하지 않아도 기본값 적용
+# userlist_deny=YES # 명시하지 않아도 기본값 적용
 ```
 
 ```bash
@@ -309,7 +309,7 @@ ftp> ls -l
 
 ---
 
-## 3. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 3. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 ### 3-1. 접근 제어 동작 확인
 
@@ -334,12 +334,12 @@ ss -tlnp | grep :21
 
 ### 3-3. 트러블슈팅 시나리오
 
-#### 🚨 시나리오 1. FTP 접속 자체가 시간 초과됨
+#### 시나리오 1. FTP 접속 자체가 시간 초과됨
 
 - **원인:** 방화벽 미개방 또는 vsftpd 미동작.
 - **해결:** `systemctl status vsftpd`, `firewall-cmd --list-all`로 확인 후 20/21번 포트와 ftp 서비스를 개방한다.
 
-#### 🚨 시나리오 2. write_enable=YES인데도 업로드가 550으로 거부됨
+#### 시나리오 2. write_enable=YES인데도 업로드가 550으로 거부됨
 
 - **원인 후보:** 설정 변경 후 데몬 미재시작, `user_config_dir` 계정 파일이 우선 적용, 디렉터리 실제 쓰기 권한 부족, chroot·SELinux 차단.
 - **해결 절차:**
@@ -352,20 +352,20 @@ getsebool -a | grep ftp                        # SELinux ftp 관련 boolean 확�
 systemctl restart vsftpd
 ```
 
-#### 🚨 시나리오 3. 비밀번호도 묻지 않고 530으로 거부됨
+#### 시나리오 3. 비밀번호도 묻지 않고 530으로 거부됨
 
 - **원인:** `user_list`에 등록된 계정이며 `userlist_deny=YES`(기본값) 상태.
 - **해결:** 접속을 허용하려면 `user_list`에서 해당 계정을 제거하거나, 허용 목록 방식(`userlist_deny=NO`)으로 전환하고 목록을 허용 계정으로 재작성한다.
 
-#### 🚨 시나리오 4. chroot 적용 후 500 OOPS 오류로 로그인 실패
+#### 시나리오 4. chroot 적용 후 500 OOPS 오류로 로그인 실패
 
 - **원인:** `chroot_local_user=YES`인데 홈 디렉터리에 쓰기 권한이 있어 vsftpd가 보안상 거부.
 - **해결:** `allow_writeable_chroot=YES` 추가 후 재시작.
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - FTP는 제어 TCP 21, 데이터 TCP 20 사용, 평문 전송
 > - `write_enable=NO`면 다운로드만 가능
 > - `userlist_deny=YES`는 차단 목록(기본값), `NO`는 허용 목록
 > - `user_config_dir`로 계정별 예외 설정 가능
 > - `chroot_local_user=YES` + 쓰기 가능 홈은 `allow_writeable_chroot=YES` 필요
-> - 관련: 🔒 SFTP 파일 전송 · 📤 SCP 파일 전송 (Linux·Windows) · 🚨 트러블슈팅 치트시트 (SSH·vsFTP·SFTP·DHCP·DNS)
+> - 관련:  SFTP 파일 전송 ·  SCP 파일 전송 (Linux·Windows) ·  트러블슈팅 치트시트 (SSH·vsFTP·SFTP·DHCP·DNS)

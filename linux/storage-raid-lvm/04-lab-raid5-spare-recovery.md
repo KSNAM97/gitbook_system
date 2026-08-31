@@ -1,11 +1,11 @@
-# 🏗️ 종합실습 RAID 5 + Spare 구성 & 장애 복구
+# 종합실습 RAID 5 + Spare 구성 & 장애 복구
 
 > **Tag:** #Linux #Lab #RAID5 #mdadm #Spare #FaultTolerance #fstab
 > **핵심 요약:** RAID용 파티션(타입 `fd`)을 만들고 활성 디스크 4개와 Spare 디스크 1개로 RAID 5를 구성한 뒤, ext4 포맷·마운트·`/etc/fstab` 영구화까지 진행하는 종합 실습이다. 이후 `mdadm --fail`로 장애를 주입해 Spare가 자동 투입·복구(rebuild)되는 과정을 확인하고, RAID 5가 디스크 1개 장애까지 결함 허용을 제공하되 2개 이상 동시 장애 시 복구가 불가능함을 검증한다.
 
 ---
 
-## 1. 🎯 실습 목표 (Scenario)
+## 1. 실습 목표 (Scenario)
 
 ### 1-1. 요구사항
 
@@ -31,7 +31,7 @@
 
 ---
 
-## 2. 🛠️ 단계별 실습 (Configuration)
+## 2. 단계별 실습 (Configuration)
 
 > **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
 
@@ -61,7 +61,7 @@ wipefs -a /dev/sde
 wipefs -a /dev/sdf
 ```
 
-> ⚠️ 이 명령들은 대상 디스크의 데이터 접근을 파괴합니다. 실습용 빈 디스크가 맞는지 `lsblk`, `mdadm --detail`로 반드시 먼저 확인합니다.
+>  이 명령들은 대상 디스크의 데이터 접근을 파괴합니다. 실습용 빈 디스크가 맞는지 `lsblk`, `mdadm --detail`로 반드시 먼저 확인합니다.
 
 ### STEP 1. RAID용 파티션 생성
 
@@ -119,7 +119,7 @@ mdadm --detail --scan > /etc/mdadm.conf    # RAID 구성 정보 저장
 dracut -fv                                 # initramfs 갱신
 ```
 
-> 이 단계를 생략하면 재부팅 후 `/dev/md127` 등 다른 번호로 자동 조립될 수 있다. (참고: ⚙️ mdadm 명령어 & RAID 관리)
+> 이 단계를 생략하면 재부팅 후 `/dev/md127` 등 다른 번호로 자동 조립될 수 있다. (참고:  mdadm 명령어 & RAID 관리)
 
 ### STEP 4. 파일시스템 생성
 
@@ -175,7 +175,7 @@ ls -l /RAID55                              # 복사 결과 확인
 
 ---
 
-## 3. 🔍 장애 복구 검증 (Verification & Troubleshooting)
+## 3. 장애 복구 검증 (Verification & Troubleshooting)
 
 ### 3-1. 디스크 1개 장애 → Spare 자동 투입
 
@@ -227,11 +227,11 @@ ls -l /RAID55                              # 접근 실패 확인
 
 RAID 5는 패리티가 1개이므로 동시에 디스크 2개가 손실되면 데이터를 복구할 수 없다. 이때 파일 접근이 불가능해질 수 있다.
 
-> ⚠️ RAID 5는 디스크 1개 장애까지만 결함 허용을 제공한다. 복구(rebuild)가 끝나기 전이나 동시에 2개가 고장 나면 데이터를 잃는다. 이중 장애 대비가 필요하면 RAID 6 또는 RAID 10을 검토한다.
+>  RAID 5는 디스크 1개 장애까지만 결함 허용을 제공한다. 복구(rebuild)가 끝나기 전이나 동시에 2개가 고장 나면 데이터를 잃는다. 이중 장애 대비가 필요하면 RAID 6 또는 RAID 10을 검토한다.
 
 ---
 
-## 4. ✅ 최종 체크리스트
+## 4. 최종 체크리스트
 
 ```text
 [ ] sdb ~ sdf 모델·용량 확인, 실습용 빈 디스크 확인
@@ -247,10 +247,10 @@ RAID 5는 패리티가 1개이므로 동시에 디스크 2개가 손실되면 �
 [ ] 2개 동시 장애 시 복구 불가 확인
 ```
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - RAID 5는 활성 N개 + Spare로 구성 가능
 > - Spare는 활성 디스크 장애 시 자동 투입·복구
 > - 디스크 1개 장애까지 결함 허용, 2개 동시 장애는 복구 불가
 > - md127 방지를 위해 `/etc/mdadm.conf` + `dracut -fv`
 > - 파괴적 명령 전 대상 디스크 재확인
-> - 관련: 🧩 RAID 개념 & Hardware vs Software RAID · 📊 RAID 레벨별 특징 (Linear·0·1·5·6) · ⚙️ mdadm 명령어 & RAID 관리 · 🧱 LVM 개념 & 구조 (PV·VG·LV·PE)
+> - 관련:  RAID 개념 & Hardware vs Software RAID ·  RAID 레벨별 특징 (Linear·0·1·5·6) ·  mdadm 명령어 & RAID 관리 ·  LVM 개념 & 구조 (PV·VG·LV·PE)

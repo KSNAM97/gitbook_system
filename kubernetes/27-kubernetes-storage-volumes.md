@@ -1,11 +1,11 @@
-# 💾 Kubernetes - Storage 개요와 emptyDir·hostPath
+# Kubernetes - Storage 개요와 emptyDir·hostPath
 
 > **Tag:** #Kubernetes #Storage #Volume #emptyDir #hostPath #부트캠프
 > **핵심 요약:** 쿠버네티스 스토리지 전체 구조와 핵심 개념 4가지를 정리하고, emptyDir과 hostPath 볼륨을 실습으로 확인
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 Pod는 원래 언제든지 사라질 수 있는 존재다. Deployment는 Pod를 필요하면 새로 만들고, 문제가 있으면 재생성한다. 노드를 drain 하면 Pod가 다른 노드로 이동(재생성)하고, 스케줄러는 Pod를 다른 노드에 새로 올릴 수 있다.
 
@@ -74,7 +74,7 @@ Pod는 갈아끼우고, 데이터는 그대로 유지하는 것이 목표다. Po
 
 ---
 
-## 2. 🛠️ emptyDir 실습
+## 2. emptyDir 실습
 
 ### EX1) emptyDir을 사용한 볼륨 실습
 
@@ -317,7 +317,7 @@ pod "pod-emptydir-nginx2" deleted from default namespace
 
 ---
 
-## 3. 🛠️ hostPath 실습
+## 3. hostPath 실습
 
 hostPath는 Pod가 실행되는 노드의 특정 디렉터리를 컨테이너 안에 그대로 마운트해서 사용하는 방식이다. Pod가 다른 노드로 이동할 수 있으므로, 모든 노드에 동일한 디렉터리가 존재해야 데이터 불일치 위험을 줄일 수 있다. 특정 Node의 데이터를 사용해야 한다면 nodeSelector나 nodeAffinity를 이용하여 Pod가 특정 Node에서 실행되도록 제한할 수 있다. 이 구조는 노드 종속적이어서 운영 환경에서는 권장되지 않는다.
 
@@ -704,7 +704,7 @@ drwxr-xr-x 2 root root  6  8월 27 12:06 /webdata2
 
 ---
 
-## 4. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 4. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 - 두 nginx Pod(`web-empt`, `web-noempt`)가 같은 이미지인데도 응답이 다른 이유는 emptyDir이 웹 루트를 완전히 빈 디렉터리로 덮어썼기 때문이다. `mount | grep /usr`로 실제 마운트 여부를 확인할 수 있다.
 - 사이드카 컨테이너 간 파일 공유가 안 될 때는 두 컨테이너의 `volumeMounts.name`이 `volumes.name`과 정확히 일치하는지, `mountPath`가 올바른지 먼저 확인한다. `kubectl exec -it <pod> -c <container> -- /bin/bash`로 컨테이너별 파일시스템을 직접 비교하면 빠르다.
@@ -714,9 +714,9 @@ drwxr-xr-x 2 root root  6  8월 27 12:06 /webdata2
 
 ---
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - 쿠버네티스 스토리지는 Pod 내부(volumeMounts) → 리소스(PV/PVC/StorageClass) → 실제 인프라(NFS 등) 3단계 구조로 이해한다
 > - emptyDir은 Pod 생명주기와 함께하는 임시 저장소로, 삭제 시 데이터도 함께 사라지며 같은 Pod 내 컨테이너 간 파일 공유에 사용
 > - hostPath는 노드의 로컬 디렉터리를 그대로 마운트하는 방식으로, 노드 종속적이라 nodeSelector로 특정 노드에 Pod를 고정해야 안정적으로 동작하며 운영 환경에서는 권장되지 않음
 > - hostPath의 type 옵션(DirectoryOrCreate/Directory/FileOrCreate/File)에 따라 경로 자동 생성 여부와 Pod 생성 실패 여부가 달라짐
-> - 관련: 28. 💽 Kubernetes - PV·PVC와 StorageClass·Dynamic Provisioning
+> - 관련: 28.  Kubernetes - PV·PVC와 StorageClass·Dynamic Provisioning

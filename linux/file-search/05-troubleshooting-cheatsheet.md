@@ -90,7 +90,7 @@ find <경로> <조건> -ls
 
 ## 트러블슈팅 시나리오 (Verification & Troubleshooting)
 
-### 🚨 시나리오 1. 대용량 파일 출력 후 SSH 화면이 멈췄다
+### 시나리오 1. 대용량 파일 출력 후 SSH 화면이 멈췄다
 
 현재 세션에서:
 
@@ -119,7 +119,7 @@ tail -n 500 huge.log
 
 > `pkill cat`은 다른 사용자의 정상 프로세스까지 종료할 수 있으므로 가능한 한 PID를 확인한다.
 
-### 🚨 시나리오 2. 로그 회전 후 `tail -f`에 새 내용이 표시되지 않는다
+### 시나리오 2. 로그 회전 후 `tail -f`에 새 내용이 표시되지 않는다
 
 ```bash
 tail -F /var/log/nginx/access.log
@@ -132,7 +132,7 @@ ls -li /var/log/nginx/access.log*
 lsof /var/log/nginx/access.log*
 ```
 
-### 🚨 시나리오 3. `>`로 설정 파일을 덮어썼다
+### 시나리오 3. `>`로 설정 파일을 덮어썼다
 
 현재 파일을 추가로 변경하지 않는다.
 
@@ -171,7 +171,7 @@ apachectl configtest
 
 > 패키지 재설치가 수정된 설정 파일을 자동으로 기본값으로 되돌린다고 보장할 수 없다. 백업, `.rpmnew`, `.rpmsave`, 패키지 원본을 비교해야 한다.
 
-### 🚨 시나리오 4. `cat file > file` 후 파일이 비었다
+### 시나리오 4. `cat file > file` 후 파일이 비었다
 
 원인:
 
@@ -202,7 +202,7 @@ else
 fi
 ```
 
-### 🚨 시나리오 5. Heredoc의 `$uri`가 치환되었다
+### 시나리오 5. Heredoc의 `$uri`가 치환되었다
 
 잘못된 예:
 
@@ -220,7 +220,7 @@ try_files $uri $uri/ =404;
 EOF
 ```
 
-### 🚨 시나리오 6. `sudo echo >>`가 권한 오류로 실패한다
+### 시나리오 6. `sudo echo >>`가 권한 오류로 실패한다
 
 ```bash
 printf '%s\n' 'net.ipv4.ip_forward=1' |
@@ -234,7 +234,7 @@ sudo sh -c \
   'printf "%s\n" "net.ipv4.ip_forward=1" >> /etc/sysctl.conf'
 ```
 
-### 🚨 시나리오 7. Heredoc가 끝나지 않는다
+### 시나리오 7. Heredoc가 끝나지 않는다
 
 종료 구분자는 다음 조건을 만족해야 한다.
 
@@ -257,7 +257,7 @@ EOF
 Ctrl + C
 ```
 
-### 🚨 시나리오 8. `find /home -name *.log` 결과가 이상하다
+### 시나리오 8. `find /home -name *.log` 결과가 이상하다
 
 ```bash
 find /home -name '*.log'
@@ -269,7 +269,7 @@ find /home -name '*.log'
 printf '<%s>\n' *.log
 ```
 
-### 🚨 시나리오 9. `find`의 `Permission denied`가 너무 많다
+### 시나리오 9. `find`의 `Permission denied`가 너무 많다
 
 간단히 표준 오류를 숨긴다.
 
@@ -292,7 +292,7 @@ find / \
 find / -xdev -name 'passwd' 2>/dev/null
 ```
 
-### 🚨 시나리오 10. `find -delete` 대상이 너무 많다
+### 시나리오 10. `find -delete` 대상이 너무 많다
 
 즉시 삭제를 실행하지 않고 검색 조건부터 다시 확인한다.
 
@@ -344,7 +344,7 @@ find "$REAL_TARGET" \
   -type f -name '*.log' -mtime +30 -delete
 ```
 
-### 🚨 시나리오 11. `-mtime +7`이 생각한 달력 날짜와 다르다
+### 시나리오 11. `-mtime +7`이 생각한 달력 날짜와 다르다
 
 `-mtime`은 현재 시각 기준 완료된 24시간 단위로 계산한다.
 

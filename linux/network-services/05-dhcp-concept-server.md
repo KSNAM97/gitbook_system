@@ -1,11 +1,11 @@
-# 🌐 DHCP 개념 & 서버 구성
+# DHCP 개념 & 서버 구성
 
 > **Tag:** #Linux #DHCP #DORA #dhcpd #UDP67 #UDP68 #lease #NetworkManager
 > **핵심 요약:** DHCP(Dynamic Host Configuration Protocol)는 클라이언트에게 IP 주소·서브넷마스크·게이트웨이·DNS 서버 주소·임대 시간 등 네트워크 통신에 필요한 정보를 자동으로 할당하는 프로토콜로 UDP 67(서버)·68(클라이언트) 포트를 사용한다. 동작 과정은 Discover → Offer → Request → ACK의 DORA 4단계이며, Rocky Linux에서는 `dhcp-server` 패키지를 설치하고 `/etc/dhcp/dhcpd.conf`에 subnet과 range를 정의한 뒤 `dhcpd` 서비스를 기동한다. 한 네트워크에 DHCP 서버가 둘 이상 동작하면 클라이언트가 어느 서버에서 주소를 받을지 예측할 수 없으므로 반드시 하나만 남겨야 한다.
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 PC나 서버 같은 통신 장비가 인터넷망을 통해 통신하려면 IP 주소, 서브넷마스크, 게이트웨이 IP 주소, DNS 서버 주소 등이 필요하다. DHCP는 클라이언트에게 네트워크 통신에 필요한 정보를 자동으로 할당하는 프로토콜이다.
 
@@ -88,7 +88,7 @@ DHCP 서버 . . . . . . . . . : 192.168.10.254
 
 ---
 
-## 2. 🛠️ 표준 설정 템플릿 (Configuration)
+## 2. 표준 설정 템플릿 (Configuration)
 
 > **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
 
@@ -189,7 +189,7 @@ Linux 클라이언트는 IP 주소가 없으면 SSH 접속이 불가능하므로
 
 ```bash
 ifconfig ens160
-# inet 192.168.10.150  netmask 255.255.255.0  broadcast 192.168.10.255
+# inet 192.168.10.150 netmask 255.255.255.0 broadcast 192.168.10.255
 ```
 
 ```bash
@@ -207,7 +207,7 @@ IPv4 주소 . . . . . . . . . : 192.168.10.151
 
 ---
 
-## 3. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 3. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 ### 3-1. 할당 내역 확인
 
@@ -253,17 +253,17 @@ journalctl -u dhcpd -n 50             # 상세 오류 확인
 
 ### 3-3. 트러블슈팅 시나리오
 
-#### 🚨 시나리오 1. VMware DHCP와 직접 구축한 DHCP가 충돌
+#### 시나리오 1. VMware DHCP와 직접 구축한 DHCP가 충돌
 
 - **원인:** 한 네트워크에 두 개의 DHCP 서버가 동시에 동작.
 - **해결:** VMware Workstation의 Virtual Network Editor에서 VMnet8의 내장 DHCP 체크를 해제한다. NAT·게이트웨이 기능은 그대로 유지된다.
 
-#### 🚨 시나리오 2. Client-L이 콘솔에서만 접속 가능
+#### 시나리오 2. Client-L이 콘솔에서만 접속 가능
 
 - **원인:** IP를 아직 받지 못한 상태라 SSH 접속이 불가능함.
 - **해결:** DHCP 서버 기동 후 클라이언트를 재부팅하거나 `nmcli connection up`으로 재요청하면 IP를 받아 SSH 접속이 가능해진다.
 
-#### 🚨 시나리오 3. dhcpd 서비스가 기동되지 않음
+#### 시나리오 3. dhcpd 서비스가 기동되지 않음
 
 - **원인:** dhcpd.conf 문법 오류 또는 subnet 대역과 서버 실제 IP 불일치.
 - **해결:**
@@ -273,10 +273,10 @@ dhcpd -t -cf /etc/dhcp/dhcpd.conf
 journalctl -u dhcpd -n 50
 ```
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - DHCP는 IP·마스크·게이트웨이·DNS·임대시간을 자동 할당
 > - UDP 67(서버)·68(클라이언트) 사용
 > - 동작 과정은 Discover → Offer → Request → ACK
 > - 설정은 `/etc/dhcp/dhcpd.conf`의 subnet·range
 > - 한 네트워크에 DHCP 서버는 하나만 유지(VMware 내장 DHCP 중지 필수)
-> - 관련: 🧭 DNS 개념 & Master Name Server·Zone 이론 · 🚨 트러블슈팅 치트시트 (SSH·vsFTP·SFTP·DHCP·DNS)
+> - 관련:  DNS 개념 & Master Name Server·Zone 이론 ·  트러블슈팅 치트시트 (SSH·vsFTP·SFTP·DHCP·DNS)

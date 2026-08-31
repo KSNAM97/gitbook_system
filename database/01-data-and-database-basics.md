@@ -1,11 +1,11 @@
-# 🗄️ DB - 데이터와 데이터베이스 기초 (MariaDB 설치 포함)
+# DB - 데이터와 데이터베이스 기초 (MariaDB 설치 포함)
 
 > **Tag:** #Database #MariaDB #MySQL #데이터 #정보 #DB설치 #보안설정
 > **핵심 요약:** 데이터(Data)는 가공되지 않은 사실이고, 정보(Information)는 데이터를 처리해 의미를 부여한 결과물이다. 데이터베이스는 데이터를 **중복 없이, 정확하게, 효율적으로** 관리하는 시스템이며, MySQL/MariaDB는 그 구현체다. DB의 목적은 단순 저장이 아니라 **정보 가치 창출**이다.
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 데이터(Data)는 가공되지 않은 사실(raw facts)로 그 자체로는 의미가 없는 순수한 기록이다. 예를 들어 온도 측정값 `29, 30, 31`, 시험 점수 `85`, 출근 시간 `08:57`, 회원 이름 `김철수` 등이 데이터에 해당한다. 정보(Information)는 이러한 데이터를 처리하여 의미와 가치를 부여한 결과물이며, 의사결정의 기반이 된다. 앞의 데이터를 가공하면 `오늘 평균 기온 30도`, `반 평균보다 높은 성적`, `지각 여부 판단` 같은 정보가 된다. **MySQL은 데이터를 저장하는 도구**이지 정보 자체를 만들지 않는다. 하지만 `SELECT`, 조건 검색, 집계 함수를 사용하는 이유는 **데이터를 정보로 변환**하기 위해서다. 즉 DB의 목적은 데이터 저장이 아니라 **정보 가치 창출**에 있다.
 
@@ -17,7 +17,7 @@ MariaDB 계정 생성과 권한 부여는 `CREATE USER '사용자'@'호스트' I
 
 ---
 
-## 2. 🛠️ 표준 설정 템플릿 (Configuration)
+## 2. 표준 설정 템플릿 (Configuration)
 
 > **적용 환경:** MariaDB/MySQL 계열 RDBMS.
 
@@ -45,8 +45,8 @@ mysql_secure_installation
 # 1. root 비밀번호 입력: (처음 설치 시 Enter)
 # 2. unix_socket 인증: n
 # 3. root 비밀번호 변경: y → 새 비밀번호 입력 (예: admin1234)
-# 4. 익명 사용자 제거: n (테스트 환경)  / y (운영 환경)
-# 5. root 원격 접속 차단: n (테스트)     / y (운영)
+# 4. 익명 사용자 제거: n (테스트 환경) / y (운영 환경)
+# 5. root 원격 접속 차단: n (테스트) / y (운영)
 # 6. test DB 삭제: y
 # 7. 권한 테이블 리로드: y
 ```
@@ -104,7 +104,7 @@ https://dev.mysql.com/downloads/workbench/
 
 ---
 
-## 3. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 3. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 ### 3-1. 필수 검증 명령어
 
@@ -126,7 +126,7 @@ mysql -u user1 -p -h <서버IP>
 
 ### 3-2. 트러블슈팅 시나리오
 
-#### 🚨 시나리오 1. 외부에서 MariaDB 접속 불가
+#### 시나리오 1. 외부에서 MariaDB 접속 불가
 
 - **증상:** Workbench에서 연결 시 `Can't connect to MySQL server on '서버IP'` 오류.
 - **원인:** bind-address가 `127.0.0.1`(로컬 전용)이거나 방화벽에서 3306 포트가 막혀 있음.
@@ -143,7 +143,7 @@ mysql -u user1 -p -h <서버IP>
   firewall-cmd --reload
   ```
 
-#### 🚨 시나리오 2. 계정으로 접속 시 권한 없음 오류
+#### 시나리오 2. 계정으로 접속 시 권한 없음 오류
 
 - **증상:** `CREATE TABLE` 등 실행 시 `Access denied for user ...` 오류.
 - **원인:** 계정 생성 후 `GRANT` 또는 `FLUSH PRIVILEGES` 를 실행하지 않음.
@@ -153,7 +153,7 @@ mysql -u user1 -p -h <서버IP>
   FLUSH PRIVILEGES;
   ```
 
-#### 🚨 시나리오 3. `systemctl enable mariadb` 이후에도 부팅 시 서비스 미시작
+#### 시나리오 3. `systemctl enable mariadb` 이후에도 부팅 시 서비스 미시작
 
 - **증상:** 서버 재부팅 후 MariaDB가 자동 시작되지 않음.
 - **원인:** `enable` 명령은 실행했지만 이미 `disable` 상태가 고착된 경우.
@@ -165,8 +165,8 @@ mysql -u user1 -p -h <서버IP>
 
 ---
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - 데이터 → 가공 → 정보. DB의 목적은 **정보 가치 창출**
 > - 파일 관리의 한계(동시성, 집계, 관계) → DB로 해결
 > - MariaDB 설치 후 순서: `systemctl start/enable` → `mysql_secure_installation` → 계정·권한 설정 → 방화벽 설정 → `bind-address` 설정 → 재시작
-> - 관련: 🔧 DB - SQL 문법 (DDL·DML·DCL) · 🔍 DB - SELECT·WHERE·ORDER BY·LIKE 실습 · 📋 emp·dept 테이블 정의 및 데이터
+> - 관련:  DB - SQL 문법 (DDL·DML·DCL) ·  DB - SELECT·WHERE·ORDER BY·LIKE 실습 ·  emp·dept 테이블 정의 및 데이터

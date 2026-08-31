@@ -1,11 +1,11 @@
-# 💽 Kubernetes - PV·PVC와 StorageClass·Dynamic Provisioning
+# Kubernetes - PV·PVC와 StorageClass·Dynamic Provisioning
 
 > **Tag:** #Kubernetes #Storage #PV #PVC #StorageClass #DynamicProvisioning #NFS #Helm #부트캠프
 > **핵심 요약:** PV/PVC로 Pod와 데이터를 분리하는 정적 프로비저닝 구조를 실습하고, StorageClass·NFS Provisioner를 이용한 동적 프로비저닝(Dynamic Provisioning)까지 전체 흐름을 정리
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 Pod는 삭제/재생성/이동이 자주 발생한다. 컨테이너 안에 저장한 데이터는 Pod가 없어지면 같이 사라질 수 있다. 그래서 필요한 것이 Pod와 데이터 저장소를 분리하는 것이다(Pod는 교체 가능, 데이터는 유지). PV/PVC는 이걸 위한 표준 방식이다.
 
@@ -106,7 +106,7 @@ PVC가 삭제되면 그 PV와 실제 데이터는 어떻게 할지를 결정해�
 
 ---
 
-## 2. 🛠️ NFS 서버 준비 (Control-Plane을 NFS Server로 사용)
+## 2. NFS 서버 준비 (Control-Plane을 NFS Server로 사용)
 
 Master Node를 NFS Server로 사용한다.
 
@@ -218,7 +218,7 @@ Export list for 192.168.10.100:
 /export/k8s 192.168.10.0/24
 ```
 
-## 3. 🛠️ PersistentVolume 정적 생성 실습(Static Provisioning)
+## 3. PersistentVolume 정적 생성 실습(Static Provisioning)
 
 YAML 파일을 사용하여 PV를 생성한다.
 
@@ -358,7 +358,7 @@ Source:
 Events:        	<none>
 ```
 
-## 4. 🛠️ Pod에서 PVC 마운트해서 NFS에 쓰기
+## 4. Pod에서 PVC 마운트해서 NFS에 쓰기
 
 ```bash
 [root@k8s-master ~]# vi pod-nfs-test.yaml
@@ -448,7 +448,7 @@ total 4
 -rw-r--r-- 1 root root 15  8월 27 14:44 test.txt
 ```
 
-## 5. 🛠️ 다른 Pod에서 같은 PVC 공유 실습
+## 5. 다른 Pod에서 같은 PVC 공유 실습
 
 첫 번째 Pod `nfs-pvc-test`는 이미 `pvc-nfs-rwx`를 사용 중이다. 두 번째 Pod도 같은 PVC를 요청해서 두 Pod가 서로 다른 워커노드에 배치되어도 같은 NFS 데이터를 공유하는지 확인한다.
 
@@ -605,7 +605,7 @@ persistentvolumeclaim "pvc-nfs-rwx" deleted from default namespace
 persistentvolume "pv-nfs-rwx" deleted
 ```
 
-## 6. 📖 StorageClass와 Dynamic Provisioning 개념
+## 6. StorageClass와 Dynamic Provisioning 개념
 
 쿠버네티스에서 Pod는 기본적으로 휘발성이다. Pod가 삭제되거나 다른 노드로 이동하면, Pod 안에 있던 파일은 같이 사라진다. 웹 서버의 index.html, DB 컨테이너의 데이터 디렉터리, 업로드한 파일 같은 데이터는 Pod가 재시작되어도 유지돼야 한다. 그래서 쿠버네티스는 Pod와 데이터를 분리하는 구조를 만들었고, 그 결과가 PV, PVC 개념이다. 하지만 초창기 방식에는 큰 문제가 있었다.
 
@@ -671,7 +671,7 @@ PV를 관리자가 미리 만들지 않고 PVC가 필요해질 때 그 순간에
 4. **4단계**: StorageClass에 정의된 provisioner가 실행된다. NFS라면 디렉터리를 만들고, 클라우드라면 디스크를 생성하고, 쿠버네티스 안에는 PV 오브젝트를 자동 생성한다.
 5. **5단계**: 생성된 PV가 PVC와 즉시 연결된다. 사용자는 PV가 언제, 어떻게 만들어졌는지 몰라도 된다. PVC만 쓰면 된다.
 
-## 7. 🛠️ StorageClass + Dynamic Provisioning 실습
+## 7. StorageClass + Dynamic Provisioning 실습
 
 Static Provisioning에서는 관리자가 PV를 직접 미리 만들었다. Dynamic Provisioning에서는 관리자가 PV를 미리 만들지 않고, 사용자가 PVC를 생성하면 StorageClass와 Provisioner를 통해 PV가 자동으로 생성된다. 이번 실습에서는 PVC 개수만큼 각각의 PV가 자동으로 생성되는 과정과, Pod가 PVC를 실제로 사용해서 NFS 서버에 데이터를 저장하는지를 확인한다.
 
@@ -989,7 +989,7 @@ persistentvolumeclaim/pvc-backup created
 
 PV YAML 파일을 작성 및 실행하지 않고 PVC만 YAML 파일을 작성 및 실행했다. 각 PVC는 `storageClassName: sc-nfs-multi`를 통해 NFS Provisioner를 사용하게 된다.
 
-## 8. 🔎 Step9 ~ 12) Dynamic Provisioning 결과 확인
+## 8. Step9 ~ 12) Dynamic Provisioning 결과 확인
 
 ```bash
 	# Step9) PVC 상태 확인
@@ -1095,7 +1095,7 @@ Events:        	<none>
 
 `pvc-log`는 PVC 이름이다. PV 이름은 별도로 자동 생성된다. 먼저 실제 PV 이름을 확인한 후 describe해야 한다.
 
-## 9. 🛠️ PVC를 사용하는 Pod 생성과 데이터 유지 확인
+## 9. PVC를 사용하는 Pod 생성과 데이터 유지 확인
 
 ### Step13) PVC를 사용하는 Pod 생성
 
@@ -1309,7 +1309,7 @@ pvc-bbeabf9d-03dc-40a6-97de-d164573815b4   10Gi       RWX            Delete     
 
 NFS Provisioner가 생성한 StorageClass의 `reclaimPolicy`가 `Delete`라면 PVC가 삭제된 후 연결된 PV도 자동으로 삭제된다.
 
-## 10. 🛠️ archiveOnDelete 옵션 실습
+## 10. archiveOnDelete 옵션 실습
 
 ```bash
 [root@k8s-master ~]# kubectl get storageclass
@@ -1403,7 +1403,7 @@ nfs-subdir-external-provisioner/nfs-subdir-external-provisioner \
 
 ---
 
-## 11. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 11. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 - PVC가 `Pending` 상태에서 멈춰 있다면 조건에 맞는 PV가 없거나(Static) StorageClass의 Provisioner Pod가 `Running`이 아닌 경우(Dynamic)가 가장 흔한 원인이다. `kubectl get pods`로 `nfs-provisioner-...` Pod의 상태를 먼저 확인한다.
 - `kubectl get pv`의 `STORAGECLASS`가 비어있으면 Static PV이고, 이름이 채워져 있으면 Dynamic Provisioning으로 생성된 PV다. `kubectl describe pv <이름>`으로 `Source`(NFS 서버/경로)를 확인하면 실제 데이터 위치를 추적할 수 있다.
@@ -1415,10 +1415,10 @@ nfs-subdir-external-provisioner/nfs-subdir-external-provisioner \
 
 ---
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - PV(PersistentVolume)는 실제 저장공간, PVC(PersistentVolumeClaim)는 저장공간 요청서이며, 쿠버네티스가 조건(용량/accessModes/StorageClass)에 맞는 PV를 찾아 PVC와 Bound 시킨다
 > - accessModes는 RWO(한 Node에서만 읽기/쓰기), RWX(여러 Node에서 동시 읽기/쓰기, NFS 등 공유 스토리지), ROX(여러 Node에서 읽기 전용)로 구분되며, persistentVolumeReclaimPolicy(Retain/Delete/Recycle)는 PVC 삭제 후 PV·데이터 처리 방식을 결정한다
 > - Static Provisioning은 관리자가 PV를 미리 만들어야 하는 방식으로 클러스터가 커질수록 운영 부담이 커지며, 이를 해결하기 위해 StorageClass(자동 생성 규칙)와 Dynamic Provisioning(PVC 생성 시점에 PV 자동 생성)이 등장했다
 > - Dynamic Provisioning은 NFS Provisioner(예: nfs-subdir-external-provisioner) 같은 구성 요소가 실제로 PVC 요청을 받아 NFS 디렉터리와 PV를 자동 생성해야 동작하며, Pod는 StorageClass나 PV를 직접 지정하지 않고 PVC 이름만 참조한다
 > - StorageClass의 reclaimPolicy·volumeBindingMode·allowVolumeExpansion·archiveOnDelete 옵션에 따라 PV 자동 삭제 여부, Binding 시점, 용량 확장 허용, 삭제 시 데이터 보관 방식이 달라진다
-> - 관련: 27. 💾 Kubernetes - Storage 개요와 emptyDir·hostPath · 29. ⚙️ Kubernetes - ConfigMap · 2. 📦 Kubernetes - Pod 생성
+> - 관련: 27.  Kubernetes - Storage 개요와 emptyDir·hostPath · 29.  Kubernetes - ConfigMap · 2.  Kubernetes - Pod 생성

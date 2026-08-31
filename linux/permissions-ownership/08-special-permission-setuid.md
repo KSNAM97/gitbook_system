@@ -1,11 +1,11 @@
-# 🪪 특수권한 Set-UID — 실행 중 소유자 권한 위임 (4XXX)
+# 특수권한 Set-UID — 실행 중 소유자 권한 위임 (4XXX)
 
 > **Tag:** #Linux #SetUID #SUID #Security #Privilege  
 > **핵심 요약:** Set-UID가 설정된 실행 파일은 실행한 사용자의 실제 UID는 유지하면서 실행 파일 소유자의 유효 UID로 동작한다. 파일 소유자가 root인 경우에만 EUID 0으로 동작하며, 프로그램 내부에서 허용한 작업을 제한적으로 수행한다.
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 **Set-UID는 어떻게 동작하는가?**
 
@@ -102,7 +102,7 @@ s → Set-UID와 Owner 실행 권한 모두 있음
 S → Set-UID는 있으나 Owner 실행 권한 없음
 ```
 
-## 2. 🛠️ 설정 및 안전한 확인
+## 2. 설정 및 안전한 확인
 
 > **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
 
@@ -157,7 +157,7 @@ printf '%s\n' "$pkg"
 
 ---
 
-## 3. 🔍 검증 및 트러블슈팅
+## 3. 검증 및 트러블슈팅
 
 ### 3-1. Set-UID 파일 검색
 
@@ -307,10 +307,10 @@ chmod u-s <파일>
 
 ---
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - Set-UID 숫자: `4XXX`
 > - EUID는 실행 파일 소유자 UID
 > - 파일 소유자가 root일 때만 EUID 0
 > - root 소유 Set-UID 파일은 최소화·감사
 > - `/usr/bin/passwd` 복구 전 `rpm -qf`로 실제 패키지 확인
-> - 관련: 6-4. 👥 소유권 & 특수 권한 (chown & chgrp & SUID · SGID · Sticky) · 6-9. 🧩 허가권·소유권 통합 정리 · 6-10.  🚑 허가권·소유권 트러블슈팅 치트시트
+> - 관련: 6-4.  소유권 & 특수 권한 (chown & chgrp & SUID · SGID · Sticky) · 6-9.  허가권·소유권 통합 정리 · 6-10.   허가권·소유권 트러블슈팅 치트시트

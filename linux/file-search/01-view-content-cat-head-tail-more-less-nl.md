@@ -1,11 +1,11 @@
-# 👀 파일 내용 출력 6종 (cat · head · tail · more · less · nl)
+# 파일 내용 출력 6종 (cat · head · tail · more · less · nl)
 
 > **Tag:** #Linux #cat #head #tail #more #less #nl #LogAnalysis  
 > **핵심 요약:** 파일 크기와 조회 목적에 따라 `cat`, `head`, `tail`, `more`, `less`, `nl`을 구분해서 사용한다. 짧은 파일은 `cat`, 일부 범위는 `head`·`tail`, 대용량 파일은 `less`, 실시간 로그는 `tail -F`가 적합하다.
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 파일 조회 명령어는 상황에 따라 다음과 같이 구분해서 사용한다.
 
@@ -48,7 +48,7 @@ tail -F /var/log/app.log
 
 ---
 
-## 2. 🛠️ 표준 사용 템플릿 (Configuration)
+## 2. 표준 사용 템플릿 (Configuration)
 
 > **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
 
@@ -344,7 +344,7 @@ ls -lt /etc | head
 
 ---
 
-## 3. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 3. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 ### 3-1. 필수 검증 명령어
 
@@ -358,7 +358,7 @@ stat <파일>                      # 크기·시간·권한 등 상세 정보
 
 ### 3-2. 대표 트러블슈팅
 
-#### 🚨 시나리오 1. `cat huge.log` 실행 후 SSH 세션이 멈춘 것처럼 보인다
+#### 시나리오 1. `cat huge.log` 실행 후 SSH 세션이 멈춘 것처럼 보인다
 
 현재 세션에서 중단:
 
@@ -387,7 +387,7 @@ less huge.log
 tail -n 500 huge.log
 ```
 
-#### 🚨 시나리오 2. 로그 회전 후 새 로그가 보이지 않는다
+#### 시나리오 2. 로그 회전 후 새 로그가 보이지 않는다
 
 ```bash
 tail -F /var/log/nginx/access.log
@@ -400,7 +400,7 @@ ls -li /var/log/nginx/access.log*
 lsof /var/log/nginx/access.log*
 ```
 
-#### 🚨 시나리오 3. 설정 문법은 맞아 보이지만 파싱 오류가 발생한다
+#### 시나리오 3. 설정 문법은 맞아 보이지만 파싱 오류가 발생한다
 
 보이지 않는 문자 확인:
 
@@ -438,7 +438,7 @@ apachectl configtest
 
 > **참고:** 실제 설치된 서비스에 해당하는 검사 명령만 사용한다.
 
-#### 🚨 시나리오 4. `more`에서 위로 이동할 수 없다
+#### 시나리오 4. `more`에서 위로 이동할 수 없다
 
 파이프로 전달된 입력은 이전 내용을 자유롭게 다시 읽지 못할 수 있다.
 
@@ -453,7 +453,7 @@ command > /tmp/output.txt
 less /tmp/output.txt
 ```
 
-#### 🚨 시나리오 5. 바이너리 파일을 출력해 터미널 문자가 깨졌다
+#### 시나리오 5. 바이너리 파일을 출력해 터미널 문자가 깨졌다
 
 파일 유형 확인:
 
@@ -473,7 +473,7 @@ strings <파일> | less
 reset
 ```
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - 짧은 파일 전체: `cat`
 > - 앞·뒤 일부: `head`, `tail`
 > - 대용량 조회: `less`

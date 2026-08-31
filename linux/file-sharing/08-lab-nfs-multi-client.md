@@ -1,11 +1,11 @@
-# 🏗️ 종합실습 다중 클라이언트 NFS 구성
+# 종합실습 다중 클라이언트 NFS 구성
 
 > **Tag:** #Linux #Lab #NFS #exports #Partition #fstab #MultiClient  
 > **핵심 요약:** 추가 디스크에 여러 파티션을 만들어 각각 ext4로 포맷하고, 클라이언트별 전용 공유 디렉터리(`/NFS_SB`, `/NFS_LC`)로 마운트한 뒤 `/etc/exports`에서 클라이언트 IP별로 서로 다른 공유를 제공하는 실습이다. Server-B와 Client-L이 각각 지정된 용량만 사용하도록 구성하고, 양쪽 모두 fstab에 등록해 재부팅 후에도 마운트가 유지되는지 검증한다.
 
 ---
 
-## 1. 🎯 실습 목표 (Scenario)
+## 1. 실습 목표 (Scenario)
 
 ### 1-1. 구성도
 
@@ -30,7 +30,7 @@ Client-L (192.168.10.130)  NFS Client → /NFS_CLIENT
 
 ---
 
-## 2. 🛠️ 단계별 실습 - 서버 (Configuration)
+## 2. 단계별 실습 - 서버 (Configuration)
 
 > **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
 
@@ -178,7 +178,7 @@ Export list for Server-A:
 
 ---
 
-## 3. 🛠️ 단계별 실습 - 클라이언트
+## 3. 단계별 실습 - 클라이언트
 
 ### STEP 8. Server-B (192.168.10.200)
 
@@ -240,7 +240,7 @@ findmnt /NFS_CLIENT
 
 ---
 
-## 4. 🔍 검증 (Verification & Troubleshooting)
+## 4. 검증 (Verification & Troubleshooting)
 
 ### 4-1. 재부팅 검증
 
@@ -282,7 +282,7 @@ nfsstat -s                                 # 서버 통계
 
 ---
 
-## 5. ✅ 최종 체크리스트
+## 5. 최종 체크리스트
 
 ```text
 [ ] 추가 디스크 파티션 구성 확인 (lsblk)
@@ -299,10 +299,10 @@ nfsstat -s                                 # 서버 통계
 [ ] 타 클라이언트 접근 차단 확인
 ```
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - 클라이언트별로 파티션·공유 디렉터리를 분리하면 용량 격리가 쉽다
 > - exports에서 IP를 지정하면 다른 호스트 접근이 자동 차단된다
 > - 서버는 파티션 fstab, 클라이언트는 NFS fstab을 각각 등록해야 한다
 > - 변경 후에는 `exportfs -ra` → `showmount -e` 순으로 검증
 > - 재부팅 검증까지 마쳐야 실습이 완료된다
-> - 관련: ⚙️ NFS 서버 구성 · 💻 NFS 클라이언트 마운트 & fstab · 📚 종합정리 Samba & NFS
+> - 관련:  NFS 서버 구성 ·  NFS 클라이언트 마운트 & fstab ·  종합정리 Samba & NFS

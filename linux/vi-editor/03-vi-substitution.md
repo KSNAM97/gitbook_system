@@ -1,11 +1,11 @@
-# 🔁 VI 치환
+# VI 치환
 
 > **Tag:** #Linux #Vi #Vim #Substitute #Regex #Refactoring  
 > **핵심 요약:** VI/Vim의 `:substitute` 명령은 범위, 검색 패턴, 치환 문자열, 플래그를 조합한다. 대량 치환 전에는 백업과 매칭 개수 확인을 수행하고, 운영 파일에서는 `c` 플래그로 각 변경을 확인한다.
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 치환 명령의 기본 구조는 다음과 같다.
 
@@ -50,7 +50,7 @@ sed -i.bak 's/old/new/g' file
 
 ---
 
-## 2. 🛠️ 표준 사용 템플릿 (Configuration)
+## 2. 표준 사용 템플릿 (Configuration)
 
 > **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
 
@@ -354,7 +354,7 @@ N
 
 ---
 
-## 3. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 3. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 ### 3-1. 안전 치환 절차
 
@@ -414,7 +414,7 @@ DNS1="192.168.1.2"
 
 ### 3-3. 대표 트러블슈팅
 
-#### 🚨 시나리오 1. `selinux`, `linuxOS`까지 변경되었다
+#### 시나리오 1. `selinux`, `linuxOS`까지 변경되었다
 
 실행 취소:
 
@@ -434,7 +434,7 @@ u
 :%s/\<linux\>/WIN/gic
 ```
 
-#### 🚨 시나리오 2. IP 치환에서 예상하지 않은 문자열까지 변경되었다
+#### 시나리오 2. IP 치환에서 예상하지 않은 문자열까지 변경되었다
 
 잘못된 패턴:
 
@@ -473,7 +473,7 @@ u
 
 세션 종료 후에는 백업, 버전 관리, persistent undo 등을 확인한다.
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - 현재 줄: `:s/old/new/`
 > - 전체: `:%s/old/new/g`
 > - 확인: `c`

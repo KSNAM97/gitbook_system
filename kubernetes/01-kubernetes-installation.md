@@ -1,11 +1,11 @@
-# 🔧 Kubernetes - 설치
+# Kubernetes - 설치
 
 > **Tag:** #Kubernetes #kubeadm #설치 #containerd #kubectl #부트캠프
 > **핵심 요약:** kubeadm을 이용한 Rocky Linux 9 기반 쿠버네티스 클러스터(마스터 1대 + 워커 2대) 구축 전체 절차와 kubectl 기본 사용법 정리
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 쿠버네티스 클러스터를 직접 구성하는 도구로는 `kubeadm`과 `kubespray`가 대표적이다. `kubeadm`은 쿠버네티스 프로젝트에서 공식으로 제공하는 클러스터 생성/설치/관리 도구로, 최소한의 구성 요소만 설치해 주기 때문에 구조를 이해하면서 직접 클러스터를 구축하고 싶은 학습자에게 적합하다. 마스터 노드 초기화, 워커 노드 조인, 인증서 관리 등 기본 기능을 제공하며 클라우드 환경, 온프레미스 모두 사용 가능하고, 디버깅과 구조 이해 목적의 실습 환경에서 가장 많이 사용된다. `kubespray`는 쿠버네티스 클러스터를 자동으로 배포해 주는 오픈소스 프로젝트로, 다양한 OS(Ubuntu, CentOS, Rocky 등)를 지원하며 설치 옵션을 매우 세밀하게 조정할 수 있다. 온프레미스 환경에서 상용 수준의 쿠버네티스 클러스터를 구성하거나 여러 대의 서버에 복잡한 설정을 반복해야 할 때 유용하며, 고가용성(HA) 구성, 인증서 관리, 네트워크 플러그인(CNI) 설치까지 자동화되어 기업 환경에서 많이 활용된다.
 
@@ -48,7 +48,7 @@ Worker Node 안에서 Pod가 실행되고 Pod 안에서 Container가 실행되�
 
 ---
 
-## 2. 🧩 기초 이론: 컨테이너에서 Kubernetes까지
+## 2. 기초 이론: 컨테이너에서 Kubernetes까지
 
 쿠버네티스를 배우기 전에 먼저 컨테이너가 어떤 기술인지 이해해야 한다.
 
@@ -150,7 +150,7 @@ Kubernetes는 이 레이어 구조에서 Layer5(Orchestration/Scheduling/Service
 
 ---
 
-## 3. 🛠️ 설치 절차 (kubeadm 기반 클러스터 구축)
+## 3. 설치 절차 (kubeadm 기반 클러스터 구축)
 
 > **적용 환경:** Rocky Linux 9, 마스터 1대(k8s-master) + 워커 2대(k8s-worker1, k8s-worker2), CNI는 Flannel 사용.
 
@@ -268,7 +268,7 @@ NAME      TYPE       SIZE USED PRIO
 ```
 [root@k8s-master ~]# vi /etc/fstab
 UUID=73bc277c-741d-4122-9c58-59ccd1889709 /               xfs     defaults        0 0
-#UUID=520bc18c-2b64-4df1-85e0-d126908ba6dd none     swap    defaults        0 0    # 오토마운트 주석 처리
+#UUID=520bc18c-2b64-4df1-85e0-d126908ba6dd none swap defaults 0 0 # 오토마운트 주석 처리
 ```
 
 k8s-worker1, k8s-worker2에서도 동일하게 `swapon --show`, `swapoff -a`, `wipefs -a`, `/etc/fstab` 편집을 수행한다.
@@ -551,7 +551,7 @@ k8s-worker2   Ready    <none>          33s   v1.35.7
 
 ---
 
-## 4. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 4. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 ### kubectl 자동완성 및 cheat sheet 참고
 
@@ -643,9 +643,9 @@ systemctl set-default multi-user.target
 
 ---
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - kubeadm으로 마스터/워커 노드를 구성하는 절차: hostname/hosts → swap 비활성화 → containerd 설치 → kubeadm/kubelet/kubectl 설치 → `kubeadm init`(마스터) → CNI(Flannel) 설치 → `kubeadm join`(워커)
 > - containerd 설정(`SystemdCgroup = true`, `cri` 플러그인 활성화)이 틀리면 kubelet-containerd 연결 실패가 가장 흔한 장애 원인
 > - kubectl은 kubeconfig(`~/.kube/config`)를 읽어 API Server에 요청을 보내는 클라이언트 도구이며, 형식은 `kubectl [Command] [Type] [Name] [Flags]`
 > - CNI는 Flannel(단순, 학습용), Calico(NetworkPolicy 강력), Cilium(eBPF 고성능) 등 목적에 따라 선택
-> - 관련: 2. 📦 Kubernetes - Pod 생성 · 3. 🏗️ Kubernetes - 아키텍처 개요와 핵심 컴포넌트 · 6. 🧬 Kubernetes - Pod 구조와 생성·동작 흐름
+> - 관련: 2.  Kubernetes - Pod 생성 · 3.  Kubernetes - 아키텍처 개요와 핵심 컴포넌트 · 6.  Kubernetes - Pod 구조와 생성·동작 흐름

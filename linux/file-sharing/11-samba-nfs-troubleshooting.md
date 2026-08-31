@@ -1,11 +1,11 @@
-# 🚨 Samba·NFS 트러블슈팅 치트시트
+# Samba·NFS 트러블슈팅 치트시트
 
 > **Tag:** #Linux #Troubleshooting #Samba #NFS #CIFS #Error #Checklist  
 > **핵심 요약:** Samba·NFS 장애는 대부분 네트워크, 방화벽, 서비스 상태, 설정 파일 문법, 디렉터리 퍼미션, UID/계정 매핑, SELinux 중 하나에서 발생한다. 이 문서는 증상별 원인과 조치를 표로 정리하고, 어떤 순서로 좁혀 나가야 하는지 진단 플로우를 제공한다. 오류 메시지를 그대로 검색할 수 있도록 실제 출력 문구를 함께 수록했다.
 
 ---
 
-## 1. 🧭 공통 진단 플로우
+## 1. 공통 진단 플로우
 
 ### 1-1. 7계층 점검 순서
 
@@ -33,7 +33,7 @@ echo "== SELinux ==" ; getenforce
 
 ---
 
-## 2. 🐧 Samba 오류 대응표
+## 2. Samba 오류 대응표
 
 ### 2-1. 접속·인증 오류
 
@@ -84,7 +84,7 @@ ausearch -m avc -ts recent                 # 접근 거부 로그
 
 ---
 
-## 3. 📡 NFS 오류 대응표
+## 3. NFS 오류 대응표
 
 ### 3-1. 서버 측 오류
 
@@ -133,7 +133,7 @@ journalctl -u nfs-server -n 100            # 서버 로그
 
 ---
 
-## 4. 🔥 방화벽·fstab 관련 함정
+## 4. 방화벽·fstab 관련 함정
 
 ### 4-1. 방화벽
 
@@ -169,7 +169,7 @@ mount -a
 
 ---
 
-## 5. 🔐 SELinux 관련
+## 5. SELinux 관련
 
 ```bash
 getenforce                                 # Enforcing/Permissive/Disabled
@@ -188,7 +188,7 @@ sealert -a /var/log/audit/audit.log        # 해석(setroubleshoot 설치 시)
 
 ---
 
-## 6. 🧪 증상별 30초 진단
+## 6. 증상별 30초 진단
 
 ```text
 [접속 자체가 안 됨]
@@ -212,7 +212,7 @@ NFS:   exportfs -ra
 
 ---
 
-## 7. ✅ 장애 대응 최종 체크리스트
+## 7. 장애 대응 최종 체크리스트
 
 ```text
 [ ] 서버·클라이언트 IP 확인 및 ping 성공
@@ -228,10 +228,10 @@ NFS:   exportfs -ra
 [ ] 재부팅 후 정상 동작 확인
 ```
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - 진단은 네트워크 → 방화벽 → 서비스 → 설정 → 퍼미션 → 인증 → SELinux 순
 > - Samba 인증 오류는 `smbpasswd -a`와 `valid users`부터 확인
 > - NFS 접근 거부는 exports의 클라이언트 IP가 1순위 원인
 > - `--permanent` 누락과 `exportfs -ra` 누락이 가장 흔한 실수
 > - fstab 수정 후에는 반드시 검증 후 재부팅
-> - 관련: 📚 종합정리 Samba & NFS · ⚡ Samba·NFS 퀵 레퍼런스 · 🐧 Linux Samba 서버 구축 · ⚙️ NFS 서버 구성
+> - 관련:  종합정리 Samba & NFS ·  Samba·NFS 퀵 레퍼런스 ·  Linux Samba 서버 구축 ·  NFS 서버 구성

@@ -1423,9 +1423,9 @@ sudo setenforce 1                   # Enforcing
 파일: `/etc/selinux/config`
 
 ```ini
-# enforcing  : 정책 위반 차단
+# enforcing : 정책 위반 차단
 # permissive : 차단하지 않고 기록
-# disabled   : SELinux 비활성화, 일반적으로 비권장
+# disabled : SELinux 비활성화, 일반적으로 비권장
 SELINUX=enforcing
 
 SELINUXTYPE=targeted
@@ -1583,7 +1583,7 @@ sudo blkid /dev/sdb1
 파일: `/etc/fstab`
 
 ```fstab
-# 장치/UUID       마운트점  타입  옵션              dump fsck
+# 장치/UUID 마운트점 타입 옵션 dump fsck
 UUID=<실제-UUID>  /data     xfs   defaults,nofail  0    0
 ```
 
@@ -2139,7 +2139,7 @@ sudo hostnamectl set-hostname server01.example.com
 파일: `/etc/hosts`
 
 ```text
-# IP           FQDN                   짧은 이름
+# IP FQDN 짧은 이름
 192.0.2.10     server01.example.com   server01
 ```
 

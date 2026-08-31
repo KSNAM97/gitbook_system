@@ -1,11 +1,11 @@
-# 👤  소유권 (Ownership) — chown & UID·GID 소유 모델
+# 소유권 (Ownership) — chown & UID·GID 소유 모델
 
 > **Tag:** #Linux #Ownership #chown #chgrp #UID #GID  
 > **핵심 요약:** Linux 파일시스템은 소유자 이름이 아니라 UID와 GID를 저장한다. `chown`과 `chgrp`으로 소유자·소유 그룹을 변경할 수 있으며, 일반 사용자는 파일 소유자를 임의로 변경할 수 없고 자신이 소유한 파일의 그룹만 자신이 속한 그룹으로 제한적으로 변경할 수 있다.
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 **파일과 디렉터리의 소유권은 무엇으로 구성되는가?**
 
@@ -172,7 +172,7 @@ chown :groupB myfile
 
 속하지 않은 그룹으로 변경하면 거부된다.
 
-## 2. 🛠️ 표준 설정 템플릿 (Configuration)
+## 2. 표준 설정 템플릿 (Configuration)
 
 > **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판. 소유자 변경에는 root 또는 `CAP_CHOWN`이 필요하며, 그룹 변경은 소유자 본인이면서 대상 그룹에 속해 있어야 한다.
 
@@ -337,7 +337,7 @@ ls -l /home/user1/networks
 
 ---
 
-## 3. 🔍 검증 및 트러블슈팅
+## 3. 검증 및 트러블슈팅
 
 ### 3-1. 필수 확인
 
@@ -428,11 +428,11 @@ rpm -V "$pkg"
 
 ---
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - 소유권은 UID·GID로 저장
 > - 소유자 변경: `chown`
 > - 그룹 변경: `chgrp`, `chown :group`
 > - 일반 사용자는 소유자 변경 불가
 > - 자신의 파일 그룹은 자신이 속한 그룹으로만 변경 가능
 > - `-xdev`는 다른 파일시스템을 검색하지 않음
-> - 관련: 🔐 허가권 (Permission) — chmod & rwx·UGO 모델 · 🔧 허가권 상세 (chmod & 8진수 · 심볼릭 표기) · 👥 소유권 & 특수 권한 (chown & chgrp & SUID · SGID · Sticky)
+> - 관련:  허가권 (Permission) — chmod & rwx·UGO 모델 ·  허가권 상세 (chmod & 8진수 · 심볼릭 표기) ·  소유권 & 특수 권한 (chown & chgrp & SUID · SGID · Sticky)

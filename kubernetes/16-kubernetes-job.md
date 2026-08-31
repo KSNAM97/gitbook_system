@@ -1,11 +1,11 @@
-# ⚙️ Kubernetes - Job
+# Kubernetes - Job
 
 > **Tag:** #Kubernetes #Job #Controller #부트캠프
 > **핵심 요약:** 한 번 실행하고 끝나는 작업을 위한 Job Controller의 개념과 completions/parallelism/backoffLimit/restartPolicy/activeDeadlineSeconds 실습 정리
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 ### 왜 Pod를 직접 `kubectl run`으로 실행하면 계속 재시작되는가
 
@@ -162,7 +162,7 @@ Job은 반드시 끝이 있는 작업에만 사용해야 한다.
 
 ---
 
-## 2. 🛠️ 실습
+## 2. 실습
 
 ### 기본 Job 실행 (completions/parallelism/backoffLimit 주석 처리)
 
@@ -173,9 +173,9 @@ kind: Job
 metadata:
   name: centos-job
 spec:
-#  completions: 5
-#  parallelism: 2
-#  activeDeadlineSeconds: 5
+# completions: 5
+# parallelism: 2
+# activeDeadlineSeconds: 5
   template:
     spec:
       containers:
@@ -186,8 +186,8 @@ spec:
         - "-c"
         - "date; echo 'Hello World'; sleep 20; date; echo 'Bye'"
       restartPolicy: Never
-#      restartPolicy: OnFailure
-#  backoffLimit: 3
+# restartPolicy: OnFailure
+# backoffLimit: 3
 ```
 
 - completions: 이 Job이 총 몇 번 성공해야 끝나는가. 기본적인 Job은 completions 1. 여러 번 성공해야 하는 반복 작업도 가능.
@@ -225,9 +225,9 @@ kind: Job
 metadata:
   name: centos-job
 spec:
-#  completions: 5
-#  parallelism: 2
-#  activeDeadlineSeconds: 5
+# completions: 5
+# parallelism: 2
+# activeDeadlineSeconds: 5
   template:
     spec:
       containers:
@@ -238,8 +238,8 @@ spec:
         - "-c"
         - "date; echo 'Hello World'; sleep 60; date; echo 'Bye'"		# 60초로 수정
       restartPolicy: Never
-#      restartPolicy: OnFailure
-#  backoffLimit: 3
+# restartPolicy: OnFailure
+# backoffLimit: 3
 
 
 [root@k8s-master ~]# kubectl  apply  -f  job-exam.yaml
@@ -323,8 +323,8 @@ metadata:
   name: centos-job
 spec:
   completions: 3			# 주석 삭제 후 3으로 수정
-#  parallelism: 2
-#  activeDeadlineSeconds: 5
+# parallelism: 2
+# activeDeadlineSeconds: 5
   template:
     spec:
       containers:
@@ -334,7 +334,7 @@ spec:
         args:
         - "-c"
         - "date; echo 'Hello World'; sleep 20; date; echo 'Bye'"
-#      restartPolicy: Never		# 주석 처리
+# restartPolicy: Never # 주석 처리
       restartPolicy: OnFailure		# 주석 삭제
   backoffLimit: 3			# 주석 삭제
 
@@ -401,8 +401,8 @@ metadata:
   name: centos-job
 spec:
   completions: 3			# 주석 삭제 후 3으로 수정
-#  parallelism: 2
-#  activeDeadlineSeconds: 5
+# parallelism: 2
+# activeDeadlineSeconds: 5
   template:
     spec:
       containers:
@@ -412,7 +412,7 @@ spec:
         args:
         - "-c"
         - "date; echo 'Hello World'; sleep 20; date; echo 'Bye'"
-#      restartPolicy: Never
+# restartPolicy: Never
       restartPolicy: OnFailure		<--- Test (작업 실패시 컨테이너 재시작)
   backoffLimit: 3			<--- Test (3번 연속 실패시 작업 실패로 간주)
 
@@ -502,7 +502,7 @@ metadata:
 spec:
   completions: 5			# 3에서 5로 수정
   parallelism: 2			# 주석 제거
-#  activeDeadlineSeconds: 5
+# activeDeadlineSeconds: 5
   template:
     spec:
       containers:
@@ -512,7 +512,7 @@ spec:
         args:
         - "-c"
         - "date; echo 'Hello World'; sleep 20; date; echo 'Bye'"
-#      restartPolicy: Never
+# restartPolicy: Never
       restartPolicy: OnFailure
   backoffLimit: 3
 
@@ -579,8 +579,8 @@ kind: Job
 metadata:
   name: centos-job
 spec:
-#  completions: 5			# 주석 처리
-#  parallelism: 2			# 주석 처리
+# completions: 5 # 주석 처리
+# parallelism: 2 # 주석 처리
   activeDeadlineSeconds: 10		# 주석 삭제
   template:
     spec:
@@ -591,7 +591,7 @@ spec:
         args:
         - "-c"
         - "date; echo 'Hello World'; sleep 20; echo 'Bye'"
-#      restartPolicy: Never
+# restartPolicy: Never
       restartPolicy: OnFailure
   backoffLimit: 3
 ```
@@ -618,7 +618,7 @@ sleep 20으로 작업 종료 전에 `activeDeadlineSeconds: 10`이 지나면 Job
 
 ---
 
-## 3. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 3. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 - `kubectl run`으로 만든 단일 Pod는 기본 `restartPolicy: Always`가 적용되어 종료돼도 계속 재시작(`Completed → Running` 반복)된다. 한 번만 끝내려는 작업은 반드시 Job으로 만들어야 한다.
 - Job의 `template.spec.restartPolicy`는 `Never` 또는 `OnFailure`만 허용된다(Always는 사용 불가). `Never`는 실패 시 Job Controller가 새 Pod를 생성해서 재시도하고, `OnFailure`는 같은 Pod 안에서 컨테이너만 재시작한다.
@@ -629,9 +629,9 @@ sleep 20으로 작업 종료 전에 `activeDeadlineSeconds: 10`이 지나면 Job
 
 ---
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - Job Controller는 한 번 실행하고 끝나는(성공/실패로 명확히 갈리는) 배치 작업을 위한 컨트롤러이며, exit code(0=성공)만으로 성공/실패를 판단한다
 > - 핵심 옵션: `completions`(성공해야 할 횟수, 기본 1), `parallelism`(동시 실행 Pod 수, 기본 1), `backoffLimit`(재시도 허용 횟수, 기본 6), `activeDeadlineSeconds`(전체 실행 시간 제한)
 > - `restartPolicy`는 `Never`(Job이 새 Pod 생성) 또는 `OnFailure`(같은 Pod 내 컨테이너 재시작)만 사용 가능
 > - CronJob → Job → Pod 순서로 동작하며, Job은 "무슨 작업"을, CronJob은 "언제 실행"을 담당
-> - 관련: 17. ⏰ Kubernetes - CronJob · 2. 📦 Kubernetes - Pod 생성 · 10. 🎛️ Kubernetes - Controller 개념과 ReplicationController
+> - 관련: 17. ⏰ Kubernetes - CronJob · 2.  Kubernetes - Pod 생성 · 10.  Kubernetes - Controller 개념과 ReplicationController

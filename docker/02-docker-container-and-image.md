@@ -1,11 +1,11 @@
-# 📦 Docker - 컨테이너와 이미지
+# Docker - 컨테이너와 이미지
 
 > **Tag:** #Docker #이미지 #Dockerfile #컨테이너 #부트캠프
 > **핵심 요약:** Dockerfile 작성법과 이미지 생성, 컨테이너 실행 방법 핵심 정리
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 Dockerfile은 Docker 이미지를 자동으로 빌드하기 위한 명령어 모음 파일이다. 전체 흐름은 다음과 같다.
 
@@ -30,7 +30,7 @@ COPY와 ADD도 자주 비교되는데, 둘 다 파일 복사는 지원하지만 
 
 ---
 
-## 2. 🛠️ 표준 설정 템플릿 (Configuration)
+## 2. 표준 설정 템플릿 (Configuration)
 
 > **적용 환경:** Docker Engine (Compose V2 내장) 설치 환경.
 
@@ -67,7 +67,7 @@ CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]
 
 ---
 
-## 3. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 3. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 ### Docker 이미지 빌드 및 관리 명령어
 
@@ -127,9 +127,9 @@ docker push localhost:5000/myapp:1.0
 
 ---
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - Dockerfile: 이미지 자동 빌드 명령 파일 (FROM → RUN → COPY → CMD 순서)
 > - CMD(덮어쓰기 가능) vs ENTRYPOINT(고정) — 실행 명령 제어 방식 차이
 > - COPY(단순 복사) vs ADD(URL/압축 해제 지원) — 일반 파일은 COPY 권장
 > - 레이어 생성: FROM, RUN, COPY, ADD → 이미지 크기에 직접 영향
-> - 관련: 1. 🐳 Docker - 도커와 컨테이너의 이해 · 3. 🔄 Docker - 컨테이너 사용하기 · 11. ⚡ Docker - 퀵 레퍼런스
+> - 관련: 1.  Docker - 도커와 컨테이너의 이해 · 3.  Docker - 컨테이너 사용하기 · 11.  Docker - 퀵 레퍼런스

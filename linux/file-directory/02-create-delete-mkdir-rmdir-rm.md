@@ -1,11 +1,11 @@
-# 🏗️ 디렉터리·파일 생성 및 삭제 (mkdir · rmdir · rm)
+# 디렉터리·파일 생성 및 삭제 (mkdir · rmdir · rm)
 
 > **Tag:** #Linux #mkdir #rmdir #rm #Recursive #DataLoss  
 > **핵심 요약:** `mkdir`로 디렉터리를 생성하고, 빈 디렉터리는 `rmdir`, 내용이 있는 디렉터리는 `rm -r`로 삭제한다. `rm -rf`는 복구가 어려운 파괴적 명령이므로 실행 전 대상과 경로를 반드시 검증한다.
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 `mkdir`, `rmdir`, `rm`의 차이를 정리하면 다음과 같다.
 
@@ -39,7 +39,7 @@ rm -rf -- /home/guest/app
 
 ---
 
-## 2. 🛠️ 표준 사용 템플릿 (Configuration)
+## 2. 표준 사용 템플릿 (Configuration)
 
 > **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
 
@@ -219,7 +219,7 @@ rm -rf -- "$TARGET"
 
 ---
 
-## 3. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 3. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 ### 3-1. 필수 검증 명령어
 
@@ -270,7 +270,7 @@ rm -rf -- /sol/B-class/b1
 
 ### 3-3. 대표 트러블슈팅
 
-#### 🚨 시나리오 1. `rm: cannot remove: Is a directory`
+#### 시나리오 1. `rm: cannot remove: Is a directory`
 
 `rm`은 기본적으로 디렉터리를 삭제하지 않는다.
 
@@ -284,7 +284,7 @@ rm -r /path/dir
 rmdir /path/dir
 ```
 
-#### 🚨 시나리오 2. `mkdir: No such file or directory`
+#### 시나리오 2. `mkdir: No such file or directory`
 
 상위 디렉터리가 없기 때문이다.
 
@@ -298,7 +298,7 @@ mkdir /sk/sk-networks/sk-net-a1/sk-net-b1
 mkdir -p /sk/sk-networks/sk-net-a1/sk-net-b1
 ```
 
-#### 🚨 시나리오 3. `rm -rf "$DIR/"` 사용 후 예상하지 못한 경로가 삭제되었다
+#### 시나리오 3. `rm -rf "$DIR/"` 사용 후 예상하지 못한 경로가 삭제되었다
 
 - 변수 값 출력
 - 정규화 경로 확인
@@ -312,7 +312,7 @@ printf 'TARGET=%q\n' "$TARGET"
 find "$TARGET" -maxdepth 2 -print
 ```
 
-#### 🚨 시나리오 4. `rm dir/*`를 실행했는데 디렉터리가 남아 있다
+#### 시나리오 4. `rm dir/*`를 실행했는데 디렉터리가 남아 있다
 
 `*`는 디렉터리 자체도 매칭하지만 `-r`이 없으면 삭제되지 않는다. 또한 숨김파일은 기본적으로 매칭하지 않는다.
 
@@ -329,7 +329,7 @@ find /path/dir -mindepth 1 -maxdepth 1 -type f -print
 find /path/dir -mindepth 1 -maxdepth 1 -type f -delete
 ```
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - 중첩 생성: `mkdir -p`
 > - 빈 디렉터리 삭제: `rmdir`
 > - 재귀 삭제: `rm -r`

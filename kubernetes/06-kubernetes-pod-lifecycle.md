@@ -1,11 +1,11 @@
-# 🧬 Kubernetes - Pod 구조와 생성 · 동작 흐름
+# Kubernetes - Pod 구조와 생성 · 동작 흐름
 
 > **Tag:** #Kubernetes #Pod #kubelet #Scheduler #부트캠프
 > **핵심 요약:** Pod의 개념과 생성 방식(Single/Multi Container), CLI·YAML을 이용한 Pod 생성 실습, Pod 생성 시 API Server→Scheduler→kubelet으로 이어지는 동작 흐름 정리
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 Pod는 쿠버네티스에서 컨테이너를 실행하는 가장 작은 단위이다.
 
@@ -33,7 +33,7 @@ Pod 안에는 다음과 같은 것들이 들어 있다.
 
 ---
 
-## 2. 🛠️ Pod 구조와 생성 · 동작 흐름
+## 2. Pod 구조와 생성 · 동작 흐름
 
 ### Single Container Pod와 Multi Container Pod
 
@@ -508,9 +508,9 @@ Pod가 실행된 이후에도 kubelet은 계속 감시한다.
 
 ---
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - Pod는 컨테이너를 담는 실행 단위이며, Pod 안의 모든 컨테이너는 같은 IP·네트워크·볼륨을 공유한다
 > - Pod는 Single Container Pod와 Multi Container Pod로 나뉘며, `kubectl run` 또는 YAML(`kubectl apply`)로 생성한다
 > - `kubectl get pods <이름> -o yaml`로 기존 Pod의 스펙을 추출해 새로운 YAML을 만들 수 있고, Multi Container Pod는 `-c <컨테이너명>` 옵션으로 특정 컨테이너에 접속·로그 확인이 가능하다
 > - Pod 생성은 kubectl 요청 → API Server 접수(Pending) → Scheduler 노드 결정 → kubelet 감지·실행 지시 → 컨테이너 런타임이 이미지 pull 및 실행 → Running의 흐름을 따른다
-> - 관련: 2. 📦 Kubernetes - Pod 생성 · 7. 💓 Kubernetes - livenessProbe · 9. 🔍 Kubernetes - Init Container·Static Pod
+> - 관련: 2.  Kubernetes - Pod 생성 · 7.  Kubernetes - livenessProbe · 9.  Kubernetes - Init Container·Static Pod

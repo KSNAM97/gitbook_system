@@ -1,11 +1,11 @@
-# 🧩 RAID·LVM 통합 정리 — 스토리지 관리 한눈에
+# RAID·LVM 통합 정리 — 스토리지 관리 한눈에
 
 > **Tag:** #Linux #RAID #LVM #mdadm #Storage #Summary
-> **핵심 요약:** RAID는 **결함 허용·성능**을, LVM은 **유연한 용량 관리**를 목적으로 한다. RAID는 `mdadm`으로 `/dev/mdX` 장치를 만들고, LVM은 `pvcreate → vgcreate → lvcreate`로 PV·VG·LV 계층을 쌓는다. 이 문서는 🧩 RAID 개념 & Hardware vs Software RAID~🏗️ 종합실습 LVM 구성 → 확장 → 축소를 한 장으로 닫는 색인이다.
+> **핵심 요약:** RAID는 **결함 허용·성능**을, LVM은 **유연한 용량 관리**를 목적으로 한다. RAID는 `mdadm`으로 `/dev/mdX` 장치를 만들고, LVM은 `pvcreate → vgcreate → lvcreate`로 PV·VG·LV 계층을 쌓는다. 이 문서는  RAID 개념 & Hardware vs Software RAID~ 종합실습 LVM 구성 → 확장 → 축소를 한 장으로 닫는 색인이다.
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 RAID와 LVM을 관통하는 단 하나의 차이는, RAID는 **디스크 결함에 대비한 데이터 보호·성능** 기술이고 LVM은 **용량을 유연하게 관리**하는 기술이라는 점입니다. RAID는 디스크가 죽어도 데이터를 지키는 것이 목적이고, LVM은 디스크가 부족해질 때 데이터 손실 없이 용량을 늘리는 것이 목적입니다. LVM 단독으로는 결함 허용을 제공하지 않으므로, 안정성이 필요하면 **RAID(보호 계층) 위에 LVM(유연성 계층)** 을 얹는 조합이 실무 표준입니다.
 
@@ -13,7 +13,7 @@ RAID와 LVM을 관통하는 단 하나의 차이는, RAID는 **디스크 결함�
 
 ---
 
-## 2. 🛠️ 표준 개념 정리 (Configuration)
+## 2. 표준 개념 정리 (Configuration)
 
 > **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
 
@@ -32,7 +32,7 @@ vgextend + lvextend + resize2fs/xfs_growfs → 확장
 umount + e2fsck + resize2fs + lvreduce → 축소(ext4 전용)
 ```
 
-### Step 3. 파티션 타입 구분 ★
+### Step 3. 파티션 타입 구분
 | 용도 | 타입 코드 | 별칭 |
 |---|---|---|
 | RAID 멤버 | `fd` | `raid` |
@@ -57,7 +57,7 @@ umount + e2fsck + resize2fs + lvreduce → 축소(ext4 전용)
 
 ---
 
-## 3. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 3. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 ### 3-1. 생성 직후 5-Point 검증 (RAID)
 ```bash
@@ -87,9 +87,9 @@ df -Th | grep vg_project        # 마운트·용량 확인
 | XFS 축소 시도 | 지원 안 됨(실패) | 축소 필요 볼륨은 ext4 채택 |
 | `wipefs`/`--zero-superblock` 대상 착오 | 데이터 파괴 | 실행 전 `lsblk`로 대상 재확인 |
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - RAID = 결함 허용·성능, LVM = 유연한 용량 관리
 > - 파티션 타입: RAID는 `fd`, LVM은 `8e`
 > - 확장 후에는 항상 파일시스템도 함께 확장
 > - 파괴적 명령 전 대상 디스크 재확인은 공통 원칙
-> - 관련: 🧩 RAID 개념 & Hardware vs Software RAID · ⚙️ mdadm 명령어 & RAID 관리 · ⚙️ LVM 구성 & 확장·축소 (pvcreate·vgcreate·lvcreate) · 🚑 RAID·LVM 트러블슈팅 치트시트 · ⚡ RAID·LVM 명령어 퀵 레퍼런스
+> - 관련:  RAID 개념 & Hardware vs Software RAID ·  mdadm 명령어 & RAID 관리 ·  LVM 구성 & 확장·축소 (pvcreate·vgcreate·lvcreate) ·  RAID·LVM 트러블슈팅 치트시트 ·  RAID·LVM 명령어 퀵 레퍼런스

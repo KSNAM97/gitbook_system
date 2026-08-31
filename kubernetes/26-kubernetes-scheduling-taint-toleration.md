@@ -1,11 +1,11 @@
-# 🚧 Kubernetes - Pod Scheduling (Taint·Toleration)
+# Kubernetes - Pod Scheduling (Taint·Toleration)
 
 > **Tag:** #Kubernetes #PodScheduling #Taint #Toleration #Cordon #Drain #부트캠프
 > **핵심 요약:** Node가 Pod를 거부하도록 막는 Taint와 이를 허용하는 Toleration의 개념·구조·Effect(NoSchedule/PreferNoSchedule/NoExecute), Taint와 Node Affinity의 차이, 그리고 Node 유지보수를 위한 Cordon·Drain의 사용법까지 실습 전체 정리
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 Taint & Toleration은 특정 Node에 아무 Pod나 배치되지 못하도록 제한하고, 필요한 Pod만 해당 Node에 배치할 수 있도록 하는 기능이다.
 
@@ -172,7 +172,7 @@ tolerations:
 
 ---
 
-## 2. 🧪 NoSchedule Taint 실습
+## 2. NoSchedule Taint 실습
 
 ```
 [root@k8s-master ~]# kubectl  describe  nodes  k8s-master  | grep Taint
@@ -318,7 +318,7 @@ pod "taint-step1-pod-2" deleted from default namespace
 
 ---
 
-## 3. 🧪 Taint + Toleration 응용 실습
+## 3. Taint + Toleration 응용 실습
 
 **EX3) 일반 Pod와 전용 Pod를 Taint로 분리 (같은 클러스터에서 특정 Pod만 전용 노드에 배치되도록 제어한다.)**
 
@@ -739,7 +739,7 @@ PreferNoSchedule Taint가 걸린 k8s-worker1이 유일하게 스케줄 가능한
 
 ---
 
-## 4. 🧭 Cordon & Drain이란
+## 4. Cordon & Drain이란
 
 Cordon과 Drain은 특정 Node에 새로운 Pod가 배치되지 않도록 하거나, 기존에 실행 중인 Pod를 다른 Node로 이동시키기 위해 사용하는 Node 관리 기능이다.
 
@@ -912,7 +912,7 @@ Cordon과 Taint는 둘 다 Pod의 배치를 제한하지만 목적과 방식이 
 
 ---
 
-## 5. 🧪 Cordon / Drain 실습
+## 5. Cordon / Drain 실습
 
 **EX1) cordon을 사용해 신규 Pod 배치를 차단**
 
@@ -1245,7 +1245,7 @@ Drain은 1회성 동작이기때문에 현재 k8s-worker2는 Cordon 상태이다
 
 ---
 
-## 6. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 6. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 - Pod가 Pending 상태이면 `kubectl describe pod <이름>`의 Events에서 `FailedScheduling` 사유를 확인한다. Taint를 허용하지 못하는 경우 `node(s) had untolerated taint` 메시지가 표시된다.
 - `kubectl describe nodes <이름> | grep Taint` 또는 `kubectl describe nodes | grep Taint`로 각 Node에 걸린 Taint를 확인하고, Pod의 `tolerations`가 key/value/effect까지 정확히 일치하는지 대조한다.
@@ -1260,10 +1260,10 @@ Drain은 1회성 동작이기때문에 현재 k8s-worker2는 Cordon 상태이다
 
 ---
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - Taint는 Node가 Pod를 거부하는 설정(`key=value:effect`)이고, Toleration은 Pod가 그 Taint를 허용하겠다고 선언하는 설정이다 — Toleration이 있다고 반드시 그 Node에 배치되는 것은 아니다
 > - Effect는 NoSchedule(신규 배치만 차단), PreferNoSchedule(가능하면 회피, 강제 아님), NoExecute(신규 배치 차단 + 기존 Pod도 제거 가능) 세 가지가 대표적이다
 > - Taint & Toleration은 "누가 들어올 수 있는가"(Node 입장의 제한)를 다루고, Node Affinity/nodeSelector는 "어디에 들어갈 것인가"(Pod 입장의 선택)를 다루므로 특정 Node에 반드시 배치하려면 둘을 함께 사용한다
 > - Cordon은 새 Pod 배치만 차단(`SchedulingDisabled`)하고 기존 Pod는 유지하며, Drain은 Cordon 후 기존 Pod까지 evict해 Controller가 다른 Node에 재생성하도록 한다
 > - `kubectl drain <Node> --ignore-daemonsets [--delete-emptydir-data] [--force]`로 유지보수 대상 Node를 비우고, 작업 후 `kubectl uncordon <Node>`로 복구하는 것이 표준 유지보수 흐름이다
-> - 관련: 2. 📦 Kubernetes - Pod 생성 · 24. 🏷️ Kubernetes - Label · 25. 📍 Kubernetes - Pod Scheduling (nodeSelector·Affinity)
+> - 관련: 2.  Kubernetes - Pod 생성 · 24.  Kubernetes - Label · 25.  Kubernetes - Pod Scheduling (nodeSelector·Affinity)

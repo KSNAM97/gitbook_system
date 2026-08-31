@@ -1,11 +1,11 @@
-# ⚡ Docker - 퀵 레퍼런스
+# Docker - 퀵 레퍼런스
 
 > **Tag:** #Docker #퀵레퍼런스 #치트시트 #명령어 #부트캠프
 > **핵심 요약:** 코딩·운영 중 바로 찾아보는 Docker 명령어 전체 패턴 모음
 
 ---
 
-## 1. 🎯 핵심 기술 개념 (Concept)
+## 1. 핵심 기술 개념 (Concept)
 
 ### 자주 헷갈리는 항목
 
@@ -22,7 +22,7 @@
 
 ---
 
-## 2. 🛠️ 표준 설정 템플릿 (Configuration)
+## 2. 표준 설정 템플릿 (Configuration)
 
 ### Dockerfile 기본 템플릿
 
@@ -94,7 +94,7 @@ networks:
 
 ---
 
-## 3. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 3. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 ### 설치 (Rocky Linux)
 
@@ -286,9 +286,9 @@ docker compose restart 서비스명
 
 ---
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - stop(SIGTERM) vs kill(SIGKILL) / rm(컨테이너) vs rmi(이미지) / run(신규) vs start(재시작)
 > - `-p 직접지정` vs `-P EXPOSE자동매핑` / COPY(단순) vs ADD(URL+압축)
 > - `docker compose down`(컨테이너+네트워크 삭제) vs `stop`(중지만)
 > - Bind Mount(호스트 경로 직접) vs Named Volume(Docker 관리, 이식성 높음)
-> - 관련: 1. 🐳 Docker - 도커와 컨테이너의 이해 · 8. 🔧 Docker - Docker Compose · 9. 🧩 Docker - 통합 정리
+> - 관련: 1.  Docker - 도커와 컨테이너의 이해 · 8.  Docker - Docker Compose · 9.  Docker - 통합 정리

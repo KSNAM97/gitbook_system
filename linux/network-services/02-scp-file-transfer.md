@@ -1,11 +1,11 @@
-# 📤 SCP 파일 전송 (Linux·Windows)
+# SCP 파일 전송 (Linux·Windows)
 
 > **Tag:** #Linux #SCP #SSH #SecureCopy #Upload #Download #Windows
 > **핵심 요약:** SCP(Secure Copy)는 SSH 프로토콜을 기반으로 원격 서버와 파일을 송수신하는 보안 전송 방식으로, SSH가 사용하는 TCP 22번 포트를 그대로 사용하며 모든 데이터가 암호화되어 전송된다. 별도의 데몬 설치가 필요 없고 SSH만 켜져 있으면 바로 사용할 수 있어 단순 백업이나 단일 파일 전송에 적합하다. 다운로드는 `scp 계정@호스트:원격경로 로컬경로`, 업로드는 `scp 로컬경로 계정@호스트:원격경로` 형식이며, 디렉터리는 `-r`이 필요하고 Windows의 cmd·PowerShell에서도 동일한 문법으로 사용할 수 있다.
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 SCP는 Secure Copy의 약자로, SSH 프로토콜을 기반으로 원격 서버와 파일을 송수신하는 보안 전송 방식이다. SSH에서 사용하는 TCP 22번 포트를 그대로 사용하며 모든 데이터가 암호화되어 전송된다. FTP처럼 별도의 데몬을 설치할 필요가 없고, 암호화되지 않아 보안이 취약한 FTP와 달리 SSH만 켜져 있으면 바로 사용할 수 있는 안전한 파일 전송 방식이다.
 
@@ -62,7 +62,7 @@ scp guest@192.168.10.100:/SHARE/{rpc,resolv.conf,subgid,subuid} /client  # 중�
 
 ---
 
-## 2. 🛠️ 표준 설정 템플릿 (Configuration)
+## 2. 표준 설정 템플릿 (Configuration)
 
 > **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
 
@@ -97,8 +97,8 @@ scp -r guest@192.168.10.100:/temp/dnf /client                # 디렉터리
 
 ```bash
 ls -l /client
-# -rw-r--r-- 1 root root 1529  7월 16 12:47 aliases
-# -rw-r--r-- 1 root root 2658  7월 16 12:49 bashrc
+# -rw-r--r-- 1 root root 1529 7월 16 12:47 aliases
+# -rw-r--r-- 1 root root 2658 7월 16 12:49 bashrc
 # -rw-r--r-- 1 root root 27839 7월 16 12:51 dnsmasq.conf
 ```
 
@@ -128,7 +128,7 @@ a.txt                                             100%   58     0.1KB/s   00:00
 
 ```bash
 ls -ld /temp/a.txt
-# -rw-r--r-- 1 guest guest 58  7월 16 15:45 /temp/a.txt
+# -rw-r--r-- 1 guest guest 58 7월 16 15:45 /temp/a.txt
 cat /temp/a.txt
 # scp를 사용하여 윈도우에서 리눅스로 업로드
 ```
@@ -160,7 +160,7 @@ PS C:\Users\aaa>  scp  -r  guest@192.168.10.100:/home/guest/*  C:\data\"Data Fol
 
 ---
 
-## 3. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 3. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 ### 3-1. 전송 결과 확인
 
@@ -182,12 +182,12 @@ ssh guest@192.168.10.100 'ls -l /temp'        # 원격 결과 한 번에 확인
 
 ### 3-3. 트러블슈팅 시나리오
 
-#### 🚨 시나리오 1. 디렉터리 복사 시 `not a regular file` 오류
+#### 시나리오 1. 디렉터리 복사 시 `not a regular file` 오류
 
 - **원인:** SCP는 기본적으로 파일만 복사하는데 디렉터리를 `-r` 없이 지정함.
 - **해결:** `scp -r guest@192.168.10.100:/temp/dnf /client`처럼 `-r` 옵션을 추가한다.
 
-#### 🚨 시나리오 2. 방화벽 미개방으로 접속 자체가 실패
+#### 시나리오 2. 방화벽 미개방으로 접속 자체가 실패
 
 ```bash
 firewall-cmd --list-port          # 22/tcp 포함 여부 확인
@@ -195,7 +195,7 @@ firewall-cmd --permanent --add-port=22/tcp --add-service=ssh
 firewall-cmd --reload
 ```
 
-#### 🚨 시나리오 3. 대용량·다수 파일 전송이 느리거나 중단됨
+#### 시나리오 3. 대용량·다수 파일 전송이 느리거나 중단됨
 
 - **해결/대안:** SCP는 매번 전체를 다시 전송하므로 중단·재개가 필요하면 `rsync`를 검토한다.
 
@@ -203,10 +203,10 @@ firewall-cmd --reload
 rsync -avz --progress /src/ guest@host:/dst/     # 증분·재개 지원
 ```
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - SCP는 SSH(22) 기반 암호화 파일 복사, 별도 데몬 불필요
 > - 콜론(`:`)이 붙은 쪽이 원격, 왼쪽이면 다운로드·오른쪽이면 업로드
 > - 디렉터리는 반드시 `-r` 필요
 > - Windows cmd·PowerShell에서도 동일한 문법으로 사용 가능
 > - 대용량·증분 전송은 `rsync` 검토
-> - 관련: 🖥️ SSH 개념 & 프로세스·보안 설정 · 🔒 SFTP 파일 전송 · ⚡ 퀵 레퍼런스 (SSH·SCP·SFTP·vsFTP·DHCP·DNS)
+> - 관련:  SSH 개념 & 프로세스·보안 설정 ·  SFTP 파일 전송 ·  퀵 레퍼런스 (SSH·SCP·SFTP·vsFTP·DHCP·DNS)

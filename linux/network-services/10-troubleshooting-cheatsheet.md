@@ -1,11 +1,11 @@
-# 🚨 트러블슈팅 치트시트 (SSH·vsFTP·SFTP·SCP·DHCP·DNS)
+# 트러블슈팅 치트시트 (SSH·vsFTP·SFTP·SCP·DHCP·DNS)
 
 > **Tag:** #Linux #Troubleshooting #Cheatsheet #SSH #vsFTP #DHCP #DNS #SELinux #firewalld
 > **핵심 요약:** 네트워크 서비스 장애는 대부분 데몬 미동작, 방화벽 미개방, 설정 후 재시작 누락, SELinux 차단, 권한 문제 다섯 가지로 수렴한다. 증상별 원인과 확인 명령을 서비스별로 정리하고, 공통 진단 순서(데몬 → 포트 → 방화벽 → SELinux → 로그)를 기준으로 범위를 좁혀 나간다. 변경 전 백업과 사전 검증 명령(`sshd -t`, `named-checkconf`, `dhcpd -t`) 사용을 습관화한다.
 
 ---
 
-## 1. 🎯 공통 진단 5단계
+## 1. 공통 진단 5단계
 
 ```text
 1) 데몬이 동작하는가        systemctl status 서비스
@@ -27,7 +27,7 @@ telnet 서버IP 포트                          # 포트 도달 여부(대체)
 
 ---
 
-## 2. 🖥️ SSH
+## 2. SSH
 
 | 증상 | 원인 | 확인·대응 |
 |---|---|---|
@@ -54,7 +54,7 @@ tail -f /var/log/secure
 
 ---
 
-## 3. 📁 vsFTP
+## 3. vsFTP
 
 | 증상 | 원인 | 확인·대응 |
 |---|---|---|
@@ -86,7 +86,7 @@ setsebool -P ftpd_full_access on            # 필요 시(운영은 신중히)
 
 ---
 
-## 4. 🔒 SFTP·SCP
+## 4. SFTP·SCP
 
 | 오류 | 원인 | 대응 |
 |---|---|---|
@@ -107,7 +107,7 @@ ls -ld /로컬/대상                            # 로컬 권한 확인
 
 ---
 
-## 5. 🌐 DHCP
+## 5. DHCP
 
 | 증상 | 원인 | 확인·대응 |
 |---|---|---|
@@ -141,7 +141,7 @@ ipconfig /release && ipconfig /renew           # Windows
 
 ---
 
-## 6. 🧭 DNS (BIND)
+## 6. DNS (BIND)
 
 | 증상 | 원인 | 확인·대응 |
 |---|---|---|
@@ -175,7 +175,7 @@ nslookup IP 127.0.0.1                       # 역방향 검증
 
 ---
 
-## 7. 🛡️ SELinux 공통
+## 7. SELinux 공통
 
 ```bash
 getenforce                                  # Enforcing / Permissive
@@ -201,7 +201,7 @@ semanage port -a -t ssh_port_t -p tcp 2002  # 새 포트 등록
 
 ---
 
-## 8. 🔥 방화벽 공통
+## 8. 방화벽 공통
 
 ```bash
 firewall-cmd --state                        # 방화벽 동작 여부
@@ -221,7 +221,7 @@ firewall-cmd --reload                       # 반드시 실행
 
 ---
 
-## 9. 📋 증상별 빠른 인덱스
+## 9. 증상별 빠른 인덱스
 
 | 증상 키워드 | 우선 확인 |
 |---|---|
@@ -236,7 +236,7 @@ firewall-cmd --reload                       # 반드시 실행
 
 ---
 
-## 10. ✅ 사고 예방 체크리스트
+## 10. 사고 예방 체크리스트
 
 ```text
 [ ] 설정 파일 수정 전 백업(cp 파일 파일.bak.$(date +%F))
@@ -250,12 +250,12 @@ firewall-cmd --reload                       # 반드시 실행
 [ ] 변경 후 로그(journalctl, /var/log/secure) 확인
 ```
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - 진단 순서는 데몬 → 포트 → 방화벽 → SELinux → 로그
 > - 대부분의 장애는 재시작 누락·방화벽 미개방·SELinux 차단
 > - 오류 메시지를 그대로 읽고 원인 범위를 좁히는 것이 최우선
 > - 변경 전 백업, 변경 전 문법 검증을 습관화
 > - 원격 작업은 기존 세션을 유지한 채 검증
-> - 관련: 📚 종합정리 네트워크 서비스 (SSH·SCP·SFTP·vsFTP·DHCP·DNS) · ⚡ 퀵 레퍼런스
+> - 관련:  종합정리 네트워크 서비스 (SSH·SCP·SFTP·vsFTP·DHCP·DNS) ·  퀵 레퍼런스
 
 ---

@@ -146,7 +146,7 @@ echo $BASH_VERSION              # 연관 배열(4.0+)·음수 인덱스(4.3+) �
 
 ## 트러블슈팅 시나리오 상세
 
-### 🚨 시나리오 1. 변수 계산 결과가 이어붙은 문자열로 출력
+### 시나리오 1. 변수 계산 결과가 이어붙은 문자열로 출력
 
 ```bash
 $ num1=10; num2=20
@@ -156,7 +156,7 @@ $ echo $num1+$num2
 
 **해결**: `echo $(( num1 + num2 ))`
 
-### 🚨 시나리오 2. 중괄호 확장에 변수를 사용해 반복문이 동작하지 않음
+### 시나리오 2. 중괄호 확장에 변수를 사용해 반복문이 동작하지 않음
 
 ```bash
 $ max=5
@@ -170,7 +170,7 @@ $ for i in {1..$max}; do echo $i; done
 for (( i=1; i<=max; i++ )); do echo "$i"; done
 ```
 
-### 🚨 시나리오 3. case 문에서 기본 분기(`*`)만 계속 실행
+### 시나리오 3. case 문에서 기본 분기(`*`)만 계속 실행
 
 ```bash
 $ read -p "y/n : " answer
@@ -190,7 +190,7 @@ case "$answer" in
 esac
 ```
 
-### 🚨 시나리오 4. while 카운터 누락으로 무한 루프
+### 시나리오 4. while 카운터 누락으로 무한 루프
 
 ```bash
 count=1
@@ -207,7 +207,7 @@ done
 count=$((count + 1))    # 루프 본문 마지막에 반드시 포함
 ```
 
-### 🚨 시나리오 5. unset 후 인덱스가 어긋나 배열 반복이 깨짐
+### 시나리오 5. unset 후 인덱스가 어긋나 배열 반복이 깨짐
 
 ```bash
 $ name=("kim" "lee" "park" "ryu")
@@ -229,7 +229,7 @@ for i in "${!name[@]}"; do echo "${name[i]}"; done   # 인덱스 목록 기준
 name=("${name[@]}")                                   # 또는 인덱스 재정렬
 ```
 
-### 🚨 시나리오 6. 공백 포함 인자가 두 개로 쪼개져 처리됨
+### 시나리오 6. 공백 포함 인자가 두 개로 쪼개져 처리됨
 
 ```bash
 $ ./bak.sh "my file.txt" /backup
@@ -244,7 +244,7 @@ cp: 'my' 파일이나 디렉터리가 없습니다
 cp -- "$1" "$2"
 ```
 
-### 🚨 시나리오 7. 가변 인자 검증을 앞 두 개만 해서 잘못된 값이 통과
+### 시나리오 7. 가변 인자 검증을 앞 두 개만 해서 잘못된 값이 통과
 
 ```bash
 # $1, $2 만 정수 검증한 스크립트
@@ -262,7 +262,7 @@ do
 done
 ```
 
-### 🚨 시나리오 8. 백업 파일명에 콜론이 들어가 전송·복원에서 실패
+### 시나리오 8. 백업 파일명에 콜론이 들어가 전송·복원에서 실패
 
 ```bash
 $ ls /backup/
@@ -272,7 +272,7 @@ sqlDB_2026-07-29_17:13:39.tar.gz         # date +%T 사용 결과
 **원인**: 콜론은 `scp host:path` 문법과 충돌하고 일부 파일시스템에서 사용할 수 없다.
 **해결**: `date +%F_%H%M%S` 형식으로 변경한다.
 
-### 🚨 시나리오 9. 파괴적 명령에 글롭 패턴을 확인 없이 바로 실행
+### 시나리오 9. 파괴적 명령에 글롭 패턴을 확인 없이 바로 실행
 
 ```bash
 rm -rf /backup/a*      # 예상보다 많은 파일이 삭제될 위험
@@ -290,10 +290,10 @@ rm -rf "$1"/*                 # 확인 후 실행
 ---
 
 ## 요약
-- 📌 **핵심 요약**
+-  **핵심 요약**
 - 계산 오류 → `$(( ))` 사용 여부부터 확인
 - 문법 오류 → 대괄호 공백, 따옴표, 중괄호 변수 사용 여부부터 확인
 - 무한 루프/의도치 않은 종료 → 카운터 증가, `break`/`continue` 범위부터 확인
 - 배열·인자 이상 → `[@]` vs `[*]`, `${#arr[@]}` vs `${#arr}`, `${10}` 중괄호부터 확인
 - 파괴적 명령 전에는 항상 인자 검증 + `printf '%s\n'` 로 대상 사전 확인
-- 관련: **10. 🧩 Shell Script - 통합 정리** · **12. ⚡ Shell Script - 명령어 퀵 레퍼런스** · **9. ⏰ Shell Script - cron · anacron (스케줄 자동화)** · **4. 🚦 Shell Script - exit 상태와 test 명령** · **5. 🔀 Shell Script - 조건문 (if · case)** · **6. 🔁 Shell Script - 반복문 (for · while · until)** · **7. 📦 Shell Script - 배열(Array)과 RANDOM** · **8. 🎯 Shell Script - 위치 매개변수 (Positional Parameters)**
+- 관련: **10.  Shell Script - 통합 정리** · **12.  Shell Script - 명령어 퀵 레퍼런스** · **9. ⏰ Shell Script - cron · anacron (스케줄 자동화)** · **4.  Shell Script - exit 상태와 test 명령** · **5.  Shell Script - 조건문 (if · case)** · **6.  Shell Script - 반복문 (for · while · until)** · **7.  Shell Script - 배열(Array)과 RANDOM** · **8.  Shell Script - 위치 매개변수 (Positional Parameters)**

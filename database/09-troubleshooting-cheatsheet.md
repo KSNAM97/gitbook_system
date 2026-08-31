@@ -1,11 +1,11 @@
-# 🚑 DB - 트러블슈팅 치트시트
+# DB - 트러블슈팅 치트시트
 
 > **Tag:** #Database #MariaDB #SQL #Troubleshooting #CheatSheet
 > **핵심 요약:** DB 오류의 대부분은 ① WHERE 절 누락으로 전체 데이터 변경, ② FK 선후관계 위반(부모 없는 자식 삽입·자식 있는 부모 삭제), ③ NULL 비교 오류(`= NULL` 사용), ④ 대소문자 혼동으로 LIKE 결과 없음, ⑤ DDL 실행 후 롤백 불가, ⑥ INNER JOIN ON 절 누락, ⑦ WHERE에 집계함수 사용(HAVING 써야 함), ⑧ UNIQUE/FK 제약조건 중복·참조 오류에서 발생한다. **증상 → 원인 → 조치** 순으로 즉시 대응할 수 있게 정리한 문서다.
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 DB 오류를 진단할 때 가장 먼저 확인해야 할 것은 네 가지다. 첫째, 오류 메시지 전문을 확인한다(MariaDB는 정확한 원인을 메시지에 포함한다). 둘째, 대상 테이블 구조를 확인한다(`DESC 테이블명`). 셋째, 실제 데이터를 확인한다(`SELECT COUNT(*)`·`SELECT * ... LIMIT 5`). 넷째, FK 관계를 확인한다(`SHOW CREATE TABLE 테이블명`).
 
@@ -13,7 +13,7 @@ DB 오류를 진단할 때 가장 먼저 확인해야 할 것은 네 가지다. 
 
 ---
 
-## 2. 🛠️ 증상별 즉시 대응표 (Configuration)
+## 2. 증상별 즉시 대응표 (Configuration)
 
 ### 1. MariaDB 설치 · 접속
 
@@ -110,7 +110,7 @@ DB 오류를 진단할 때 가장 먼저 확인해야 할 것은 네 가지다. 
 
 ---
 
-## 3. 🔍 핵심 진단 명령어 모음 (Verification)
+## 3. 핵심 진단 명령어 모음 (Verification)
 
 ```sql
 -- 테이블 구조 확인 (컬럼·타입·NULL·기본값·KEY)
@@ -148,9 +148,9 @@ firewall-cmd --list-service
 
 ---
 
-## 4. 🔍 트러블슈팅 시나리오 상세
+## 4. 트러블슈팅 시나리오 상세
 
-### 🚨 시나리오 1. WHERE 절 누락으로 전체 데이터 변경
+### 시나리오 1. WHERE 절 누락으로 전체 데이터 변경
 
 ```sql
 -- 실수
@@ -166,7 +166,7 @@ UPDATE member SET status = 'INACTIVE' WHERE username = 'user10';
 
 ---
 
-### 🚨 시나리오 2. FK 선후관계 위반
+### 시나리오 2. FK 선후관계 위반
 
 ```sql
 -- 실수 1: dept 없이 emp 생성
@@ -188,7 +188,7 @@ DELETE FROM dept WHERE deptno = 10;
 
 ---
 
-### 🚨 시나리오 3. NULL 비교 오류
+### 시나리오 3. NULL 비교 오류
 
 ```sql
 -- 잘못된 방법 (항상 0건 반환)
@@ -206,7 +206,7 @@ SELECT * FROM emp WHERE job != 'SALESMAN' OR job IS NULL;
 
 ---
 
-### 🚨 시나리오 4. AND/OR 우선순위 오류
+### 시나리오 4. AND/OR 우선순위 오류
 
 ```sql
 -- 의도: (나이 30~35세) 이거나 (INACTIVE 상태)
@@ -220,7 +220,7 @@ SELECT * FROM member WHERE (age >= 30 AND age < 35) OR status = 'INACTIVE';
 
 ---
 
-### 🚨 시나리오 5. LIKE 대소문자로 결과 없음
+### 시나리오 5. LIKE 대소문자로 결과 없음
 
 ```sql
 -- 실제 저장: 'Samsung'
@@ -236,7 +236,7 @@ SELECT * FROM product_catalog WHERE product_name LIKE 'Samsung%';
 
 ---
 
-### 🚨 시나리오 6. CONCAT에 NULL 포함 시 전체 NULL 반환
+### 시나리오 6. CONCAT에 NULL 포함 시 전체 NULL 반환
 
 ```sql
 -- 문제
@@ -249,7 +249,7 @@ SELECT CONCAT(IFNULL(comm, 0), '원') FROM emp;
 
 ---
 
-### 🚨 시나리오 7. ORDER BY 별칭 따옴표로 정렬 안 됨
+### 시나리오 7. ORDER BY 별칭 따옴표로 정렬 안 됨
 
 ```sql
 -- 잘못된 방법
@@ -263,7 +263,7 @@ SELECT sal * 12 AS 연봉 FROM emp ORDER BY 1;           -- 컬럼 번호 사용
 
 ---
 
-### 🚨 시나리오 8. INNER JOIN ON 절 누락 (카티션 곱)
+### 시나리오 8. INNER JOIN ON 절 누락 (카티션 곱)
 
 ```sql
 -- 실수: ON 절 없음 → 30 × 50 = 1500행 반환
@@ -279,25 +279,25 @@ INNER JOIN orders o ON c.customer_id = o.customer_id;
 
 ---
 
-### 🚨 시나리오 9. WHERE에 집계함수 사용 오류
+### 시나리오 9. WHERE에 집계함수 사용 오류
 
 ```sql
 -- 실수
 SELECT deptno, AVG(sal)
 FROM emp
-WHERE AVG(sal) >= 2000   -- ❌ Invalid use of group function
+WHERE AVG(sal) >= 2000   --  Invalid use of group function
 GROUP BY deptno;
 
 -- 해결: 집계함수 조건은 HAVING
 SELECT deptno, AVG(sal)
 FROM emp
 GROUP BY deptno
-HAVING AVG(sal) >= 2000;  -- ✅
+HAVING AVG(sal) >= 2000;  -- 
 ```
 
 ---
 
-### 🚨 시나리오 10. FK INSERT 오류 (부모에 없는 값)
+### 시나리오 10. FK INSERT 오류 (부모에 없는 값)
 
 ```sql
 -- 실수: dept에 99번 부서가 없는데 emp에 INSERT
@@ -314,7 +314,7 @@ INSERT INTO emp VALUES(9999, 'TEST', 'CLERK', NULL, NOW(), 1000, NULL, 10);
 
 ---
 
-### 🚨 시나리오 11. UNIQUE 중복 INSERT 오류
+### 시나리오 11. UNIQUE 중복 INSERT 오류
 
 ```sql
 -- 실수: username이 이미 존재하는 경우
@@ -337,7 +337,7 @@ ON DUPLICATE KEY UPDATE phone = '010-0000-0000';
 
 ---
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - WHERE 없는 UPDATE/DELETE = 전체 변경 → **SELECT로 대상 먼저 확인**
 > - FK 위반 → 생성은 **부모 먼저**, 삭제는 **자식 먼저**
 > - NULL 비교는 `= NULL` 불가 → 반드시 `IS NULL` / `IS NOT NULL`

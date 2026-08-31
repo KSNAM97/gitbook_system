@@ -398,7 +398,7 @@ find /sol/A-class/a1/a2/a3 \
 
 ### 3-4. 대표 트러블슈팅
 
-#### 🚨 시나리오 1. `rm: cannot remove: Is a directory`
+#### 시나리오 1. `rm: cannot remove: Is a directory`
 
 `rm`은 기본적으로 일반 파일을 삭제하며 디렉터리에는 `-r`이 필요하다.
 
@@ -412,7 +412,7 @@ rm -r /path/dir
 rmdir /path/dir
 ```
 
-#### 🚨 시나리오 2. `mkdir: No such file or directory`
+#### 시나리오 2. `mkdir: No such file or directory`
 
 상위 디렉터리가 존재하지 않는다.
 
@@ -426,7 +426,7 @@ mkdir /sk/sk-networks/sk-net-a1/sk-net-b1
 mkdir -p /sk/sk-networks/sk-net-a1/sk-net-b1
 ```
 
-#### 🚨 시나리오 3. `rm -f`를 사용했지만 삭제되지 않는다
+#### 시나리오 3. `rm -f`를 사용했지만 삭제되지 않는다
 
 경로의 각 디렉터리 권한을 확인한다.
 
@@ -446,7 +446,7 @@ SELinux 로그를 확인한다.
 ausearch -m AVC -ts recent
 ```
 
-#### 🚨 시나리오 4. `rm dir/*` 후 디렉터리가 비어 있지 않다
+#### 시나리오 4. `rm dir/*` 후 디렉터리가 비어 있지 않다
 
 숨김파일이나 하위 디렉터리가 남았는지 확인한다.
 
@@ -467,7 +467,7 @@ find /path/dir -mindepth 1 -maxdepth 1 -type f -delete
 rm -rf -- /path/dir
 ```
 
-#### 🚨 시나리오 5. 변수 기반 삭제 명령이 위험한 경로로 확장된다
+#### 시나리오 5. 변수 기반 삭제 명령이 위험한 경로로 확장된다
 
 ```bash
 : "${DIR:?DIR must be set}"

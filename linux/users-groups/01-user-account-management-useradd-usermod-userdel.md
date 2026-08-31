@@ -1,11 +1,11 @@
- # 👤 리눅스 사용자 계정 관리 (useradd / usermod / userdel / passwd / su)
+ #  리눅스 사용자 계정 관리 (useradd / usermod / userdel / passwd / su)
 
 > **Tag:** #Linux #UserManagement #useradd #usermod #userdel #passwd #su #UID #GID
 > **핵심 요약:** 리눅스 계정 시스템의 근간은 **UID(숫자 식별자)** 이며, 계정 생성은 `/etc/passwd`, `/etc/shadow`, `/etc/group`, `/home`, `/var/spool/mail` 5개 위치에 **동시적으로** 정보를 기록한다. `useradd`/`usermod`/`userdel` 로 계정 라이프사이클을, `passwd` 로 비밀번호 정책을, `su -` 로 관리자 권한 승격을 관리하는 것이 실무 표준.
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 리눅스가 계정을 이름이 아닌 UID(숫자)로 관리하는 이유는 **커널·파일시스템 레벨에서는 문자열 처리 비용이 너무 크고**, 파일 소유권·프로세스 권한 검사에 초당 수백만 번 참조되므로 **정수 비교(UID)** 로 처리하는 것이 표준이기 때문이다. 이름(`root`, `guest`)은 어디까지나 `/etc/passwd` 라는 매핑 테이블을 통해 관리자 편의를 위해 붙인 별칭이다. **UID=0 인 계정은 무조건 root 권한**을 가지며, 이름이 `root` 가 아니어도 UID 0이면 시스템 전권을 가지므로 보안 감사 시 `awk -F: '$3==0 {print $1}' /etc/passwd` 로 반드시 확인해야 한다. RHEL 7 이상은 **시스템 계정 UID 0~999**, **일반 사용자 UID 1000~** 로 분리되어 있으며(`/etc/login.defs` 의 `UID_MIN`/`UID_MAX` 정책), 다중 서버 UID sync 시 이 경계값이 다르면 NFS 소유권 오류가 발생한다.
 
@@ -19,7 +19,7 @@
 
 ---
 
-## 2. 🛠️ 표준 설정 템플릿 (Configuration)
+## 2. 표준 설정 템플릿 (Configuration)
 
 > **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
 
@@ -40,7 +40,7 @@
 ```bash
 # 형식 : 계정명:비밀번호:UID:GID:Comment:홈디렉터리:로그인셸
 guest:x:1000:1000:guest:/home/guest:/bin/bash
-#  ①    ②  ③    ④    ⑤       ⑥          ⑦
+# ① ② ③ ④ ⑤ ⑥ ⑦
 ① guest         계정명 (로그인 ID)
 ② x             비밀번호 자리표시자 (실제는 /etc/shadow 에)
 ③ 1000          UID (시스템: 0~999 / 사용자: 1000~)
@@ -75,9 +75,9 @@ vi /etc/default/useradd
 ### Step 4. useradd 옵션 6종 (실무 필수)
 
 ```bash
-# -c : Comment (실명/부서/닉네임)  → SSH 로그 추적 시 필수
+# -c : Comment (실명/부서/닉네임) → SSH 로그 추적 시 필수
 # -d : 홈 디렉터리 절대경로 지정
-# -m : 홈 디렉터리 자동 생성 (없으면) - -d 와 세트로 사용 ★
+# -m : 홈 디렉터리 자동 생성 (없으면) - -d 와 세트로 사용
 # -k : 참조할 skel 디렉터리 (기본값 /etc/skel 대체)
 # -s : 로그인 셸 지정
 # -u : UID 직접 지정 (다중 서버 sync 시)
@@ -126,20 +126,20 @@ passwd user1                               # (root) 특정 계정 비밀번호 �
 # [상태 조회 - PS / LK / NP]
 passwd -S user1
 # user1 PS 2026-07-08 0 99999 7 -1 (비밀번호가 설정되어있습니다, SHA512 암호화.)
-#         │       │      │    │     │  │
-#         │       │      │    │     │  └─ 만료 후 비활성화까지 일수 (-1 = 사용안함)
-#         │       │      │    │     └─ 만료 몇 일 전부터 경고
-#         │       │      │    └─ 만료까지 일수 (99999 = 사실상 무기한)
-#         │       │      └─ 최소 변경 대기 일수 (0 = 언제든 변경 가능)
-#         │       └─ 최근 변경 날짜
-#         └─ 상태 : PS(설정됨) / LK(잠금) / NP(비번없음)
+# │ │ │ │ │ │
+# │ │ │ │ │ └─ 만료 후 비활성화까지 일수 (-1 = 사용안함)
+# │ │ │ │ └─ 만료 몇 일 전부터 경고
+# │ │ │ └─ 만료까지 일수 (99999 = 사실상 무기한)
+# │ │ └─ 최소 변경 대기 일수 (0 = 언제든 변경 가능)
+# │ └─ 최근 변경 날짜
+# └─ 상태 : PS(설정됨) / LK(잠금) / NP(비번없음)
 
-# [잠금 / 해제 - 퇴사자·휴직자 대응 표준] ★
+# [잠금 / 해제 - 퇴사자·휴직자 대응 표준]
 passwd -l user1                            # 계정 유지 + 로그인만 차단
 passwd -u user1                            # 잠금 해제
 
 # [비밀번호 삭제 - 운영 서버 사용 금지]
-passwd -d user1                            # ⚠️ 무비밀번호 로그인 위험
+passwd -d user1                            #  무비밀번호 로그인 위험
 
 # [만료 정책 - chage 명령]
 chage -l user1                             # 정책 조회
@@ -155,13 +155,13 @@ usermod -s /bin/tcsh user1
 # [Comment 변경]
 usermod -c "HR-Kim-New" hrkim
 
-# [홈 디렉터리 변경 - ★ -md 세트 사용 필수]
-# -d 만  : /etc/passwd 의 경로만 바뀌고 실제 디렉터리는 그대로 (사고 유발)
-# -md   : passwd 갱신 + 실제 홈 디렉터리를 새 위치로 이동 ★ 실무 표준
+# [홈 디렉터리 변경 - -md 세트 사용 필수]
+# -d 만 : /etc/passwd 의 경로만 바뀌고 실제 디렉터리는 그대로 (사고 유발)
+# -md : passwd 갱신 + 실제 홈 디렉터리를 새 위치로 이동 실무 표준
 usermod -md /saleshome/user1  user1
 
 # [주의] -md 는 "기존 passwd 경로 == 실제 홈 경로" 일 때만 정상 동작
-#        → 두 경로가 어긋나 있으면 mv 로 수동 이동 후 -d 만 사용해야 함
+# → 두 경로가 어긋나 있으면 mv 로 수동 이동 후 -d 만 사용해야 함
 
 # [UID 변경]
 usermod -u 2000 user1
@@ -176,11 +176,11 @@ userdel user8
 # → 홈 디렉터리(/home/user8), 메일박스(/var/spool/mail/user8) 잔존
 # → ls -l 시 소유자가 UID 숫자로 표시됨 (예: "1008 1008")
 
-# [완전 삭제 - 홈디렉터리 + 메일박스까지 제거] ★ 실무 표준
+# [완전 삭제 - 홈디렉터리 + 메일박스까지 제거] 실무 표준
 userdel -r user6
 
 # [강제 삭제 - 로그인 세션이 있어도 강제]
-userdel -rf user6                          # ⚠️ 실행 중 프로세스 데이터 손실 위험
+userdel -rf user6                          #  실행 중 프로세스 데이터 손실 위험
 ```
 
 ### Step 9. su — 관리자 권한 승격 (`su` vs `su -`)
@@ -193,7 +193,7 @@ Password: ****
 # ▶ sbin 경로가 PATH 에 없어 systemctl, useradd 등이 안 먹을 수 있음
 # ▶ pwd 하면 /home/guest (원래 위치 유지)
 
-# [su - 로그인 셸 환경까지 완전 전환] ★ 실무 표준
+# [su - 로그인 셸 환경까지 완전 전환] 실무 표준
 guest$ su -
 Password: ****
 # ▶ root 로 실제 로그인한 것과 동일한 환경
@@ -205,7 +205,7 @@ $ su - user1                               # user1 로 로그인 셸 진입
 $ su -c 'systemctl restart nginx' -        # root 로 명령 하나만 실행 후 복귀
 
 # [원래 사용자로 복귀]
-# root# exit  또는  Ctrl+D
+# root# exit 또는 Ctrl+D
 ```
 
 ### Step 10. 로그인 실습 워크플로우 (안전 접속 표준)
@@ -222,7 +222,7 @@ Password: ****
 root# exit
 guest$
 ```
-## 3. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 3. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 ### 3-1. 필수 검증 명령어
 
@@ -278,7 +278,7 @@ ls -l /var/spool/mail/$CHECK_USER
 
 ### 3-3. 트러블슈팅 시나리오
 
-#### 🚨 시나리오 1. `useradd` 로 계정을 만들었는데 SSH 로그인이 안 됨
+#### 시나리오 1. `useradd` 로 계정을 만들었는데 SSH 로그인이 안 됨
 
 - **원인 후보:**
     1. **비밀번호 미설정** → `/etc/shadow` 에 `!!` 상태 (locked).
@@ -300,7 +300,7 @@ ls -l /var/spool/mail/$CHECK_USER
     ```
     
 
-#### 🚨 시나리오 2. `usermod -d /new/path user1` 로 홈 경로를 바꿨는데 로그인 시 "No such directory"
+#### 시나리오 2. `usermod -d /new/path user1` 로 홈 경로를 바꿨는데 로그인 시 "No such directory"
 
 - **원인:** `-d` 만 사용해서 **`/etc/passwd` 상의 경로는 바뀌었지만 실제 디렉터리는 이동 안 됨**. 로그인 시 존재하지 않는 경로 진입 시도 → 오류.
 - **해결:**
@@ -315,7 +315,7 @@ ls -l /var/spool/mail/$CHECK_USER
     ```
     
 
-#### 🚨 시나리오 3. `userdel user8` 후 `ls -l /home` 하니 소유자가 이름이 아닌 숫자(1008) 로 표시됨
+#### 시나리오 3. `userdel user8` 후 `ls -l /home` 하니 소유자가 이름이 아닌 숫자(1008) 로 표시됨
 
 - **원인:** 계정만 삭제되고 홈 디렉터리는 잔존 → 시스템이 UID→이름 매핑에 실패해 숫자로 표시.
 - **위험성:** 같은 UID 로 새 계정을 만들면 **옛 사용자의 홈/파일이 자동으로 새 계정 소유로 매핑**되어 데이터 유출 사고.
@@ -330,7 +330,7 @@ ls -l /var/spool/mail/$CHECK_USER
     # [사전 예방] 계정 삭제는 무조건 -r 옵션
     userdel -r user8
     ```
-#### 🚨 시나리오 4. 퇴사자 계정을 `userdel -r` 로 지웠는데 감사팀에서 데이터 요청이 옴
+#### 시나리오 4. 퇴사자 계정을 `userdel -r` 로 지웠는데 감사팀에서 데이터 요청이 옴
 
 - **원인:** 완전 삭제로 데이터 복구 불가. 인수인계 전에 삭제해버림.
 - **해결/예방:**
@@ -351,7 +351,7 @@ ls -l /var/spool/mail/$CHECK_USER
     ```
     
 
-#### 🚨 시나리오 5. `su -` 로 root 진입 후 세션을 방치했다가 다른 사람이 root 명령 실행
+#### 시나리오 5. `su -` 로 root 진입 후 세션을 방치했다가 다른 사람이 root 명령 실행
 
 - **원인:** root 승격 상태로 자리를 비움 → 물리적/원격 접근 사고.
 - **해결/예방:**
@@ -370,7 +370,7 @@ ls -l /var/spool/mail/$CHECK_USER
     ```
     
 
-#### 🚨 시나리오 6. `passwd -d user1` 실행 후 user1 이 비밀번호 없이 로그인해버림
+#### 시나리오 6. `passwd -d user1` 실행 후 user1 이 비밀번호 없이 로그인해버림
 
 - **원인:** `-d` 는 shadow 파일의 비밀번호 해시를 빈 값으로 만듦 → **인증 우회 상태**.
 - **해결:**
@@ -387,7 +387,7 @@ ls -l /var/spool/mail/$CHECK_USER
     ```
     
 
-#### 🚨 시나리오 7. 여러 서버에서 같은 사용자인데 파일 소유자가 서버마다 다르게 보임 (NFS 환경)
+#### 시나리오 7. 여러 서버에서 같은 사용자인데 파일 소유자가 서버마다 다르게 보임 (NFS 환경)
 
 - **원인:** 서버마다 `useradd` 를 각자 실행 → **UID 가 서버별로 다르게 할당됨**.
 - **해결:**
@@ -407,10 +407,10 @@ ls -l /var/spool/mail/$CHECK_USER
 
 ---
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - 계정 생성: `useradd -m -s /bin/bash -c "설명" user` — `-m` 홈 자동 생성, `-s` 셸 지정
 > - 비밀번호: `passwd user` (root), `echo "pw" | passwd --stdin user` (스크립트용)
 > - 계정 수정: `usermod -l 새이름`, `-md 새홈`, `-e YYYY-MM-DD` (만료일)
 > - 계정 잠금/해제: `passwd -l user` / `passwd -u user` (삭제 전 잠금이 안전)
 > - 계정 삭제: `userdel -r user` (홈+메일 함께 삭제) — `id user` 로 존재 확인 후 실행
-> - 관련: 5-2. 👥 리눅스 그룹 관리 & UPG 모델(groupadd &usermod & gpasswd) · 5-3. 🛡️ Root 접속 통제 & Sudo 권한 위임 · 5-4. 🧩 사용자·그룹·권한 통합 정리 · 5-5. 🚑 사용자·그룹·권한 트러블슈팅 치트시트 · 5-6. ⚡ 사용자·그룹·권한 명령어 퀵 레퍼런스
+> - 관련: 5-2.  리눅스 그룹 관리 & UPG 모델(groupadd &usermod & gpasswd) · 5-3.  Root 접속 통제 & Sudo 권한 위임 · 5-4.  사용자·그룹·권한 통합 정리 · 5-5.  사용자·그룹·권한 트러블슈팅 치트시트 · 5-6.  사용자·그룹·권한 명령어 퀵 레퍼런스

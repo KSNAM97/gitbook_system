@@ -1,11 +1,11 @@
-# 🔍 DB - SELECT · WHERE · ORDER BY · LIKE 실습 (emp · dept · member · product_catalog)
+# DB - SELECT · WHERE · ORDER BY · LIKE 실습 (emp · dept · member · product_catalog)
 
 > **Tag:** #SQL #SELECT #WHERE #ORDERBY #LIKE #CONCAT #DML #조건검색 #정렬 #패턴검색
 > **핵심 요약:** SELECT는 DML의 핵심으로 **어떤 컬럼을 / 어떤 테이블에서 / 어떤 조건으로 / 어떤 순서로** 조회할지를 정의한다. WHERE로 조건을 걸고, ORDER BY로 정렬하며, LIKE로 패턴 검색을 수행한다. 산술 연산·별칭(AS)·CONCAT 문자열 연결도 SELECT 구문 안에서 처리된다.
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 SELECT 문은 `SELECT 컬럼 FROM 테이블 WHERE 조건 ORDER BY 정렬기준;` 순서로 작성하며, 내부 실행 순서는 `FROM → WHERE → SELECT → ORDER BY` 다. `SELECT *`는 모든 컬럼을 조회하고, `SELECT empno, ename, sal`처럼 특정 컬럼만 조회할 수도 있다. SELECT는 조회(읽기)만 수행할 뿐 테이블 안의 값을 변경하지 않으며, UPDATE·DELETE는 별도 명령이 필요하다. `AS` 별칭은 `sal AS '월급'`처럼 컬럼 이름을 출력 시에만 바꿔 보여주는 기능이다.
 
@@ -21,7 +21,7 @@ CONCAT 함수는 여러 개의 문자열이나 컬럼 값을 하나의 문자열
 
 ---
 
-## 2. 🛠️ 표준 설정 템플릿 (Configuration)
+## 2. 표준 설정 템플릿 (Configuration)
 
 > **적용 환경:** MariaDB/MySQL 계열 RDBMS.
 
@@ -325,7 +325,7 @@ ORDER BY product_name ASC;
 
 ---
 
-## 3. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 3. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 ### 3-1. 필수 검증 명령어
 
@@ -349,7 +349,7 @@ SELECT * FROM member WHERE last_login IS NULL;
 
 ### 3-2. 트러블슈팅 시나리오
 
-#### 🚨 시나리오 1. WHERE 조건에서 AND/OR 우선순위 오류
+#### 시나리오 1. WHERE 조건에서 AND/OR 우선순위 오류
 
 - **증상:** `WHERE age >= 30 AND age < 35 OR status='INACTIVE'` 결과가 예상과 다름.
 - **원인:** `AND`가 `OR`보다 우선순위가 높아 `(age >= 30 AND age < 35) OR status='INACTIVE'`로 해석됨. 의도와 다를 수 있음.
@@ -358,7 +358,7 @@ SELECT * FROM member WHERE last_login IS NULL;
   WHERE (age >= 30 AND age < 35) OR status = 'INACTIVE'
   ```
 
-#### 🚨 시나리오 2. LIKE 검색 결과가 없음 (대소문자 문제)
+#### 시나리오 2. LIKE 검색 결과가 없음 (대소문자 문제)
 
 - **증상:** `WHERE product_name LIKE 'samsung%'` 실행 시 결과 없음. 실제 데이터는 `Samsung`으로 저장됨.
 - **원인:** MariaDB는 기본 collation에 따라 대소문자를 구분하지 않는 경우가 많지만, 일부 설정에서는 구분.
@@ -369,7 +369,7 @@ SELECT * FROM member WHERE last_login IS NULL;
   WHERE product_name LIKE 'Samsung%'   -- 대소문자 맞춰 검색
   ```
 
-#### 🚨 시나리오 3. UPDATE 시 WHERE 절 누락으로 전체 데이터 수정
+#### 시나리오 3. UPDATE 시 WHERE 절 누락으로 전체 데이터 수정
 
 ```sql
 -- 실수
@@ -383,7 +383,7 @@ UPDATE member SET status = 'INACTIVE' WHERE 조건;
 
 **예방:** 운영 DB에서는 `SET sql_safe_updates = 1;` 설정으로 WHERE 없는 UPDATE 차단.
 
-#### 🚨 시나리오 4. ORDER BY 별칭 참조 오류
+#### 시나리오 4. ORDER BY 별칭 참조 오류
 
 - **증상:** `ORDER BY '월급'` 실행 시 정렬이 되지 않거나 오류 발생.
 - **원인:** 문자열로 감싸면 컬럼명이 아닌 리터럴로 인식됨.
@@ -400,7 +400,7 @@ UPDATE member SET status = 'INACTIVE' WHERE 조건;
 
 ---
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - SELECT 절에서 산술 연산·AS 별칭·CONCAT 모두 사용 가능
 > - WHERE: AND/OR 우선순위 주의 → 괄호로 명확히 구분
 > - ORDER BY: ASC(오름차순, 기본) / DESC(내림차순), 다중 정렬 시 쉼표 구분

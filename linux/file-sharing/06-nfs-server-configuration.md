@@ -1,11 +1,11 @@
-# ⚙️ NFS 서버 구성 (/etc/exports·exportfs·방화벽)
+# NFS 서버 구성 (/etc/exports·exportfs·방화벽)
 
 > **Tag:** #Linux #NFS #exports #exportfs #showmount #firewalld #nfsserver  
 > **핵심 요약:** NFS 서버는 `nfs-utils` 설치 후 `/etc/exports`에 공유 디렉터리와 허용 클라이언트·옵션을 정의하고, `exportfs -ra`로 반영한 뒤 `nfs-server`를 실행하면 구성된다. 방화벽은 `nfs`와 `rpc-bind` 서비스를 `--permanent`로 허용해야 재부팅·reload 후에도 유지된다. `--permanent` 없이 추가한 규칙은 `firewall-cmd --reload` 시점에 모두 사라지므로 반드시 영구 옵션을 사용한다.
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 `/etc/exports`의 문법은 다음과 같다.
 
@@ -66,7 +66,7 @@ firewall-cmd --reload                      # 영구 설정을 런타임에 적�
 
 ---
 
-## 2. 🛠️ 표준 설정 템플릿 (Configuration)
+## 2. 표준 설정 템플릿 (Configuration)
 
 > **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
 
@@ -236,7 +236,7 @@ getsebool -a | grep nfs                    # 관련 부울 확인
 
 ---
 
-## 3. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 3. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 ### 3-1. 서버 점검 순서
 
@@ -266,10 +266,10 @@ journalctl -u nfs-server -n 50             # 로그
 vi /etc/exports → exportfs -ra → exportfs -v → showmount -e
 ```
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - `/etc/exports`는 "경로 클라이언트(옵션)" 형식, 괄호 앞 공백 금지
 > - 변경 후에는 항상 `exportfs -ra`로 반영
 > - 방화벽은 `--permanent` + `--reload` 조합이 필수
 > - `nfs-server`의 `active (exited)`는 정상 상태
 > - exports 옵션과 디렉터리 퍼미션이 모두 맞아야 쓰기 가능
-> - 관련: 📡 NFS 개념 & RPC 동작 원리 · 💻 NFS 클라이언트 마운트 & fstab · 🏗️ 종합실습 다중 클라이언트 NFS 구성
+> - 관련:  NFS 개념 & RPC 동작 원리 ·  NFS 클라이언트 마운트 & fstab ·  종합실습 다중 클라이언트 NFS 구성

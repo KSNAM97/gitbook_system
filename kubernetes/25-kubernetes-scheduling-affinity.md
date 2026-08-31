@@ -1,17 +1,17 @@
-# 📍 Kubernetes - Pod Scheduling (nodeSelector·Affinity)
+# Kubernetes - Pod Scheduling (nodeSelector·Affinity)
 
 > **Tag:** #Kubernetes #PodScheduling #nodeSelector #NodeAffinity #PodAffinity #부트캠프
 > **핵심 요약:** Pod가 어느 Node에 배치될지 결정하는 스케줄링 과정, nodeSelector를 이용한 단순 배치 제한, Node Affinity(required/preferred)를 이용한 세밀한 조건 배치, Pod Affinity/Anti-Affinity를 이용한 Pod 간 관계 기반 배치까지 실습 전체 정리
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 Pod Scheduling은 Pod를 어느 Node(서버)에 올려서 실행할지 결정하는 과정이다. Pod는 그냥 만들어진다고 바로 실행되지 않는다. (반드시 배치될 Node가 결정되어야 한다.) 이 결정을 하는 역할이 kube-scheduler(스케줄러)다.
 
 ```
-# Pod 		= 실행할 프로그램 묶음
-# Node 		= Pod가 실제로 올라가서 실행되는 서버(워커 서버)
+# Pod = 실행할 프로그램 묶음
+# Node = Pod가 실제로 올라가서 실행되는 서버(워커 서버)
 # Scheduler	= Pod를 어느 Node에 올릴지 선택하는 관리자
 ```
 
@@ -50,7 +50,7 @@ Filtering에서는 Pod의 요구사항을 만족하지 못하는 Node를 후보�
 ```
 # Pod requests: cpu 1, memory 1Gi
 # Node에 배치 가능한 여유 자원: cpu 0.5, memory 2Gi
-#  CPU 부족 --> 그 Node는 후보에서 제외
+# CPU 부족 --> 그 Node는 후보에서 제외
 ```
 
 2) Node 상태가 정상인가
@@ -91,7 +91,7 @@ Filtering에서는 Pod의 요구사항을 만족하지 못하는 Node를 후보�
 
 ---
 
-## 2. 🎯 nodeSelector
+## 2. nodeSelector
 
 nodeSelector는 Pod를 특정 라벨(label)을 가진 Node에만 배치하도록 강제하는 기능이다. Pod가 스케줄러에게 이렇게 요구하는 것과 같다.
 
@@ -328,7 +328,7 @@ k8s-worker2   	Ready    	<none>          	14d     v1.35.7      gpu
 
 ---
 
-## 3. 🧭 Affinity / Anti-Affinity란
+## 3. Affinity / Anti-Affinity란
 
 Affinity / Anti-Affinity는 Pod를 어떤 Node에 가깝게 또는 떨어지게 배치할지 정하는 규칙이다. Affinity는 특정 조건을 만족하는 대상과 가깝게 배치하도록 하는 개념이다. Anti-Affinity는 특정 조건을 만족하는 대상과 떨어지게 배치하도록 하는 개념이다.
 
@@ -437,7 +437,7 @@ nodeSelector는 특정 Label을 만족해야 하는 강제적인 Node 선택 방
 
 ---
 
-## 4. 🧪 Node Affinity 실습
+## 4. Node Affinity 실습
 
 **EX1) required 조건으로 특정 환경(env)을 반드시 만족하는 노드에만 Pod 배치하기**
 
@@ -1034,7 +1034,7 @@ affinity-multi-weight-6f759c5f74-vsph8	1/1        Running     0                 
 
 ---
 
-## 5. 🧪 Pod Affinity 실습
+## 5. Pod Affinity 실습
 
 **EX1) 프론트엔드 서버와 캐시 서버의 관계 이해 (Pod Affinity 미적용)**
 
@@ -1291,7 +1291,7 @@ deployment.apps "frontend" deleted from default namespace
 
 ---
 
-## 6. 🧪 Pod Anti-Affinity 실습
+## 6. Pod Anti-Affinity 실습
 
 복제 Pod가 같은 노드에 같이 있지 못하도록 강제한다. 고가용성(HA)에서 가장 기본이 되는 분산 규칙을 만든다.
 
@@ -1446,7 +1446,7 @@ preferred는 강제 조건이 아니므로, Worker Node가 2개뿐인 상태에�
 
 ---
 
-## 7. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 7. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 - Pod가 계속 `Pending` 상태라면 먼저 `kubectl describe pod <이름>`의 Events를 확인해 스케줄링 실패 사유(FailedScheduling)를 본다. nodeSelector/required Affinity 조건을 만족하는 Node가 없는 경우가 가장 흔한 원인이다.
 - `kubectl get nodes -L <key>`로 각 Node의 실제 라벨 값을 확인해, nodeSelector나 matchExpressions의 key/value 오타 여부를 점검한다. 라벨은 대소문자와 철자가 정확히 일치해야 매칭된다.
@@ -1459,10 +1459,10 @@ preferred는 강제 조건이 아니므로, Worker Node가 2개뿐인 상태에�
 
 ---
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - kube-scheduler는 Filtering(배치 불가 Node 제거) → Scoring(적합도 평가) → Binding(최종 선택) 순서로 Pod가 실행될 Node를 결정한다
 > - nodeSelector는 Node의 Label을 기준으로 하는 가장 단순한 강제 배치 조건이며, 조건을 만족하는 Node가 없으면 Pod는 Pending 상태로 남는다
 > - Node Affinity는 requiredDuringSchedulingIgnoredDuringExecution(강제)과 preferredDuringSchedulingIgnoredDuringExecution(선호, weight 기반 점수제)으로 nodeSelector보다 세밀한 조건을 표현한다
 > - nodeSelectorTerms 사이는 OR, 같은 term의 matchExpressions끼리는 AND로 평가된다
 > - Pod Affinity는 다른 Pod와 가까이(같은 topologyKey), Pod Anti-Affinity는 다른 Pod와 떨어뜨려 배치하는 규칙이며, 고가용성 확보와 네트워크 지연 최소화에 활용된다
-> - 관련: 2. 📦 Kubernetes - Pod 생성 · 24. 🏷️ Kubernetes - Label · 26. 🚧 Kubernetes - Pod Scheduling (Taint·Toleration)
+> - 관련: 2.  Kubernetes - Pod 생성 · 24.  Kubernetes - Label · 26.  Kubernetes - Pod Scheduling (Taint·Toleration)

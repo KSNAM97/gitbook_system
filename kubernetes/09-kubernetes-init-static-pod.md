@@ -1,4 +1,4 @@
-# 🔍 Kubernetes - Init Container·Static Pod
+# Kubernetes - Init Container·Static Pod
 
 > **Tag:** #Kubernetes #InitContainer #InfraContainer #StaticPod #부트캠프
 > **핵심 요약:** 메인 컨테이너 실행 전 준비 작업을 수행하는 Init Container, Pod의 네트워크·볼륨을 유지하는 Infra Container, API Server 없이 kubelet이 직접 관리하는 Static Pod 정리
@@ -507,7 +507,7 @@ Static Pod의 이름 뒤에 노드 이름(`-k8s-worker1`)이 자동으로 붙는
 
 ---
 
-## 2. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 2. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 - Init Container가 실패(0이 아닌 exit code)하면 메인 컨테이너는 아예 시작되지 않으므로, `kubectl logs <파드명> <init 컨테이너명>`으로 Init Container의 로그를 먼저 확인해야 한다.
 - Multi Container Pod에서 특정 컨테이너의 로그나 셸에 접근할 때는 반드시 `-c <컨테이너명>` 옵션을 붙여야 한다(`kubectl exec`, `kubectl logs` 모두 동일).
@@ -516,9 +516,9 @@ Static Pod의 이름 뒤에 노드 이름(`-k8s-worker1`)이 자동으로 붙는
 
 ---
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - Init Container는 메인 컨테이너 실행 전 준비 작업을 순차 수행하며, 모두 정상 종료되어야만 메인 컨테이너가 실행되고 실패 시 Pod 전체가 시작되지 않는다
 > - Infra Container(pause)는 사용자가 만들지 않는, Pod의 네트워크·IP·볼륨을 유지하는 보이지 않는 기반 컨테이너이며 메인 컨테이너 재시작에도 Pod IP를 고정시킨다
 > - Static Pod는 API Server를 거치지 않고 kubelet이 `/etc/kubernetes/manifests`의 YAML을 직접 읽어 생성·관리하며, kube-apiserver 등 Control Plane 핵심 컴포넌트 실행에 사용된다
 > - Static Pod는 kubectl로 생성·삭제할 수 없고, 노드의 manifests 디렉터리에서 YAML 파일을 직접 추가/삭제해야 한다
-> - 관련: 6. 🧬 Kubernetes - Pod 구조와 생성·동작 흐름 · 7. 💓 Kubernetes - livenessProbe · 3. 🏗️ Kubernetes - 아키텍처 개요와 핵심 컴포넌트
+> - 관련: 6.  Kubernetes - Pod 구조와 생성·동작 흐름 · 7.  Kubernetes - livenessProbe · 3.  Kubernetes - 아키텍처 개요와 핵심 컴포넌트

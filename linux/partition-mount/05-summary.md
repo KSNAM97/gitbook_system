@@ -1,11 +1,11 @@
-# 📋 파티션·마운트 통합 정리
+# 파티션·마운트 통합 정리
 
 > **Tag:** #Linux #Partition #FileSystem #Mount #fstab #Summary  
 > **핵심 요약:** 신규 디스크의 표준 구성 흐름은 디스크 식별 → 파티션 또는 LVM 구성 → 파일시스템 생성 → 임시 마운트 검증 → `/etc/fstab` 영구화이다. 각 단계에서 대상 장치와 결과를 확인해야 하며, 가장 위험한 작업은 잘못된 장치에 대한 파티션 초기화·포맷과 검증되지 않은 fstab 설정이다.
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 신규 디스크 구성의 표준 5단계는 다음과 같습니다.
 
@@ -40,7 +40,7 @@
 
 ---
 
-## 2. 🛠️ 표준 전체 워크플로 (Configuration)
+## 2. 표준 전체 워크플로 (Configuration)
 
 > **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
 
@@ -196,7 +196,7 @@ UUID=<uuid> /upload xfs defaults,nosuid,nodev,noexec 0 0
 
 ---
 
-## 3. 🔍 전 단계 검증 및 트러블슈팅
+## 3. 전 단계 검증 및 트러블슈팅
 
 통합 확인:
 
@@ -234,9 +234,9 @@ free -h
 | 재부팅 후 누락 | fstab, UUID, journal |
 | emergency mode | fstab 오류·필수 장치 미존재 |
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - 식별 → 파티션 → 포맷 → 테스트 마운트 → fstab
 > - 포맷 전 장치 모델·일련번호·마운트 상태 확인
 > - fstab 변경 전 백업
 > - 변경 후 `findmnt --verify --verbose`
-> - 관련: 8-1. 💽 디스크 타입 & 파티션 구조 · 8-2. 🗂️ 파일 시스템 & Format · 8-3. 🔗 마운트 & umount · 8-4. ⚓ Automount
+> - 관련: 8-1.  디스크 타입 & 파티션 구조 · 8-2.  파일 시스템 & Format · 8-3.  마운트 & umount · 8-4.  Automount

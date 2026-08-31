@@ -1,11 +1,11 @@
-# ⚡ RAID·LVM 명령어 퀵 레퍼런스
+# RAID·LVM 명령어 퀵 레퍼런스
 
 > **Tag:** #Linux #QuickReference #RAID #mdadm #LVM #pvcreate #vgcreate #lvcreate #CheatSheet
 > **핵심 요약:** `mdadm`(RAID)과 `pvcreate/vgcreate/lvcreate`(LVM) 문법을 빠르게 조회하는 암기 카드. 이해가 아니라 "조회·복붙"이 목적이다.
 
 ---
 
-## 1. 🛠️ 명령어 문법 (Configuration)
+## 1. 명령어 문법 (Configuration)
 
 ### 1. 파티션 준비
 
@@ -97,7 +97,7 @@ mount -a                                  # fstab 기반 전체 마운트
 
 ---
 
-## 2. 🔢 빠른 조회표 (Configuration)
+## 2. 빠른 조회표 (Configuration)
 
 ### 1. 파티션 타입 코드
 | 코드 | 별칭 | 용도 |
@@ -135,7 +135,7 @@ mount -a                                  # fstab 기반 전체 마운트
 
 ---
 
-## 3. 🔍 검증 명령어 모음 (Verification)
+## 3. 검증 명령어 모음 (Verification)
 
 ```bash
 lsblk -f                                  # 전체 블록 장치·UUID·RAID/LVM 멤버 확인
@@ -147,10 +147,10 @@ findmnt <MOUNTPOINT>                      # 특정 마운트 상태 확인
 blkid                                     # UUID 조회
 ```
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - RAID 생성: `mdadm --create --level=<N> --raid-devices=<수>`
 > - LVM 생성: `pvcreate → vgcreate → lvcreate`
 > - 확장 후 파일시스템 확장 필수: `resize2fs`/`xfs_growfs`
 > - ext4 축소: `umount → e2fsck → resize2fs → lvreduce`
 > - md127 방지: `--zero-superblock` + `/etc/mdadm.conf` + `dracut -fv`
-> - 관련: 🧩 RAID 개념 & Hardware vs Software RAID · ⚙️ mdadm 명령어 & RAID 관리 · ⚙️ LVM 구성 & 확장·축소 (pvcreate·vgcreate·lvcreate) · 🧩 RAID·LVM 통합 정리 · 🚑 RAID·LVM 트러블슈팅 치트시트
+> - 관련:  RAID 개념 & Hardware vs Software RAID ·  mdadm 명령어 & RAID 관리 ·  LVM 구성 & 확장·축소 (pvcreate·vgcreate·lvcreate) ·  RAID·LVM 통합 정리 ·  RAID·LVM 트러블슈팅 치트시트

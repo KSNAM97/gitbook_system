@@ -1,11 +1,11 @@
-# 🔎 파일·디렉터리 검색 (find)
+# 파일·디렉터리 검색 (find)
 
 > **Tag:** #Linux #find #Search #Audit #Housekeeping  
 > **핵심 요약:** `find`는 지정한 경로를 직접 탐색하여 이름, 종류, 수정 시간, 크기, 권한, 소유자 등의 조건으로 파일과 디렉터리를 검색한다. `-exec`와 `-delete`를 사용하면 검색 결과에 작업을 수행할 수 있으므로 반드시 `-print`로 먼저 검증한다.
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 `find`와 `locate`의 차이는 다음과 같다.
 
@@ -97,7 +97,7 @@ find /var/log -type f -name '*.log' -mtime +30 -delete
 
 ---
 
-## 2. 🛠️ 표준 사용 템플릿 (Configuration)
+## 2. 표준 사용 템플릿 (Configuration)
 
 > **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
 
@@ -531,7 +531,7 @@ find / -xdev -type f -name '*.conf' 2>/dev/null
 
 ---
 
-## 3. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 3. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 ### 3-1. 삭제 전 필수 검증
 
@@ -633,7 +633,7 @@ find /backup2 -type f -newermt '2026-07-05'
 
 ### 3-3. 대표 트러블슈팅
 
-#### 🚨 시나리오 1. `find /home -name *.log` 결과가 이상하다
+#### 시나리오 1. `find /home -name *.log` 결과가 이상하다
 
 현재 디렉터리의 `*.log`를 셸이 먼저 확장할 수 있다.
 
@@ -655,7 +655,7 @@ find /home -name '*.log'
 printf '<%s>\n' *.log
 ```
 
-#### 🚨 시나리오 2. 삭제 범위가 예상보다 넓다
+#### 시나리오 2. 삭제 범위가 예상보다 넓다
 
 위험한 예:
 
@@ -691,7 +691,7 @@ find "$REAL_TARGET" \
 
 > **참고:** `set -euo pipefail`은 빈 변수나 일부 명령 실패를 처리하는 데 유용하지만, 잘못된 비어 있지 않은 경로를 자동으로 차단하지 않는다.
 
-#### 🚨 시나리오 3. `Permission denied`가 대량으로 출력된다
+#### 시나리오 3. `Permission denied`가 대량으로 출력된다
 
 표준 오류 숨김:
 
@@ -714,7 +714,7 @@ find / \
 find / -xdev -name 'passwd' 2>/dev/null
 ```
 
-#### 🚨 시나리오 4. 시작 경로 자체가 결과에 포함된다
+#### 시나리오 4. 시작 경로 자체가 결과에 포함된다
 
 예:
 
@@ -736,7 +736,7 @@ find /backup2 -mindepth 1 -newermt '2026-07-05'
 find /backup2 -mindepth 1 -type f -newermt '2026-07-05'
 ```
 
-#### 🚨 시나리오 5. `-nouser -o -nogroup` 결과가 예상과 다르다
+#### 시나리오 5. `-nouser -o -nogroup` 결과가 예상과 다르다
 
 괄호로 OR 범위를 묶는다.
 
@@ -750,7 +750,7 @@ find /home \( -nouser -o -nogroup \) -print
 find /home -type f \( -nouser -o -nogroup \) -print
 ```
 
-#### 🚨 시나리오 6. `-delete`와 `-prune`을 함께 사용했는데 제외가 되지 않는다
+#### 시나리오 6. `-delete`와 `-prune`을 함께 사용했는데 제외가 되지 않는다
 
 `-delete`는 깊이 우선 순회와 관련된 동작 때문에 `-prune`과 예상대로 조합되지 않을 수 있다.
 
@@ -770,7 +770,7 @@ find /data \
   -o -type f -name '*.tmp' -exec rm -f -- {} +
 ```
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - 기본 문법: `find 경로 조건 액션`
 > - 이름 패턴: 반드시 따옴표 사용
 > - `-newer`: 생성 시간이 아닌 수정 시간 비교

@@ -1,11 +1,11 @@
-# ⚡ Samba·NFS 퀵 레퍼런스
+# Samba·NFS 퀵 레퍼런스
 
 > **Tag:** #Linux #QuickReference #Samba #NFS #Cheatsheet #Command  
 > **핵심 요약:** Samba와 NFS 구축·점검에 필요한 명령을 한 페이지로 모은 참조 문서이다. 설치, 설정 파일, 서비스 제어, 방화벽, 마운트, 확인 명령을 목적별로 정리했으며 각 명령의 핵심 옵션과 대표 출력 형태를 함께 담았다. 실습 중 명령이 기억나지 않을 때 이 문서만 열어 바로 찾을 수 있도록 구성했다.
 
 ---
 
-## 1. 📦 설치
+## 1. 설치
 
 ```bash
 dnf install -y samba samba-client samba-common samba-winbind   # Samba 서버·클라이언트
@@ -26,7 +26,7 @@ rpm -qa | grep cifs-utils
 
 ---
 
-## 2. 🐧 Samba 명령
+## 2. Samba 명령
 
 ### 2-1. 계정 관리
 
@@ -113,7 +113,7 @@ ipconfig                                   # IP 확인
 
 ---
 
-## 3. 📡 NFS 명령
+## 3. NFS 명령
 
 ### 3-1. exports 설정
 
@@ -176,7 +176,7 @@ fuser -mv /NFSC                            # 사용 중 프로세스
 
 ---
 
-## 4. 🔥 방화벽 (firewalld)
+## 4. 방화벽 (firewalld)
 
 ```bash
 # Samba
@@ -215,7 +215,7 @@ firewall-cmd --reload
 
 ---
 
-## 5. 🔐 SELinux
+## 5. SELinux
 
 ```bash
 getenforce                                 # 현재 모드
@@ -237,7 +237,7 @@ ausearch -m avc -ts recent                 # 거부 로그 확인
 
 ---
 
-## 6. 💾 fstab 항목 모음
+## 6. fstab 항목 모음
 
 ```text
 # CIFS (Samba)
@@ -264,7 +264,7 @@ findmnt /NFSC
 
 ---
 
-## 7. 🔢 포트 요약
+## 7. 포트 요약
 
 | 서비스 | 포트 | 용도 |
 |---|---|---|
@@ -278,7 +278,7 @@ findmnt /NFSC
 
 ---
 
-## 8. 🔤 권한·옵션 요약
+## 8. 권한·옵션 요약
 
 ```text
 [Samba smb.conf]
@@ -299,10 +299,10 @@ chmod 1777 → 소유자만 삭제(Sticky Bit, drwxrwxrwt)
 chmod 2770 → Set-GID, 그룹 소유권 상속
 ```
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - Samba 반영은 `testparm` → `systemctl restart smb nmb`
 > - NFS 반영은 `exportfs -ra` → `exportfs -v` → `showmount -e`
 > - 방화벽은 항상 `--permanent` + `--reload`
 > - CIFS 마운트에는 `cifs-utils`, 한글에는 `iocharset=utf8`
 > - fstab 수정 후 `findmnt --verify`로 검증
-> - 관련: 📚 종합정리 Samba & NFS · 🚨 Samba·NFS 트러블슈팅 치트시트
+> - 관련:  종합정리 Samba & NFS ·  Samba·NFS 트러블슈팅 치트시트

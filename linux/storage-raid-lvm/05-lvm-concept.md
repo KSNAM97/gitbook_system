@@ -1,11 +1,11 @@
-# 🧱 LVM 개념 & 구조 (PV·VG·LV·PE)
+# LVM 개념 & 구조 (PV·VG·LV·PE)
 
 > **Tag:** #Linux #LVM #PV #VG #LV #PE #Storage #Flexibility
 > **핵심 요약:** LVM(Logical Volume Manager)은 여러 물리 디스크·파티션을 하나의 큰 저장 공간(VG)으로 묶고, 그 안에서 원하는 크기로 논리 볼륨(LV)을 나눠 쓰는 유연한 저장소 관리 기술이다. 구성 단위는 물리 볼륨(PV), 볼륨 그룹(VG), 논리 볼륨(LV)이며 할당 최소 단위는 PE(Physical Extent)이다. 데이터 이동 없이 용량을 확장·축소할 수 있지만, LVM 단독으로는 RAID 같은 결함 허용을 제공하지 않는다.
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 일반 파티션은 크기가 고정되어 사용 중에 유연하게 조정하기 어렵습니다. LVM은 여러 물리 디스크(또는 파티션)를 **하나의 큰 저장 공간처럼 묶어** 관리하거나, 반대로 큰 공간을 **논리적으로 여러 개로 나눠** 쓸 수 있게 해주는 기술입니다. 핵심은 **데이터 이동 없이 볼륨 크기를 늘리거나 줄일 수 있다**는 점입니다.
 
@@ -56,7 +56,7 @@ LVM 구성 절차는 다음과 같습니다.
 
 ---
 
-## 2. 🛠️ 표준 확인 (Configuration)
+## 2. 표준 확인 (Configuration)
 
 > **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
 
@@ -90,7 +90,7 @@ VG 관련 값에서 `#PV`는 VG에 포함된 PV 개수, `#LV`는 생성된 LV �
 
 ---
 
-## 3. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 3. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 ### 3-1. 계층별 상태 점검
 
@@ -111,12 +111,12 @@ LVM을 제거할 때는 생성 순서의 역순으로 진행합니다.
 LV 삭제(lvremove) → VG 삭제(vgremove) → PV 삭제(pvremove)
 ```
 
-> **주의:** ⚠️ LVM 계층은 위에서 아래(LV→VG→PV) 순으로 삭제해야 안전합니다. 하위 계층부터 지우면 참조 오류가 발생할 수 있습니다.
+> **주의:**  LVM 계층은 위에서 아래(LV→VG→PV) 순으로 삭제해야 안전합니다. 하위 계층부터 지우면 참조 오류가 발생할 수 있습니다.
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - LVM은 PV → VG → LV 계층으로 유연한 용량 관리 제공
 > - PE는 할당 최소 단위(기본 4MB)
 > - 데이터 이동 없이 확장·축소 가능
 > - LVM 단독은 결함 허용을 제공하지 않음
 > - 삭제는 LV → VG → PV 역순
-> - 관련: 🏗️ 종합실습 RAID 5 + Spare 구성 & 장애 복구 · ⚙️ LVM 구성 & 확장·축소 (pvcreate·vgcreate·lvcreate) · 🏗️ 종합실습 LVM 구성 → 확장 → 축소
+> - 관련:  종합실습 RAID 5 + Spare 구성 & 장애 복구 ·  LVM 구성 & 확장·축소 (pvcreate·vgcreate·lvcreate) ·  종합실습 LVM 구성 → 확장 → 축소

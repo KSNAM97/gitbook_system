@@ -1,11 +1,11 @@
-# 🏗️ Kubernetes - 아키텍처 개요와 핵심 컴포넌트
+# Kubernetes - 아키텍처 개요와 핵심 컴포넌트
 
 > **Tag:** #Kubernetes #Architecture #ControlPlane #WorkerNode #부트캠프
 > **핵심 요약:** Control Plane과 Worker Node를 구성하는 핵심 컴포넌트(API Server, etcd, Scheduler, Controller Manager, kubelet, kube-proxy, Container Runtime)의 역할과 Pod 생성 전체 흐름(0단계~6단계) 정리
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 쿠버네티스 클러스터는 크게 **Control Plane(컨트롤 플레인)** 과 **Worker Node(워커 노드)** 로 나뉜다.
 
@@ -16,7 +16,7 @@
 
 ---
 
-## 2. 🏗️ 핵심 컴포넌트와 동작 흐름
+## 2. 핵심 컴포넌트와 동작 흐름
 
 ### 마스터(Control Plane) 컴포넌트
 
@@ -237,10 +237,10 @@ kubelet은 "이 Pod는 내가 실행해야 한다"는 사실을 확인한 뒤 �
 
 ---
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - 클러스터는 Control Plane(API Server, etcd, Scheduler, Controller Manager)과 Worker Node(kubelet, kube-proxy, Container Runtime)로 구성되며, 사용자는 원하는 상태(Desired State)만 선언하고 나머지는 쿠버네티스가 자동으로 조정한다
 > - API Server는 모든 요청이 반드시 거치는 단일 진입점이고, etcd는 클러스터의 모든 상태를 저장하는 Key-Value 저장소다
 > - kube-scheduler는 Pod를 어느 Node에 배치할지만 결정하고, kube-controller-manager는 현재 상태와 원하는 상태를 비교해 자동으로 조치한다
 > - kubelet은 자신의 Node에 배정된 Pod를 관리하며 Container Runtime(containerd 등)에 컨테이너 실행을 지시하고, kube-proxy는 Service 트래픽을 Pod로 전달하는 네트워크 규칙을 관리한다
 > - Pod 생성은 이미지 빌드/push(0단계) → 상태 선언(1) → API Server 접수(2) → Controller Manager 감시(3) → Pod 생성 요청(4) → Scheduler 노드 결정(5) → kubelet·컨테이너 런타임 실행(6)의 흐름으로 이루어진다
-> - 관련: 1. 🔧 Kubernetes - 설치 · 2. 📦 Kubernetes - Pod 생성 · 4. 📦 Kubernetes - Namespace
+> - 관련: 1.  Kubernetes - 설치 · 2.  Kubernetes - Pod 생성 · 4.  Kubernetes - Namespace

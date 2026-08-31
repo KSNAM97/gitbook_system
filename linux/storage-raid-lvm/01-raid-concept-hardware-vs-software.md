@@ -1,11 +1,11 @@
-# 🧩 RAID 개념 & Hardware vs Software RAID
+# RAID 개념 & Hardware vs Software RAID
 
 > **Tag:** #Linux #RAID #Storage #HardwareRAID #SoftwareRAID #mdadm #FaultTolerance
 > **핵심 요약:** RAID는 여러 개의 물리 디스크(HDD·SSD)를 하나의 논리 디스크처럼 묶어 성능 향상, 데이터 보호, 대용량 확보를 목적으로 하는 기술이다. 전용 컨트롤러가 연산을 처리하는 Hardware RAID와, 운영체제(Linux는 `mdadm`)가 연산을 처리하는 Software RAID로 나뉜다. 두 방식 모두 RAID 0·1·5·6 같은 레벨을 구성할 수 있지만 성능, 비용, 장애 처리 방식이 다르므로 환경에 맞게 선택한다.
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 RAID(Redundant Array of Inexpensive/Independent Disks)는 **여러 개의 물리 디스크를 하나의 논리적 디스크처럼 묶어** 사용하는 기술입니다. 목적은 크게 세 가지, **성능 향상 · 데이터 보호(중복 저장을 통한 결함 허용) · 대용량 저장공간 확보**이며, RAID 레벨에 따라 이 셋 중 어디에 중점을 두는지가 달라집니다.
 
@@ -53,7 +53,7 @@ Hardware RAID와 Software RAID를 비교하면, 연산 주체가 컨트롤러(Ha
 
 ---
 
-## 2. 🛠️ 표준 설정 템플릿 (Configuration)
+## 2. 표준 설정 템플릿 (Configuration)
 
 > **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
 
@@ -79,7 +79,7 @@ mdadm --detail --scan         # 조립된 RAID 요약 정보 확인
 
 ---
 
-## 3. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 3. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 ### 3-1. RAID 방식 선택 판단
 
@@ -102,12 +102,12 @@ mdadm --examine /dev/sdb1     # 디스크에 저장된 RAID 슈퍼블록 확인
 - 실습·구성 전에는 항상 `lsblk`, `fdisk -l`로 **대상 디스크가 맞는지** 먼저 확인합니다. 잘못된 디스크에 파티션·RAID를 구성하면 기존 데이터가 손상될 수 있습니다.
 - RAID는 데이터 **보호(중복)** 수단이지 백업이 아니므로, 중요 데이터는 RAID 구성과 무관하게 별도 백업을 유지합니다.
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - RAID는 여러 물리 디스크를 하나의 논리 디스크로 묶는 기술
 > - Hardware RAID는 전용 컨트롤러, Software RAID는 OS·CPU(`mdadm`)가 연산
 > - Linux Software RAID는 `mdadm`으로 구성
 > - RAID는 백업을 대체하지 않음
 > - RAID 레벨에 따라 성능·안정성·공간효율 균형이 다름
-> - 관련: 📊 RAID 레벨별 특징 (Linear·0·1·5·6) · ⚙️ mdadm 명령어 & RAID 관리 · 🚑 RAID·LVM 트러블슈팅 치트시트
+> - 관련:  RAID 레벨별 특징 (Linear·0·1·5·6) ·  mdadm 명령어 & RAID 관리 ·  RAID·LVM 트러블슈팅 치트시트
 
 ---

@@ -1,4 +1,4 @@
-# ⚡ HTML - 퀵 레퍼런스
+# HTML - 퀵 레퍼런스
 
 > **Tag:** #HTML #퀵레퍼런스 #치트시트 #레퍼런스 #부트캠프
 > **핵심 요약:** 코딩 중 바로 찾아보는 HTML 태그·속성 전체 패턴 모음으로, 기본 구조부터 텍스트·이미지·링크·입력 태그까지 한 곳에 정리했다.
@@ -253,23 +253,23 @@ H<sub>2</sub>O     <!-- 아랫 첨자 -->
 
 ---
 
-## 🔗 관련 문서
+## 관련 문서
 
-- 1. 🌐 HTML - HTML 기초와 기본구조
-- 2. 📝 HTML - 텍스트 표시 방법
-- 3. 🔤 HTML - 태그의 구분·인라인 텍스트 요소
-- 4. 🖼️ HTML - 이미지 태그
-- 5. 📦 HTML - 컨테이너 태그
-- 6. 🔗 HTML - 링크
-- 7. ⌨️ HTML - 입력태그
-- 8. 🧩 HTML - 통합 정리
-- 9. 🚑 HTML - 트러블슈팅 치트시트
+- 1.  HTML - HTML 기초와 기본구조
+- 2.  HTML - 텍스트 표시 방법
+- 3.  HTML - 태그의 구분·인라인 텍스트 요소
+- 4.  HTML - 이미지 태그
+- 5.  HTML - 컨테이너 태그
+- 6.  HTML - 링크
+- 7. ⌨ HTML - 입력태그
+- 8.  HTML - 통합 정리
+- 9.  HTML - 트러블슈팅 치트시트
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - 기본 구조: DOCTYPE → html → head(charset·viewport·title·CSS) → body → script
 > - 텍스트: h1~h6, p, br, hr, strong/b, em, u, s, mark, sup, sub
 > - 이미지: `<img src alt width>` — 너비만 지정하면 비율 유지
 > - 링크: `<a href target>` — `_blank`(새 탭), `#id`(앵커 링크)
 > - 입력: input type 전체·select·form (action/method)
 > - 특수문자: `&nbsp;`(공백), `&lt;`(<), `&gt;`(>), `&amp;`(&)
-> - 관련: 8. 🧩 HTML - 통합 정리 · 9. 🚑 HTML - 트러블슈팅 치트시트
+> - 관련: 8.  HTML - 통합 정리 · 9.  HTML - 트러블슈팅 치트시트

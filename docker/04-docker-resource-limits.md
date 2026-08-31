@@ -1,11 +1,11 @@
-# ⚡ Docker - 컨테이너 리소스 제한
+# Docker - 컨테이너 리소스 제한
 
 > **Tag:** #Docker #리소스제한 #메모리 #CPU #모니터링 #부트캠프
 > **핵심 요약:** 메모리/CPU 리소스 제한 옵션과 모니터링 방법 핵심 정리
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 컨테이너의 메모리는 `docker run` 시 `-m` 또는 `--memory` 옵션으로 제한한다. `-m` / `--memory`는 최대 메모리 사용량을 제한하고(`-m 512m`), `--memory-swap`은 메모리와 스왑을 합산하여 제한하며(`--memory-swap 1g`), `--memory-reservation`은 권고 수준의 소프트 제한을 걸고(`--memory-reservation 256m`), `--oom-kill-disable`은 OOM Killer를 비활성화한다(`--oom-kill-disable`).
 
@@ -89,10 +89,10 @@ docker events 로 oom 이벤트 확인 가능
 
 ---
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - 메모리: `-m 512m` / `--memory-swap` / `--memory-reservation` / `--oom-kill-disable`
 > - `--memory-swap == -m` → 스왑 사용 안 함, `--memory-swap -1` → 스왑 무제한
 > - CPU: `--cpus`(개수 제한) / `--cpuset-cpus`(코어 지정) / `-c`(가중치)
 > - 모니터링: `docker stats`(실시간) / `docker events`(이벤트 확인)
 > - 메모리 초과 시 Linux OOM Killer 발동 → `docker events`로 oom 이벤트 확인
-> - 관련: 3. 🔄 Docker - 컨테이너 사용하기 · 9. 🧩 Docker - 통합 정리 · 11. ⚡ Docker - 퀵 레퍼런스
+> - 관련: 3.  Docker - 컨테이너 사용하기 · 9.  Docker - 통합 정리 · 11.  Docker - 퀵 레퍼런스

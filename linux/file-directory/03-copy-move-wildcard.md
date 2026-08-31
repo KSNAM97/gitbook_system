@@ -1,11 +1,11 @@
-# 📋 복사·이동·와일드카드 (cp · mv · glob)
+# 복사·이동·와일드카드 (cp · mv · glob)
 
 > **Tag:** #Linux #cp #mv #Wildcard #Glob #Backup  
 > **핵심 요약:** `cp`는 원본을 유지한 채 복사하고, `mv`는 파일이나 디렉터리를 이동하거나 이름을 변경한다. 와일드카드 `*`, `?`는 셸이 명령 실행 전에 확장하므로 실행 전 결과를 확인해야 한다.
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 `cp`와 `mv`의 차이는 다음과 같다.
 
@@ -54,7 +54,7 @@ shopt -p nullglob failglob
 
 ---
 
-## 2. 🛠️ 표준 사용 템플릿 (Configuration)
+## 2. 표준 사용 템플릿 (Configuration)
 
 > **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
 
@@ -296,7 +296,7 @@ find /backup -mindepth 1 -maxdepth 1 -type f -name 'a*' -print
 
 ---
 
-## 3. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 3. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 ### 3-1. 필수 검증 명령어
 
@@ -312,7 +312,7 @@ printf '%s\n' <와일드카드>
 
 ### 3-2. 대표 트러블슈팅
 
-#### 🚨 시나리오 1. `cp: -r not specified; omitting directory`
+#### 시나리오 1. `cp: -r not specified; omitting directory`
 
 와일드카드에 디렉터리가 포함되었지만 재귀 옵션이 없기 때문이다.
 
@@ -333,7 +333,7 @@ find /etc -maxdepth 1 -type f -name 'a*' \
   -exec cp -t /backup/ -- {} +
 ```
 
-#### 🚨 시나리오 2. 복사할 때 덮어쓰기 질문이 반복된다
+#### 시나리오 2. 복사할 때 덮어쓰기 질문이 반복된다
 
 ```bash
 type cp
@@ -352,13 +352,13 @@ alias cp
 cp -Rf /etc/a* /backup/
 ```
 
-#### 🚨 시나리오 3. `cp /etc/skel/*`에서 `.bashrc`가 누락된다
+#### 시나리오 3. `cp /etc/skel/*`에서 `.bashrc`가 누락된다
 
 ```bash
 cp -a /etc/skel/. /home/newuser/
 ```
 
-#### 🚨 시나리오 4. `mv a old/` 실행 후 `a`가 사라졌다
+#### 시나리오 4. `mv a old/` 실행 후 `a`가 사라졌다
 
 `old`가 존재하지 않으면 `a`의 이름이 `old`로 변경될 수 있다.
 
@@ -367,7 +367,7 @@ mkdir -p /home/guest/work/old
 mv -t /home/guest/work/old/ /home/guest/work/a
 ```
 
-#### 🚨 시나리오 5. 일반 사용자로 이동했더니 `Permission denied`
+#### 시나리오 5. 일반 사용자로 이동했더니 `Permission denied`
 
 원본과 목적지의 상위 디렉터리 권한을 확인한다.
 
@@ -376,7 +376,7 @@ namei -l /backup/adjtime
 namei -l /soldesk/linux/rocky/
 ```
 
-#### 🚨 시나리오 6. `mv` 후 심볼릭 링크가 깨졌다
+#### 시나리오 6. `mv` 후 심볼릭 링크가 깨졌다
 
 ```bash
 find / -xtype l 2>/dev/null
@@ -389,7 +389,7 @@ readlink <링크>
 ln -sfn <새로운-대상> <링크-경로>
 ```
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - 기본 복사: `cp`
 > - 속성 보존: `cp -p`
 > - 디렉터리 백업: `cp -a`

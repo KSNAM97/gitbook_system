@@ -1,11 +1,11 @@
-# 👥 특수권한 Set-GID — 소유 그룹 자동 상속 (2XXX)
+# 특수권한 Set-GID — 소유 그룹 자동 상속 (2XXX)
 
 > **Tag:** #Linux #SetGID #SGID #GroupInheritance #Collaboration  
 > **핵심 요약:** Set-GID 디렉터리에서 새로 생성된 파일과 하위 디렉터리는 생성자의 기본 그룹이 아니라 상위 디렉터리의 소유 그룹을 상속한다. 다만 그룹 쓰기 권한까지 자동으로 보장하지 않으므로 `umask` 또는 기본 ACL을 함께 설계해야 한다.
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 **일반 디렉터리에서 파일을 생성하면?**
 
@@ -47,7 +47,7 @@ umask 0022 → 파일 644, 디렉터리 755
 
 `umask 0022`라면 새 파일의 그룹이 `teamA`여도 Group 권한이 `r--`이므로 다른 팀원이 수정하지 못한다.
 
-## 2. 🛠️ 표준 설정 템플릿 (Configuration)
+## 2. 표준 설정 템플릿 (Configuration)
 
 > **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
 
@@ -146,7 +146,7 @@ getfacl /homesol/sol_tmp1
 
 ---
 
-## 3. 🔍 검증 및 트러블슈팅
+## 3. 검증 및 트러블슈팅
 
 Set-GID 디렉터리 검색:
 
@@ -154,7 +154,7 @@ Set-GID 디렉터리 검색:
 find / -xdev -type d -perm -2000 -ls 2>/dev/null
 ```
 
-### 🚨 그룹은 상속됐는데 수정이 안 된다
+### 그룹은 상속됐는데 수정이 안 된다
 
 확인:
 
@@ -186,7 +186,7 @@ umask 0002
 
 또는 기본 ACL을 사용한다.
 
-### 🚨 Set-GID를 설정했는데 그룹이 상속되지 않는다
+### Set-GID를 설정했는데 그룹이 상속되지 않는다
 
 확인:
 
@@ -208,10 +208,10 @@ drwxrws---
 - 애플리케이션이 생성 후 소유권 변경
 - 컨테이너 UID/GID 매핑
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - Set-GID 숫자: `2XXX`
 > - 디렉터리 Group의 `x` 자리에 `s`
 > - 팀 공유 디렉터리: `2770`
 > - 타인 파일 삭제도 막으려면 `3770`
 > - 공동 수정에는 `umask 0002` 또는 기본 ACL 검토
-> - 관련: 6-5. 🎭  Umask — 기본 권한 마스크 (User Mask) · 6-7. 📌 특수권한 Sticky-bit — 공유 디렉터리 삭제 방지 (1XXX)
+> - 관련: 6-5.   Umask — 기본 권한 마스크 (User Mask) · 6-7.  특수권한 Sticky-bit — 공유 디렉터리 삭제 방지 (1XXX)

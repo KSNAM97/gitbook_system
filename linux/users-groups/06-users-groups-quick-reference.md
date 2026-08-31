@@ -1,11 +1,11 @@
-# ⚡ 사용자·그룹·권한 명령어 퀵 레퍼런스
+# 사용자·그룹·권한 명령어 퀵 레퍼런스
 
 > **Tag:** #Linux #QuickReference #useradd #usermod #passwd #group #sudo #CheatSheet  
 > **핵심 요약:** useradd·usermod·userdel·passwd·group·su·sudo 문법을 빠르게 조회하는 암기 카드. 이해가 아니라 "조회·복붙"이 목적.
 
 ---
 
-## 1. 🛠️ 명령어 문법 (Configuration)
+## 1. 명령어 문법 (Configuration)
 
 ### 1. useradd (계정 생성)
 
@@ -85,14 +85,14 @@ visudo -c                                # sudoers 전체 문법 검사
 
 ---
 
-## 2. 🔢 빠른 조회표 (Configuration)
+## 2. 빠른 조회표 (Configuration)
 
 ### 1. `/etc/passwd` 7필드
 
 ```properties
 계정명 : x : UID : GID : Comment : 홈디렉터리 : 로그인셸
 guest  : x :1000 :1000 : guest   : /home/guest : /bin/bash
-#  ①      ②   ③     ④      ⑤          ⑥            ⑦
+# ① ② ③ ④ ⑤ ⑥ ⑦
 ```
 
 ### 2. `passwd -S` 상태값
@@ -125,7 +125,7 @@ guest  : x :1000 :1000 : guest   : /home/guest : /bin/bash
 
 ---
 
-## 3. 🔍 검증 명령어 모음 (Verification)
+## 3. 검증 명령어 모음 (Verification)
 
 ```bash
 id <user>                               # UID·GID·보조 그룹 확인
@@ -141,7 +141,7 @@ awk -F: '$3==0 {print $1}' /etc/passwd  # UID 0을 사용하는 계정 감사
 find / -xdev -uid <UID> -ls 2>/dev/null # 특정 UID 소유 파일 검색
 ```
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - 생성: `useradd -m -d`
 > - 수정: `usermod -aG`
 > - 삭제: `userdel -r`
@@ -149,4 +149,4 @@ find / -xdev -uid <UID> -ls 2>/dev/null # 특정 UID 소유 파일 검색
 > - Primary Group: `-g`
 > - Secondary Group 추가: `-aG`
 > - sudoers는 `visudo`로 편집
-> - 관련: 5-1. 👤 리눅스 사용자 계정 관리 (useradd & usermod & userdel) · 5-2. 👥 리눅스 그룹 관리 & UPG 모델(groupadd &usermod & gpasswd) · 5-3. 🛡️ Root 접속 통제 & Sudo 권한 위임 · 5-7. 🏗️ 종합실습 부서별 계정·홈디렉터리·Skel 표준화 시나리오
+> - 관련: 5-1.  리눅스 사용자 계정 관리 (useradd & usermod & userdel) · 5-2.  리눅스 그룹 관리 & UPG 모델(groupadd &usermod & gpasswd) · 5-3.  Root 접속 통제 & Sudo 권한 위임 · 5-7.  종합실습 부서별 계정·홈디렉터리·Skel 표준화 시나리오

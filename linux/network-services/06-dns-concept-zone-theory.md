@@ -1,11 +1,11 @@
-# 🧭 DNS 개념 & Master Name Server·Zone 이론
+# DNS 개념 & Master Name Server·Zone 이론
 
 > **Tag:** #Linux #DNS #BIND #named #MasterNameServer #Zone #named.conf #ReverseDNS
 > **핵심 요약:** Master Name Server는 특정 도메인에 대한 최종 권한(Authoritative)을 가지고 Zone File을 직접 관리하는 DNS 서버로, A·NS·MX·CNAME 등의 레코드를 보유하고 질의에 공식 응답을 제공한다. Linux에서 DNS 서버 소프트웨어는 BIND이고 실행되는 데몬은 `named`이며, 전체 동작은 `/etc/named.conf`에서, 실제 레코드는 `/var/named/` 아래 Zone File에서 관리한다. 정방향(도메인→IP)은 A 레코드, 역방향(IP→도메인)은 PTR 레코드가 담당하며, 역방향 DNS는 메일 서버 신뢰성 검증과 로그 분석에 특히 중요하다.
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 Master Name Server는 해당 도메인에 대한 권한을 가진(Authoritative) DNS 서버 중 하나이며, Zone File(영역 파일)을 직접 관리한다. 즉 `example.com` 도메인의 IP 주소 매핑 정보(A, MX, NS, CNAME 등)를 직접 보유하며, DNS 질의가 들어오면 해당 도메인에 대한 공식적인 응답 정보를 제공한다. 다른 서버(Secondary Name Server)는 이 Master 서버로부터 데이터를 복제(Zone Transfer)받는다.
 
@@ -147,7 +147,7 @@ Failed password for 192.168.10.200
 
 ---
 
-## 2. 🛠️ 표준 설정 템플릿 (Configuration)
+## 2. 표준 설정 템플릿 (Configuration)
 
 > **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
 
@@ -327,7 +327,7 @@ vi /etc/resolv.conf
 
 ```text
 search localdomain
-#nameserver 192.168.10.2       # 기존(외부) DNS 주석 처리
+#nameserver 192.168.10.2 # 기존(외부) DNS 주석 처리
 nameserver 192.168.10.100      # 구축한 DNS 서버 지정
 ```
 
@@ -335,7 +335,7 @@ nameserver 192.168.10.100      # 구축한 DNS 서버 지정
 
 ---
 
-## 3. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 3. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 ### 3-1. 조회 테스트
 
@@ -358,7 +358,7 @@ Address: 192.168.10.100
 ```bash
 nslookup dns.google
 nslookup 8.8.8.8
-# 8.8.8.8.in-addr.arpa    name = dns.google.
+# 8.8.8.8.in-addr.arpa name = dns.google.
 ```
 
 ### 3-2. 실제 사이트로 연결될 때
@@ -380,25 +380,25 @@ ls -l /var/named/            # 파일 권한(root:named 640) 확인
 
 ### 3-4. 트러블슈팅 시나리오
 
-#### 🚨 시나리오 1. zone 로딩은 되는데 www.soldesk.com이 외부 사이트로 연결됨
+#### 시나리오 1. zone 로딩은 되는데 www.soldesk.com이 외부 사이트로 연결됨
 
 - **원인:** `/etc/resolv.conf`가 여전히 외부 DNS(192.168.10.2 등)를 가리키고 있음.
 - **해결:** `nameserver`를 구축한 DNS 서버(192.168.10.100)로 변경하고 재확인한다.
 
-#### 🚨 시나리오 2. 역방향 조회가 NXDOMAIN으로 실패
+#### 시나리오 2. 역방향 조회가 NXDOMAIN으로 실패
 
 - **원인 후보:** zone 이름의 옥텟 순서 오류, PTR 값 끝의 점(`.`) 누락.
 - **해결:** zone 이름을 네트워크 대역을 뒤집은 형태(`10.168.192.in-addr.arpa`)로 정확히 선언했는지, PTR 값 끝에 점이 있는지 확인한다.
 
-#### 🚨 시나리오 3. zone 파일 권한 오류로 named 기동 실패
+#### 시나리오 3. zone 파일 권한 오류로 named 기동 실패
 
 - **원인:** zone 파일 소유자·권한이 `root:named 640`이 아님.
 - **해결:** `chown root:named`, `chmod 640` 재적용 후 재시작.
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - Master는 zone 파일을 직접 관리하는 권한 서버, Secondary는 복제본, Caching은 zone 없이 캐시만 보유
 > - BIND는 소프트웨어, named는 데몬, `/var/named`는 데이터 경로
 > - SOA의 serial은 수정할 때마다 반드시 증가시켜야 함
 > - 정방향은 A, 역방향은 PTR 레코드, 메일 신뢰성(FCrDNS)에 필수
 > - zone 파일 작성 후 `named-checkzone`, 권한은 `root:named 640`
-> - 관련: 🌐 DHCP 개념 & 서버 구성 · 🏗️ 종합실습 DNS Master + Web + FTP 통합 구성 · 📄 Zone 파일 레코드 옵션 (TTL·SOA·A·AAAA)
+> - 관련:  DHCP 개념 & 서버 구성 ·  종합실습 DNS Master + Web + FTP 통합 구성 ·  Zone 파일 레코드 옵션 (TTL·SOA·A·AAAA)

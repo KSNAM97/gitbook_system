@@ -1,11 +1,11 @@
-# 🔑 DB - 제약조건 (PK · UNIQUE · FK)
+# DB - 제약조건 (PK · UNIQUE · FK)
 
 > **Tag:** #SQL #Constraint #PrimaryKey #UniqueKey #ForeignKey #제약조건 #데이터무결성
 > **핵심 요약:** 제약조건은 테이블에 잘못된·중복된·엉뚱한 데이터가 들어가지 않도록 DB가 자동으로 막아주는 안전장치다. `PRIMARY KEY`(대표 식별자), `UNIQUE`(중복 금지), `FOREIGN KEY`(타 테이블 참조)가 핵심 3종이며, 이를 올바르게 설계하면 DB가 데이터 일관성을 스스로 보장한다.
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 제약조건(Constraint)은 테이블에 들어가는 데이터를 규칙으로 관리하는 장치다. 잘못된 데이터·중복 데이터·참조 오류가 애플리케이션 레이어를 통과하더라도 DB가 마지막으로 걸러준다. 예를 들어 존재하지 않는 부서번호로 사원을 등록하면 안 되는 것은 **FOREIGN KEY**가 막아주고, 같은 사람을 두 번 저장하면 안 되는 것은 **PRIMARY KEY**/**UNIQUE**가 막아준다. 주민등록번호·학번처럼 절대 중복되면 안 되는 값은 **UNIQUE**로 보장한다. 제약조건 없이 설계하면 애플리케이션 버그 하나로 DB 전체가 오염될 수 있다. 제약조건의 종류에는 `PRIMARY KEY`, `UNIQUE`, `FOREIGN KEY`, `NOT NULL`, `CHECK`, `DEFAULT`가 있다.
 
@@ -17,7 +17,7 @@ FOREIGN KEY(외래키)는 다른 테이블의 PRIMARY KEY(또는 UNIQUE 키)를 
 
 ---
 
-## 2. 🛠️ 표준 설정 템플릿 (Configuration)
+## 2. 표준 설정 템플릿 (Configuration)
 
 > **적용 환경:** MariaDB/MySQL 계열 RDBMS.
 
@@ -46,8 +46,8 @@ CREATE TABLE product (
 );
 ```
 
-> **참고:** ⚠️ 같은 `student_no`로 INSERT 시도 → `Duplicate entry` 오류
-> **참고:** ⚠️ `student_no = NULL` INSERT 시도 → `Column cannot be null` 오류
+> **참고:**  같은 `student_no`로 INSERT 시도 → `Duplicate entry` 오류
+> **참고:**  `student_no = NULL` INSERT 시도 → `Column cannot be null` 오류
 
 ### Step 2. UNIQUE 설정 예제
 
@@ -90,7 +90,7 @@ CREATE TABLE emp (
 );
 ```
 
-> **참고:** ⚠️ dept에 없는 deptno로 emp INSERT → `Cannot add or update a child row: a foreign key constraint fails` 오류
+> **참고:**  dept에 없는 deptno로 emp INSERT → `Cannot add or update a child row: a foreign key constraint fails` 오류
 
 ### Step 4. ON DELETE CASCADE (연쇄 삭제)
 
@@ -114,16 +114,16 @@ CREATE TABLE emp (
 
 | 제약조건 | 중복 | NULL | 테이블당 개수 | 주요 용도 |
 |---|---|---|---|---|
-| `PRIMARY KEY` | ❌ | ❌ | 1개 | 행의 대표 식별자 |
-| `UNIQUE` | ❌ | ✅ | 여러 개 | 이메일, 아이디, 주민번호 |
-| `FOREIGN KEY` | ✅ | ✅ | 여러 개 | 타 테이블 참조, 관계 표현 |
-| `NOT NULL` | ✅ | ❌ | 여러 개 | 필수 입력 컬럼 |
-| `DEFAULT` | ✅ | — | 여러 개 | 기본값 자동 설정 |
-| `CHECK` | ✅ | ✅ | 여러 개 | 값 범위 제한 |
+| `PRIMARY KEY` |  |  | 1개 | 행의 대표 식별자 |
+| `UNIQUE` |  |  | 여러 개 | 이메일, 아이디, 주민번호 |
+| `FOREIGN KEY` |  |  | 여러 개 | 타 테이블 참조, 관계 표현 |
+| `NOT NULL` |  |  | 여러 개 | 필수 입력 컬럼 |
+| `DEFAULT` |  | — | 여러 개 | 기본값 자동 설정 |
+| `CHECK` |  |  | 여러 개 | 값 범위 제한 |
 
 ---
 
-## 3. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 3. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 ### 3-1. 필수 검증 명령어
 
@@ -142,7 +142,7 @@ WHERE TABLE_SCHEMA = DATABASE();
 
 ### 3-2. 트러블슈팅 시나리오
 
-#### 🚨 시나리오 1. FK INSERT 오류 (자식 → 부모 없음)
+#### 시나리오 1. FK INSERT 오류 (자식 → 부모 없음)
 
 - **증상:** `INSERT INTO emp VALUES(9999, 'TEST', 99);` → FK 오류
 - **원인:** `dept.deptno = 99` 가 존재하지 않음
@@ -155,7 +155,7 @@ WHERE TABLE_SCHEMA = DATABASE();
   INSERT INTO emp VALUES(9999, 'TEST', 10);
   ```
 
-#### 🚨 시나리오 2. 부모 행 삭제 오류 (자식이 참조 중)
+#### 시나리오 2. 부모 행 삭제 오류 (자식이 참조 중)
 
 - **증상:** `DELETE FROM dept WHERE deptno = 10;` → FK 오류
 - **원인:** `emp.deptno = 10` 인 행이 존재 → 참조 무결성 위반
@@ -167,7 +167,7 @@ WHERE TABLE_SCHEMA = DATABASE();
   -- 또는 ON DELETE CASCADE 옵션 사용 (테이블 재생성 필요)
   ```
 
-#### 🚨 시나리오 3. UNIQUE 중복 오류
+#### 시나리오 3. UNIQUE 중복 오류
 
 - **증상:** `INSERT INTO member ... VALUES (..., 'user01', ...)` → 오류 (username이 이미 존재)
 - **원인:** UNIQUE 제약조건 위반
@@ -184,10 +184,10 @@ WHERE TABLE_SCHEMA = DATABASE();
 
 ---
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - 제약조건 = DB 레벨 안전장치. 애플리케이션이 놓친 것도 DB가 마지막에 차단
 > - `PRIMARY KEY`: 중복 불가 + NULL 불가 + 테이블당 1개 → 대표 식별자
 > - `UNIQUE`: 중복 불가 + NULL 허용 + 여러 개 가능 → 이메일, 아이디 등
 > - `FOREIGN KEY`: 부모 테이블 PK 참조 → 생성은 부모 먼저, 삭제는 자식 먼저
 > - `ON DELETE CASCADE`: 부모 삭제 시 자식도 함께 삭제되는 연쇄 옵션
-> - 관련: 🔧 DB - SQL 문법 (DDL·DML·DCL) · 📋 emp·dept 테이블 정의 및 데이터 · 🔗 DB - INNER JOIN 실습
+> - 관련:  DB - SQL 문법 (DDL·DML·DCL) ·  emp·dept 테이블 정의 및 데이터 ·  DB - INNER JOIN 실습

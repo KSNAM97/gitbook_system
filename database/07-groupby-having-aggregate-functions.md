@@ -1,11 +1,11 @@
-# 📊 DB - GROUP BY · HAVING · 집계함수
+# DB - GROUP BY · HAVING · 집계함수
 
 > **Tag:** #SQL #GROUPBY #HAVING #집계함수 #SUM #AVG #MAX #MIN #COUNT #서브쿼리
 > **핵심 요약:** GROUP BY는 동일한 값을 가진 행들을 그룹으로 묶어 **집계 함수(SUM·AVG·MAX·MIN·COUNT)** 를 그룹 단위로 계산하는 기능이다. HAVING은 WHERE와 달리 **그룹이 만들어진 후** 그룹 자체에 조건을 걸 수 있으며, 집계함수 조건은 반드시 HAVING에서 사용해야 한다.
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 GROUP BY가 필요한 이유는 데이터를 그룹 단위로 분석·비교하기 위해서다. 전체 평균이 아닌 "부서별 평균 급여", "직무별 최고 급여", "연도별 매출 합계"처럼 **기준별 통계**를 구하려면 GROUP BY가 필수다. GROUP BY 없이 `SUM(sal)`을 쓰면 전체 합계(행 1개)가 나오지만, `GROUP BY deptno` 후 `SUM(sal)`을 쓰면 부서별 합계(부서 개수만큼 행)가 나온다. SELECT 절에는 두 종류의 값만 올 수 있는데, `GROUP BY에 적은 컬럼` 또는 `집계함수(SUM·AVG·COUNT·MAX·MIN)`뿐이다. WHERE에는 집계함수를 사용할 수 없으므로 집계 결과에 조건을 걸려면 **HAVING**을 사용해야 한다.
 
@@ -19,7 +19,7 @@ HAVING 절에 서브쿼리를 사용하는 이유는 조건으로 사용할 값�
 
 ---
 
-## 2. 🛠️ 표준 설정 템플릿 (Configuration)
+## 2. 표준 설정 템플릿 (Configuration)
 
 > **적용 환경:** MariaDB/MySQL 계열 RDBMS.
 
@@ -108,7 +108,7 @@ GROUP BY deptno;
 -- AVG(sal)은 그룹이 만들어진 후 계산 → WHERE는 그룹 이전 단계 → 사용 불가
 SELECT deptno, AVG(sal)
 FROM emp
-WHERE AVG(sal) >= 2000   -- ❌ 오류
+WHERE AVG(sal) >= 2000   --  오류
 GROUP BY deptno;
 
 -- EX1) 부서별(deptno) 평균 급여가 2000 이상인 부서만 조회
@@ -232,7 +232,7 @@ HAVING AVG(sal) > (
 
 ---
 
-## 3. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 3. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 ### 3-1. 필수 검증 명령어
 
@@ -252,32 +252,32 @@ SELECT AVG(sal) FROM emp;
 
 ### 3-2. 트러블슈팅 시나리오
 
-#### 🚨 시나리오 1. WHERE에서 집계함수 사용 오류
+#### 시나리오 1. WHERE에서 집계함수 사용 오류
 
 - **증상:** `WHERE AVG(sal) >= 2000` → `Invalid use of group function` 오류
 - **원인:** WHERE는 그룹 생성 이전 단계 → 집계함수 실행 불가
 - **해결:** `HAVING AVG(sal) >= 2000` 으로 변경
 
-#### 🚨 시나리오 2. SELECT에 GROUP BY 컬럼 외 일반 컬럼 포함
+#### 시나리오 2. SELECT에 GROUP BY 컬럼 외 일반 컬럼 포함
 
 - **증상:** `SELECT deptno, ename, COUNT(*) FROM emp GROUP BY deptno;` → 오류 또는 예상 밖 결과
 - **원인:** `ename`은 GROUP BY에 없음 → 그룹 내 어떤 행의 ename을 출력할지 알 수 없음
 - **해결:** SELECT에는 `GROUP BY에 지정한 컬럼` 또는 `집계함수`만 사용
 
-#### 🚨 시나리오 3. HAVING vs WHERE 혼동
+#### 시나리오 3. HAVING vs WHERE 혼동
 
 - WHERE: 행 조건 (집계 이전), 개별 행 필터 → 집계함수 사용 불가
 - HAVING: 그룹 조건 (집계 이후), 그룹 필터 → 집계함수 사용 가능
 - 두 절 동시 사용 시 처리 순서: `WHERE(행 필터) → GROUP BY → HAVING(그룹 필터)`
 
-#### 🚨 시나리오 4. COUNT(*) vs COUNT(컬럼) 차이
+#### 시나리오 4. COUNT(*) vs COUNT(컬럼) 차이
 
 - `COUNT(*)`: NULL 포함 모든 행 개수
 - `COUNT(comm)`: comm 컬럼이 NULL이 아닌 행만 개수 (emp의 경우 SALESMAN만 comm이 있음)
 
 ---
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - GROUP BY = 동일 값 행들을 그룹화 → 집계함수로 그룹 단위 통계 계산
 > - 집계함수 5종: `SUM(합계)` · `AVG(평균)` · `MAX(최대)` · `MIN(최소)` · `COUNT(개수)`
 > - SELECT 제약: GROUP BY 지정 컬럼 + 집계함수만 사용 가능

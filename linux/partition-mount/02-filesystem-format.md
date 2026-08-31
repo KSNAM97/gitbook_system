@@ -1,11 +1,11 @@
-# 🗂️ 파일 시스템 & Format
+# 파일 시스템 & Format
 
 > **Tag:** #Linux #FileSystem #Format #mkfs #XFS #ext4 #Swap #Journaling  
 > **핵심 요약:** 파티션은 저장공간의 경계이고 파일시스템은 파일·디렉터리·권한·소유권·메타데이터를 저장하는 구조이다. `mkfs.xfs`, `mkfs.ext4`, `mkswap`은 기존 데이터를 파괴할 수 있으므로 실행 전 대상 장치, 마운트 여부, 기존 시그니처를 반드시 확인한다.
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 **파티션과 파일시스템의 차이는?**
 
@@ -183,7 +183,7 @@ mkfs 실행
 - 조직의 데이터 폐기 정책
 - 물리적 폐기 필요 여부
 
-## 2. 🛠️ 표준 설정 템플릿 (Configuration)
+## 2. 표준 설정 템플릿 (Configuration)
 
 > **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
 
@@ -480,7 +480,7 @@ blkid /dev/sdb1 /dev/sdb2 /dev/sdb5 /dev/sdb6 /dev/sdb7 /dev/sdb8
 
 ---
 
-## 3. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 3. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 ### 3-1. 포맷 결과 검증
 
@@ -604,11 +604,11 @@ fstab 예시:
 UUID=<filesystem-uuid>  /data  ext4  defaults  0 2
 ```
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - 파티션 생성 후 `mkfs`로 파일시스템 생성
 > - XFS: 온라인 확장 가능, 축소 불가
 > - ext4: 확장 가능, 축소는 일반적으로 오프라인
 > - Swap: `mkswap` → `swapon`
 > - 포맷과 `wipefs`는 보안 목적의 완전 삭제가 아님
 > - 포맷 전 `lsblk`, `findmnt`, `wipefs -n` 확인
-> - 관련: 8-1. 💽 디스크 타입 & 파티션 구조 · 8-3. 🔗 마운트 & umount · 8-4. ⚓ Automount
+> - 관련: 8-1.  디스크 타입 & 파티션 구조 · 8-3.  마운트 & umount · 8-4.  Automount

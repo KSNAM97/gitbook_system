@@ -1,11 +1,11 @@
-# 🌐 Kubernetes - 정규표현식 Ingress·Canary 배포
+# Kubernetes - 정규표현식 Ingress·Canary 배포
 
 > **Tag:** #Kubernetes #Ingress #Regex #Canary #부트캠프
 > **핵심 요약:** 정규표현식과 rewrite-target을 사용한 Ingress 구성, Canary Deployment 개념과 replicas 조정을 통한 점진적 배포 실습 정리
 
 ---
 
-## 1. 🔤 정규표현식 기반 Ingress (rewrite-target)
+## 1. 정규표현식 기반 Ingress (rewrite-target)
 
 `path: /login`처럼 접두사(Prefix)로만 매칭하면 `/login/login.html`처럼 하위 경로가 그대로 백엔드에 전달되어 파일 경로가 꼬일 수 있다. 이 문제를 해결하기 위해 정규표현식과 `rewrite-target` 애노테이션을 사용한 Ingress를 별도로 구성한다.
 
@@ -322,7 +322,7 @@ https://192.168.10.100:30366/
 
 ---
 
-## 2. 🐤 Canary Deployment (카나리 배포)
+## 2. Canary Deployment (카나리 배포)
 
 ### 개념
 
@@ -512,7 +512,7 @@ COPY index.html /usr/share/nginx/html/index.html
 -rw-r--r-- 1 root root  65  8월 25 12:42 Dockerfile
 -rw-r--r-- 1 root root 143  8월 25 12:38 index.html
 
-# Canary web1  이미지 생성
+# Canary web1 이미지 생성
 [root@k8s-master v1]# docker  build  -t  konan7979/canary-web:v1.0  .
 
 [root@k8s-master v1]# docker  images | grep canary
@@ -532,7 +532,7 @@ COPY index.html /usr/share/nginx/html/index.html
 
 [root@k8s-master v1]# cd /canary/v2
 
-# Canary web2  이미지 생성
+# Canary web2 이미지 생성
 [root@k8s-master v2]# docker build  -t konan7979/canary-web:v2.0  .
 
 [root@k8s-master v1]# docker  images | grep canary
@@ -946,7 +946,7 @@ deployment.apps/web-v2 scaled
 
 ---
 
-## 3. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 3. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 - `path: /login`처럼 `pathType: Prefix`만 사용하면 `/login/login.html`의 하위 경로 문자열이 그대로 백엔드로 전달되어 nginx 내부 파일 경로와 어긋날 수 있다. 하위 경로까지 깔끔하게 전달하려면 `nginx.ingress.kubernetes.io/use-regex: "true"`와 `rewrite-target: /$2`를 사용한 정규표현식 경로(`/login(/|$)(.*)`)로 전환한다.
 - 정규표현식 Ingress에서 그룹 번호(`$1`, `$2`)와 `rewrite-target`이 어긋나면 엉뚱한 경로가 백엔드로 전달된다. `path: /class(/|$)(.*)`처럼 그룹을 두 개(`(/|$)`, `(.*)`) 구성했다면 `rewrite-target`은 두 번째 그룹인 `/$2`를 가리켜야 한다.
@@ -956,9 +956,9 @@ deployment.apps/web-v2 scaled
 
 ---
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - `use-regex: "true"`와 `rewrite-target: /$2` 애노테이션을 사용하면 `/login(/|$)(.*)` 같은 정규표현식 경로로 하위 경로까지 정확히 백엔드로 rewrite해서 전달할 수 있다
 > - Canary Deployment는 새 버전을 전체가 아닌 일부 Pod(또는 일부 사용자)에만 먼저 배포해 안정성을 확인한 뒤 점진적으로 확대하는 배포 방식이다
 > - `app` 라벨은 공통, `version` 라벨은 구분하는 두 Deployment(web-v1/web-v2)를 같은 Service selector(`app`만 사용)로 묶으면 `--replicas` 조정만으로 트래픽 비율을 점진적으로 조절할 수 있다
 > - 문제가 발생하면 `kubectl scale deployment web-v2 --replicas=0`으로 즉시 신규 버전 트래픽을 차단해 빠르게 롤백할 수 있다
-> - 관련: 21. 🌐 Kubernetes - Ingress 기초와 준비 · 22. 🌐 Kubernetes - host·path 기반 Ingress · 18. 🔌 Kubernetes - Service 기초와 ClusterIP
+> - 관련: 21.  Kubernetes - Ingress 기초와 준비 · 22.  Kubernetes - host·path 기반 Ingress · 18.  Kubernetes - Service 기초와 ClusterIP

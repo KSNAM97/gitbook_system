@@ -1,11 +1,11 @@
-# 🌐 Kubernetes - ExternalName·Headless Service
+# Kubernetes - ExternalName·Headless Service
 
 > **Tag:** #Kubernetes #Service #ExternalName #Headless #StatefulSet #부트캠프
 > **핵심 요약:** 셀렉터 없이 외부 DNS를 Service 이름으로 매핑하는 ExternalName 타입과, ClusterIP 없이 Pod IP를 그대로 노출하는 Headless Service 타입을 StatefulSet 연동 실습까지 정리
 
 ---
 
-## 1. 🌐 ExternalName 실습
+## 1. ExternalName 실습
 
 - 외부 DNS 이름을 Service 이름으로 매핑한다.
 - 셀렉터(selector)를 사용하지 않는다. (Pod를 선택하지 않음)
@@ -179,7 +179,7 @@ No resources found in default namespace.
 
 ---
 
-## 2. 🕳️ Headless Service 실습
+## 2. Headless Service 실습
 
 Headless Service는 서비스 IP(ClusterIP)를 아예 만들지 않는 Service다.
 
@@ -660,7 +660,7 @@ web-sts-2   1/1        Running     0                 4m4s   10.244.1.10   k8s-wo
 
 ---
 
-## 3. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 3. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 - ExternalName Service는 Pod를 선택하지 않으므로 `kubectl describe svc`에 `Selector`, `Endpoints`가 나타나지 않는다. 대신 `TYPE`이 `ExternalName`이고 `EXTERNAL-IP` 자리에 매핑된 외부 도메인이 표시된다.
 - Headless Service(`clusterIP: None`)는 `kubectl get svc`의 `CLUSTER-IP` 컬럼이 `None`으로 표시되며, `nslookup`으로 조회 시 Service IP 대신 Pod IP 목록이 그대로 반환된다.
@@ -670,9 +670,9 @@ web-sts-2   1/1        Running     0                 4m4s   10.244.1.10   k8s-wo
 
 ---
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - **ExternalName**은 selector 없이 "Service 이름 → 외부 DNS 이름"을 CNAME으로 매핑하는 타입으로, 외부 DB·API·SaaS 연동에 사용한다
 > - ExternalName Service는 Pod를 전혀 선택하지 않으며, 클러스터 내부에서 Service 이름으로 조회하면 외부 도메인의 CNAME이 그대로 반환된다
 > - **Headless Service**(`clusterIP: None`)는 ClusterIP를 만들지 않고 DNS 조회 시 연결된 Pod들의 IP 목록을 그대로 반환하며, kube-proxy가 로드밸런싱에 개입하지 않는다
 > - Headless Service는 StatefulSet과 결합해 `<Pod이름>.<Service이름>` 형태의 고정 DNS로 개별 Pod에 직접 접근할 때 사용하며, DB 클러스터·Stateful 서비스처럼 특정 Pod로 반드시 접속해야 하는 경우에 적합하다
-> - 관련: 18. 🔌 Kubernetes - Service 기초와 ClusterIP · 2. 📦 Kubernetes - Pod 생성 · 10. 🎛️ Kubernetes - Controller 개념과 ReplicationController
+> - 관련: 18.  Kubernetes - Service 기초와 ClusterIP · 2.  Kubernetes - Pod 생성 · 10.  Kubernetes - Controller 개념과 ReplicationController

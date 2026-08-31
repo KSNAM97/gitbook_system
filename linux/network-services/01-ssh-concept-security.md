@@ -1,11 +1,11 @@
-# 🖥️ SSH 개념 & 프로세스·보안 설정 (Telnet·Daemon·sshd_config)
+# SSH 개념 & 프로세스·보안 설정 (Telnet·Daemon·sshd_config)
 
 > **Tag:** #Linux #SSH #Telnet #Process #Daemon #sshd_config #PermitRootLogin #Banner
 > **핵심 요약:** Telnet은 TCP 23번을 사용하는 평문 원격 접속 프로토콜로 현재는 사용이 금지되며, SSH는 TCP 22번을 사용해 암호화 통신과 키 기반 인증을 제공하는 원격 접속 표준이다. 프로그램은 디스크의 실행 파일, 프로세스는 메모리에서 실행 중인 상태이며, 데몬은 백그라운드에 상주하며 요청을 기다리는 프로세스로 이름에 보통 `d`가 붙는다. SSH 접속 정책은 `/etc/ssh/sshd_config`에서 `PermitRootLogin`·`Port`·`Banner`·`MaxAuthTries`·`LoginGraceTime`·`AllowUsers`·`AllowGroups`로 제어하며, 설정 변경 후에는 반드시 데몬을 재시작해야 반영된다.
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 Telnet은 TCP 23번 포트를 사용하는 원격 접속 프로토콜이다. GUI 기능은 없고 텍스트 기반 원격 터미널 접속만 가능하며, 평문(암호화 없음)으로 데이터를 송수신하기 때문에 패킷을 스니핑하면 계정·비밀번호·명령어가 그대로 노출된다. 보안이 취약해 보안 환경에서는 절대 사용하지 않는다.
 
@@ -65,7 +65,7 @@ AllowGroups sshGroup                   # sshGroup 소속만 허용
 
 ---
 
-## 2. 🛠️ 표준 설정 템플릿 (Configuration)
+## 2. 표준 설정 템플릿 (Configuration)
 
 > **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
 
@@ -263,7 +263,7 @@ sshGroup에 속하지 않은 guest는 접속이 거부되고, sshUser1은 정상
 
 ---
 
-## 3. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 3. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 ### 3-1. 필수 검증 명령어
 
@@ -278,12 +278,12 @@ journalctl -u sshd -n 50                    # 서비스 로그
 
 ### 3-2. 트러블슈팅 시나리오
 
-#### 🚨 시나리오 1. root 계정으로 SSH 접속이 안 됨
+#### 시나리오 1. root 계정으로 SSH 접속이 안 됨
 
 - **원인:** `PermitRootLogin no` 설정으로 root 직접 접속이 차단된 상태.
 - **해결:** 일반 계정으로 접속 후 `su -` 또는 `sudo`로 권한을 상승시킨다. root 직접 접속이 반드시 필요하면 `PermitRootLogin yes`로 되돌리되, 운영 서버에서는 권장하지 않는다.
 
-#### 🚨 시나리오 2. 포트를 2002로 바꿨는데 접속이 안 됨
+#### 시나리오 2. 포트를 2002로 바꿨는데 접속이 안 됨
 
 - **원인:** 데몬만 재시작하고 방화벽에서 2002번 포트를 열지 않음.
 - **해결 절차:**
@@ -296,22 +296,22 @@ firewall-cmd --reload
 sshd -t && systemctl restart sshd
 ```
 
-#### 🚨 시나리오 3. AllowUsers 설정 후 자기 자신도 접속이 안 됨
+#### 시나리오 3. AllowUsers 설정 후 자기 자신도 접속이 안 됨
 
 - **원인:** `AllowUsers`에 현재 사용 중인 계정을 포함시키지 않음.
 - **예방:** 원격에서 `AllowUsers`·`AllowGroups`를 설정할 때는 반드시 현재 계정을 포함시키고, 기존 세션을 열어둔 채 새 세션으로 접속을 검증한다.
 
-#### 🚨 시나리오 4. 배너를 설정했는데 출력되지 않음
+#### 시나리오 4. 배너를 설정했는데 출력되지 않음
 
 - **원인:** `vi`로 `Banner` 라인을 수정한 뒤 데몬을 재시작하지 않음.
 - **해결:** `systemctl restart sshd` 후 재접속하여 확인. 데몬은 설정 파일을 메모리에 캐시하므로 재시작 없이는 절대 반영되지 않는다.
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - Telnet(23)은 평문, SSH(22)는 암호화 원격 접속
 > - Daemon은 설정을 메모리에 유지하므로 변경 후 재시작 필수
 > - `PermitRootLogin no`로 root 직접 로그인 차단이 기본 원칙
 > - 포트 변경 시 방화벽 개방을 반드시 함께 처리
 > - `AllowUsers`·`AllowGroups`는 화이트리스트, 자기 계정 누락 주의
-> - 관련: 📤 SCP 파일 전송 (Linux·Windows) · 🔒 SFTP 파일 전송 · 🚨 트러블슈팅 치트시트 (SSH·vsFTP·SFTP·DHCP·DNS)
+> - 관련:  SCP 파일 전송 (Linux·Windows) ·  SFTP 파일 전송 ·  트러블슈팅 치트시트 (SSH·vsFTP·SFTP·DHCP·DNS)
 
 ---

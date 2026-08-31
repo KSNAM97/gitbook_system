@@ -1,11 +1,11 @@
-# 🏗️ 종합실습 LVM 구성 → 확장 → 축소
+# 종합실습 LVM 구성 → 확장 → 축소
 
 > **Tag:** #Linux #Lab #LVM #pvcreate #vgcreate #lvcreate #lvextend #lvreduce
 > **핵심 요약:** 두 개의 디스크를 LVM 파티션(8e)으로 만들어 PV·VG를 구성하고, VG 안에서 여러 LV를 나눠 ext4로 포맷·마운트·fstab 영구화까지 진행하는 종합 실습이다. 이후 새 디스크를 `vgextend`로 추가해 LV를 `lvextend` + `resize2fs`로 확장하고, ext4 LV를 안전한 순서로 축소하는 과정을 검증한다. XFS는 확장만 가능하고 축소가 불가능하다는 점을 함께 확인한다.
 
 ---
 
-## 1. 🎯 실습 목표 (Scenario)
+## 1. 실습 목표 (Scenario)
 
 ### 1-1. 요구사항
 
@@ -21,7 +21,7 @@ vg_project
 
 ---
 
-## 2. 🛠️ 단계별 실습 (Configuration)
+## 2. 단계별 실습 (Configuration)
 
 > **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
 
@@ -51,7 +51,7 @@ vi /etc/fstab                              # 이전 RAID·LVM 항목 삭제
 lsblk -f                                   # 초기화 결과 확인
 ```
 
-> ⚠️ `wipefs`는 데이터 접근을 파괴합니다. 실습용 빈 디스크가 맞는지 확인합니다.
+>  `wipefs`는 데이터 접근을 파괴합니다. 실습용 빈 디스크가 맞는지 확인합니다.
 
 ### STEP 1. LVM 파티션(8e) 생성 — EX1
 
@@ -198,7 +198,7 @@ lvextend -L +2G /dev/vg_project/lv_log
 xfs_growfs /LOG
 ```
 
-> ⚠️ XFS는 확장만 가능하고 축소는 지원하지 않는다.
+>  XFS는 확장만 가능하고 축소는 지원하지 않는다.
 
 ### STEP 10. LV 축소 (ext4 전용, 선택 실습)
 
@@ -219,11 +219,11 @@ lvs                                         # LV 크기 확인
 df -h | grep DATA                           # 실제 용량 확인
 ```
 
-> ⚠️ 축소 전 반드시 백업합니다. 파일시스템을 먼저 줄이지 않고 LV를 줄이면 데이터가 손상됩니다.
+>  축소 전 반드시 백업합니다. 파일시스템을 먼저 줄이지 않고 LV를 줄이면 데이터가 손상됩니다.
 
 ---
 
-## 3. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 3. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 ### 3-1. 계층별 최종 확인
 
@@ -255,7 +255,7 @@ vgextend vg_project /dev/sdX1
 
 ---
 
-## 4. ✅ 최종 체크리스트
+## 4. 최종 체크리스트
 
 ```text
 [ ] sdb·sdc·sdd 실습용 빈 디스크 확인
@@ -270,10 +270,10 @@ vgextend vg_project /dev/sdX1
 [ ] (선택) ext4 축소 순서 검증
 ```
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - 파티션(8e) → PV → VG → LV → 포맷 → 마운트 → fstab
 > - VG 확장은 pvcreate + vgextend
 > - LV 확장은 lvextend + resize2fs/xfs_growfs
 > - ext4 축소는 umount → e2fsck → resize2fs → lvreduce
 > - XFS는 축소 불가
-> - 관련: 🧱 LVM 개념 & 구조 (PV·VG·LV·PE) · ⚙️ LVM 구성 & 확장·축소 (pvcreate·vgcreate·lvcreate) · 🧩 RAID·LVM 통합 정리
+> - 관련:  LVM 개념 & 구조 (PV·VG·LV·PE) ·  LVM 구성 & 확장·축소 (pvcreate·vgcreate·lvcreate) ·  RAID·LVM 통합 정리

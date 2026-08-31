@@ -1,11 +1,11 @@
-# 🎛️ Kubernetes - Deployment
+# Kubernetes - Deployment
 
 > **Tag:** #Kubernetes #Deployment #RollingUpdate #ReplicaSet #부트캠프
 > **핵심 요약:** Deployment는 Pod 생성, 개수 유지, 무중단 업데이트(Rolling Update), 버전 관리, 롤백을 담당하는 컨트롤러이며, Rolling Update는 maxSurge/maxUnavailable 옵션으로 업데이트 중 여유/위험 수준을 조절한다.
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 Deployment는 Pod를 어떻게 만들고, 어떻게 업데이트하고, 문제가 생기면 어떻게 되돌릴지를 쿠버네티스에게 선언적으로 알려주는 컨트롤러다.
 
@@ -53,7 +53,7 @@ Deployment가 하는 핵심 역할은 5가지다.
 
 ---
 
-## 2. 📝 Deployment YAML 기본 예제
+## 2. Deployment YAML 기본 예제
 
 ```yaml
 apiVersion: apps/v1
@@ -137,7 +137,7 @@ Deployment는 이전 상태를 기록으로 남긴다. 그래서 최신 버전�
 
 ---
 
-## 3. 🔄 Rolling Update 개념
+## 3. Rolling Update 개념
 
 롤링 업데이트는 서비스를 멈추지 않고 기존 Pod를 새 Pod로 하나씩 교체하는 업데이트 방식이다. 즉, 전체 Pod를 한 번에 삭제하지 않는다.
 
@@ -197,7 +197,7 @@ Pod가 3개 있는 Deployment에서 이미지를 변경시 내부 동작:
 
 ---
 
-## 4. ⚙️ 롤링 업데이트 전략 옵션
+## 4. 롤링 업데이트 전략 옵션
 
 Deployment에는 롤링 업데이트 속도와 안정성을 조절하는 옵션이 있다. 대표 옵션 2가지는 `maxSurge`, `maxUnavailable`이다. 이 옵션들은 얼마나 여유 있게 업데이트할 것인가를 정한다.
 
@@ -296,7 +296,7 @@ new-pod-3 (v2)  서비스 중
 
 ---
 
-## 5. 🛠️ 실습 — Deployment 생성/확인/삭제
+## 5. 실습 — Deployment 생성/확인/삭제
 
 ```
 [root@k8s-master ~]# vi deploy-nginx.yaml
@@ -370,7 +370,7 @@ No resources found in default namespace.
 
 ---
 
-## 6. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 6. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 - `kubectl get deployments`의 READY가 목표값과 다르면 새 Pod가 아직 Ready 상태가 아니라는 뜻이므로 `kubectl get pods`와 `kubectl describe pods <이름>`으로 원인을 확인한다.
 - template(spec.template)이 바뀌지 않으면 롤링 업데이트가 발생하지 않는다 — 이미지/환경변수/포트/커맨드/볼륨 중 아무것도 안 바뀌면 새 ReplicaSet이 생성되지 않는다.
@@ -379,9 +379,9 @@ No resources found in default namespace.
 
 ---
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - Deployment = Pod 생성 + 개수 유지 + 무중단 업데이트 + 버전 관리 + 롤백을 담당하는 컨트롤러이며, 내부적으로 Deployment → ReplicaSet → Pod 구조를 가진다
 > - spec.template이 변경되면(이미지/환경변수/포트/커맨드/볼륨) 새로운 ReplicaSet이 생성되며 이것이 Rolling Update를 유발한다
 > - Rolling Update는 maxSurge(추가로 만들 수 있는 Pod 수)와 maxUnavailable(내려가도 되는 Pod 수)로 여유/위험 수준을 조절한다
 > - Recreate는 전체 Pod를 삭제 후 재생성해 서비스 중단이 발생하지만, RollingUpdate는 하나씩 교체해 서비스를 유지한다
-> - 관련: 13. 🔁 Kubernetes - Rollout·Rollback 실습 · 2. 📦 Kubernetes - Pod 생성
+> - 관련: 13.  Kubernetes - Rollout·Rollback 실습 · 2.  Kubernetes - Pod 생성

@@ -1,11 +1,11 @@
-# 💓 Kubernetes - livenessProbe
+# Kubernetes - livenessProbe
 
 > **Tag:** #Kubernetes #livenessProbe #SelfHealing #Probe #부트캠프
 > **핵심 요약:** livenessProbe(httpGet/tcpSocket/exec) 3가지 방식과 Self-healing Pod 동작 원리, 각 방식별 실습 정리
 
 ---
 
-## 1. 📖 livenessProbe와 Self-healing Pod
+## 1. livenessProbe와 Self-healing Pod
 
 ### livenessProbe란 무엇인가
 
@@ -78,7 +78,7 @@ Self-healing은 livenessProbe가 있어야만 가능하다.
 
 ---
 
-## 2. 🛠️ livenessProbe 메커니즘 — 3가지 방식과 실습
+## 2. livenessProbe 메커니즘 — 3가지 방식과 실습
 
 livenessProbe는 컨테이너가 정상적으로 살아있는지를 쿠버네티스가 주기적으로 확인하는 기능이다. 정상으로 판단되지 않으면 해당 컨테이너를 종료하고 다시 시작한다.
 
@@ -1095,7 +1095,7 @@ total 12
 
 ---
 
-## 3. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 3. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 - livenessProbe가 실패해서 컨테이너가 반복적으로 재시작될 때는 `kubectl describe pods <이름>`의 Events 섹션에서 `Unhealthy`, `Killing` 이벤트와 함께 실패 원인(HTTP status code, connection refused 등)을 확인한다.
 - exec probe나 컨테이너 내부 명령으로 강제 종료시킨 프로세스는 `command terminated with exit code 137`처럼 종료 코드 137(SIGKILL)로 표시되며, 이는 kubelet이 컨테이너를 강제 종료했다는 신호다.
@@ -1104,9 +1104,9 @@ total 12
 
 ---
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - livenessProbe는 컨테이너가 "살아있는가"를 kubelet이 주기적으로 확인하는 방식이며, httpGet(HTTP 200번대)·tcpSocket(TCP 연결 성공)·exec(명령어 exit code 0) 3가지 방식을 지원
 > - livenessProbe 실패 시 kubelet은 Pod 전체가 아니라 컨테이너만 재시작하며(Pod IP·이름 유지), 이것이 Self-healing Pod의 핵심 메커니즘
 > - readinessProbe(트래픽 차단)와 livenessProbe(컨테이너 재시작)는 질문과 결과가 다르다
 > - 주요 옵션: initialDelaySeconds(0초)·timeoutSeconds(1초)·periodSeconds(10초)·successThreshold(1)·failureThreshold(3)
-> - 관련: 6. 🧬 Kubernetes - Pod 구조와 생성·동작 흐름 · 9. 🔍 Kubernetes - Init Container·Static Pod · 10. 🎛️ Kubernetes - Controller 개념과 ReplicationController
+> - 관련: 6.  Kubernetes - Pod 구조와 생성·동작 흐름 · 9.  Kubernetes - Init Container·Static Pod · 10.  Kubernetes - Controller 개념과 ReplicationController

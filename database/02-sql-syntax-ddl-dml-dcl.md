@@ -1,11 +1,11 @@
-# 🔧 DB - SQL 문법 (DDL · DML · DCL)
+# DB - SQL 문법 (DDL · DML · DCL)
 
 > **Tag:** #SQL #DDL #DML #DCL #CREATE #ALTER #DROP #INSERT #SELECT #UPDATE #DELETE #GRANT #REVOKE #자료형 #제약조건
 > **핵심 요약:** SQL은 크게 구조를 정의하는 **DDL**, 데이터를 다루는 **DML**, 권한을 제어하는 **DCL** 세 종류로 나뉜다. DDL은 즉시 반영되어 롤백이 어렵고, DML은 COMMIT/ROLLBACK으로 되돌릴 수 있다. 테이블 설계 시 자료형과 제약조건을 올바르게 지정하는 것이 DB 품질의 핵심이다.
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 DDL(Data Definition Language)은 테이블·DB 등 **구조(그릇)**를 만드는 언어, DML(Data Manipulation Language)은 그 안의 **데이터(내용)**를 다루는 언어, DCL(Data Control Language)은 **접근 권한**을 관리하는 언어다. DDL은 실행 즉시 적용되고 ROLLBACK이 불가능하며 COMMIT 없이 바로 반영되어 개발·설계 단계에서 주로 사용된다. DML은 데이터 내용을 변경하며 COMMIT/ROLLBACK으로 복구가 가능해 실무에서 가장 많이 사용되는 CRUD 작업이다. DCL은 데이터 자체가 아니라 데이터 **사용 권한**을 제어하며 보안·사용자 관리·데이터 안정성 유지가 목적이다. DDL이 그릇을 만드는 언어라면, DML은 그 그릇 안의 음식을 다루는 언어라고 비유할 수 있다.
 
@@ -19,7 +19,7 @@ DCL은 DB 보안·사용자 관리·데이터 안정성 유지를 위해 **접�
 
 ---
 
-## 2. 🛠️ 표준 설정 템플릿 (Configuration)
+## 2. 표준 설정 템플릿 (Configuration)
 
 > **적용 환경:** MariaDB/MySQL 계열 RDBMS.
 
@@ -372,7 +372,7 @@ SHOW DATABASES;
 
 ---
 
-## 3. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 3. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 ### 3-1. 필수 검증 명령어
 
@@ -386,7 +386,7 @@ SELECT * FROM member LIMIT 5;      -- 데이터 샘플 확인
 
 ### 3-2. 트러블슈팅 시나리오
 
-#### 🚨 시나리오 1. `DROP TABLE` 실행 후 데이터가 사라짐
+#### 시나리오 1. `DROP TABLE` 실행 후 데이터가 사라짐
 
 - **증상:** 실수로 `DROP TABLE member;` 실행 → 테이블과 데이터 모두 삭제됨.
 - **원인:** DDL은 즉시 반영되며 ROLLBACK이 불가능.
@@ -394,7 +394,7 @@ SELECT * FROM member LIMIT 5;      -- 데이터 샘플 확인
   - 실무에서는 DROP 전 반드시 **백업** 실행.
   - 데이터만 삭제하려면 `DELETE FROM member;` 또는 `TRUNCATE TABLE member;` 사용.
 
-#### 🚨 시나리오 2. `ALTER TABLE MODIFY` 후 기존 데이터 손실
+#### 시나리오 2. `ALTER TABLE MODIFY` 후 기존 데이터 손실
 
 - **증상:** 컬럼 자료형 변경 시 기존 값이 잘려나가거나 오류 발생.
 - **원인:** 기존 데이터가 새 자료형과 호환되지 않음 (예: VARCHAR → INT, 값이 문자열인 경우).
@@ -402,7 +402,7 @@ SELECT * FROM member LIMIT 5;      -- 데이터 샘플 확인
   - 변경 전 `SELECT DISTINCT 컬럼명 FROM 테이블명;` 으로 실제 값 확인.
   - 새 컬럼 추가 → 데이터 이전 → 기존 컬럼 삭제 순으로 안전하게 진행.
 
-#### 🚨 시나리오 3. `CHECK` 제약조건이 동작하지 않음 (MariaDB)
+#### 시나리오 3. `CHECK` 제약조건이 동작하지 않음 (MariaDB)
 
 - **증상:** `age INT CHECK (age >= 18)` 설정 후 나이 5를 입력해도 오류 없이 저장됨.
 - **원인:** MariaDB 10.x 일부 버전에서 CHECK 구문은 파싱되지만 강제 적용되지 않음.
@@ -410,7 +410,7 @@ SELECT * FROM member LIMIT 5;      -- 데이터 샘플 확인
   - MariaDB 10.3.10+ 에서는 `CONSTRAINT` 이름 명시 시 적용되는 경우 있음.
   - 애플리케이션 레이어에서 별도 유효성 검사 로직 추가 권장.
 
-#### 🚨 시나리오 4. `AUTO_INCREMENT` 값이 TRUNCATE 후에도 초기화되지 않음
+#### 시나리오 4. `AUTO_INCREMENT` 값이 TRUNCATE 후에도 초기화되지 않음
 
 - **증상:** `DELETE FROM member;` 후 새로 데이터를 넣으면 id가 1부터 시작하지 않음.
 - **원인:** `DELETE`는 AUTO_INCREMENT 값을 초기화하지 않음.
@@ -423,9 +423,9 @@ SELECT * FROM member LIMIT 5;      -- 데이터 샘플 확인
 
 ---
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - DDL(구조) · DML(데이터) · DCL(권한) 세 종류 구분
 > - DDL은 즉시 반영·롤백 불가 → **실행 전 반드시 확인**
 > - 자료형: 돈 → `DECIMAL`, 일반 문자 → `VARCHAR`, 날짜시간 → `DATETIME`
 > - 제약조건: `PRIMARY KEY` > `NOT NULL` > `UNIQUE` > `DEFAULT` > `CHECK` 순으로 자주 사용
-> - 관련: 🗄️ DB - 데이터와 데이터베이스 기초 · 🔍 DB - SELECT·WHERE·ORDER BY·LIKE 실습 · 📋 emp·dept 테이블 정의 및 데이터
+> - 관련:  DB - 데이터와 데이터베이스 기초 ·  DB - SELECT·WHERE·ORDER BY·LIKE 실습 ·  emp·dept 테이블 정의 및 데이터

@@ -1,11 +1,11 @@
-# 📦 Kubernetes - Namespace
+# Kubernetes - Namespace
 
 > **Tag:** #Kubernetes #Namespace #kubectl #부트캠프
 > **핵심 요약:** namespace로 클러스터를 여러 가상 공간으로 나눠 리소스를 격리하는 방법, CLI/YAML로 namespace를 생성·삭제하는 방법, `kubectl config`로 base namespace를 전환하는 방법 정리
 
 ---
 
-## 1. 📦 namespace — 클러스터 안의 가상 공간
+## 1. namespace — 클러스터 안의 가상 공간
 
 namespace는 한 개의 쿠버네티스 클러스터를 여러 개의 가상의 공간으로 나눠서 리소스를 서로 섞이지 않게 관리하는 기능이다.
 
@@ -504,8 +504,8 @@ users:
 Context "soldesk@kubernetes" created.
 
 
-# kubectl  config		: kubectl 설정 파일 관리
-# set-context		: 새로운 context 생성 또는 수정
+# kubectl config : kubectl 설정 파일 관리
+# set-context : 새로운 context 생성 또는 수정
 # soldesk@kubernete	: 생성할 context 이름 (여러 context를 구분하기위한 이름)
 # --cluster=kubernetes	: 해당 context를 생성할 클러스터를 지정
 # --user=kubernetes-admin	: kubenetes를 접속시 사용할 계정 (현재 생성되어있는 계정을 그대로 사용)
@@ -1170,7 +1170,7 @@ nginx-custom-deploy-6ccb7f6479-tcgtx 	  1/1         Running     0               
 ---
 
 
-## 2. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 2. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 - namespace를 매번 `-n`으로 지정하기 번거로우면 `kubectl config set-context`로 context를 만들고 `kubectl config use-context`로 전환해 base namespace를 바꿔두면 이후 명령어가 해당 namespace를 기본 대상으로 삼는다. 다만 이 상태에서 `kubectl delete pods --all`처럼 `-n` 없이 실행하는 명령은 현재 context의 namespace에만 적용되므로 의도치 않은 namespace의 리소스가 삭제되지 않도록 현재 context를 항상 확인해야 한다.
 - `kubectl get pods --all-namespaces`(또는 `-A`)로 모든 namespace의 리소스를 한 번에 조회할 수 있으며, 특정 namespace의 리소스만 보려면 `-n <namespace>`를 명시해야 한다. namespace를 지정하지 않으면 현재 context의 base namespace(기본값 `default`)가 대상이 된다.
@@ -1178,10 +1178,10 @@ nginx-custom-deploy-6ccb7f6479-tcgtx 	  1/1         Running     0               
 
 ---
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - namespace는 하나의 클러스터를 여러 가상 공간으로 나눠 팀/서비스/환경별로 리소스를 분리하고, 같은 이름의 리소스도 서로 다른 namespace에 만들 수 있게 해준다
 > - Pod, Deployment, Service, ConfigMap, Secret 등은 namespace에 속하지만, Node, PersistentVolume, StorageClass, ClusterRole 등은 클러스터 전체 공용 리소스로 namespace에 속하지 않는다
 > - namespace는 `kubectl create namespace`(CLI) 또는 `kubectl create namespace --dry-run=client -o yaml`로 생성한 YAML을 `kubectl apply -f`/`kubectl create -f`로 적용하는 방식(YAML)으로 생성할 수 있다
 > - `kubectl create`는 이미 존재하면 에러가 나지만 `kubectl apply`는 없으면 생성하고 있으면 그대로 두는 멱등성을 가진다
 > - `kubectl config set-context`로 namespace가 포함된 context를 만들고 `kubectl config use-context`로 전환하면 매번 `-n` 옵션을 쓰지 않고도 해당 namespace를 기본 대상으로 사용할 수 있다
-> - 관련: 1. 🔧 Kubernetes - 설치 · 2. 📦 Kubernetes - Pod 생성 · 3. 🏗️ Kubernetes - 아키텍처 개요와 핵심 컴포넌트 · 5. 🎚️ Kubernetes - ResourceQuota·LimitRange
+> - 관련: 1.  Kubernetes - 설치 · 2.  Kubernetes - Pod 생성 · 3.  Kubernetes - 아키텍처 개요와 핵심 컴포넌트 · 5.  Kubernetes - ResourceQuota·LimitRange

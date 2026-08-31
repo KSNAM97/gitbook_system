@@ -1,11 +1,11 @@
-# 🚦 Kubernetes - readinessProbe
+# Kubernetes - readinessProbe
 
 > **Tag:** #Kubernetes #readinessProbe #Service #Probe #부트캠프
 > **핵심 요약:** readinessProbe(httpGet/exec/tcpSocket)로 Pod가 트래픽을 받을 준비가 되었는지 확인하고, 실패 시 컨테이너 재시작 없이 Service Endpoint에서만 제외하는 동작 원리와 실습 정리
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 Readiness Probe는 Pod가 현재 사용자 요청을 받을 준비가 되었는지 확인하는 기능이다. 컨테이너가 실행 중이라고 해서 항상 서비스를 제공할 준비가 된 것은 아니다.
 
@@ -99,7 +99,7 @@ web-pod3는 Label이 일치하더라도 Readiness 검사에 실패하면 정상 
 
 ---
 
-## 2. 🛠️ Readiness Probe 검사 방법
+## 2. Readiness Probe 검사 방법
 
 대표적으로 다음 방법을 사용한다.
 
@@ -146,7 +146,7 @@ readinessProbe:
 
 80번 포트에 연결할 수 있으면 성공한다.
 
-## 3. ⚙️ Readiness Probe 주요 옵션
+## 3. Readiness Probe 주요 옵션
 
 ```yaml
 readinessProbe:
@@ -166,7 +166,7 @@ readinessProbe:
 - **successThreshold** — 몇 번 연속 성공해야 정상으로 판단할지 설정
 - **failureThreshold** — 몇 번 연속 실패해야 비정상으로 판단할지 설정
 
-## 4. 🧪 EX1) HTTP Readiness Probe Deployment 생성
+## 4. EX1) HTTP Readiness Probe Deployment 생성
 
 **Deployment**
 
@@ -238,7 +238,7 @@ http://Pod-IP:80/
 성공하면 : READY 1/1
 ```
 
-## 5. 🧪 EX2) Service 생성
+## 5. EX2) Service 생성
 
 ClusterIP Service를 생성
 
@@ -306,7 +306,7 @@ readiness-service
         └── Pod3
 ```
 
-## 6. 🧪 EX3) Readiness Probe 실패 상태 만들기
+## 6. EX3) Readiness Probe 실패 상태 만들기
 
 현재 Readiness Probe는 다음 경로를 검사한다. `/`를 존재하지 않는 경로인 `/notfound`로 변경하여 Readiness Probe를 고의로 실패시키기.
 
@@ -422,7 +422,7 @@ readiness-deploy-7b4f58cd8b-bfrtd   	1/1        Running      0                7m
 
 ---
 
-## 7. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 7. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 - readinessProbe가 실패하면 `kubectl get pods`에서 `READY` 컬럼이 `0/1`로 표시되지만 `STATUS`는 여전히 `Running`으로 남는다 — livenessProbe 실패(재시작으로 RESTARTS 증가)와 구분되는 핵심 신호다.
 - `kubectl describe pods <이름>`의 Events에서 `Unhealthy` 이벤트와 함께 `Readiness probe failed: HTTP probe failed with statuscode: 404` 같은 실패 원인이 기록되므로, 원인 파악의 첫 단계로 사용한다.
@@ -432,9 +432,9 @@ readiness-deploy-7b4f58cd8b-bfrtd   	1/1        Running      0                7m
 
 ---
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - readinessProbe는 Pod가 트래픽을 받을 준비가 되었는지 확인하며, httpGet·exec·tcpSocket 3가지 검사 방식을 지원
 > - readinessProbe 실패 시 Pod와 컨테이너는 그대로 유지되고 Service Endpoint에서만 제외되어 트래픽만 차단된다(재시작 없음)
 > - livenessProbe(컨테이너 재시작)와 달리 readinessProbe는 "요청을 받아도 되는가?"를 묻고 실패해도 자동 복구되면 다시 Endpoint에 포함된다
 > - 주요 옵션: initialDelaySeconds·periodSeconds·timeoutSeconds·successThreshold·failureThreshold
-> - 관련: 7. 💓 Kubernetes - livenessProbe · 2. 📦 Kubernetes - Pod 생성 · 9. 🔍 Kubernetes - Init Container·Static Pod
+> - 관련: 7.  Kubernetes - livenessProbe · 2.  Kubernetes - Pod 생성 · 9.  Kubernetes - Init Container·Static Pod

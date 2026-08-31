@@ -1,11 +1,11 @@
-# 🐧 Linux Samba 서버 구축 (smbd·nmbd·smb.conf)
+# Linux Samba 서버 구축 (smbd·nmbd·smb.conf)
 
 > **Tag:** #Linux #Samba #smbd #nmbd #smbconf #smbpasswd #firewalld #SELinux  
 > **핵심 요약:** Linux Samba 서버는 파일 공유를 담당하는 `smbd`(TCP 445·139)와 NetBIOS 이름 해석을 담당하는 `nmbd`(UDP 137·138) 두 데몬으로 동작한다. 공유 디렉터리를 만들고 Linux 계정을 `smbpasswd -a`로 Samba 사용자 DB에 등록한 뒤, `/etc/samba/smb.conf`에 공유 섹션을 정의하고 방화벽에서 samba 서비스를 허용하면 Windows 탐색기에서 네트워크 드라이브로 연결할 수 있다. RHEL 계열에서는 SELinux 컨텍스트(`samba_share_t`) 설정이 필수적인 경우가 많다.
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 Samba는 크게 두 가지 데몬으로 동작한다.
 
@@ -54,7 +54,7 @@ smb.conf의 주요 옵션은 다음과 같다.
 
 ---
 
-## 2. 🛠️ 표준 설정 템플릿 (Configuration)
+## 2. 표준 설정 템플릿 (Configuration)
 
 > **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
 
@@ -214,7 +214,7 @@ net use                                    # 현재 연결 목록
 
 ---
 
-## 3. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 3. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 ### 3-1. 서버 측 자체 점검
 
@@ -244,10 +244,10 @@ journalctl -u nmb -n 50                    # nmbd 로그
 ls -l /var/log/samba/                      # Samba 로그 디렉터리
 ```
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - `smbd`는 파일 공유(445·139), `nmbd`는 이름 해석(137·138)
 > - Linux 계정 생성 → `smbpasswd -a`로 Samba DB 등록
 > - `smb.conf`에 공유 섹션 정의 후 `testparm`으로 검증
 > - 방화벽은 `--permanent --add-service=samba` + `--reload`
 > - RHEL 계열은 SELinux `samba_share_t` 설정 필수
-> - 관련: 🪟 Windows SMB 서버 & Linux CIFS 클라이언트 · 🏗️ 종합실습 Samba 공유 & 권한 제어 · 🚨 Samba·NFS 트러블슈팅 치트시트
+> - 관련:  Windows SMB 서버 & Linux CIFS 클라이언트 ·  종합실습 Samba 공유 & 권한 제어 ·  Samba·NFS 트러블슈팅 치트시트

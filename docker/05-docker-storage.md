@@ -1,11 +1,11 @@
-# 💾 Docker - 스토리지
+# Docker - 스토리지
 
 > **Tag:** #Docker #스토리지 #볼륨 #바인드마운트 #부트캠프
 > **핵심 요약:** 컨테이너 데이터 영구 보존을 위한 스토리지 구조와 Volume 사용법 핵심 정리
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 컨테이너 저장 구조는 세 가지 요소로 이루어진다. Image Layer(읽기 전용)는 Dockerfile로 만든 읽기 전용 레이어들이고, Container Write Layer는 컨테이너 실행 중 변경 사항을 저장하는 휘발성 레이어이며, Storage Driver는 여러 레이어를 하나의 파일시스템처럼 관리한다.
 
@@ -79,7 +79,7 @@ docker run -d --name web \
 
 ---
 
-## 2. 🛠️ 표준 설정 템플릿 (Configuration)
+## 2. 표준 설정 템플릿 (Configuration)
 
 > **적용 환경:** Docker Engine (Compose V2 내장) 설치 환경.
 
@@ -139,10 +139,10 @@ docker run -d --name web2 \
 
 ---
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - Container Write Layer: 휘발성 (컨테이너 삭제 시 함께 삭제)
 > - Docker Volume: 영구 보존 (삭제 명령 전까지 유지), 속도도 빠름
 > - Bind Mount: 호스트 경로 직접 연결 (`-v /host:/container`)
 > - `:ro` 옵션: 읽기 전용 마운트 — writer + web(ro) 패턴으로 역할 분리
 > - overlay2: 현재 Linux 표준 Storage Driver
-> - 관련: 3. 🔄 Docker - 컨테이너 사용하기 · 6. 🌐 Docker - 컨테이너 네트워크 · 8. 🔧 Docker - Docker Compose
+> - 관련: 3.  Docker - 컨테이너 사용하기 · 6.  Docker - 컨테이너 네트워크 · 8.  Docker - Docker Compose

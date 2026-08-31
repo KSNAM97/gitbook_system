@@ -1,11 +1,11 @@
-# 🚑 파일 압축·아카이브 트러블슈팅 치트시트
+# 파일 압축·아카이브 트러블슈팅 치트시트
 
 > **Tag:** #Linux #Compression #Archive #tar #gzip #bzip2 #xz #Troubleshooting #CheatSheet  
 > **핵심 요약:** 압축·아카이브 장애는 파일의 실제 형식, 원본 처리 상태, 압축 스트림 무결성, tar 내부 경로, 대상 디렉터리 권한과 디스크 공간 순서로 확인한다. 확장자만 믿지 말고 먼저 `file`과 `tar -t`로 검사한다.
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 **가장 먼저 확인할 것은?**
 
@@ -43,7 +43,7 @@ HTML document
 ASCII text
 ```
 
-## 2. 🛠️ 증상별 즉시 대응표 (Configuration)
+## 2. 증상별 즉시 대응표 (Configuration)
 
 ### 1. gzip·bzip2·xz
 
@@ -70,9 +70,9 @@ ASCII text
 
 ---
 
-## 3. 🔍 트러블슈팅 시나리오 (Verification & Troubleshooting)
+## 3. 트러블슈팅 시나리오 (Verification & Troubleshooting)
 
-### 🚨 시나리오 1. 압축 후 원본 파일이 사라졌다
+### 시나리오 1. 압축 후 원본 파일이 사라졌다
 
 실행:
 
@@ -114,7 +114,7 @@ gzip -c services > services.gz
 
 ---
 
-### 🚨 시나리오 2. `.tar` 파일이 풀리지 않는다
+### 시나리오 2. `.tar` 파일이 풀리지 않는다
 
 오류:
 
@@ -154,7 +154,7 @@ mv AWS_SOL.tar AWS_SOL.tar.bz2
 
 ---
 
-### 🚨 시나리오 3. `gzip: not in gzip format`
+### 시나리오 3. `gzip: not in gzip format`
 
 확인:
 
@@ -178,7 +178,7 @@ sha256sum download.gz
 
 ---
 
-### 🚨 시나리오 4. 다중 파일 압축 결과가 여러 개 생겼다
+### 시나리오 4. 다중 파일 압축 결과가 여러 개 생겼다
 
 ```bash
 gzip file1 file2 file3
@@ -200,7 +200,7 @@ tar -czvf files.tar.gz file1 file2 file3
 
 ---
 
-### 🚨 시나리오 5. 지정 위치에 추출되지 않았다
+### 시나리오 5. 지정 위치에 추출되지 않았다
 
 잘못된 예:
 
@@ -224,7 +224,7 @@ tar -xvf archive.tar -C /restore
 
 ---
 
-### 🚨 시나리오 6. 아카이브 내부 구조를 모른 채 추출했다
+### 시나리오 6. 아카이브 내부 구조를 모른 채 추출했다
 
 목록 확인:
 
@@ -254,7 +254,7 @@ find /tmp/archive-review -maxdepth 3 -ls
 
 ---
 
-### 🚨 시나리오 7. 추출 중 `No space left on device`
+### 시나리오 7. 추출 중 `No space left on device`
 
 공간 확인:
 
@@ -287,7 +287,7 @@ tar -tvf archive.tar.gz
 
 ---
 
-### 🚨 시나리오 8. `Permission denied`가 발생한다
+### 시나리오 8. `Permission denied`가 발생한다
 
 대상 디렉터리 확인:
 
@@ -312,7 +312,7 @@ findmnt -T /restore/path
 
 ---
 
-### 🚨 시나리오 9. 압축 파일이 손상되었다
+### 시나리오 9. 압축 파일이 손상되었다
 
 검사:
 
@@ -332,7 +332,7 @@ sha256sum -c file.sha256
 
 ---
 
-### 🚨 시나리오 10. 추출 시 기존 파일을 덮어쓰고 싶지 않다
+### 시나리오 10. 추출 시 기존 파일을 덮어쓰고 싶지 않다
 
 먼저 목록 확인:
 
@@ -357,7 +357,7 @@ tar --keep-old-files -xvf archive.tar -C /restore
 
 ---
 
-### 🚨 시나리오 11. 백업 중 `file changed as we read it`
+### 시나리오 11. 백업 중 `file changed as we read it`
 
 원본 파일이 tar 처리 중 변경되었다.
 
@@ -372,7 +372,7 @@ tar --keep-old-files -xvf archive.tar -C /restore
 
 ---
 
-### 🚨 시나리오 12. 공유 폴더의 아카이브를 다른 사용자가 삭제했다
+### 시나리오 12. 공유 폴더의 아카이브를 다른 사용자가 삭제했다
 
 공개 임시 공간:
 
@@ -398,7 +398,7 @@ chmod 3770 /shared
 
 ---
 
-## 4. 🔍 긴급 점검 명령 모음
+## 4. 긴급 점검 명령 모음
 
 ```bash
 ls -lh <파일>
@@ -419,11 +419,11 @@ namei -l <대상경로>
 findmnt -T <대상경로>
 ```
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - 확장자보다 `file` 결과를 신뢰
 > - 압축 후 원본이 없으면 기본 대체 동작 확인
 > - 압축 손상은 `-t`와 체크섬으로 검증
 > - 추출 전 `tar -t`
 > - 추출은 격리 디렉터리와 `-C`
 > - 공간 부족은 `df -h`, inode 부족은 `df -i`
-> - 관련: 7-1. 🗜️ 파일 압축 & 아카이브 — gzip · bzip2 · xz · tar · 7-2. 🧩 파일 압축·아카이브 통합 정리 · 7-4. ⚡ 파일 압축·아카이브 명령어 퀵 레퍼런스
+> - 관련: 7-1.  파일 압축 & 아카이브 — gzip · bzip2 · xz · tar · 7-2.  파일 압축·아카이브 통합 정리 · 7-4.  파일 압축·아카이브 명령어 퀵 레퍼런스

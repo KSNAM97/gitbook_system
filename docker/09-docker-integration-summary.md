@@ -1,11 +1,11 @@
-# 🧩 Docker - 통합 정리
+# Docker - 통합 정리
 
 > **Tag:** #Docker #통합정리 #요약 #부트캠프
 > **핵심 요약:** Docker 전체 개념 흐름 요약 및 핵심 비교표 모음
 
 ---
 
-## 1. 🎯 핵심 기술 개념 (Concept)
+## 1. 핵심 기술 개념 (Concept)
 
 ### Docker 전체 학습 흐름
 
@@ -77,19 +77,19 @@
 
 | 명령어 | 레이어 생성 | 역할 |
 |---|---|---|
-| FROM | ✅ | 베이스 이미지 |
-| RUN | ✅ | 빌드 시 명령 실행 |
-| COPY | ✅ | 파일 복사 |
-| ADD | ✅ | 파일 복사 + URL/압축 지원 |
+| FROM |  | 베이스 이미지 |
+| RUN |  | 빌드 시 명령 실행 |
+| COPY |  | 파일 복사 |
+| ADD |  | 파일 복사 + URL/압축 지원 |
 | WORKDIR | — | 작업 디렉터리 (레이어 영향 미미) |
 | ENV | — | 환경 변수 (레이어 영향 미미) |
-| EXPOSE | ❌ | 포트 문서화 |
-| VOLUME | ❌ | 마운트 포인트 |
-| USER | ❌ | 실행 사용자 |
-| CMD | ❌ | 기본 실행 명령 (덮어쓰기 가능) |
-| ENTRYPOINT | ❌ | 고정 실행 명령 |
-| HEALTHCHECK | ❌ | 상태 확인 |
-| LABEL | ❌ | 메타데이터 |
+| EXPOSE |  | 포트 문서화 |
+| VOLUME |  | 마운트 포인트 |
+| USER |  | 실행 사용자 |
+| CMD |  | 기본 실행 명령 (덮어쓰기 가능) |
+| ENTRYPOINT |  | 고정 실행 명령 |
+| HEALTHCHECK |  | 상태 확인 |
+| LABEL |  | 메타데이터 |
 
 > 소스에서 명시: "FROM, RUN, COPY, ADD 등이 새로운 레이어를 생성한다"
 
@@ -126,8 +126,8 @@ pull → create → start → pause ↔ unpause
 
 | 방식 | 설명 | DNS 지원 |
 |---|---|---|
-| 기본 bridge (docker0) | Docker 자동 생성, 172.17.x.x | ❌ |
-| User-Defined Bridge | 사용자 생성, DNS 자동 지원 | ✅ |
+| 기본 bridge (docker0) | Docker 자동 생성, 172.17.x.x |  |
+| User-Defined Bridge | 사용자 생성, DNS 자동 지원 |  |
 | host | 호스트 네트워크 직접 사용 | — |
 | none | 네트워크 없음 | — |
 
@@ -155,7 +155,7 @@ pull → create → start → pause ↔ unpause
 
 ---
 
-## 2. 🛠️ 표준 설정 템플릿 (Configuration)
+## 2. 표준 설정 템플릿 (Configuration)
 
 > **적용 환경:** Docker Engine (Compose V2 내장) 설치 환경.
 
@@ -171,10 +171,10 @@ sudo usermod -aG docker $USER
 
 ---
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - Docker = 컨테이너 기반 플랫폼: Image(템플릿) → Container(실행 인스턴스)
 > - 레이어 생성 명령: FROM / RUN / COPY / ADD → 이미지 크기에 영향
 > - 영구 데이터: Container Write Layer(휘발) vs Volume/Bind Mount(영구)
 > - 네트워크: 기본 bridge(이름 통신 불가) vs User-Defined(DNS 자동 지원)
 > - Docker Compose: 멀티 컨테이너를 단일 YAML로 관리, depends_on으로 순서 제어
-> - 관련: 1. 🐳 Docker - 도커와 컨테이너의 이해 · 8. 🔧 Docker - Docker Compose · 11. ⚡ Docker - 퀵 레퍼런스
+> - 관련: 1.  Docker - 도커와 컨테이너의 이해 · 8.  Docker - Docker Compose · 11.  Docker - 퀵 레퍼런스

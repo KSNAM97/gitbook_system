@@ -1,11 +1,11 @@
-# 🔗 파일 공유 개요 (NFS vs Samba/SMB)
+# 파일 공유 개요 (NFS vs Samba/SMB)
 
 > **Tag:** #Linux #NFS #Samba #SMB #CIFS #FileSharing #Storage  
 > **핵심 요약:** 네트워크 파일 공유의 대표 기술은 NFS와 Samba(SMB)이다. NFS는 Linux/Unix 계열끼리 파일시스템을 공유하는 데 최적화되어 있고, Samba는 Microsoft의 SMB 프로토콜을 Linux에서 사용할 수 있도록 구현한 소프트웨어 모음이다. Samba는 Linux↔Windows뿐 아니라 Linux↔Linux, Windows↔Windows 환경에서도 동작하지만, Linux 환경만 존재한다면 일반적으로 NFS를 더 많이 사용한다. 두 기술 모두 "디스크 공간(스토리지)"을 공유하는 것이지 메모리를 공유하는 것이 아니다.
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 NFS(Network File System)는 주로 Linux/Unix 시스템 사이에서 파일과 디렉터리를 공유하기 위해 사용하는 네트워크 파일 공유 기술이다. TCP/IP 네트워크를 통해 원격 서버의 디렉터리를 로컬 디렉터리처럼 마운트해서 사용하며, 다음과 같은 조합에서 쓰인다.
 
@@ -56,7 +56,7 @@ NFS는 UID/GID가 서버·클라이언트 간 일치해야 권한이 자연스�
 
 ---
 
-## 2. 🛠️ 표준 확인 (Configuration)
+## 2. 표준 확인 (Configuration)
 
 > **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
 
@@ -80,7 +80,7 @@ dnf install -y nfs-utils                                    # NFS 서버·클라
 
 ---
 
-## 3. 🔍 선택 기준 (Verification)
+## 3. 선택 기준 (Verification)
 
 ```text
 Linux 전용 환경, 대량 I/O, UID 통일 가능   → NFS
@@ -89,12 +89,12 @@ Windows 클라이언트 존재, 계정 인증 필요     → Samba(SMB)
 방화벽 단순화(포트 최소)                    → NFSv4 (2049 단일)
 ```
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - NFS는 Linux/Unix 중심, Samba는 SMB 프로토콜 구현체
 > - Samba는 Linux↔Windows 외 조합에서도 사용 가능
 > - Linux 전용 환경에서는 일반적으로 NFS 선호
 > - SMB1(CIFS)은 비활성화가 기본, 현행은 SMB2/SMB3
 > - 공유되는 자원은 메모리가 아니라 디스크 공간
-> - 관련: 🪟 Windows SMB 서버 & Linux CIFS 클라이언트 · 🐧 Linux Samba 서버 구축 · 📡 NFS 개념 & RPC 동작 원리
+> - 관련:  Windows SMB 서버 & Linux CIFS 클라이언트 ·  Linux Samba 서버 구축 ·  NFS 개념 & RPC 동작 원리
 
 ---

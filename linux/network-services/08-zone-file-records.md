@@ -1,11 +1,11 @@
-# 📄 Zone 파일 레코드 옵션 (TTL·SOA·NS·serial·A·AAAA)
+# Zone 파일 레코드 옵션 (TTL·SOA·NS·serial·A·AAAA)
 
 > **Tag:** #Linux #DNS #ZoneFile #TTL #SOA #NSRecord #ARecord #AAAA #serial
 > **핵심 요약:** Zone 파일 첫 줄의 `$TTL`은 다른 서버가 이 도메인 정보를 조회했을 때 결과를 캐시에 저장할 시간을 정하며, SOA는 zone 파일의 시작을 선언하고 serial·refresh·retry·expire·minimum 다섯 값으로 Secondary와의 동기화 정책을 정의한다. NS는 네임서버를, A는 IPv4 주소를, AAAA는 IPv6 주소를 매핑하며, 도메인 이름 끝의 점(`.`) 유무가 절대 이름과 상대 이름을 가르는 가장 흔한 실수 지점이다.
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 TTL은 zone 파일의 첫 번째 줄에 작성한다. 다른 서버가 이 도메인 정보를 조회했을 때, 그 결과를 자신의 캐시(Cache)에 얼마 동안 저장할지를 정하는 설정이다. 값을 따로 지정하지 않으면 86400초(24시간)가 기본값으로 적용된다.
 
@@ -54,7 +54,7 @@ www  IN  AAAA  2001:43A1:9900:D3::871C:671
 
 ---
 
-## 2. 🛠️ 표준 설정 템플릿 (Configuration)
+## 2. 표준 설정 템플릿 (Configuration)
 
 > **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
 
@@ -98,7 +98,7 @@ OK
 
 ---
 
-## 3. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 3. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 ### 3-1. 검증 명령어
 
@@ -110,24 +110,24 @@ dig www.soldesk.com AAAA                     # AAAA 레코드 확인
 
 ### 3-2. 트러블슈팅 시나리오
 
-#### 🚨 시나리오 1. zone 파일을 수정했는데 Secondary·클라이언트에 반영되지 않음
+#### 시나리오 1. zone 파일을 수정했는데 Secondary·클라이언트에 반영되지 않음
 
 - **원인:** serial 값을 증가시키지 않아 변경 사실이 전파되지 않음.
 - **해결:** serial을 증가시킨 뒤 `systemctl restart named` 또는 `rndc reload`로 재로딩한다.
 
-#### 🚨 시나리오 2. 이름이 이상하게 중복되어 조회됨
+#### 시나리오 2. 이름이 이상하게 중복되어 조회됨
 
 - **원인:** NS·A 레코드 값 끝의 점(`.`)을 누락해 상대 이름으로 해석됨.
 - **해결:** `ns.soldesk.com.`처럼 완전한 이름(FQDN)에는 반드시 마지막 점을 붙인다.
 
-#### 🚨 시나리오 3. TTL을 너무 길게 설정해 IP 변경이 늦게 반영됨
+#### 시나리오 3. TTL을 너무 길게 설정해 IP 변경이 늦게 반영됨
 
 - **원인:** `$TTL` 값이 크면 클라이언트·중간 DNS의 캐시가 오래 유지됨.
 - **해결:** 변경 예정 전에는 TTL을 짧게(예: 300초) 낮추고, 변경 완료 후 다시 원래 값으로 늘린다.
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - `$TTL`은 첫 줄에 위치, 캐시 유지 시간(기본 86400초)
 > - SOA의 serial·refresh·retry·expire·minimum이 Secondary 동기화 정책을 결정
 > - serial은 수정할 때마다 반드시 증가
 > - A는 IPv4, AAAA는 IPv6 매핑
-> - 관련: 🧭 DNS 개념 & Master Name Server·Zone 이론 · 🏗️ 종합실습 DNS Master + Web + FTP 통합 구성
+> - 관련:  DNS 개념 & Master Name Server·Zone 이론 ·  종합실습 DNS Master + Web + FTP 통합 구성

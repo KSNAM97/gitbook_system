@@ -1,11 +1,11 @@
-# 🌐 Kubernetes - host/path 기반 Ingress
+# Kubernetes - host/path 기반 Ingress
 
 > **Tag:** #Kubernetes #Ingress #hostPath #부트캠프
 > **핵심 요약:** host/path 기반 Ingress 실습 — 메인/커리큘럼/강좌/로그인 서비스를 순차적으로 추가하며 Ingress 라우팅 규칙과 롤링 업데이트를 구성
 
 ---
 
-## 1. 🔀 host/path 기반 Ingress 실습
+## 1. host/path 기반 Ingress 실습
 
 ### Deployment/Service YAML 확인
 
@@ -104,7 +104,7 @@ metadata:
 spec:
   ingressClassName: nginx		# nginx Ingress Controller 사용
   rules:
-#   -host: www.soldesk.com		# Domain이 있는경우 Domain 설정
+# -host: www.soldesk.com # Domain이 있는경우 Domain 설정
     - http:                        		# HTTP 요청에 대한 라우팅 규칙 설정
         paths:
           - path: /          		# / 로 들어오는 요청 처리 (: http://도메인/)
@@ -1037,7 +1037,7 @@ https://192.168.10.100:30366/login/login.html
 
 ---
 
-## 2. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 2. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 - Ingress를 생성해도 트래픽이 라우팅되지 않는다면, Ingress Controller(`ingress-nginx-controller`)가 정상적으로 떠 있는지 `kubectl get pods -n ingress-nginx`, `kubectl get svc -n ingress-nginx`로 먼저 확인한다. Ingress 리소스는 규칙 정의일 뿐, 실제 트래픽 처리는 Controller가 담당하기 때문이다.
 - `kubectl get ingress`의 `ADDRESS` 컬럼이 비어 있으면 아직 Ingress Controller가 규칙을 반영하지 않은 상태다. `kubectl describe ingress <이름>`의 `Rules`와 `Events`를 확인해 백엔드 Service·포트가 올바른지, `Sync` 이벤트가 발생했는지 점검한다.
@@ -1047,9 +1047,9 @@ https://192.168.10.100:30366/login/login.html
 
 ---
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - Ingress 규칙(`rules.http.paths`)의 `path`와 `pathType: Prefix`로 도메인/경로 조건을 정의하고, `backend.service`로 매칭된 요청을 전달할 Service를 지정한다
 > - 메인(`/`) → 커리큘럼(`/curriculum`) → 강좌(`/ban`) → 로그인(`/login`) 순서로 서비스를 추가할 때마다 Deployment/Service를 생성하고 Ingress `ingress.yaml`을 업데이트해 경로를 추가한다
 > - 화면 간 이동(버튼 링크)이 필요하면 HTML을 수정한 뒤 새 이미지 태그로 빌드·push하고 `kubectl set image`로 롤링 업데이트하며, `kubectl annotate ... change-cause`로 배포 이력을 남긴다
 > - `pathType: Prefix`만으로는 `/login/login.html` 같은 하위 경로가 그대로 백엔드에 전달되어 파일 경로가 꼬일 수 있어 정규표현식 기반 Ingress가 필요하다
-> - 관련: 21. 🌐 Kubernetes - Ingress 기초와 준비 · 23. 🌐 Kubernetes - 정규표현식 Ingress·Canary 배포 · 18. 🔌 Kubernetes - Service 기초와 ClusterIP
+> - 관련: 21.  Kubernetes - Ingress 기초와 준비 · 23.  Kubernetes - 정규표현식 Ingress·Canary 배포 · 18.  Kubernetes - Service 기초와 ClusterIP

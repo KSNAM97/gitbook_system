@@ -1,11 +1,11 @@
-# ⚙️ Kubernetes - ConfigMap
+# Kubernetes - ConfigMap
 
 > **Tag:** #Kubernetes #ConfigMap #환경변수 #Volume #부트캠프
 > **핵심 요약:** 애플리케이션의 민감하지 않은 설정값을 이미지와 분리해서 저장·관리하는 ConfigMap의 개념, 생성 방법, Pod에서 사용하는 두 가지 방식(환경변수/파일 Mount)을 실습으로 정리
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 ConfigMap은 애플리케이션에서 사용하는 설정값(Configuration)을 저장하는 Kubernetes 오브젝트이다.
 
@@ -174,7 +174,7 @@ volumeMounts:                  # Volume을 Container 내부에 연결(Mount)하�
 
 ---
 
-## 2. 🛠️ 실습
+## 2. 실습
 
 ### 1-1) ConfigMap 생성
 
@@ -897,7 +897,7 @@ Pod를 재시작하지 않아도 ConfigMap을 Volume으로 Mount한 경우 변�
 
 ---
 
-## 3. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 3. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 - ConfigMap을 환경변수(`env`/`envFrom`)로 주입한 경우, ConfigMap을 수정해도 이미 실행 중인 Pod의 환경변수는 즉시 반영되지 않는다. 새 값을 적용하려면 Pod를 재시작(재생성)해야 한다.
 - ConfigMap을 Volume으로 Mount한 경우, `kubectl edit configmaps <이름>`으로 수정하면 파일 내용이 일정 시간 내에 자동으로 갱신된다(symlink 방식으로 `..data`를 가리키기 때문).
@@ -907,9 +907,9 @@ Pod를 재시작하지 않아도 ConfigMap을 Volume으로 Mount한 경우 변�
 
 ---
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - ConfigMap은 민감하지 않은 설정값을 애플리케이션 이미지와 분리해서 저장하는 Kubernetes 오브젝트
 > - 생성 방법: `--from-literal`(명령어), `--from-file`(파일), YAML 직접 작성
 > - Pod에서 사용하는 방법 2가지: 환경변수(`env`/`envFrom`), 파일 Mount(`volumes`/`volumeMounts`)
 > - Volume으로 Mount한 ConfigMap은 수정 시 파일 내용이 자동 갱신되지만, 환경변수로 주입한 값은 Pod 재생성이 필요
-> - 관련: 30. 🔐 Kubernetes - Secret · 12. 🎛️ Kubernetes - Deployment · 5. 🎚️ Kubernetes - ResourceQuota·LimitRange
+> - 관련: 30.  Kubernetes - Secret · 12.  Kubernetes - Deployment · 5.  Kubernetes - ResourceQuota·LimitRange

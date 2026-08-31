@@ -1,11 +1,11 @@
-# 🔐 Kubernetes - Secret
+# Kubernetes - Secret
 
 > **Tag:** #Kubernetes #Secret #Base64 #환경변수 #Volume #MySQL #부트캠프
 > **핵심 요약:** 비밀번호, 토큰, 인증키 등 민감한 데이터를 Base64 인코딩된 형태로 저장·관리하는 Secret의 개념, 생성 방법, Pod에서 사용하는 방식(환경변수/파일 Mount)과 MySQL 연동 실습으로 정리
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 Secret은 비밀번호, 토큰, 인증키 등 민감한 데이터를 저장하기 위한 Kubernetes 오브젝트이다.
 
@@ -284,7 +284,7 @@ Secret 자체가 Volume은 아니다.
 
 ---
 
-## 2. 🛠️ 실습 1 — Secret 생성과 Deployment 환경변수 적용
+## 2. 실습 1 — Secret 생성과 Deployment 환경변수 적용
 
 ### STEP 1) 실습 디렉터리 생성
 
@@ -463,7 +463,7 @@ admin
 
 ---
 
-## 3. 🛠️ 실습 2 — Secret + MySQL 연동 실습
+## 3. 실습 2 — Secret + MySQL 연동 실습
 
 ```
 Secret  -->  Deployment  -->  Pod  -->  MySQL
@@ -748,7 +748,7 @@ mysql> SELECT * FROM member;
 
 ---
 
-## 4. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 4. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 - Secret의 `data` 값은 Base64로 인코딩되어 저장된다. Base64는 암호화가 아니라 단순 인코딩이므로 값을 알면 누구나 `base64 -d`로 원본을 복원할 수 있다. 접근 권한(RBAC)으로 Secret 조회 자체를 통제해야 실질적인 보안이 된다.
 - `kubectl get secret <이름> -o jsonpath='{.data.<KEY>}' | base64 -d`로 특정 Key의 원본 값을 빠르게 확인할 수 있다.
@@ -762,10 +762,10 @@ mysql> SELECT * FROM member;
 
 ---
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - Secret은 비밀번호, 토큰, 인증키 등 민감한 데이터를 저장하는 Kubernetes 오브젝트이며 ConfigMap과 달리 값이 기본적으로 Base64로 인코딩되어 저장된다(암호화 아님)
 > - 생성 방법: `--from-literal`(명령어), `--from-file`(파일), YAML 직접 작성(Base64 인코딩 필요)
 > - 대표 Type: Opaque(일반 Key-Value), kubernetes.io/tls(인증서), kubernetes.io/dockerconfigjson(레지스트리 인증)
 > - Pod에서 사용하는 방법: 환경변수(`env`의 `secretKeyRef` 또는 `envFrom`의 `secretRef`), 파일 Mount(`volumes`의 `secret`/`volumeMounts`)
 > - MySQL 등 DB Deployment의 접속 정보(ROOT_PASSWORD, USER, PASSWORD 등)를 Secret + `envFrom`으로 전달하는 것이 실전 패턴
-> - 관련: 29. ⚙️ Kubernetes - ConfigMap · 12. 🎛️ Kubernetes - Deployment · 2. 📦 Kubernetes - Pod 생성
+> - 관련: 29.  Kubernetes - ConfigMap · 12.  Kubernetes - Deployment · 2.  Kubernetes - Pod 생성

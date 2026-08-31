@@ -1,11 +1,11 @@
-# 🌐 Docker - 컨테이너 네트워크
+# Docker - 컨테이너 네트워크
 
 > **Tag:** #Docker #네트워크 #포트포워딩 #브릿지 #부트캠프
 > **핵심 요약:** 컨테이너 간 통신 구조와 포트 포워딩, 사용자 정의 네트워크 핵심 정리
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 Docker는 설치 시 `docker0` 가상 브릿지(virtual ethernet bridge)를 자동으로 생성한다. 기본 네트워크 구조는 다음과 같다.
 
@@ -97,7 +97,7 @@ curl http://db:3306
 
 ---
 
-## 3. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 3. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 ### 네트워크 구조 확인 실습 명령어
 
@@ -117,10 +117,10 @@ docker exec -it 컨테이너명 ip addr
 
 ---
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - Docker 설치 시 docker0(172.17.0.0/16) 가상 브릿지 자동 생성
 > - veth pair: 컨테이너 eth0 ↔ docker0 연결하는 가상 LAN 케이블 쌍
 > - 포트 포워딩: `-p 호스트:컨테이너` → iptables NAT 규칙 자동 생성
 > - 기본 bridge는 이름으로 통신 불가 → User-Defined Bridge는 내부 DNS 지원
 > - 같은 User-Defined 네트워크 내 컨테이너는 컨테이너 이름으로 직접 통신 가능
-> - 관련: 5. 💾 Docker - 스토리지 · 8. 🔧 Docker - Docker Compose · 10. 🚑 Docker - 트러블슈팅 치트시트
+> - 관련: 5.  Docker - 스토리지 · 8.  Docker - Docker Compose · 10.  Docker - 트러블슈팅 치트시트

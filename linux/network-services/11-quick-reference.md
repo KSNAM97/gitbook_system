@@ -1,11 +1,11 @@
-# ⚡ 퀵 레퍼런스 (SSH·SCP·SFTP·vsFTP·DHCP·DNS)
+# 퀵 레퍼런스 (SSH·SCP·SFTP·vsFTP·DHCP·DNS)
 
 > **Tag:** #Linux #QuickReference #Cheatsheet #SSH #SCP #SFTP #vsFTP #DHCP #DNS
 > **핵심 요약:** SSH·SCP·SFTP·vsFTP·DHCP·DNS 운영에 자주 쓰는 명령과 설정 항목을 한눈에 찾을 수 있도록 정리한 참조 문서다. 서비스 관리, 방화벽, 파일 전송, DNS 조회, 로그 확인 명령을 목적별로 묶었으며 옵션 혼동이 잦은 항목(포트 지정 대소문자, userlist_deny 반전 등)을 별도로 표시했다.
 
 ---
 
-## 1. 🔧 서비스 관리
+## 1. 서비스 관리
 
 ### 1-1. systemctl
 
@@ -30,7 +30,7 @@ dnf info 패키지                             # 정보 확인
 
 ---
 
-## 2. 🔥 방화벽 (firewalld)
+## 2. 방화벽 (firewalld)
 
 ```bash
 firewall-cmd --permanent --add-service=이름  # 서비스 허용
@@ -53,7 +53,7 @@ HTTP  : http, 80/tcp
 
 ---
 
-## 3. 🖥️ SSH
+## 3. SSH
 
 ### 3-1. 접속
 
@@ -89,7 +89,7 @@ tail -f /var/log/secure
 
 ---
 
-## 4. 📤 SCP
+## 4. SCP
 
 ```bash
 scp 계정@호스트:/원격/파일 /로컬/경로        # 다운로드
@@ -115,7 +115,7 @@ rsync -avz --progress /src/ 계정@호스트:/dst/
 
 ---
 
-## 5. 🔒 SFTP
+## 5. SFTP
 
 ```bash
 sftp 계정@호스트                            # 접속
@@ -136,7 +136,7 @@ exit / quit / bye    종료
 
 ---
 
-## 6. 📁 vsFTP
+## 6. vsFTP
 
 ### 6-1. 설정 항목
 
@@ -179,7 +179,7 @@ bye / quit          종료
 
 ---
 
-## 7. 🌐 DHCP
+## 7. DHCP
 
 ### 7-1. dhcpd.conf
 
@@ -222,7 +222,7 @@ ipconfig /renew                            # 재요청
 
 ---
 
-## 8. 🧭 DNS (BIND)
+## 8. DNS (BIND)
 
 ### 8-1. 설정 파일
 
@@ -286,7 +286,7 @@ chmod 640 /var/named/파일
 
 ---
 
-## 9. ⚠️ 혼동하기 쉬운 항목
+## 9. 혼동하기 쉬운 항목
 
 | 항목 | 정리 |
 |---|---|
@@ -301,10 +301,10 @@ chmod 640 /var/named/파일
 | 설정 반영 | 데몬 restart 또는 reload 필요 |
 | DHCP 서버 중복 | 한 네트워크에 하나만 유지 |
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - 서비스 관리는 `systemctl enable --now`로 시작+자동시작 동시 처리
 > - 방화벽은 서비스명과 포트를 함께 열고 `--reload` 필수
 > - 포트 지정은 ssh 소문자 p, scp·sftp 대문자 P
 > - DNS는 `named-checkconf`·`named-checkzone`으로 사전 검증
 > - SSH 설정은 `sshd -t` 후 재시작
-> - 관련: 📚 종합정리 네트워크 서비스 (SSH·SCP·SFTP·vsFTP·DHCP·DNS) · 🚨 트러블슈팅 치트시트 (SSH·vsFTP·SFTP·DHCP·DNS)
+> - 관련:  종합정리 네트워크 서비스 (SSH·SCP·SFTP·vsFTP·DHCP·DNS) ·  트러블슈팅 치트시트 (SSH·vsFTP·SFTP·DHCP·DNS)

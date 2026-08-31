@@ -1,11 +1,11 @@
-# 🏗️ 종합실습 DNS Master + Web + FTP 통합 구성
+# 종합실습 DNS Master + Web + FTP 통합 구성
 
 > **Tag:** #Linux #Lab #DNS #BIND #httpd #vsftpd #ZoneFile #PTR
 > **핵심 요약:** Server-A를 Master Name Server 겸 웹 서버로, Server-B를 FTP 서버로 구성해 `www.soldesk.com`은 웹 서버로, `ftp.soldesk.com`은 FTP 서버로 연결되도록 하는 통합 실습이다. httpd·vsftpd 설치와 방화벽 개방, zone 파일을 이용한 정방향·역방향 DNS 구성, 클라이언트 DNS 지정과 도메인 기반 접속 검증까지 전체 흐름을 다룬다. 실무 구조를 따라 `named.conf`와 `named.rfc1912.zones`, zone 파일을 분리해 관리한다.
 
 ---
 
-## 1. 🎯 실습 목표 (Scenario)
+## 1. 실습 목표 (Scenario)
 
 ### 1-1. 구성도
 
@@ -23,7 +23,7 @@ ns.soldesk.com   →  192.168.10.100 (DNS)
 
 ---
 
-## 2. 🛠️ 단계별 실습 (Configuration)
+## 2. 단계별 실습 (Configuration)
 
 > **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
 
@@ -119,7 +119,7 @@ FTP 기본 디렉터리 확인:
 
 ```bash
 ls -l /var/ftp
-# drwxr-xr-x 2 root root 6  pub    ← 익명 사용자 허용 시 접근 가능한 공용 디렉터리
+# drwxr-xr-x 2 root root 6 pub ← 익명 사용자 허용 시 접근 가능한 공용 디렉터리
 ```
 
 ---
@@ -316,7 +316,7 @@ vi /etc/resolv.conf
 
 ```text
 search localdomain
-#nameserver 192.168.10.2                   # 기존 외부 DNS 주석
+#nameserver 192.168.10.2 # 기존 외부 DNS 주석
 nameserver 192.168.10.100                  # 구축한 DNS 지정
 ```
 
@@ -332,7 +332,7 @@ nmcli con up ens160
 
 ---
 
-## 3. 🔍 통합 검증 (Verification)
+## 3. 통합 검증 (Verification)
 
 ### 3-1. 정방향·역방향 조회
 
@@ -403,7 +403,7 @@ ftp> pwd
 
 ---
 
-## 4. ✅ 최종 체크리스트
+## 4. 최종 체크리스트
 
 ```text
 [ ] Server-A: httpd 설치·기동·자동시작
@@ -427,19 +427,19 @@ ftp> pwd
 
 ---
 
-## 5. 🔍 트러블슈팅
+## 5. 트러블슈팅
 
-#### 🚨 시나리오 1. www.soldesk.com 접속 시 실제 외부 홈페이지로 이동됨
+#### 시나리오 1. www.soldesk.com 접속 시 실제 외부 홈페이지로 이동됨
 
 - **원인:** Client-L의 `/etc/resolv.conf`가 아직 외부 DNS(192.168.10.2)를 가리키고 있음.
 - **해결:** `nameserver`를 구축한 DNS 서버(192.168.10.100)로 변경한다.
 
-#### 🚨 시나리오 2. ftp.soldesk.com 접속은 되는데 브라우저로는 안 됨
+#### 시나리오 2. ftp.soldesk.com 접속은 되는데 브라우저로는 안 됨
 
 - **원인:** 대부분의 최신 브라우저가 `ftp://` 프로토콜 지원을 중단함.
 - **해결:** 명령행 `ftp` 클라이언트나 전용 FTP 도구를 사용한다.
 
-#### 🚨 시나리오 3. named 재시작 후 서비스가 죽음
+#### 시나리오 3. named 재시작 후 서비스가 죽음
 
 - **원인:** zone 파일 문법 오류 또는 named.conf/named.rfc1912.zones 문법 오류.
 - **해결:**
@@ -451,10 +451,10 @@ named-checkzone 10.168.192.in-addr.arpa /var/named/soldesk.com.rev
 journalctl -u named -n 50
 ```
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - Server-A는 DNS + Web, Server-B는 FTP로 역할 분리
 > - zone 선언은 named.rfc1912.zones, 데이터는 /var/named
 > - 정방향은 A, 역방향은 PTR 레코드
 > - 서비스별 방화벽 개방(80, 20·21, 53 tcp·udp) 필수
 > - 클라이언트 DNS 지정 후 도메인 기반 접속 검증
-> - 관련: 🧭 DNS 개념 & Master Name Server·Zone 이론 · 📁 vsFTP 설치 & 접근 제어 (user_list·chroot) · 🚨 트러블슈팅 치트시트 (SSH·vsFTP·SFTP·DHCP·DNS)
+> - 관련:  DNS 개념 & Master Name Server·Zone 이론 ·  vsFTP 설치 & 접근 제어 (user_list·chroot) ·  트러블슈팅 치트시트 (SSH·vsFTP·SFTP·DHCP·DNS)

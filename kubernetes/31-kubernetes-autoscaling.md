@@ -1,11 +1,11 @@
-# ⚖️ Kubernetes - AutoScaling
+# Kubernetes - AutoScaling
 
 > **Tag:** #Kubernetes #AutoScaling #HPA #VPA #ClusterAutoscaler #MetricsServer #부트캠프
 > **핵심 요약:** HPA는 Metrics Server가 제공하는 CPU/Memory 사용률을 기준으로 Deployment의 replicas 값을 자동으로 조절해 Pod 개수를 수평으로 늘리거나 줄이며, VPA는 Pod의 requests 값을 수직으로 조절하고, Cluster Autoscaler는 Pending Pod를 감지해 Node 개수를 조절한다.
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 쿠버네티스에서 애플리케이션은 보통 여러 개의 Pod로 실행된다.
 
@@ -50,7 +50,7 @@ HPA와 VPA는 서로 목적이 다르다.
 
 ---
 
-## 2. 📊 Metrics Server
+## 2. Metrics Server
 
 Metrics Server는 쿠버네티스 클러스터에서 Node와 Pod의 CPU, Memory 사용량을 수집해서 Kubernetes Metrics API로 제공하는 컴포넌트다.
 
@@ -124,7 +124,7 @@ Metrics Server는 데이터 제공자, HPA는 판단자, Deployment는 실제 Po
 
 ---
 
-## 3. 📐 HPA (Horizontal Pod Autoscaler)
+## 3. HPA (Horizontal Pod Autoscaler)
 
 HPA는 워크로드의 Pod 개수를 자동으로 늘리거나 줄이는 기능이다.
 
@@ -279,7 +279,7 @@ HPA는 부하가 감소했다고 해서 즉시 Pod를 대량으로 줄이지 않
 
 ---
 
-## 4. 📏 VPA (Vertical Pod Autoscaler)
+## 4. VPA (Vertical Pod Autoscaler)
 
 VPA는 Vertical Pod Autoscaler의 약자다. VPA는 Pod의 개수를 늘리는 것이 아니라 Pod가 요청하는 CPU와 Memory 값을 조절하는 방식이다.
 
@@ -351,7 +351,7 @@ CPU/Memory requests 값을 변경하기 위해 기존 Pod를 재생성해야 하
 
 ---
 
-## 5. 🖥️ Cluster Autoscaler
+## 5. Cluster Autoscaler
 
 Cluster Autoscaler는 Pod 개수가 아니라 Node 개수를 자동으로 조절한다.
 
@@ -447,7 +447,7 @@ HPA가 Deployment replicas 증가  -->  새 Pod 생성 시도  -->  현재 Node 
 
 ---
 
-## 6. 🛠️ 실습 EX1) Metrics Server 설치 + CPU 기준 HPA
+## 6. 실습 EX1) Metrics Server 설치 + CPU 기준 HPA
 
 ### Metrics Server 설치 전 확인
 
@@ -731,7 +731,7 @@ horizontalpodautoscaler.autoscaling "hpe-web" deleted
 
 ---
 
-## 7. 🛠️ 실습 EX2) HPA v2(CPU + Memory)로 파드 확장 + 서비스 분산 처리 확인
+## 7. 실습 EX2) HPA v2(CPU + Memory)로 파드 확장 + 서비스 분산 처리 확인
 
 autoscaling/v2 HPA 적용 후 replicas가 실제로 늘어나는 것을 확인한다.
 
@@ -991,7 +991,7 @@ spec:
 
 ---
 
-## 8. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 8. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 - `kubectl top nodes` 실행 시 `error: Metrics API not available`가 나오면 Metrics Server가 설치되어 있지 않거나 정상 동작하지 않는 것이므로, `kubectl get pods --namespace kube-system`으로 metrics-server Pod의 상태를 먼저 확인한다.
 - 사설 인증서(kubelet 자체 서명 인증서)를 사용하는 클러스터에서는 metrics-server가 kubelet과 TLS 통신에 실패할 수 있으므로 `kubectl edit deployments.apps metrics-server --namespace kube-system`으로 `--kubelet-insecure-tls` 옵션을 추가해야 정상 동작하는 경우가 많다.
@@ -1003,10 +1003,10 @@ spec:
 
 ---
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - AutoScaling은 목적에 따라 HPA(Pod 개수), VPA(Pod의 CPU/Memory requests), Cluster Autoscaler(Node 개수) 3단계로 구분된다
 > - HPA는 Metrics Server가 kubelet으로부터 수집해 Metrics API로 제공하는 CPU/Memory 사용률을 기준으로 판단하며, CPU 사용률은 limits가 아니라 requests 대비로 계산된다
 > - HPA는 `필요한 Pod 수 = 현재 Pod 수 × 현재 Metric / 목표 Metric` 공식으로 replicas를 계산해 Deployment의 replicas 값을 변경하고, 실제 Pod 생성/삭제는 Deployment·ReplicaSet이 담당한다
 > - VPA는 Pod 개수 대신 requests 값 자체를 조절하는 수직 확장이며, HPA와 동일 Metric을 동시에 사용하면 서로 영향을 줄 수 있어 설계가 필요하다
 > - Cluster Autoscaler는 Node CPU 사용률이 아니라 Scheduler가 배치하지 못한 Pending Pod 존재 여부를 기준으로 Node를 늘리거나 줄이며, 실무에서는 HPA와 함께 조합해 사용하는 경우가 많다
-> - 관련: 12. 🎛️ Kubernetes - Deployment · 13. 🔁 Kubernetes - Rollout·Rollback 실습 · 2. 📦 Kubernetes - Pod 생성
+> - 관련: 12.  Kubernetes - Deployment · 13.  Kubernetes - Rollout·Rollback 실습 · 2.  Kubernetes - Pod 생성

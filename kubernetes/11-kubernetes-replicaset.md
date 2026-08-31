@@ -1,11 +1,11 @@
-# 🎛️ Kubernetes - ReplicaSet
+# Kubernetes - ReplicaSet
 
 > **Tag:** #Kubernetes #Controller #ReplicaSet #라벨셀렉터 #부트캠프
 > **핵심 요약:** ReplicaSet의 개념과 RC와의 차이(set-based selector), matchExpressions(In/NotIn/Exists/DoesNotExist) 문법, selector OR 조건 및 라벨 조작을 통한 편입/제외 실습
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 ReplicaSet은 지정한 개수만큼 Pod가 항상 존재하도록 유지하는 컨트롤러다. Pod가 죽거나 삭제되면 자동으로 다시 만들고, Pod가 너무 많으면 줄여서 원하는 개수(replicas)를 맞춘다. 쿠버네티스에서 Pod 개수 보장의 표준 컨트롤러지만, 실무에서는 ReplicaSet을 직접 쓰기보다 Deployment가 ReplicaSet을 만들어서 관리하는 형태가 가장 흔하다.
 
@@ -32,7 +32,7 @@ ReplicaSet은 지정한 개수만큼 Pod가 항상 존재하도록 유지하는 
 
 ---
 
-## 2. 🛠️ ReplicaSet YAML과 matchExpressions
+## 2. ReplicaSet YAML과 matchExpressions
 
 ```yaml
 apiVersion: apps/v1
@@ -111,7 +111,7 @@ spec:
 
 ---
 
-## 3. 🧪 실습: ReplicaSet 기본 생성과 Scale
+## 3. 실습: ReplicaSet 기본 생성과 Scale
 
 ```bash
 [root@k8s-master ~]# vi  rs-nginx.yaml
@@ -252,7 +252,7 @@ rs-nginx-nz7pl   	1/1         Running     0                5m10s
 
 ---
 
-## 4. 🧪 EX1) selector 기본 원리 + 포함/제외 + scale 실습
+## 4. EX1) selector 기본 원리 + 포함/제외 + scale 실습
 
 - selector는 "라벨 조건"이다.
 - ReplicaSet은 selector에 걸리는 Pod 개수만 유지한다.
@@ -384,7 +384,7 @@ ReplicaSet Controller에 의해 만들어진 pod가 아니어도 label만 매치
 
 ---
 
-## 5. 🧪 EX2) selector OR 조건 실습 (matchExpressions In)
+## 5. EX2) selector OR 조건 실습 (matchExpressions In)
 
 쿠버네티스 라벨 셀렉터에는 OR 문법이 없지만, `matchExpressions(In)` 하나로 OR 조건을 구성할 수 있다. 수동 Pod 투입, 라벨 변경 편입/제외, scale 반응, 실수 상황을 YAML 1개로 실습한다.
 
@@ -526,7 +526,7 @@ rs-lab-a-or   2               2               2          32m
 
 ---
 
-## 6. 🧪 실습 B) selector 사고(너무 넓음/너무 좁음) 재현과 복구
+## 6. 실습 B) selector 사고(너무 넓음/너무 좁음) 재현과 복구
 
 ReplicaSet selector를 너무 넓게/너무 좁게 설계했을 때 생기는 대표 사고를 YAML 1개로 만든 뒤 라벨 조작만으로 재현하고 원인 설명과 복구까지 단계별로 수행한다.
 
@@ -538,7 +538,7 @@ ReplicaSet selector를 너무 넓게/너무 좁게 설계했을 때 생기는 �
 [root@k8s-master ~]# kubectl create namespace selector-lab-b
 [root@k8s-master ~]# kubectl config  set-context  --current  --namespace=selector-lab-b
 # kubectl config set-context	: kubectl Context 설정 변경
-# --current		: 현재 사용 중인 Context를 수정
+# --current : 현재 사용 중인 Context를 수정
 # --namespace=selector-lab-b	: 기본 Namespace를 selector-lab-b로 설정
 ```
 
@@ -642,7 +642,7 @@ selector를 여러 라벨의 AND 조건(`matchLabels`에 키를 추가)으로 �
 
 ---
 
-## 7. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 7. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 - selector가 template.labels와 불일치하면 ReplicaSet은 Pod를 생성하지 못하고 `kubectl describe rs`의 Events에 에러가 남는다. selector와 template.labels는 항상 일치해야 한다.
 - `kubectl get rs <name> -o wide`의 SELECTOR 컬럼으로 현재 관리 대상 조건을 바로 확인할 수 있다.
@@ -652,8 +652,8 @@ selector를 여러 라벨의 AND 조건(`matchLabels`에 키를 추가)으로 �
 
 ---
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - ReplicaSet은 replicas·selector·template 3요소로 Pod 개수를 항상 목표치에 맞추며, RC보다 유연한 set-based selector(`matchExpressions`: In/NotIn/Exists/DoesNotExist)를 지원한다
 > - selector는 라벨 조건일 뿐이므로, ReplicaSet이 만들지 않은 Pod라도 라벨만 일치하면 관리 대상에 포함되고 초과분은 자동 삭제된다 — selector를 너무 넓게 설계하면 사고로 이어진다
 > - 라벨을 변경하는 것만으로 실시간으로 관리 대상 편입/제외가 가능하며, 실무에서는 ReplicaSet을 직접 쓰기보다 Deployment가 이를 생성·관리하는 형태가 표준이다
-> - 관련: 10. 🎛️ Kubernetes - Controller 개념과 ReplicationController · 12. 🎛️ Kubernetes - Deployment · 24. 🏷️ Kubernetes - Label
+> - 관련: 10.  Kubernetes - Controller 개념과 ReplicationController · 12.  Kubernetes - Deployment · 24.  Kubernetes - Label

@@ -1,11 +1,11 @@
-# 🔁 Kubernetes - Rollout·Rollback 실습
+# Kubernetes - Rollout·Rollback 실습
 
 > **Tag:** #Kubernetes #Deployment #RollingUpdate #Rollback #rollout #부트캠프
 > **핵심 요약:** kubectl set image로 이미지를 변경해 롤링 업데이트를 수행하고, kubernetes.io/change-cause annotation으로 배포 이력을 남기며, kubectl rollout undo/pause/resume으로 롤백과 배포 제어를 실습한다.
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 Deployment에서 실행 중인 컨테이너 이미지를 새로운 버전으로 변경하는 명령은 다음과 같다.
 
@@ -32,7 +32,7 @@ Deployment에서 실행 중인 컨테이너 이미지를 새로운 버전으로 
 
 ---
 
-## 2. 🛠️ 배포 이력(change-cause) 기록 방법
+## 2. 배포 이력(change-cause) 기록 방법
 
 ### deploy-nginx.yaml 파일 수정
 
@@ -192,7 +192,7 @@ Pod Template:
 
 ---
 
-## 3. 🖥️ 실습 — Image Version Up
+## 3. 실습 — Image Version Up
 
 ### 터미널 1 (watch)
 
@@ -342,7 +342,7 @@ deployment.apps "deploy-update" deleted from default namespace
 
 ---
 
-## 4. ↩️ Rollback 실습
+## 4. ↩ Rollback 실습
 
 - 형식: `kubectl rollout undo deployment <deploy_name>` — 이전 정상 버전으로 복구
 - 형식: `kubectl rollout history deployment <deploy_name>` — 배포 이력 확인
@@ -406,7 +406,7 @@ deployment.apps "deploy-update" deleted
 
 ---
 
-## 5. 🧪 실습 — Deployment 롤링업데이트 + 히스토리(change-cause) 기록 + 롤백
+## 5. 실습 — Deployment 롤링업데이트 + 히스토리(change-cause) 기록 + 롤백
 
 ```
 [root@k8s-master ~]# vi deploy-update-step2.yaml
@@ -666,7 +666,7 @@ REVISION  CHANGE-CAUSE
 
 ---
 
-## 6. ⚠️ revision이 증가하지 않는 변경 (annotation-only 변경)
+## 6. revision이 증가하지 않는 변경 (annotation-only 변경)
 
 모든 Deployment 변경이 Revision을 증가시키는 것은 아니다. Deployment 자체의 `metadata.annotation`만 변경하면 Pod Template(`spec.template`)은 변경되지 않는다. Pod Template이 변경되지 않으면 새로운 ReplicaSet이 생성되지 않고 Revision도 증가하지 않는다. 이미지, 환경변수, Pod Template의 label/annotation 등이 변경되면 새로운 ReplicaSet이 생성되고 Revision이 증가한다.
 
@@ -774,7 +774,7 @@ REVISION  CHANGE-CAUSE
 
 ---
 
-## 7. 🚨 실습 — rollout status가 멈추는 상황 만들기
+## 7. 실습 — rollout status가 멈추는 상황 만들기
 
 잘못된 이미지로 Rolling Update를 수행하여 Deployment가 정상적으로 완료되지 않는 상태를 확인한다. `rollout status` 명령어가 무엇을 기다리는지 확인한다. 새 ReplicaSet은 생성되지만, 새 Pod가 정상적으로 Ready 상태가 되지 않으면 Rolling Update는 완료되지 않는다.
 
@@ -890,7 +890,7 @@ deploy-update-59c675765b-wkt9k   	1/1         Running     0                80m
 
 ---
 
-## 8. ⏸️ 실습 — rollout pause / resume
+## 8. ⏸ 실습 — rollout pause / resume
 
 `rollout pause`와 `rollout resume`은 Deployment의 Rolling Update를 일시 중지했다가 다시 진행할 때 사용하는 명령어다. 일반적인 Rolling Update는 Deployment의 이미지나 환경변수 등 Pod Template이 변경되면 즉시 새로운 ReplicaSet을 생성하고 새로운 Pod를 배포한다.
 
@@ -1115,7 +1115,7 @@ deployment.apps "deploy-update" deleted from default namespace
 
 ---
 
-## 9. 🧮 실습 — maxSurge/maxUnavailable 값을 2로 늘려 8개 Pod 운영
+## 9. 실습 — maxSurge/maxUnavailable 값을 2로 늘려 8개 Pod 운영
 
 **EX)** Deployment의 Pod를 8개로 실행하고, Rolling Update 시 maxSurge: 2, maxUnavailable: 2를 설정하여 새 버전 Pod가 최대 2개 추가되고 기존 Pod도 최대 2개까지 사용할 수 없는 상태를 확인
 
@@ -1274,7 +1274,7 @@ deployment.apps "deploy-update" deleted from default namespace
 
 ---
 
-## 10. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 10. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 - **change-cause가 `<none>`으로 보인다** — `kubernetes.io/change-cause` annotation을 별도로 남기지 않으면 rollout history에 사유가 기록되지 않는다. `--record`(deprecated)나 `kubectl annotate deployment <name> kubernetes.io/change-cause="..." --overwrite`로 매 배포마다 기록해야 한다.
 - **annotation만 바꿨는데 Revision이 그대로다** — `spec.template`(이미지/환경변수/label 등)이 바뀌지 않으면 새 ReplicaSet이 생성되지 않아 Revision이 증가하지 않는다. 이 상태에서 change-cause annotation을 다시 걸면 새 Revision이 생기는 게 아니라 기존 Revision의 CHANGE-CAUSE 값이 덮어쓰기된다.
@@ -1286,9 +1286,9 @@ deployment.apps "deploy-update" deleted from default namespace
 
 ---
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - `kubectl set image deployment <name> <container>=<image>`로 이미지를 바꾸면 자동으로 Rolling Update가 시작되며, `kubectl rollout status`로 진행 상태를 확인할 수 있다
 > - `kubernetes.io/change-cause` annotation을 매 배포마다 남겨야 `kubectl rollout history`에서 각 Revision의 변경 사유를 추적할 수 있다 (자동 기록 아님)
 > - `kubectl rollout undo deployment <name>` (또는 `--to-revision=<N>`)으로 이전 정상 버전으로 즉시 롤백할 수 있으며, 롤백도 새로운 Revision으로 기록된다
 > - 잘못된 이미지로 인해 rollout이 멈추면(ErrImagePull) `kubectl rollout undo`로 복구하고, `kubectl rollout pause`/`resume`으로 여러 변경 사항을 모아 한 번에 배포할 수 있다
-> - 관련: 12. 🎛️ Kubernetes - Deployment · 2. 📦 Kubernetes - Pod 생성
+> - 관련: 12.  Kubernetes - Deployment · 2.  Kubernetes - Pod 생성

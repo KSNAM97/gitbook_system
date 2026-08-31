@@ -1,11 +1,11 @@
-# 🧩 파일 압축·아카이브 통합 정리
+# 파일 압축·아카이브 통합 정리
 
 > **Tag:** #Linux #Compression #Archive #tar #gzip #bzip2 #xz #Summary  
 > **핵심 요약:** Linux의 압축·아카이브 작업은 `tar`로 여러 파일을 하나로 묶고 gzip·bzip2·xz로 크기를 줄이는 구조이다. 작업 전에는 원본 유지 여부와 대상 경로를 확인하고, 생성 후에는 `file`, 압축 무결성 검사, `tar -t`, 체크섬으로 결과를 검증한다.
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 **압축과 아카이브를 관통하는 핵심 구조는?**
 
@@ -67,7 +67,7 @@ time bzip2 <복사본>
 time xz <복사본>
 ```
 
-## 2. 🛠️ 표준 개념 정리 (Configuration)
+## 2. 표준 개념 정리 (Configuration)
 
 > **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
 
@@ -234,7 +234,7 @@ tar -xzf "/backup/guest-$(date +%F).tar.gz" \
 
 ---
 
-## 3. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 3. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 ### 3-1. 표준 검증 순서
 
@@ -271,7 +271,7 @@ sha256sum archive.tar.gz
 
 ---
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - 단일 파일 압축: gzip·bzip2·xz
 > - 다중 파일 관리: tar
 > - gzip `-z`, bzip2 `-j`, xz `-J`
@@ -279,4 +279,4 @@ sha256sum archive.tar.gz
 > - 형식 확인: `file`
 > - 목록 확인: `tar -t`
 > - 무결성: 압축 도구 `-t` + `sha256sum`
-> - 관련: 7-1. 🗜️ 파일 압축 & 아카이브 — gzip · bzip2 · xz · tar · 7-3. 🚑 파일 압축·아카이브 트러블슈팅 치트시트 · 7-4. ⚡ 파일 압축·아카이브 명령어 퀵 레퍼런스
+> - 관련: 7-1.  파일 압축 & 아카이브 — gzip · bzip2 · xz · tar · 7-3.  파일 압축·아카이브 트러블슈팅 치트시트 · 7-4.  파일 압축·아카이브 명령어 퀵 레퍼런스

@@ -5,7 +5,7 @@
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 실무에서 배치 작업은 대부분 정기적으로 실행된다 — 매일 새벽 2시 DB 백업, 10분마다 로그 정리, 매주 통계 집계, 매일 캐시 초기화 등. 이 작업들의 공통점은 항상 실행 중일 필요가 없고, 사용자의 요청을 기다리는 서버 프로그램이 아니며, 정해진 시간에 실행되고 작업을 수행한 뒤 종료된다는 것이다.
 
@@ -49,7 +49,7 @@ CronJob이 하는 일은 딱 하나다 — "지금 시간이 됐으니까 Job �
 
 ---
 
-## 2. 🛠️ CronJob 스케줄 문법과 주요 옵션
+## 2. CronJob 스케줄 문법과 주요 옵션
 
 CronJob은 리눅스 cron과 완전히 같은 형식을 쓴다.
 
@@ -122,7 +122,7 @@ spec:
 
 ---
 
-## 3. 🧪 실습: CronJob 기본 생성과 History 관리
+## 3. 실습: CronJob 기본 생성과 History 관리
 
 ```yaml
 [root@k8s-master ~]# vi cronjob-exam.yaml
@@ -197,7 +197,7 @@ cronjob.batch "cronjob-exam" deleted from default namespace
 
 ---
 
-## 4. 🧪 concurrencyPolicy 비교 실습: Forbid vs Allow
+## 4. concurrencyPolicy 비교 실습: Forbid vs Allow
 
 ### concurrencyPolicy: Forbid
 
@@ -289,7 +289,7 @@ metadata:
 spec:
   schedule: "* * * * *"
   startingDeadlineSeconds: 500
-#  concurrencyPolicy: Forbid		# 주석 처리
+# concurrencyPolicy: Forbid # 주석 처리
   concurrencyPolicy: Allow		# 추가 설정
   successfulJobsHistoryLimit: 3
   failedJobsHistoryLimit: 2
@@ -322,7 +322,7 @@ cronjob-exam-29786751-btsg6    1/1         Running     0                 4s		# �
 
 ---
 
-## 5. 🧪 실습: CronJob 기반 HTTP 헬스 체크 자동화
+## 5. 실습: CronJob 기반 HTTP 헬스 체크 자동화
 
 내부 서비스 HTTP 헬스 체크를 CronJob으로 자동화하고, 실패 Job을 근거로 장애 징후를 판단한다. CronJob이 만든 Job이 성공/실패로 명확히 갈리는 흐름을 만들어, 서비스가 정상일 때는 성공, 비정상일 때는 실패가 나는 것을 직접 확인한다.
 
@@ -430,7 +430,7 @@ cron-http-check-29786780-6m5s2   	0/1        Error                   0          
 
 ---
 
-## 6. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 6. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 - `successfulJobsHistoryLimit`/`failedJobsHistoryLimit`을 설정하지 않으면 완료된 Job/Pod가 계속 쌓여 클러스터 리소스를 낭비하므로 반드시 설정하는 것이 좋다.
 - `concurrencyPolicy`의 기본값은 Allow이므로, 중복 실행이 위험한 작업(파일 이동/삭제, 상태 변경 등)에는 반드시 Forbid로 명시해야 한다.
@@ -440,9 +440,9 @@ cron-http-check-29786780-6m5s2   	0/1        Error                   0          
 
 ---
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - CronJob은 "언제 실행할지"만 담당하고 실제 작업 실행은 Job이 담당한다 — CronJob → Job → Pod → Container 순으로 동작한다
 > - 스케줄은 리눅스 cron 문법(`분 시 일 월 요일`)을 그대로 사용하며, `concurrencyPolicy`(Allow/Forbid)로 중복 실행 허용 여부를 제어한다
 > - `successfulJobsHistoryLimit`/`failedJobsHistoryLimit`으로 이력 보관 개수를 제한해야 Job/Pod가 무한히 쌓이는 것을 막을 수 있다
 > - curl `-sSf` 옵션과 CronJob을 조합하면 별도 모니터링 도구 없이도 정기 HTTP 헬스체크를 구현할 수 있다
-> - 관련: 16. ⚙️ Kubernetes - Job · 2. 📦 Kubernetes - Pod 생성 · 10. 🎛️ Kubernetes - Controller 개념과 ReplicationController
+> - 관련: 16.  Kubernetes - Job · 2.  Kubernetes - Pod 생성 · 10.  Kubernetes - Controller 개념과 ReplicationController

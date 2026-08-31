@@ -8,7 +8,7 @@
 
 ---
 
-## 2. 🛠️ 표준 설정 템플릿 (Configuration)
+## 2. 표준 설정 템플릿 (Configuration)
 
 > **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
 
@@ -48,7 +48,7 @@
 [root@localhost ~]# id guest
 uid=1000(guest) gid=1000(guest) groups=1000(guest),10(wheel)
 ```
-> **참고:** ⚠️ 로그의 주석("yes를 no로 변경")은 두 동작이 합쳐진 표현입니다. 정확한 목표는 **"`#PermitRootLogin yes` 의 `#` 주석을 제거하고, 값을 `no` 로 설정"** 이며, 최종 파일 상태는 `PermitRootLogin no` 입니다.
+> **참고:**  로그의 주석("yes를 no로 변경")은 두 동작이 합쳐진 표현입니다. 정확한 목표는 **"`#PermitRootLogin yes` 의 `#` 주석을 제거하고, 값을 `no` 로 설정"** 이며, 최종 파일 상태는 `PermitRootLogin no` 입니다.
 ### Step 2. 프로젝트 홈 루트 3개 생성
 
 ```bash
@@ -108,7 +108,7 @@ sudo useradd -u 1301 -c "gitB_User2" -s /bin/bash -mk /etc/skel-b -d /gitB/gitB_
 sudo useradd -u 1302 -c "gitB_User3" -s /bin/csh  -mk /etc/skel-b -d /gitB/gitB_User3 buser3
 ```
 
-> **참고:** 💡 huser1~3 은 Step 3에서 `HOME=/gitHQ`, `SKEL=/etc/skel` 기본값이 설정된 상태이므로 `-d`, `-k` 옵션 없이도 `/gitHQ/userXXX` 에 기본 skel이 적용됩니다. 반면 auser/buser 는 홈 경로와 skel이 기본값과 다르므로 `-mk`, `-d` 를 명시해야 합니다.
+> **참고:**  huser1~3 은 Step 3에서 `HOME=/gitHQ`, `SKEL=/etc/skel` 기본값이 설정된 상태이므로 `-d`, `-k` 옵션 없이도 `/gitHQ/userXXX` 에 기본 skel이 적용됩니다. 반면 auser/buser 는 홈 경로와 skel이 기본값과 다르므로 `-mk`, `-d` 를 명시해야 합니다.
 
 ### Step 6. 부서 그룹 생성 & Primary/Secondary 할당
 
@@ -130,11 +130,11 @@ sudo usermod -aG groupB           auser1     # A  + B 프로젝트 협업
 sudo usermod -aG groupHQ          buser1     # B  + HQ 협업
 ```
 
-> **참고:** 📌 로그 확인 결과, 보조 그룹은 `groupHQ`, `groupA`, `groupB` 순서로 생성되어 각각 GID `1331`, `1332`, `1333` 이 자동 할당되었습니다(`id` 출력의 `groupA=1331`, `groupB=1332`, `groupHQ=1334` 참고 — 중간에 다른 GID 소비가 있었던 것으로 보이므로 실제 값은 `id` 명령으로 반드시 확인).
+> **참고:**  로그 확인 결과, 보조 그룹은 `groupHQ`, `groupA`, `groupB` 순서로 생성되어 각각 GID `1331`, `1332`, `1333` 이 자동 할당되었습니다(`id` 출력의 `groupA=1331`, `groupB=1332`, `groupHQ=1334` 참고 — 중간에 다른 GID 소비가 있었던 것으로 보이므로 실제 값은 `id` 명령으로 반드시 확인).
 
 ---
 
-## 3. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 3. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 ### 3-1. 최종 검증 체크리스트
 
@@ -165,7 +165,7 @@ uid=1300(buser1) gid=1330(gitB)  groups=1330(gitB),<GID>(groupHQ)
 
 ### 3-2. 대표 트러블슈팅
 
-#### 🚨 시나리오 1. `useradd` 시 `-d /gitA/xxx` 로 지정했는데 `/home/xxx` 에 생성되거나 홈이 안 만들어짐
+#### 시나리오 1. `useradd` 시 `-d /gitA/xxx` 로 지정했는데 `/home/xxx` 에 생성되거나 홈이 안 만들어짐
 
 - **원인:** `-m` 없이 `-d` 만 지정하면 홈이 실제 생성되지 않을 수 있고, skel도 복사되지 않습니다.
     
@@ -177,7 +177,7 @@ uid=1300(buser1) gid=1330(gitB)  groups=1330(gitB),<GID>(groupHQ)
     ```
     
 
-#### 🚨 시나리오 2. Primary Group 변경 후, 홈 디렉터리 내부의 **기존 파일** 소유 그룹이 이전 그룹으로 남음
+#### 시나리오 2. Primary Group 변경 후, 홈 디렉터리 내부의 **기존 파일** 소유 그룹이 이전 그룹으로 남음
 
 - **원인:** `usermod -g` 는 이후 생성되는 파일에만 반영되고, **홈 디렉터리 내부에 이미 존재하던 파일의 소유 그룹은 자동 변경되지 않습니다.**
     
@@ -191,14 +191,14 @@ uid=1300(buser1) gid=1330(gitB)  groups=1330(gitB),<GID>(groupHQ)
     ```
     
 
-#### 🚨 시나리오 3. sudoers에 등록했는데도 `sudo` 실패
+#### 시나리오 3. sudoers에 등록했는데도 `sudo` 실패
 
 - **원인/해결:** `visudo -c` 로 문법 검증 → `/etc/sudoers` 의 `%wheel` 라인 주석 여부 확인 → 사용자 **재로그인** 으로 세션 그룹 갱신.
 
 ---
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - skel 템플릿(`/etc/skel`)에 공통 파일 배치 → `useradd -m` 시 홈에 자동 복사
 > - 부서별 그룹 먼저 생성 → 계정 생성 시 `-g` (primary) + `-G` (secondary) 지정
 > - 홈 디렉터리 권한: 개인 계정 `700`, 부서 공유 `2770`(SGID) 조합이 표준
-> - 관련: 5-1. 👤 리눅스 사용자 계정 관리 (useradd & usermod & userdel) · 5-2. 👥 리눅스 그룹 관리 & UPG 모델(groupadd &usermod & gpasswd) · 5-3. 🛡️ Root 접속 통제 & Sudo 권한 위임 · 5-4. 🧩 사용자·그룹·권한 통합 정리
+> - 관련: 5-1.  리눅스 사용자 계정 관리 (useradd & usermod & userdel) · 5-2.  리눅스 그룹 관리 & UPG 모델(groupadd &usermod & gpasswd) · 5-3.  Root 접속 통제 & Sudo 권한 위임 · 5-4.  사용자·그룹·권한 통합 정리

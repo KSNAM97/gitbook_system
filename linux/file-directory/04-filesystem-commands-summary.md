@@ -1,11 +1,11 @@
-# 🧩 파일시스템 기본 명령어 통합 정리 — 경로·조회·생성·복사 한눈에
+# 파일시스템 기본 명령어 통합 정리 — 경로·조회·생성·복사 한눈에
 
 > **Tag:** #Linux #Filesystem #cd #ls #mkdir #cp #mv #rm #Wildcard #Summary  
 > **핵심 요약:** 파일시스템 기본 작업은 위치 확인, 조회, 생성, 복사, 이동, 삭제 순서로 이해한다. 실행 전 현재 위치와 대상 범위를 확인하는 습관이 가장 중요하다.
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 파일시스템 작업의 기본 흐름은 다음과 같은 순서로 이해할 수 있다.
 
@@ -35,7 +35,7 @@ ls -ld /home/guest/work/old
 
 ---
 
-## 2. 🛠️ 표준 개념 정리 (Configuration)
+## 2. 표준 개념 정리 (Configuration)
 
 > **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
 
@@ -145,7 +145,7 @@ mkdir -p /home/guest/work/c/sub1
 
 ---
 
-## 3. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 3. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 ### 3-1. 공통 검증
 
@@ -196,7 +196,7 @@ cp -- /lab/backup/*.orig /home/guest/work/c/sub1/
 ls -l /home/guest/work/c/sub1/
 ```
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - 위치: `pwd`, `cd`
 > - 조회: `ls -alh`, `find`
 > - 생성: `mkdir -p`

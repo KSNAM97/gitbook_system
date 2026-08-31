@@ -1,11 +1,11 @@
-# 🔌 Kubernetes - Service 기초와 ClusterIP
+# Kubernetes - Service 기초와 ClusterIP
 
 > **Tag:** #Kubernetes #Service #ClusterIP #부트캠프
 > **핵심 요약:** 계속 바뀌는 Pod IP 문제를 해결하기 위해 고정된 단일 진입점을 제공하는 Service의 개념과 기본 YAML 구조, ClusterIP 타입 실습 정리
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 쿠버네티스 Service는 계속 바뀌는 Pod들을 대신해서 고정된 단일 진입점(주소와 이름)을 제공해주는 객체이다.
 
@@ -158,7 +158,7 @@ mydb.default.svc.cluster.local
 
 ---
 
-## 2. 🧩 Deployment + Service 기본 YAML 구조
+## 2. Deployment + Service 기본 YAML 구조
 
 ```yaml
 	# Deployment YAML
@@ -201,7 +201,7 @@ spec:
 
 ---
 
-## 3. 🛠️ ClusterIP 실습
+## 3. ClusterIP 실습
 
 - selector의 label이 동일한 파드들의 그룹으로 묶어 단일 진입점(Virtual IP)을 생성한다.
 - 클러스터 내부에서만 사용 가능하다.
@@ -771,9 +771,9 @@ pod "svc-out-pod" deleted from default namespace
 
 ---
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - Service는 계속 바뀌는 Pod IP 문제를 해결하기 위해 label selector로 Pod들을 묶어 고정된 단일 진입점(IP/이름)과 로드밸런싱을 제공하는 객체
 > - Service는 Pod를 직접 생성하지 않고 label selector로만 대상을 선택하므로, Pod 이름·IP를 몰라도 label만 맞으면 자동으로 연결된다
 > - Service Type은 ClusterIP·NodePort·LoadBalancer·ExternalName·Headless 5가지가 있으며, ClusterIP는 클러스터 내부 전용 기본 타입이다
 > - ClusterIP Service는 동일 label의 Pod 그룹에 단일 Virtual IP를 부여하고 요청마다 다른 Pod로 자동 로드밸런싱하며, 새 Pod나 label이 일치하는 Pod는 즉시 Endpoints에 자동 추가된다
-> - 관련: 2. 📦 Kubernetes - Pod 생성 · 10. 🎛️ Kubernetes - Controller 개념과 ReplicationController · 19. 🚪 Kubernetes - NodePort·LoadBalancer
+> - 관련: 2.  Kubernetes - Pod 생성 · 10.  Kubernetes - Controller 개념과 ReplicationController · 19.  Kubernetes - NodePort·LoadBalancer

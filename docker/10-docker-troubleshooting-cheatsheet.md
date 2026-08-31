@@ -1,11 +1,11 @@
-# 🚑 Docker - 트러블슈팅 치트시트
+# Docker - 트러블슈팅 치트시트
 
 > **Tag:** #Docker #트러블슈팅 #에러 #치트시트 #부트캠프
 > **핵심 요약:** 자주 발생하는 Docker 오류 시나리오와 해결 방법 핵심 정리
 
 ---
 
-## 1. 🎯 핵심 기술 개념 (Concept)
+## 1. 핵심 기술 개념 (Concept)
 
 ### 트러블슈팅 핵심 원칙
 
@@ -18,7 +18,7 @@
 
 ---
 
-## 3. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 3. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 ### 시나리오 1. 컨테이너가 바로 종료됨
 
@@ -251,10 +251,10 @@ environment:
 
 ---
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - 컨테이너 즉시 종료: 메인 프로세스가 없음 → `-d sleep infinity` 또는 포그라운드 실행
 > - 포트 충돌: `ss -tlnp | grep :포트` 로 점유 프로세스 확인 후 다른 포트 사용
 > - 네트워크 통신 불가: 기본 bridge는 이름 통신 불가 → User-Defined Bridge 사용
 > - Read-only 에러: `:ro` 마운트 경로에 쓰기 시도 → writer 컨테이너 분리 패턴 적용
 > - 한글 깨짐: `ENV LANG=C.UTF-8` / `ENV LC_ALL=C.UTF-8` Dockerfile에 추가
-> - 관련: 3. 🔄 Docker - 컨테이너 사용하기 · 6. 🌐 Docker - 컨테이너 네트워크 · 8. 🔧 Docker - Docker Compose
+> - 관련: 3.  Docker - 컨테이너 사용하기 · 6.  Docker - 컨테이너 네트워크 · 8.  Docker - Docker Compose

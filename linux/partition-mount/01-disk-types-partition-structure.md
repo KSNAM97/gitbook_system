@@ -1,11 +1,11 @@
-# 💽 디스크 타입 & 파티션 구조
+# 디스크 타입 & 파티션 구조
 
 > **Tag:** #Linux #Disk #Partition #MBR #GPT #Storage #NVMe  
 > **핵심 요약:** Linux는 HDD·SSD·SAN·가상 디스크 같은 저장장치를 블록 디바이스로 인식한다. SATA·SAS·SCSI·USB 디스크는 주로 `/dev/sdX`, NVMe SSD는 `/dev/nvmeXnY`, VirtIO 디스크는 `/dev/vdX`로 표시된다. 파티션 테이블은 MBR과 GPT로 구분되며, 신규 시스템은 용량과 파티션 개수에 여유가 있고 복구 구조가 강화된 GPT 사용을 우선 검토한다.
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 **Linux에서 디스크는 어떻게 표시되는가?**
 
@@ -237,7 +237,7 @@ MBR을 사용하는 대표적인 이유:
 
 > **참고:** “Primary 파티션은 최대 4개”라는 설명은 MBR에 해당한다. GPT 파티션을 Primary·Extended·Logical로 분류하지 않는다.
 
-## 2. 🛠️ 표준 설정 템플릿 (Configuration)
+## 2. 표준 설정 템플릿 (Configuration)
 
 > **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
 
@@ -550,7 +550,7 @@ lsblk /dev/sdb
 
 ---
 
-## 3. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 3. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 ### 3-1. 필수 검증 명령어
 
@@ -662,7 +662,7 @@ df -Th
 
 `/dev/sdb1`에 파일시스템이 있어도 마운트하지 않았다면 `lsblk -f`에는 표시되지만 `df -Th`에는 나타나지 않을 수 있다.
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - 전체 디스크와 파티션을 구분
 > - 신규 환경은 GPT 우선 검토
 > - Primary·Extended·Logical 구조는 MBR에 해당
@@ -670,4 +670,4 @@ df -Th
 > - `partprobe`는 파티션 테이블 재인식용
 > - 신규 디스크 확인은 `df`보다 `lsblk` 사용
 > - 영구 마운트에는 UUID 또는 안정적인 식별자 사용
-> - 관련: 8-2. 🗂️ 파일 시스템 & Format · 8-3. 🔗 마운트 & umount · 8-4. ⚓ Automount
+> - 관련: 8-2.  파일 시스템 & Format · 8-3.  마운트 & umount · 8-4.  Automount

@@ -1,11 +1,11 @@
-# 🚑 RAID·LVM 트러블슈팅 치트시트
+# RAID·LVM 트러블슈팅 치트시트
 
 > **Tag:** #Linux #Troubleshooting #RAID #LVM #mdadm #CheatSheet
 > **핵심 요약:** RAID·LVM 관련 장애를 "증상 → 원인 → 명령어"로 즉시 대응하는 조회용 문서. 반복 사고의 대부분은 **슈퍼블록 미초기화(md127)**, **`lvextend` 후 파일시스템 확장 누락**, **ext4 축소 순서 위반**, **파괴적 명령 대상 착오** 네 가지에서 나온다.
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 RAID·LVM 장애에서 가장 먼저 봐야 할 것은 ① **`mdadm --detail` / `pvs·vgs·lvs`로 계층별 상태**, ② **`lsblk -f`로 실제 블록 장치 구조**, ③ **`mount` / `df -h`로 마운트·용량 반영 여부**입니다. 대부분의 장애는 이 세 가지 확인만으로 원인이 드러납니다.
 
@@ -13,7 +13,7 @@ RAID·LVM 장애에서 가장 먼저 봐야 할 것은 ① **`mdadm --detail` / 
 
 ---
 
-## 2. 🛠️ 증상별 즉시 대응표 (Configuration)
+## 2. 증상별 즉시 대응표 (Configuration)
 
 ### 1. RAID
 | 증상 | 원인 | 조치 |
@@ -54,9 +54,9 @@ blkid                           # UUID 조회
 
 ---
 
-## 3. 🔍 트러블슈팅 시나리오 (Verification & Troubleshooting)
+## 3. 트러블슈팅 시나리오 (Verification & Troubleshooting)
 
-### 🚨 시나리오 1. RAID를 `/dev/md0`으로 만들었는데 재부팅 후 `/dev/md127`로 바뀜
+### 시나리오 1. RAID를 `/dev/md0`으로 만들었는데 재부팅 후 `/dev/md127`로 바뀜
 ```bash
 mdadm --stop /dev/md127
 mdadm --zero-superblock /dev/sdb1 /dev/sdc1
@@ -66,14 +66,14 @@ dracut -fv
 ```
 - **예방:** RAID 생성 직후 항상 `/etc/mdadm.conf` 저장 + `dracut -fv`를 습관화한다.
 
-### 🚨 시나리오 2. RAID 5에서 디스크 1개 장애 후 Spare가 자동으로 안 붙는 것처럼 보임
+### 시나리오 2. RAID 5에서 디스크 1개 장애 후 Spare가 자동으로 안 붙는 것처럼 보임
 ```bash
 mdadm --detail /dev/md5          # spare rebuilding 상태 확인
 cat /proc/mdstat                 # 진행률(%) 확인
 ```
 - **원인:** 실제로는 정상 동작 중이며, 대용량 디스크일수록 복구(rebuild) 시간이 길어 즉시 `active sync`로 안 보일 뿐이다.
 
-### 🚨 시나리오 3. `lvextend -L +2G`를 했는데 `df -h` 용량이 그대로
+### 시나리오 3. `lvextend -L +2G`를 했는데 `df -h` 용량이 그대로
 ```bash
 lvs                               # LV 크기는 실제로 커졌는지 확인
 resize2fs /dev/vg_project/lv_log  # ext4 파일시스템 확장 (누락분 반영)
@@ -81,7 +81,7 @@ resize2fs /dev/vg_project/lv_log  # ext4 파일시스템 확장 (누락분 반�
 xfs_growfs /LOG
 ```
 
-### 🚨 시나리오 4. ext4 LV 축소 중 `resize2fs`가 e2fsck 요구
+### 시나리오 4. ext4 LV 축소 중 `resize2fs`가 e2fsck 요구
 ```bash
 umount /GS
 e2fsck -f /dev/SOLLVM/6G_LV2
@@ -90,7 +90,7 @@ lvreduce --size 5G /dev/SOLLVM/6G_LV2
 mount /dev/SOLLVM/6G_LV2 /GS
 ```
 
-### 🚨 시나리오 5. VG에 여유 공간이 없어 LV를 더 만들 수 없음
+### 시나리오 5. VG에 여유 공간이 없어 LV를 더 만들 수 없음
 ```bash
 vgs                                # VFree 확인(0에 가까움)
 pvcreate /dev/sdd1                 # 새 디스크 PV 초기화
@@ -98,10 +98,10 @@ vgextend vg_project /dev/sdd1      # VG 확장
 vgs                                # VFree 증가 확인
 ```
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - RAID·LVM 장애는 계층별(디스크→RAID/LVM→파일시스템→마운트) 순서로 진단
 > - `md127` 예방은 `--zero-superblock` + `/etc/mdadm.conf` + `dracut -fv`
 > - 확장은 장치 확장 + 파일시스템 확장이 **한 세트**
 > - ext4 축소는 `umount → e2fsck → resize2fs → lvreduce` 순서 고정
 > - 파괴적 명령 전 대상 재확인은 모든 시나리오의 공통 예방책
-> - 관련: 🧩 RAID 개념 & Hardware vs Software RAID · ⚙️ mdadm 명령어 & RAID 관리 · ⚙️ LVM 구성 & 확장·축소 (pvcreate·vgcreate·lvcreate) · 🧩 RAID·LVM 통합 정리 · ⚡ RAID·LVM 명령어 퀵 레퍼런스
+> - 관련:  RAID 개념 & Hardware vs Software RAID ·  mdadm 명령어 & RAID 관리 ·  LVM 구성 & 확장·축소 (pvcreate·vgcreate·lvcreate) ·  RAID·LVM 통합 정리 ·  RAID·LVM 명령어 퀵 레퍼런스

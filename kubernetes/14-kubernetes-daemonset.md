@@ -1,11 +1,11 @@
-# ☸️ Kubernetes - DaemonSet
+# Kubernetes - DaemonSet
 
 > **Tag:** #Kubernetes #DaemonSet #Controller #부트캠프
 > **핵심 요약:** 클러스터의 각 노드마다 특정 Pod를 1개씩 자동으로 유지하는 컨트롤러 DaemonSet의 개념과 노드 선택, 롤링 업데이트/롤백 실습 정리
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 DaemonSet은 클러스터의 각 Node마다 특정 Pod를 1개씩(또는 조건에 맞는 노드마다) 자동으로 실행해 주는 컨트롤러이다. 즉, Deployment가 서비스용 Pod를 n개 유지라면, DaemonSet은 노드마다 1개씩 유지한다.
 
@@ -86,7 +86,7 @@ Deployment는 replicas 기반으로 바꾸고, DaemonSet은 노드 단위로 바
 
 ---
 
-## 2. 🛠️ 실습
+## 2. 실습
 
 ### DaemonSet YAML 예제
 
@@ -470,7 +470,7 @@ daemonset-nginx-7z8sj   	1/1         Running     0                9m38s   10.244
 
 
 
-# 터미널 2  (이전 버전의 이미지로 롤백)
+# 터미널 2 (이전 버전의 이미지로 롤백)
 [root@k8s-master ~]# kubectl  rollout  undo  daemonset  daemonset-nginx
 
 
@@ -507,7 +507,7 @@ daemonset-nginx-psrvx   	1/1     	Running             	0                1s      
 
 ---
 
-## 3. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 3. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
 - DaemonSet의 Pod 이름은 Deployment처럼 ReplicaSet 해시가 붙는 대신 노드별로 각각 생성되며, `kubectl get pods -o wide`로 NODE 컬럼을 확인하면 각 워커 노드에 정확히 1개씩 배치된 것을 확인할 수 있다.
 - `kubectl rollout history daemonset <이름>`의 CHANGE-CAUSE가 `<none>`으로 나오는 경우, `kubectl annotate ... kubernetes.io/change-cause=... --overwrite`를 이미지 변경 전에 미리 실행해두지 않았기 때문이다. YAML의 `metadata.annotations.kubernetes.io/change-cause`에 미리 지정해두면 최초 배포부터 이력이 남는다.
@@ -517,9 +517,9 @@ daemonset-nginx-psrvx   	1/1     	Running             	0                1s      
 
 ---
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - DaemonSet은 클러스터의 각 노드마다 Pod를 1개씩 자동으로 생성/유지하는 컨트롤러이며, 노드가 추가/삭제되면 Pod도 함께 자동으로 늘거나 줄어든다
 > - Deployment는 replicas로 서비스 Pod 개수를 보장하고, DaemonSet은 노드당 1개를 보장한다는 점이 핵심 차이다
 > - nodeSelector, nodeAffinity, taints/tolerations로 모든 노드가 아닌 특정 노드(GPU 노드, control-plane 등)에만 배치할 수 있다
 > - DaemonSet은 ReplicaSet이 아닌 ControllerRevision으로 롤아웃 이력을 관리하며, `kubectl rollout history`/`kubectl rollout undo`로 이미지 변경 이력 확인과 롤백이 가능하다
-> - 관련: 2. 📦 Kubernetes - Pod 생성 · 15. ☸️ Kubernetes - StatefulSet
+> - 관련: 2.  Kubernetes - Pod 생성 · 15.  Kubernetes - StatefulSet

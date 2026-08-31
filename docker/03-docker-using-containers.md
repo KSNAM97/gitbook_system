@@ -1,11 +1,11 @@
-# 🔄 Docker - 컨테이너 사용하기
+# Docker - 컨테이너 사용하기
 
 > **Tag:** #Docker #컨테이너 #라이프사이클 #명령어 #부트캠프
 > **핵심 요약:** 컨테이너 생명주기와 주요 운영 명령어 핵심 정리
 
 ---
 
-## 1. 📖 개요 (Overview)
+## 1. 개요 (Overview)
 
 컨테이너는 생명주기(Lifecycle) 동안 여러 단계를 거친다. 전체 흐름은 다음과 같다.
 
@@ -63,7 +63,7 @@ docker rm -f 컨테이너명
 docker container prune
 ```
 
-> ⚠️ 컨테이너 삭제 시 컨테이너 내부 데이터(쓰기 레이어)는 함께 삭제됨
+>  컨테이너 삭제 시 컨테이너 내부 데이터(쓰기 레이어)는 함께 삭제됨
 > 영구 데이터는 반드시 Volume 사용
 
 패키지 설치는 컨테이너 내부에서 직접 하기보다 Dockerfile에 포함하는 것이 권장된다. 컨테이너 내부에서 직접 설치하면 즉시 적용은 되지만 컨테이너가 삭제될 때 함께 사라지는 반면, Dockerfile의 `RUN`으로 설치하면 이미지에 포함되어 영구적이고 재현 가능하다.
@@ -112,10 +112,10 @@ docker logs -f web
 
 ---
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - 생명주기: pull → create → start → (pause/unpause) → exec → stop/kill → rm
 > - `docker run` = pull + create + start 를 한번에 처리
 > - stop(SIGTERM, 정상 종료) vs kill(SIGKILL, 강제 종료) 구분
 > - 컨테이너 삭제 시 내부 데이터 함께 삭제 → 영구 데이터는 반드시 Volume 사용
 > - 패키지 설치는 Dockerfile RUN에 포함해야 이미지에 영구 반영됨
-> - 관련: 1. 🐳 Docker - 도커와 컨테이너의 이해 · 5. 💾 Docker - 스토리지 · 11. ⚡ Docker - 퀵 레퍼런스
+> - 관련: 1.  Docker - 도커와 컨테이너의 이해 · 5.  Docker - 스토리지 · 11.  Docker - 퀵 레퍼런스

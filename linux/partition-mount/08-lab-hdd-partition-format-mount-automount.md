@@ -1,11 +1,11 @@
-# 🏗️  종합실습 HDD 추가 → 파티션 → 포맷 → 마운트 → Automount
+# 종합실습 HDD 추가 → 파티션 → 포맷 → 마운트 → Automount
 
 > **Tag:** #Linux #Lab #Partition #GPT #XFS #ext4 #Mount #fstab #Automount  
 > **핵심 요약:** 신규 HDD 3개를 추가해 `/GIT`, `/homeSK`, `/homeLG` 볼륨을 구성하는 종합 실습이다. 디스크 식별 → GPT 파티션 생성 → 파일시스템 포맷 → 임시 마운트 → `/etc/fstab` 영구화 → 계정·그룹·SELinux 연동 → 재부팅 검증 순서로 진행한다.
 
 ---
 
-## 1. 🎯 실습 목표 (Scenario)
+## 1. 실습 목표 (Scenario)
 
 ### 1-1. 요구사항
 
@@ -68,7 +68,7 @@
 
 ---
 
-## 2. 🛠️ 단계별 실습 (Configuration)
+## 2. 단계별 실습 (Configuration)
 
 > **적용 환경:** RHEL 계열(RHEL·Rocky Linux·AlmaLinux) 및 대부분의 Linux 배포판 공통.
 
@@ -891,9 +891,9 @@ exit
 
 ---
 
-## 3. 🔍 검증 및 트러블슈팅 (Verification & Troubleshooting)
+## 3. 검증 및 트러블슈팅 (Verification & Troubleshooting)
 
-### 🚨 시나리오 1. 새 디스크가 `lsblk`에 없다
+### 시나리오 1. 새 디스크가 `lsblk`에 없다
 
 VMware 또는 하이퍼바이저에서 디스크가 실제 연결되었는지 확인한다.
 
@@ -917,7 +917,7 @@ dmesg --ctime | tail -n 50
 
 ---
 
-### 🚨 시나리오 2. 파티션 생성 후 `/dev/sdb1`이 없다
+### 시나리오 2. 파티션 생성 후 `/dev/sdb1`이 없다
 
 ```bash
 parted /dev/sdb print
@@ -930,7 +930,7 @@ lsblk /dev/sdb
 
 ---
 
-### 🚨 시나리오 3. `mkfs`에서 기존 파일시스템 경고가 발생한다
+### 시나리오 3. `mkfs`에서 기존 파일시스템 경고가 발생한다
 
 ```bash
 wipefs -n /dev/sdb1
@@ -956,7 +956,7 @@ wipefs -a /dev/sdb1
 
 ---
 
-### 🚨 시나리오 4. `mount -a`에서 UUID 오류가 발생한다
+### 시나리오 4. `mount -a`에서 UUID 오류가 발생한다
 
 현재 UUID:
 
@@ -985,7 +985,7 @@ mount -a
 
 ---
 
-### 🚨 시나리오 5. 재부팅 후 사용자 홈이 비어 있다
+### 시나리오 5. 재부팅 후 사용자 홈이 비어 있다
 
 마운트 확인:
 
@@ -1013,7 +1013,7 @@ mount /homeLG
 
 ---
 
-### 🚨 시나리오 6. 계정을 먼저 만들고 나중에 `/homeLG`를 마운트했다
+### 시나리오 6. 계정을 먼저 만들고 나중에 `/homeLG`를 마운트했다
 
 기존 홈이 마운트 아래에 가려진 상태다.
 
@@ -1054,7 +1054,7 @@ restorecon -RFv /homeLG
 
 ---
 
-### 🚨 시나리오 7. LG팀 사용자가 공유 파일을 수정하지 못한다
+### 시나리오 7. LG팀 사용자가 공유 파일을 수정하지 못한다
 
 현재 그룹:
 
@@ -1101,7 +1101,7 @@ setfacl -d -m m::rwx /homeLG/shared
 
 ---
 
-### 🚨 시나리오 8. `umount`가 busy로 실패한다
+### 시나리오 8. `umount`가 busy로 실패한다
 
 ```bash
 cd /
@@ -1126,7 +1126,7 @@ umount /homeLG
 
 ---
 
-### 🚨 시나리오 9. fstab 오류로 emergency mode에 진입했다
+### 시나리오 9. fstab 오류로 emergency mode에 진입했다
 
 콘솔에서 root로 로그인한다.
 
@@ -1164,7 +1164,7 @@ reboot
 
 ---
 
-## 4. ✅ 최종 체크리스트
+## 4. 최종 체크리스트
 
 ```text
 [ ] sdb·sdc·sdd 모델과 일련번호 확인
@@ -1185,7 +1185,7 @@ reboot
 [ ] 사용자 로그인 확인
 ```
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - 디스크 이름만 보지 말고 모델·일련번호 확인
 > - 파티션과 포맷은 비가역적일 수 있음
 > - 임시 마운트로 먼저 테스트
@@ -1193,4 +1193,4 @@ reboot
 > - 개인 홈과 팀 공유 디렉터리 분리
 > - Set-GID만으로 그룹 쓰기 권한이 보장되지 않으므로 umask·ACL 검토
 > - 최종 검증은 재부팅 후 `findmnt`, `df -Th`, 사용자 로그인
-> - 관련: 8-1. 💽 디스크 타입 & 파티션 구조 · 8-2. 🗂️ 파일 시스템 & Format · 8-3. 🔗 마운트 & umount · 8-4. ⚓ Automount · 8-5. 📋 파티션·마운트 통합 정리 · 8-6. 🚨 파티션·마운트 트러블슈팅 치트시트 · 8-7. ⚡ Partition & Mount 명령어 퀵 레퍼런스
+> - 관련: 8-1.  디스크 타입 & 파티션 구조 · 8-2.  파일 시스템 & Format · 8-3.  마운트 & umount · 8-4.  Automount · 8-5.  파티션·마운트 통합 정리 · 8-6.  파티션·마운트 트러블슈팅 치트시트 · 8-7.  Partition & Mount 명령어 퀵 레퍼런스

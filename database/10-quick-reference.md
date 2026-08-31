@@ -1,11 +1,11 @@
-# ⚡ DB - SQL 퀵 레퍼런스
+# DB - SQL 퀵 레퍼런스
 
 > **Tag:** #Database #MariaDB #SQL #QuickReference #CheatSheet
 > **핵심 요약:** MariaDB 설치·접속·계정 관리부터 DDL·DML·DCL·자료형·제약조건(PK·UNIQUE·FK)·SELECT·WHERE·ORDER BY·LIKE·CONCAT·INNER JOIN·GROUP BY·HAVING·집계함수까지 빠르게 조회하는 암기 카드. 이해가 아니라 **"조회·복붙"** 이 목적이다.
 
 ---
 
-## 1. 🛠️ MariaDB 설치 · 접속 · 계정 (Configuration)
+## 1. MariaDB 설치 · 접속 · 계정 (Configuration)
 
 ```bash
 # 설치 및 서비스
@@ -48,7 +48,7 @@ SHOW GRANTS FOR 'user1'@'%';
 
 ---
 
-## 2. 🛠️ DDL 문법 (Configuration)
+## 2. DDL 문법 (Configuration)
 
 ### 1. 데이터베이스
 
@@ -126,7 +126,7 @@ ALTER TABLE member RENAME TO customer;
 
 ---
 
-## 3. 🛠️ 자료형 빠른 참조 (Configuration)
+## 3. 자료형 빠른 참조 (Configuration)
 
 ### 1. 숫자형
 
@@ -160,7 +160,7 @@ BOOLEAN       -- TRUE/FALSE
 
 ---
 
-## 4. 🛠️ 제약조건 빠른 참조 (Configuration)
+## 4. 제약조건 빠른 참조 (Configuration)
 
 ```sql
 PRIMARY KEY                          -- 중복 불가 + NULL 불가, 테이블당 1개
@@ -201,7 +201,7 @@ FROM information_schema.TABLE_CONSTRAINTS WHERE TABLE_SCHEMA = DATABASE();
 
 ---
 
-## 5. 🛠️ DML - INSERT · UPDATE · DELETE (Configuration)
+## 5. DML - INSERT · UPDATE · DELETE (Configuration)
 
 ```sql
 -- INSERT: 컬럼 명시 (권장)
@@ -228,7 +228,7 @@ SET sql_safe_updates = 1;
 
 ---
 
-## 6. 🛠️ DML - SELECT (Configuration)
+## 6. DML - SELECT (Configuration)
 
 ### 1. 기본 SELECT + 산술 + 별칭
 
@@ -399,7 +399,7 @@ HAVING AVG(sal) > (SELECT AVG(sal) FROM emp);
 
 ---
 
-## 7. 🛠️ DCL 문법 (Configuration)
+## 7. DCL 문법 (Configuration)
 
 ```sql
 -- 권한 부여
@@ -415,7 +415,7 @@ FLUSH PRIVILEGES;
 
 ---
 
-## 8. 🔢 빠른 조회표 (Configuration)
+## 8. 빠른 조회표 (Configuration)
 
 ### 1. SQL 명령어 종류 요약
 
@@ -430,8 +430,8 @@ FLUSH PRIVILEGES;
 | 문법 | 결과 |
 |---|---|
 | `WHERE 컬럼 = NULL` | 항상 0건 (잘못된 방법) |
-| `WHERE 컬럼 IS NULL` | NULL인 행만 조회 ✅ |
-| `WHERE 컬럼 IS NOT NULL` | NULL이 아닌 행만 조회 ✅ |
+| `WHERE 컬럼 IS NULL` | NULL인 행만 조회  |
+| `WHERE 컬럼 IS NOT NULL` | NULL이 아닌 행만 조회  |
 | `IFNULL(컬럼, 기본값)` | NULL이면 기본값으로 대체 |
 | `CONCAT(NULL, '문자')` | NULL 반환 → IFNULL 사용 |
 
@@ -465,7 +465,7 @@ FLUSH PRIVILEGES;
 | `AS '월급'` vs `AS 월급` | ORDER BY 시 리터럴 vs 별칭 참조 |
 | `GRANT` vs `REVOKE` | 권한 부여 vs 권한 회수 |
 | `COMMIT` vs `ROLLBACK` | 변경 확정 vs 변경 취소 |
-| `WHERE AVG(sal)` vs `HAVING AVG(sal)` | WHERE에 집계함수 불가(오류) vs HAVING에 가능 ✅ |
+| `WHERE AVG(sal)` vs `HAVING AVG(sal)` | WHERE에 집계함수 불가(오류) vs HAVING에 가능  |
 | `PRIMARY KEY` vs `UNIQUE` | NULL불가·1개 vs NULL허용·여러개 |
 | `ON DELETE CASCADE` vs (기본) | 부모 삭제 시 자식 함께 삭제 vs 부모 삭제 차단 |
 | `COUNT(*)` vs `COUNT(컬럼)` | NULL 포함 전체 건수 vs NULL 제외 건수 |
@@ -475,11 +475,11 @@ FLUSH PRIVILEGES;
 | 순서 | 절 | 집계함수 사용 |
 |---|---|---|
 | 1 | `FROM` | — |
-| 2 | `WHERE` | ❌ 불가 |
+| 2 | `WHERE` |  불가 |
 | 3 | `GROUP BY` | — |
-| 4 | `HAVING` | ✅ 가능 |
-| 5 | `SELECT` | ✅ 가능 |
-| 6 | `ORDER BY` | ✅ 가능 |
+| 4 | `HAVING` |  가능 |
+| 5 | `SELECT` |  가능 |
+| 6 | `ORDER BY` |  가능 |
 
 ### 7. emp · dept 테이블 컬럼 요약
 
@@ -521,7 +521,7 @@ order_date DATE
 
 ---
 
-## 9. 🔍 검증 명령어 모음 (Verification)
+## 9. 검증 명령어 모음 (Verification)
 
 ```sql
 -- 구조 및 데이터 확인
@@ -555,12 +555,12 @@ firewall-cmd --list-service
 
 ---
 
-> 📌 **핵심 요약**
+>  **핵심 요약**
 > - MariaDB 설치 후: `start → enable → secure_installation → 계정·권한 → 방화벽 → bind-address → restart`
 > - DDL은 롤백 불가. DROP/TRUNCATE 전 반드시 백업
 > - UPDATE/DELETE는 **항상 WHERE 조건** 지정. 사전 SELECT로 대상 확인
-> - NULL 비교: `= NULL` ❌ → `IS NULL` ✅
-> - 금액 저장: `FLOAT` ❌ → `DECIMAL(p,s)` ✅
+> - NULL 비교: `= NULL`  → `IS NULL` 
+> - 금액 저장: `FLOAT`  → `DECIMAL(p,s)` 
 > - LIKE: `%`(0개 이상) / `_`(정확히 1개) / 대소문자 → `LOWER()` 활용
 > - FK: **부모 테이블 먼저 생성 / 자식 테이블 먼저 삭제** / `ON DELETE CASCADE` = 연쇄 삭제
 > - INNER JOIN: `ON A.키 = B.키` 필수. ON 없으면 카티션 곱
