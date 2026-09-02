@@ -38,4 +38,4 @@ ssh -i [pem 파일 경로]/aws-prod.pem ubuntu@x.xx.xxx.xx
 
 ![chmod 700 적용 후 SSH로 정상 접속된 터미널 화면](assets/ssh-connect-success-terminal.png)
 
-> 관련: 2.  AWS EC2 - 배포
+> 관련: 3.  AWS EC2 - 배포
