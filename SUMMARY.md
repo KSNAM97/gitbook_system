@@ -229,3 +229,4 @@
 * [AWS - 클라우드 기초 개념](aws/01-aws-cloud-fundamentals.md)
 * [AWS EC2 - 배포](aws/02-aws-ec2-deployment.md)
 * [AWS ELB(로드 밸런서) 적용하기](aws/03-aws-elb-https-setup.md)
+* [AWS 탄력적 IP(Elastic IP) 적용하기](aws/04-aws-elastic-ip.md)
