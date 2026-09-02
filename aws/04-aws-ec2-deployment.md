@@ -718,6 +718,40 @@ EC2 인스턴스에서 다른 AWS 서비스(S3, DynamoDB 등)를 사용하려면
 - 단점: 관리가 어렵고, 변경이 번거로움
 - 예: EC2 100대에 등록된 자격 증명을 모두 교체해야 하는 상황이라면, 각 인스턴스마다 수동으로 변경해야 함
 
+### 실습: EC2 접근용 IAM 사용자 생성
+
+자격 증명을 발급받으려면 먼저 IAM 사용자가 있어야 한다. IAM 대시보드에서 [액세스 관리] > [사용자]로 이동하면 지금까지 생성한 IAM 사용자 목록을 확인할 수 있다. 오른쪽 상단의 [사용자 추가] 버튼을 클릭한다.
+
+![IAM 대시보드 사용자 목록에서 사용자 추가 버튼 클릭](assets/iam-users-list-add-button.png)
+
+사용자 추가는 사용자 세부 정보 지정, 권한 설정, 검토 및 생성, 암호 검색 4단계로 진행된다.
+
+![사용자 추가 4단계 - 사용자 세부 정보 지정, 권한 설정, 검토 및 생성, 암호 검색](assets/iam-create-user-steps-overview.png)
+
+사용자 이름을 입력하고, AWS Management Console에 대한 액세스 권한 제공 여부를 선택한다. 프로그래밍 방식 액세스(Access Key)만 필요하다면 [IAM 사용자를 생성하고 싶음]을 선택한다.
+
+![사용자 세부 정보 지정 - 사용자 이름 입력, 콘솔 액세스 권한 제공 옵션 선택](assets/iam-create-user-details-console-access.png)
+
+콘솔 접속도 함께 허용할 경우, 콘솔 암호를 자동 생성하거나 직접 지정할 수 있다. "사용자는 다음 로그인 시 새 암호를 생성해야 합니다" 옵션을 체크하는 것이 권장된다.
+
+![콘솔 암호 옵션 - 자동 생성된 암호 또는 사용자 지정 암호, 다음 로그인 시 새 암호 생성 요구](assets/iam-create-user-console-password-options.png)
+
+권한 설정 단계에서는 EC2 관련 권한이 담긴 사용자 그룹(예: `AmazonEC2FullAccess`가 연결된 그룹)에 사용자를 추가하거나, [직접 정책 연결]로 필요한 정책을 개별 연결할 수 있다.
+
+![권한 설정 - 그룹에 사용자 추가, 권한 복사, 직접 정책 연결 옵션 및 사용자 그룹 목록](assets/iam-create-user-permissions-groups.png)
+
+[직접 정책 연결]을 선택하면 AWS 관리형 정책 목록에서 검색해 연결할 수 있다. 필요한 정책이 없다면 [정책 생성] 버튼으로 직접 만들 수도 있다.
+
+![직접 정책 연결 선택 시 나타나는 AWS 관리형 권한 정책 목록](assets/iam-create-user-permission-policy-list.png)
+
+검토 및 생성 단계에서 사용자 세부 정보와 권한을 확인하고 [사용자 생성]을 클릭한다.
+
+![검토 및 생성 화면 - 사용자 세부 정보와 권한 요약](assets/iam-create-user-review-and-create.png)
+
+사용자가 생성되면 콘솔 로그인 URL이 표시된다. 이 화면에서만 암호를 확인·다운로드할 수 있으므로 .csv 파일을 반드시 저장해 둔다. 이 사용자의 액세스 키를 발급받아 아래 `aws configure`에 등록하면 EC2 인스턴스에서 해당 자격 증명을 사용할 수 있다.
+
+![암호 검색 화면 - 콘솔 로그인 URL, 사용자 이름, 콘솔 암호, csv 파일 다운로드 버튼](assets/iam-create-user-password-retrieval.png)
+
 ```bash
 aws configure
 # AWS Access Key ID [None]: <ACCESS_KEY_ID>
