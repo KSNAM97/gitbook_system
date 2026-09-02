@@ -17,14 +17,14 @@
 ssh -i [pem 파일 경로]/aws-prod.pem ubuntu@x.xx.xxx.xx
 ```
 
-키 페어 파일의 권한이 너무 열려 있으면 해당 키 페어로는 접근이 안 된다는 경고(UNPROTECTED PRIVATE KEY FILE)가 나타난다. 이 경우 `chmod` 명령어로 키 페어의 권한을 변경해야 한다. 700은 읽기, 쓰기, 실행 모든 권한을 포함한다.
+키 페어 파일의 권한이 너무 열려 있으면 해당 키 페어로는 접근이 안 된다는 경고(UNPROTECTED PRIVATE KEY FILE)가 나타난다. SSH는 개인 키 파일이 소유자 외에는 읽기·쓰기 권한이 전혀 없는 상태를 요구하므로, `chmod` 명령어로 권한을 `400`(소유자만 읽기 가능, 쓰기·실행 권한 없음)으로 변경해야 한다.
 
 ```bash
-chmod 700 [pem 파일 경로]/aws-prod.pem
+chmod 400 [pem 파일 경로]/aws-prod.pem
 
 ssh -i [pem 파일 경로]/aws-prod.pem ubuntu@x.xx.xxx.xx
 ```
 
-권한을 700으로 변경한 뒤 다시 접속하면 터미널에서도 EC2 인스턴스에 정상적으로 접속할 수 있다.
+권한을 400으로 변경한 뒤 다시 접속하면 터미널에서도 EC2 인스턴스에 정상적으로 접속할 수 있다.
 
 > 관련: 이론 2.  AWS EC2 - 배포
