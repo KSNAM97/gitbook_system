@@ -233,3 +233,4 @@
 * [EC2 인스턴스 접속하기](aws/05-ec2-instance-connect.md)
 * [AWS 탄력적 IP(Elastic IP) 적용하기](aws/06-aws-elastic-ip.md)
 * [AWS ELB(로드 밸런서) 적용하기](aws/07-aws-elb-https-setup.md)
+* [AWS IAM - MFA 강제 정책 적용하기](aws/08-aws-iam-force-mfa-policy.md)
