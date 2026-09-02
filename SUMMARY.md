@@ -230,6 +230,7 @@
 
 * [AWS - 클라우드 기초 개념](aws-이론/01-aws-cloud-fundamentals.md)
 * [AWS EC2 - 배포](aws-이론/02-aws-ec2-deployment.md)
+* [AWS VPC](aws-이론/03-aws-vpc.md)
 
 ### AWS 가이드
 
