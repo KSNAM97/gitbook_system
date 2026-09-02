@@ -239,4 +239,4 @@
 * [AWS EC2 설정](aws-가이드/03-aws-ec2-setup.md)
 * [EC2 인스턴스 접속하기](aws-가이드/04-ec2-instance-connect.md)
 * [AWS 탄력적 IP(Elastic IP) 적용하기](aws-가이드/05-aws-elastic-ip.md)
-* [AWS ELB(로드 밸런서) 적용하기](aws-가이드/06-aws-elb-https-setup.md)
+* [AWS ALB + Auto Scaling + 대상 그룹 통합 가이드](aws-가이드/06-aws-elb-https-setup.md)
