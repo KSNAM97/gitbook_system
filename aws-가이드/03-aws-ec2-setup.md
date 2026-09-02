@@ -6,13 +6,13 @@ EC2는 Elastic Compute Cloud의 약자로 AWS에서 대여받은 컴퓨터를 �
 
 ## 리전(Region)
 
-![AWS 리전 확장 현황을 보여주는 세계 지도](assets/aws-region-world-map.png)
+![AWS 리전 확장 현황을 보여주는 세계 지도](../aws/assets/aws-region-world-map.png)
 
 리전은 지역별로 인프라를 배포한 각각의 데이터 센터를 의미한다. EC2로 빌릴 수 있는 컴퓨터는 다양하게 분포되어 있다. 이렇게 분포된 컴퓨터의 위치를 리전이라고 한다. 선택된 리전에 있는 컴퓨터와 서비스를 이용하려는 사용자의 위치가 멀수록 접속 속도가 느려진다. 그래서 서비스의 주 사용자와 가장 가까운 위치에 있는 리전을 선택하는 것이 좋다. 예를 들어 한국 사용자를 대상으로 하는 서비스라면 리전을 아시아 태평양(서울)로 선택한다.
 
 리전은 AWS 로그인 후 오른쪽 상태의 메뉴에서 선택 가능하다.
 
-![AWS 콘솔 우측 상단 메뉴에서 리전 선택](assets/region-select-menu.png)
+![AWS 콘솔 우측 상단 메뉴에서 리전 선택](../aws/assets/region-select-menu.png)
 
 ## 보안 그룹
 
@@ -23,7 +23,7 @@ EC2는 Elastic Compute Cloud의 약자로 AWS에서 대여받은 컴퓨터를 �
 
 EC2에 접속하여 왼쪽의 [보안 그룹]으로 이동한다. 기본 보안 그룹은 이미 생성되어 있는 상태이며, 새로운 보안 그룹을 생성한다. 오른쪽 상단의 [보안 그룹 생성] 버튼을 클릭한다.
 
-![보안 그룹 메뉴에서 보안 그룹 생성 버튼 클릭](assets/security-group-create-button.png)
+![보안 그룹 메뉴에서 보안 그룹 생성 버튼 클릭](../aws/assets/security-group-create-button.png)
 
 보안 그룹 이름, 설명은 자유롭게 작성하고, VPC는 기본값으로 세팅한다. 인바운드 규칙은 다음과 같이 작성한다.
 
@@ -35,11 +35,11 @@ EC2에 접속하여 왼쪽의 [보안 그룹]으로 이동한다. 기본 보안 
 
 보안 그룹의 규칙은 언제든 자유롭게 편집이 가능하다.
 
-![보안 그룹 인바운드 규칙 설정 (3000/443/80/5432/22 포트)](assets/security-group-inbound-rules.png)
+![보안 그룹 인바운드 규칙 설정 (3000/443/80/5432/22 포트)](../aws/assets/security-group-inbound-rules.png)
 
 아웃바운드 규칙은 작성할 필요가 없다. 바로 보안 그룹을 생성하면 목록에 추가된 보안 그룹을 확인할 수 있다.
 
-![생성된 보안 그룹이 목록에 추가된 화면](assets/security-group-list-created.png)
+![생성된 보안 그룹이 목록에 추가된 화면](../aws/assets/security-group-list-created.png)
 
 보안 그룹의 규칙을 지정할 때는 IP와 Port를 설정할 수 있다.
 
@@ -65,33 +65,33 @@ IP(Internet Protocol)는 컴퓨터 네트워크에서 장치 간에 데이터를
 
 EC2에서 컴퓨터를 대여받는다. 여기서 말하는 컴퓨터가 AWS에서 제공하는 인스턴스라고 이해하면 된다. 왼쪽의 [인스턴스] 메뉴로 이동한다. 오른쪽 상단의 [인스턴스 시작]을 클릭한다.
 
-![인스턴스 메뉴에서 인스턴스 시작 버튼 클릭](assets/instance-launch-button.png)
+![인스턴스 메뉴에서 인스턴스 시작 버튼 클릭](../aws/assets/instance-launch-button.png)
 
 대여받은 컴퓨터의 OS, 성능, 저장 용량 등을 설정한다. 이름 및 태그에서는 사용할 컴퓨터의 이름을 입력한다. 애플리케이션 및 OS 이미지는 Ubuntu를 선택한다. 머신 이미지는 무료 버전인 프리 티어를 선택한다.
 
-![인스턴스 이름 입력 및 Ubuntu 프리 티어 AMI 선택](assets/instance-name-os-ami-select.png)
+![인스턴스 이름 입력 및 Ubuntu 프리 티어 AMI 선택](../aws/assets/instance-name-os-ami-select.png)
 
 인스턴스 유형은 일종의 하드웨어 성능이라고 보면 된다. 프리 티어에서 사용 가능한 `t2.micro`를 선택한다. 인스턴스 유형은 언제든 자유롭게 변경 가능하다.
 
-![인스턴스 유형에서 t2.micro 선택](assets/instance-type-t2micro-select.png)
+![인스턴스 유형에서 t2.micro 선택](../aws/assets/instance-type-t2micro-select.png)
 
 키 페어는 EC2 컴퓨터에 접근할 때 사용되는 열쇠라고 생각하면 된다. 키 페어를 생성하면 파일을 다운로드 받게 된다. 나중에 EC2에 접속할 때 사용되는 열쇠이니 절대 잊어버리지 않게 잘 보관해야 한다.
 
-![새 키 페어 생성 - 이름 및 유형 설정](assets/keypair-create-step1.png)
+![새 키 페어 생성 - 이름 및 유형 설정](../aws/assets/keypair-create-step1.png)
 
-![키 페어 생성 완료 및 pem 파일 다운로드](assets/keypair-create-step2.png)
+![키 페어 생성 완료 및 pem 파일 다운로드](../aws/assets/keypair-create-step2.png)
 
 네트워크 설정에서는 앞에서 생성한 기존 보안 그룹을 선택한다.
 
-![네트워크 설정에서 기존 보안 그룹 선택](assets/instance-network-security-group-select.png)
+![네트워크 설정에서 기존 보안 그룹 선택](../aws/assets/instance-network-security-group-select.png)
 
 스토리지 구성에서는 컴퓨터의 저장 공간을 설정한다. 이 저장 공간을 보통 EBS(Elastic Block Storage)라고 부른다. EBS는 컴퓨터의 하드 디스크라고 생각하면 된다. EBS와 같은 저장 공간을 포괄적인 용어로 스토리지 또는 볼륨이라고 부른다. 용량은 30GiB로 입력한다. 참고로 스토리지는 30GiB까지 무료로 이용 가능하다.
 
-![스토리지 구성에서 30GiB 볼륨 설정](assets/instance-storage-30gib-config.png)
+![스토리지 구성에서 30GiB 볼륨 설정](../aws/assets/instance-storage-30gib-config.png)
 
 [인스턴스 시작]을 클릭하여 인스턴스를 생성하면 클라우드 컴퓨터가 생성된다.
 
-![인스턴스 시작 완료 화면](assets/instance-launch-complete.png)
+![인스턴스 시작 완료 화면](../aws/assets/instance-launch-complete.png)
 
 ## 인스턴스 세부 내용
 
@@ -100,24 +100,24 @@ EC2에서 컴퓨터를 대여받는다. 여기서 말하는 컴퓨터가 AWS에�
 - **퍼블릭 IPv4 주소**: EC2 인스턴스가 생성되면서 부여받은 IP 주소다. 해당 인스턴스에 접근하려면 이 IP 주소를 입력하면 된다.
 - **인스턴스 상태**: 인스턴스의 실행 상태를 말한다.
 
-![인스턴스 세부 정보 - 퍼블릭 IPv4 주소 및 인스턴스 상태](assets/instance-detail-public-ip-status.png)
+![인스턴스 세부 정보 - 퍼블릭 IPv4 주소 및 인스턴스 상태](../aws/assets/instance-detail-public-ip-status.png)
 
 아래 보안 탭에서는 해당 인스턴스의 보안 그룹과 규칙이 표기되어 있다.
 
-![인스턴스 세부 정보의 보안 탭 - 보안 그룹과 규칙](assets/instance-detail-security-tab.png)
+![인스턴스 세부 정보의 보안 탭 - 보안 그룹과 규칙](../aws/assets/instance-detail-security-tab.png)
 
 스토리지는 볼륨 크기를 확인할 수 있다.
 
-![인스턴스 세부 정보의 스토리지 탭 - 볼륨 크기](assets/instance-detail-storage-tab.png)
+![인스턴스 세부 정보의 스토리지 탭 - 볼륨 크기](../aws/assets/instance-detail-storage-tab.png)
 
 생성된 인스턴스를 삭제하려면 [인스턴스 상태] 메뉴에서 [인스턴스 종료]를 선택한다.
 
-![인스턴스 상태 메뉴에서 인스턴스 종료 선택](assets/instance-terminate-menu.png)
+![인스턴스 상태 메뉴에서 인스턴스 종료 선택](../aws/assets/instance-terminate-menu.png)
 
-![인스턴스 종료 확인 창](assets/instance-terminate-confirm.png)
+![인스턴스 종료 확인 창](../aws/assets/instance-terminate-confirm.png)
 
 시간이 지나면 인스턴스 상태가 종료됨으로 변경된다. 인스턴스 삭제가 완료된 상황이며 시간이 지나면 목록에서 제거된다.
 
-![인스턴스 상태가 종료됨으로 변경된 화면](assets/instance-terminated-status.png)
+![인스턴스 상태가 종료됨으로 변경된 화면](../aws/assets/instance-terminated-status.png)
 
-> 관련: 4.  AWS EC2 - 배포 · 6.  EC2 인스턴스 접속하기
+> 관련: 이론 2.  AWS EC2 - 배포 · 가이드 4.  EC2 인스턴스 접속하기

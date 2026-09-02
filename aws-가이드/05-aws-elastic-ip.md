@@ -1,6 +1,6 @@
 # AWS 탄력적 IP(Elastic IP) 적용하기
 
-개념에 대한 자세한 설명은 4.  AWS EC2 - 배포 문서의 10. ENI와 Elastic IP 섹션 참고. 이 문서에서는 실제 콘솔에서 탄력적 IP를 할당하고 인스턴스에 연결하는 과정을 실습으로 다룬다.
+개념에 대한 자세한 설명은 이론 2.  AWS EC2 - 배포 문서의 10. ENI와 Elastic IP 섹션 참고. 이 문서에서는 실제 콘솔에서 탄력적 IP를 할당하고 인스턴스에 연결하는 과정을 실습으로 다룬다.
 
 ## 탄력적 IP 소개
 
@@ -12,34 +12,34 @@
 
 인스턴스를 선택하여 퍼블릭 IP 주소를 확인한다. 오른쪽 상단의 [인스턴스 상태]에서 [인스턴스 중지]를 선택한다.
 
-![인스턴스 상태에서 인스턴스 중지 선택](assets/eip-instance-stop.png)
+![인스턴스 상태에서 인스턴스 중지 선택](../aws/assets/eip-instance-stop.png)
 
 중지된 인스턴스를 다시 시작하면 퍼블릭 IP 주소가 변경된 것을 확인할 수 있다. 탄력적 IP를 사용하여 해당 인스턴스의 IP 주소를 고정한다. 탄력적 IP 페이지로 이동하여 [탄력적 IP 주소 할당] 버튼을 클릭한다.
 
-![탄력적 IP 페이지에서 탄력적 IP 주소 할당 버튼 클릭](assets/eip-allocate-address-button.png)
+![탄력적 IP 페이지에서 탄력적 IP 주소 할당 버튼 클릭](../aws/assets/eip-allocate-address-button.png)
 
 기본 설정은 그대로 두고 [할당]을 클릭한다.
 
-![탄력적 IP 할당 - 기본 설정 그대로 할당](assets/eip-allocate-default-settings.png)
+![탄력적 IP 할당 - 기본 설정 그대로 할당](../aws/assets/eip-allocate-default-settings.png)
 
 아이피 주소가 할당된다.
 
-![탄력적 IP 주소가 할당된 화면](assets/eip-address-allocated.png)
+![탄력적 IP 주소가 할당된 화면](../aws/assets/eip-address-allocated.png)
 
 생성한 탄력적 IP의 이름을 변경한다.
 
-![탄력적 IP 이름 변경](assets/eip-rename.png)
+![탄력적 IP 이름 변경](../aws/assets/eip-rename.png)
 
 EC2 인스턴스와 탄력적 IP를 연결한다. 오른쪽 상단의 [작업]에서 [탄력적 IP 주소 연결]을 선택한다.
 
-![탄력적 IP 작업 메뉴에서 탄력적 IP 주소 연결 선택](assets/eip-associate-address-menu.png)
+![탄력적 IP 작업 메뉴에서 탄력적 IP 주소 연결 선택](../aws/assets/eip-associate-address-menu.png)
 
 인스턴스에서 EC2에서 생성한 인스턴스를 선택하고, 오른쪽 하단의 [연결]을 클릭한다. 연결이 완료된다.
 
-![연결할 EC2 인스턴스 선택 후 연결 클릭](assets/eip-associate-instance-select.png)
+![연결할 EC2 인스턴스 선택 후 연결 클릭](../aws/assets/eip-associate-instance-select.png)
 
 EC2 인스턴스로 이동하면 탄력적 IP에서 할당받은 주소로 퍼블릭 IP 주소가 변경된 것을 확인할 수 있다. 이후 인스턴스를 중지하고 다시 시작해도 퍼블릭 IP 주소는 고정된다.
 
-![탄력적 IP로 고정된 EC2 인스턴스의 퍼블릭 IP](assets/eip-instance-public-ip-fixed.png)
+![탄력적 IP로 고정된 EC2 인스턴스의 퍼블릭 IP](../aws/assets/eip-instance-public-ip-fixed.png)
 
-> 관련: 4.  AWS EC2 - 배포
+> 관련: 이론 2.  AWS EC2 - 배포

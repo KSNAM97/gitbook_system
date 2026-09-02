@@ -105,7 +105,7 @@ EC2 인스턴스 저장에는 크게 EBS(Elastic Block Store)와 인스턴스 �
 - Amazon EBS는 AWS 클라우드의 Amazon EC2 인스턴스에서 사용할 영구 블록 스토리지 볼륨을 제공한다.
 - 각 Amazon EBS 볼륨은 가용 영역(AZ) 내에서 자동으로 복제되어 하드웨어 장애로부터 데이터를 보호하며, 고가용성과 내구성을 제공한다.
 
-![EBS vs 인스턴스 스토어 개념 비교](assets/ebs-vs-instance-store-compare.jpeg)
+![EBS vs 인스턴스 스토어 개념 비교](../aws/assets/ebs-vs-instance-store-compare.jpeg)
 
 EBS란?
 
@@ -119,7 +119,7 @@ EBS란?
 - 가용영역 내 자동 분산 저장으로 99.999%의 가용성을 목표로 설계됨
 - 인스턴스와 EBS는 네트워크로 연결되어있기 때문에 다른 인스턴스로 교체가 가능하다.
 
-![EBS와 EC2 인스턴스의 네트워크 연결 구조](assets/ebs-network-connection.jpeg)
+![EBS와 EC2 인스턴스의 네트워크 연결 구조](../aws/assets/ebs-network-connection.jpeg)
 
 EBS의 유형:
 
@@ -245,7 +245,7 @@ EC2 요금 모델 종류:
 - 인스턴스/호스트 단위로 격리된 환경 제공
 - 물리적 하드웨어는 단일 고객 전용이지만, 그 위에서 여러 개의 가상 CPU(vCPU) 인스턴스를 실행 가능
 
-![전용 인스턴스의 물리 CPU와 vCPU 구성](assets/dedicated-instance-vcpu-structure.jpeg)
+![전용 인스턴스의 물리 CPU와 vCPU 구성](../aws/assets/dedicated-instance-vcpu-structure.jpeg)
 
 특징:
 
@@ -272,9 +272,9 @@ Port 허용:
 - 하나의 인스턴스에 하나 이상의 보안 그룹을 설정 가능하여, 복합적인 보안 규칙 적용 가능
 - 인스턴스에 여러 보안 그룹이 적용될 경우 모든 보안 그룹의 허용 규칙이 합산되어 적용됨 (가장 개방적인 규칙이 우선)
 
-![보안 그룹별로 허용된 포트 구성 예시](assets/security-group-example.jpeg)
+![보안 그룹별로 허용된 포트 구성 예시](../aws/assets/security-group-example.jpeg)
 
-![사용자 요청이 각 보안 그룹의 허용 포트를 통해 전달되는 흐름](assets/security-group-port-flow.jpeg)
+![사용자 요청이 각 보안 그룹의 허용 포트를 통해 전달되는 흐름](../aws/assets/security-group-port-flow.jpeg)
 
 ## 8. EC2 접속 방법
 
@@ -491,7 +491,7 @@ scp -i My-EC2-KeyPair.pem index.html ec2-user@3.37.62.182:/home/ec2-user/index.h
 
 ### 인스턴스 상태 전이
 
-![EC2 인스턴스 생명주기 상태 다이어그램 (pending → running → stopping/shutting-down → stopped/terminated)](assets/ec2-lifecycle-states.jpeg)
+![EC2 인스턴스 생명주기 상태 다이어그램 (pending → running → stopping/shutting-down → stopped/terminated)](../aws/assets/ec2-lifecycle-states.jpeg)
 
 | 인스턴스 상태 | 설명 | 인스턴스 사용 요금 |
 |---|---|---|
@@ -718,40 +718,6 @@ EC2 인스턴스에서 다른 AWS 서비스(S3, DynamoDB 등)를 사용하려면
 - 단점: 관리가 어렵고, 변경이 번거로움
 - 예: EC2 100대에 등록된 자격 증명을 모두 교체해야 하는 상황이라면, 각 인스턴스마다 수동으로 변경해야 함
 
-### 실습: EC2 접근용 IAM 사용자 생성
-
-자격 증명을 발급받으려면 먼저 IAM 사용자가 있어야 한다. IAM 대시보드에서 [액세스 관리] > [사용자]로 이동하면 지금까지 생성한 IAM 사용자 목록을 확인할 수 있다. 오른쪽 상단의 [사용자 추가] 버튼을 클릭한다.
-
-![IAM 대시보드 사용자 목록에서 사용자 추가 버튼 클릭](assets/iam-users-list-add-button.png)
-
-사용자 추가는 사용자 세부 정보 지정, 권한 설정, 검토 및 생성, 암호 검색 4단계로 진행된다.
-
-![사용자 추가 4단계 - 사용자 세부 정보 지정, 권한 설정, 검토 및 생성, 암호 검색](assets/iam-create-user-steps-overview.png)
-
-사용자 이름을 입력하고, AWS Management Console에 대한 액세스 권한 제공 여부를 선택한다. 프로그래밍 방식 액세스(Access Key)만 필요하다면 [IAM 사용자를 생성하고 싶음]을 선택한다.
-
-![사용자 세부 정보 지정 - 사용자 이름 입력, 콘솔 액세스 권한 제공 옵션 선택](assets/iam-create-user-details-console-access.png)
-
-콘솔 접속도 함께 허용할 경우, 콘솔 암호를 자동 생성하거나 직접 지정할 수 있다. "사용자는 다음 로그인 시 새 암호를 생성해야 합니다" 옵션을 체크하는 것이 권장된다.
-
-![콘솔 암호 옵션 - 자동 생성된 암호 또는 사용자 지정 암호, 다음 로그인 시 새 암호 생성 요구](assets/iam-create-user-console-password-options.png)
-
-권한 설정 단계에서는 EC2 관련 권한이 담긴 사용자 그룹(예: `AmazonEC2FullAccess`가 연결된 그룹)에 사용자를 추가하거나, [직접 정책 연결]로 필요한 정책을 개별 연결할 수 있다.
-
-![권한 설정 - 그룹에 사용자 추가, 권한 복사, 직접 정책 연결 옵션 및 사용자 그룹 목록](assets/iam-create-user-permissions-groups.png)
-
-[직접 정책 연결]을 선택하면 AWS 관리형 정책 목록에서 검색해 연결할 수 있다. 필요한 정책이 없다면 [정책 생성] 버튼으로 직접 만들 수도 있다.
-
-![직접 정책 연결 선택 시 나타나는 AWS 관리형 권한 정책 목록](assets/iam-create-user-permission-policy-list.png)
-
-검토 및 생성 단계에서 사용자 세부 정보와 권한을 확인하고 [사용자 생성]을 클릭한다.
-
-![검토 및 생성 화면 - 사용자 세부 정보와 권한 요약](assets/iam-create-user-review-and-create.png)
-
-사용자가 생성되면 콘솔 로그인 URL이 표시된다. 이 화면에서만 암호를 확인·다운로드할 수 있으므로 .csv 파일을 반드시 저장해 둔다. 이 사용자의 액세스 키를 발급받아 아래 `aws configure`에 등록하면 EC2 인스턴스에서 해당 자격 증명을 사용할 수 있다.
-
-![암호 검색 화면 - 콘솔 로그인 URL, 사용자 이름, 콘솔 암호, csv 파일 다운로드 버튼](assets/iam-create-user-password-retrieval.png)
-
 ```bash
 aws configure
 # AWS Access Key ID [None]: <ACCESS_KEY_ID>
@@ -762,7 +728,7 @@ aws configure
 
 > 실습에서 `aws configure`로 발급받은 Access Key/Secret Key는 자격 증명이 코드나 설정 파일에 그대로 남는 구조이므로, 실전에서는 아래 IAM 역할 방식이 권장된다.
 
-![여러 EC2 인스턴스에 IAM 사용자 자격 증명을 직접 배포하는 구조](assets/ec2-role-credential-rotation.jpeg)
+![여러 EC2 인스턴스에 IAM 사용자 자격 증명을 직접 배포하는 구조](../aws/assets/ec2-role-credential-rotation.jpeg)
 
 **2) IAM 역할을 부여**
 
@@ -772,13 +738,13 @@ aws configure
 - 내부적으로 AWS가 주기적으로 자격 증명을 자동 갱신하므로 별도 관리 필요 없음
 - 보안성 향상: 자격 증명이 코드나 파일로 저장되지 않으므로 유출 위험이 크게 줄어든다.
 
-![EC2 인스턴스에 부여된 하나의 IAM Role을 여러 인스턴스가 공유하는 구조](assets/iam-role-permission-result.jpeg)
+![EC2 인스턴스에 부여된 하나의 IAM Role을 여러 인스턴스가 공유하는 구조](../aws/assets/iam-role-permission-result.jpeg)
 
 ### EC2에서 IAM 역할로 다른 AWS 서비스 호출 (Node.js SDK 예시)
 
 역할이 부여된 EC2 인스턴스 위에서 애플리케이션이 Access Key 없이 S3, DynamoDB, SageMaker 등에 접근하는 구조:
 
-![EC2 인스턴스의 Node.js 애플리케이션이 S3/DynamoDB/SageMaker에 접근하는 구조](assets/ec2-app-aws-service-integration.jpeg)
+![EC2 인스턴스의 Node.js 애플리케이션이 S3/DynamoDB/SageMaker에 접근하는 구조](../aws/assets/ec2-app-aws-service-integration.jpeg)
 
 IAM 사용자/역할 목록을 조회하는 AWS SDK v3(Node.js) 예시:
 
@@ -845,7 +811,7 @@ async function runTest() {
 
 개념: 기존 서버를 더 강력한 사양으로 변경 (예: CPU 1개, RAM 1GB인 서버 → CPU 16개, RAM 16GB 서버로 업그레이드). 서버의 물리적 또는 가상 자원을 늘려 처리 성능을 높임
 
-![수직 확장 시 성능과 비용 증가 비교(CPU x1 → x16, 비용 x30)](assets/vertical-scale-cost-diagram.jpeg)
+![수직 확장 시 성능과 비용 증가 비교(CPU x1 → x16, 비용 x30)](../aws/assets/vertical-scale-cost-diagram.jpeg)
 
 장점:
 
@@ -868,7 +834,7 @@ async function runTest() {
 
 개념: 동일하거나 유사한 사양의 서버를 여러 대 추가하여 부하를 분산 (예: CPU 1개, RAM 1GB 서버 1대를 → 동일 사양 서버 16대 운영). 주로 로드 밸런서(Load Balancer)를 사용하여 요청을 여러 서버로 분산
 
-![수평 확장 시 동일 사양 서버 16대로 부하를 분산하는 구조](assets/horizontal-scale-cost-diagram.jpeg)
+![수평 확장 시 동일 사양 서버 16대로 부하를 분산하는 구조](../aws/assets/horizontal-scale-cost-diagram.jpeg)
 
 장점:
 
@@ -950,7 +916,7 @@ Stateless 환경은 인스턴스의 특정 상태나 데이터를 로컬에 저�
 
 Auto Scaling Group 내부에서는 인스턴스마다 서로 다른 IP를 부여받아 관리된다.
 
-![Auto Scaling Group 내 여러 EC2 인스턴스가 각각 다른 IP를 부여받는 구조](assets/autoscaling-group-ip-pool.jpeg)
+![Auto Scaling Group 내 여러 EC2 인스턴스가 각각 다른 IP를 부여받는 구조](../aws/assets/autoscaling-group-ip-pool.jpeg)
 
 ## 15. ELB (Elastic Load Balancer)
 
@@ -970,7 +936,7 @@ Auto Scaling Group 내부에서는 인스턴스마다 서로 다른 IP를 부여
 - 장애가 발생한 인스턴스는 자동으로 연결 대상에서 제외
 - Auto Scaling과 연동되어, 서버가 자동으로 늘어나거나 줄어들어도 로드 밸런서 주소 하나로 서비스 이용이 가능
 
-![로드 밸런서 도메인 주소를 통해 여러 EC2 인스턴스로 트래픽이 분산되는 구조](assets/elb-load-balancer-diagram.jpeg)
+![로드 밸런서 도메인 주소를 통해 여러 EC2 인스턴스로 트래픽이 분산되는 구조](../aws/assets/elb-load-balancer-diagram.jpeg)
 
 ### ELB란?
 
@@ -1018,7 +984,7 @@ Auto Scaling Group 내부에서는 인스턴스마다 서로 다른 IP를 부여
 - 이를 통해 트래픽 급증 시에도 안정적인 서비스 제공이 가능하며, 트래픽이 줄면 불필요한 인스턴스를 줄여 비용을 절감한다.
 - ELB와 Auto Scaling의 연동은 고가용성과 확장성을 동시에 확보하는 핵심적인 클라우드 아키텍처 패턴이다.
 
-![ELB와 Auto Scaling Group이 연동되어 트래픽을 분산하는 구조](assets/elb-autoscaling-integration.jpeg)
+![ELB와 Auto Scaling Group이 연동되어 트래픽을 분산하는 구조](../aws/assets/elb-autoscaling-integration.jpeg)
 
 ### 대상 그룹(Target Group)
 
@@ -1060,7 +1026,7 @@ Auto Scaling Group 내부에서는 인스턴스마다 서로 다른 IP를 부여
 
 여러 대상 그룹을 도메인/경로별로 라우팅하는 예시(웹서버, 이미지서버, 대시보드, 람다 함수):
 
-![ALB가 도메인별로 여러 대상 그룹에 트래픽을 라우팅하는 구조](assets/alb-target-group-routing.jpeg)
+![ALB가 도메인별로 여러 대상 그룹에 트래픽을 라우팅하는 구조](../aws/assets/alb-target-group-routing.jpeg)
 
 ### 리스너(Listener)란?
 
@@ -1084,7 +1050,7 @@ Auto Scaling Group 내부에서는 인스턴스마다 서로 다른 IP를 부여
 
 리스너별로 조건(method/host)에 따라 서로 다른 대상 그룹으로 라우팅하는 예시:
 
-![리스너(80/8080/443)별 규칙 조건에 따라 이미지서버/웹서버 대상 그룹으로 라우팅되는 구조](assets/alb-listener-rules.jpeg)
+![리스너(80/8080/443)별 규칙 조건에 따라 이미지서버/웹서버 대상 그룹으로 라우팅되는 구조](../aws/assets/alb-listener-rules.jpeg)
 
 ### ALB 규칙 (Rules)
 
@@ -1104,4 +1070,4 @@ Auto Scaling Group 내부에서는 인스턴스마다 서로 다른 IP를 부여
 - 낮은 숫자일수록 우선순위가 높음
 - 요청이 들어오면 순서대로 평가하며, 가장 먼저 일치하는 규칙이 적용됨
 
-> 관련: 3.  AWS - 클라우드 기초 개념
+> 관련: 이론 1.  AWS - 클라우드 기초 개념

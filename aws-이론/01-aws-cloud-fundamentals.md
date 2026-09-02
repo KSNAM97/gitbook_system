@@ -26,7 +26,7 @@ Amazon Web Services(AWS)는 전 세계적으로 분포한 데이터 센터에서
 
 ### AWS 서비스 우선순위
 
-![AWS 서비스 티어 개요](assets/aws-service-tier-overview.jpeg)
+![AWS 서비스 티어 개요](../aws/assets/aws-service-tier-overview.jpeg)
 
 | 티어 | 서비스 | 관련 서비스 |
 |---|---|---|
@@ -168,7 +168,7 @@ RDS(Relational Database Service)는 AWS에서 제공하는 관리형 관계형 �
 
 온프레미스에서는 서버 구매, 데이터센터 구축 같은 비용을 처음부터 한 번에 크게 투자해야 한다(최대 피크 사용량 기준으로 인프라를 미리 준비). 아래 그래프의 노란 영역이 낭비되는 자원이다 — 사용량이 적은 시간에도 서버는 풀로 켜져 있고 전기·공간·유지비가 계속 들어간다.
 
-![온프레미스 사용량 그래프 — 최대 피크 기준 고정 인프라](assets/onpremise-peak-usage-graph.jpeg)
+![온프레미스 사용량 그래프 — 최대 피크 기준 고정 인프라](../aws/assets/onpremise-peak-usage-graph.jpeg)
 
 클라우드에서는 서버를 구매하는 게 아니라 필요할 때 빌려 쓰고, 쓴 만큼만 비용을 낸다. 막대한 초기 투자 대신 운영비 형태로 비용을 나눠 지불하는 구조다.
 
@@ -180,7 +180,7 @@ AWS 같은 클라우드 사업자는 전 세계 규모로 서버와 장비를 �
 
 온프레미스에서는 트래픽 증가를 미리 예측해서 서버를 사야 하고, 예측이 틀리면 적게 사면 장애, 많이 사면 낭비가 된다. 클라우드에서는 사용량이 늘면 서버를 늘리고 줄면 서버를 줄일 수 있다 — 이것이 **오토 스케일링(Auto Scaling)** 이다.
 
-![EC2 오토스케일링 사용량 그래프 — 사용량에 맞춰 유동적으로 조절되는 용량](assets/ec2-autoscaling-usage-graph.jpeg)
+![EC2 오토스케일링 사용량 그래프 — 사용량에 맞춰 유동적으로 조절되는 용량](../aws/assets/ec2-autoscaling-usage-graph.jpeg)
 
 노란 영역은 필요 이상으로 유지되는 고정 자원이 아니라, 필요할 때 잠깐 늘었다가 사라지는 유연한 자원이다. 그래서 클라우드에서는 자원 낭비가 줄고 비용도 절감된다.
 
@@ -197,7 +197,7 @@ AWS 같은 클라우드 사업자는 전 세계 규모로 서버와 장비를 �
 
 클라우드 서비스는 어디까지를 클라우드가 대신 해주고 어디부터를 사용자가 직접 해야 하는지에 따라 IaaS / PaaS / SaaS로 나뉜다.
 
-![On-Premises vs IaaS vs PaaS vs SaaS 관리 범위 비교](assets/iaas-paas-saas-stack-comparison.jpeg)
+![On-Premises vs IaaS vs PaaS vs SaaS 관리 범위 비교](../aws/assets/iaas-paas-saas-stack-comparison.jpeg)
 
 ### IaaS (Infrastructure as a Service)
 
@@ -308,7 +308,7 @@ AWS 리전은 AWS가 물리적으로 데이터센터를 운영하는 지리적 �
 
 리전은 화면에만 존재하는 논리적 구분이 아니라 완전히 분리된 물리적 인프라 단위다. 서울 리전과 도쿄 리전의 EC2는 서로 다른 데이터센터, 다른 네트워크, 다른 전력 환경에서 동작하며, 리전이 다르면 기본적으로 데이터도 자동으로 공유되지 않는다.
 
-![AWS 글로벌 리전 지도](assets/aws-global-regions-map.jpeg)
+![AWS 글로벌 리전 지도](../aws/assets/aws-global-regions-map.jpeg)
 
 ### AWS가 리전을 나눠 놓은 이유
 
@@ -329,7 +329,7 @@ AWS 리전은 AWS가 물리적으로 데이터센터를 운영하는 지리적 �
 
 AWS 리전은 하나의 지역 개념이고, 그 안에는 여러 개의 물리적으로 분리된 인프라 묶음(가용 영역, AZ)이 존재한다. AWS 문서에서는 "각 가용 영역은 하나 이상의 데이터센터로 구성된다"고 설명한다 — 가용 영역 하나는 작은 데이터센터가 아니라 독립된 데이터센터 단지다.
 
-![리전-가용 영역 구조](assets/region-availability-zone-structure.jpeg)
+![리전-가용 영역 구조](../aws/assets/region-availability-zone-structure.jpeg)
 
 같은 리전 안에 있어도 가용 영역끼리는 전력, 네트워크, 냉각 시스템이 서로 분리되어 있어, 한 가용 영역에 문제가 생겨도 다른 가용 영역은 영향을 받지 않는다.
 
@@ -359,7 +359,7 @@ AWS 리소스와 사용자, 결제 등을 관리하는 최상위 단위. AWS 서
 
 ### IAM 사용자와 계정-IAM 흐름
 
-![IAM/계정 프로비저닝과 비용 청구 흐름](assets/iam-account-provisioning-flow.jpeg)
+![IAM/계정 프로비저닝과 비용 청구 흐름](../aws/assets/iam-account-provisioning-flow.jpeg)
 
 - IAM은 Identity and Access Management의 약자로, AWS 리소스에 대한 접근을 제어하고 관리하는 서비스다.
 - **IAM 사용자** — AWS 계정 안에서 생성되는 하위 사용자. 개별 로그인 정보(아이디/비밀번호, 액세스 키)를 가지며 EC2, S3, RDS 같은 리소스에 정해진 권한만 부여받아 작업한다. 기본적으로 아무 권한도 없으며, 실제 사람(개발자·관리자)뿐 아니라 애플리케이션·서비스도 IAM 사용자가 될 수 있다.
@@ -399,21 +399,17 @@ AWS IAM(Identity and Access Management)을 사용하면 AWS 서비스와 리소�
 - AWS 어카운트 관리 및 리소스/사용자/서비스의 권한 제어(임시 권한 부여, 서비스 사용을 위한 인증 정보 부여)
 - 사용자의 생성, 관리, 계정의 보안(Multi-factor Authentication, 사용자의 패스워드 정책 관리)
 - 다른 계정과의 리소스 공유
-- 리소스에 따라 여러 사용자에게 세분화된 권한 부여 가능
-- ID 페더레이션 제공
-- PCI DSS 준수, 많은 AWS 서비스와 통합 가능
-- 일관성을 제공하며 기본적으로 추가 비용 없이 무료 이용 가능
 
 ### IAM 구성 요소
 
 - **사용자** — 실제 AWS를 사용하는 사람 혹은 애플리케이션
 - **그룹** — 사용자의 집합. 그룹에 속한 사용자는 그룹에 부여된 권한을 행사
-- **정책(Policy)** — 사용자·그룹·역할이 무엇을 할 수 있는지에 관한 문서. JSON 형식으로 정의하며, 개인 사용자에게 직접 부여하거나 사용자 그룹 단위로 부여할 수 있다
+- **정책(Policy)** — 사용자·그룹·역할이 무엇을 할 수 있는지에 관한 문서. JSON 형식으로 정의
 - **역할(Role)** — AWS 권한의 집합. 특정 사용자나 그룹에 연결되어 있지 않으며 다양한 애플리케이션·서비스·IAM 사용자가 받아서 사용
 
 ### 역할(Role) 예시
 
-![IAM 역할(Role) 결합 예시 — 사용자 + Role = 권한](assets/iam-role-assignment-example.jpeg)
+![IAM 역할(Role) 결합 예시 — 사용자 + Role = 권한](../aws/assets/iam-role-assignment-example.jpeg)
 
 IAM 사용자에 특정 Role을 결합하면 그 Role이 부여하는 권한을 행사할 수 있다. 예를 들어 경영지원팀 Role을 받으면 계정 요금 조회 등의 권한을, 개발자 Role을 받으면 EC2 서버 프로비전 권한을 갖게 되는 식이다.
 
