@@ -227,10 +227,10 @@
 ## AWS
 
 * [AWS 프리 티어 가입 방법](aws/01-aws-signup.md)
-* [AWS - 클라우드 기초 개념](aws/02-aws-cloud-fundamentals.md)
-* [AWS EC2 - 배포](aws/03-aws-ec2-deployment.md)
-* [AWS EC2 설정](aws/04-aws-ec2-setup.md)
-* [EC2 인스턴스 접속하기](aws/05-ec2-instance-connect.md)
-* [AWS 탄력적 IP(Elastic IP) 적용하기](aws/06-aws-elastic-ip.md)
-* [AWS ELB(로드 밸런서) 적용하기](aws/07-aws-elb-https-setup.md)
-* [AWS IAM - MFA 강제 정책 적용하기](aws/08-aws-iam-force-mfa-policy.md)
+* [AWS IAM - MFA 강제 정책 적용하기](aws/02-aws-iam-force-mfa-policy.md)
+* [AWS - 클라우드 기초 개념](aws/03-aws-cloud-fundamentals.md)
+* [AWS EC2 - 배포](aws/04-aws-ec2-deployment.md)
+* [AWS EC2 설정](aws/05-aws-ec2-setup.md)
+* [EC2 인스턴스 접속하기](aws/06-ec2-instance-connect.md)
+* [AWS 탄력적 IP(Elastic IP) 적용하기](aws/07-aws-elastic-ip.md)
+* [AWS ELB(로드 밸런서) 적용하기](aws/08-aws-elb-https-setup.md)

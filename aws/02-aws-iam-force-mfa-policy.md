@@ -184,4 +184,4 @@ OTP 애플리케이션의 QR 코드 스캔 기능으로 화면에 표시된 QR �
 
 ![AWS 콘솔 로그인 시 추가된 멀티 팩터 인증 코드 입력 화면](assets/mfa-login-second-factor-prompt.png)
 
-> 관련: 2.  AWS - 클라우드 기초 개념 · 3.  AWS EC2 - 배포
+> 관련: 3.  AWS - 클라우드 기초 개념 · 4.  AWS EC2 - 배포

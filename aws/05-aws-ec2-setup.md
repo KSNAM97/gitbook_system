@@ -120,4 +120,4 @@ EC2에서 컴퓨터를 대여받는다. 여기서 말하는 컴퓨터가 AWS에�
 
 ![인스턴스 상태가 종료됨으로 변경된 화면](assets/instance-terminated-status.png)
 
-> 관련: 3.  AWS EC2 - 배포 · 5.  EC2 인스턴스 접속하기
+> 관련: 4.  AWS EC2 - 배포 · 6.  EC2 인스턴스 접속하기
