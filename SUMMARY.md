@@ -227,3 +227,4 @@
 ## AWS
 
 * [AWS - 클라우드 기초 개념](aws/01-aws-cloud-fundamentals.md)
+* [AWS EC2 - 배포](aws/02-aws-ec2-deployment.md)
