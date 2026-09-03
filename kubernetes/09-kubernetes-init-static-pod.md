@@ -305,7 +305,7 @@ kubelet이 로컬 파일(YAML)을 직접 읽어서 Pod를 생성한다. 즉, 클
 
 **왜 Static Pod가 필요한가**
 
-쿠버네티스 클러스터가 처음 올라올 때를 생각해보자. API Server, Scheduler, Controller Manager 같은 핵심 컴포넌트는 쿠버네티스가 완전히 동작하기 전에도 먼저 실행되어야 한다. 하지만 이 시점에는 API Server가 아직 실행되지 않았기 때문에, 일반적인 방식으로 Pod 생성을 요청할 수 없다.
+쿠버네티스 클러스터가 처음 올라올 때를 생각해본다. API Server, Scheduler, Controller Manager 같은 핵심 컴포넌트는 쿠버네티스가 완전히 동작하기 전에도 먼저 실행되어야 한다. 하지만 이 시점에는 API Server가 아직 실행되지 않았기 때문에, 일반적인 방식으로 Pod 생성을 요청할 수 없다.
 
 즉 API Server가 아직 없는데 API Server에게 "kube-apiserver Pod를 생성해달라"고 요청할 수는 없다.
 

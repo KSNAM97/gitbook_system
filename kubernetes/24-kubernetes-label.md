@@ -25,7 +25,7 @@ metadata:
 
 쿠버네티스에서는 수많은 Pod가 생성될 수 있기 때문에 Pod를 분류하고 선택하기 위해 Label을 사용한다.
 
-예를 들어 Pod가 3개 있다고 하자.
+예를 들어 Pod가 3개 있다고 가정한다.
 
 - Pod1 : app=web
 - Pod2 : app=web
@@ -710,7 +710,7 @@ kubectl label nodes worker1 disktype=ssd
 
 ### Node Label을 사용하는 이유
 
-Node마다 CPU, 메모리, 디스크, GPU, 지역, 용도 등의 특성이 다를 수 있다. 예를 들어 Worker Node가 3대 있다고 하자.
+Node마다 CPU, 메모리, 디스크, GPU, 지역, 용도 등의 특성이 다를 수 있다. 예를 들어 Worker Node가 3대 있다고 가정한다.
 
 - worker1 : 일반 서버
 - worker2 : SSD 장착
