@@ -240,3 +240,4 @@
 * [EC2 인스턴스 접속하기](aws-가이드/04-ec2-instance-connect.md)
 * [AWS 탄력적 IP(Elastic IP) 적용하기](aws-가이드/05-aws-elastic-ip.md)
 * [AWS ALB + Auto Scaling + 대상 그룹 통합 가이드](aws-가이드/06-aws-elb-https-setup.md)
+* [S3 + VPC Endpoint로 프라이빗 EC2에 정적 사이트 배포하기](aws-가이드/07-aws-s3-static-site-vpc-endpoint.md)
