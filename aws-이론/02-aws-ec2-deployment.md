@@ -1403,6 +1403,55 @@ EFS는 각 가용 영역마다 Mount Target을 생성한다. Mount Target은 EC2
 
 주요 활용 사례: 로그인 세션 저장소 / 파일 업로드 저장 공간 / 로그 파일 저장 / 공용 설정 파일 관리 / 컨테이너 볼륨 공유
 
+### 실습: User Data로 EFS 자동 마운트
+
+EC2 시작 템플릿의 사용자 데이터(User Data)에 다음과 같은 cloud-init 스크립트를 등록하면, 인스턴스가 부팅될 때 자동으로 EFS를 웹 루트(`/var/www/html`)에 마운트하고 Apache를 실행한다.
+
+```yaml
+#cloud-config
+package_upgrade: true
+
+packages:
+  - nfs-utils
+  - httpd
+
+runcmd:
+  - |
+      set -e
+
+      # EFS ID 설정 (반드시 실제 파일 시스템 ID로 수정)
+      EFS_ID="fs-0fcf72f6c96570aa7"
+
+      # 기존 웹루트 백업 (있으면 보관)
+      if [ -d /var/www/html ]; then
+        mkdir -p /var/www/html.bak
+        cp -a /var/www/html/. /var/www/html.bak/ || true
+      fi
+
+      # EFS를 마운트할 웹루트 디렉터리 준비
+      mkdir -p /var/www/html
+
+      # fstab 등록: EFS를 /var/www/html로 마운트
+      echo "${EFS_ID}.efs.ap-northeast-2.amazonaws.com:/ /var/www/html nfs4 defaults,_netdev 0 0" >> /etc/fstab
+
+      # 마운트 실행
+      mount -a
+
+      # 테스트용 index.html 생성 (EFS에 저장됨)
+      echo "<h1>Hello world from EFS</h1>" > /var/www/html/index.html
+
+      # Apache 시작 및 부팅 자동 시작
+      systemctl enable --now httpd
+
+      # 샘플 디렉터리 (EFS 공유)
+      mkdir -p /var/www/html/sampledir
+      chown -R ec2-user:ec2-user /var/www/html/sampledir
+      chmod -R o+rx /var/www/html/sampledir
+```
+
+- `EFS_ID.efs.<리전>.amazonaws.com`은 EFS의 마운트 대상 DNS 이름이며, `/etc/fstab`에 등록해두면 재부팅 후에도 자동으로 다시 마운트된다. 변수(`${EFS_ID}`)는 반드시 셸 변수 참조 문법으로 작성해야 하며, 실제 파일 시스템 ID를 문자 그대로 적으면(`${fs-0fcf72f6c96570aa7}`처럼) 변수로 해석되지 않아 fstab 항목이 깨진다.
+- 같은 EFS를 여러 인스턴스가 동시에 이 스크립트로 마운트하면, 어느 인스턴스에서 `index.html`을 생성하든 나머지 인스턴스에서도 동일한 파일이 즉시 보인다. 이는 앞서 설명한 EFS의 Read After Write 일관성 덕분이다.
+
 ## 20. EC2 인스턴스 T 타입의 활용
 
 T 인스턴스는 보통은 적당한 성능으로 동작하지만, 필요할 때 잠깐 성능을 확 높일 수 있는 인스턴스이다. 마치 일반 자동차가 평소엔 천천히 달리다가, 가속이 필요할 때 순간적으로 속도를 내는 것과 같다.
