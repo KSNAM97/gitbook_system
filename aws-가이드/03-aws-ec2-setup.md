@@ -82,3 +82,4 @@ EC2에서 컴퓨터를 대여받는다. 여기서 말하는 컴퓨터가 AWS에�
 시간이 지나면 인스턴스 상태가 종료됨으로 변경되며, 이후 목록에서 제거된다.
 
 > 관련: 이론 2.  AWS EC2 - 배포 · 가이드 4.  EC2 인스턴스 접속하기
+> 공식 문서: [콘솔의 시작 인스턴스 마법사를 사용하여 EC2 인스턴스 시작](https://docs.aws.amazon.com/ko_kr/AWSEC2/latest/UserGuide/ec2-launch-instance-wizard.html)

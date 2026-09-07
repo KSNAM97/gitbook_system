@@ -164,3 +164,4 @@ IAM 정책(policy)은 IAM 역할(role) 혹은 개인 사용자에게 부여할 �
 설정 완료 후 AWS 콘솔에 로그인하면, 기존 계정 정보로 1차 인증을 마친 뒤 MFA 코드를 입력하는 2차 인증 과정이 추가된다.
 
 > 관련: 이론 1.  AWS - 클라우드 기초 개념 · 이론 2.  AWS EC2 - 배포
+> 공식 문서: [IAM 사용자가 MFA를 자체 관리하도록 허용하는 정책 예](https://docs.aws.amazon.com/ko_kr/IAM/latest/UserGuide/reference_policies_examples_iam_mfa-selfmanage.html)

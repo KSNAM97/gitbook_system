@@ -89,3 +89,4 @@ Auto Scaling 그룹은 시작 템플릿을 기반으로 EC2 인스턴스를 생�
 5. sg-ec2, sg-alb 보안 그룹을 삭제한다. (다른 리소스에서 아직 참조 중이면 삭제되지 않으므로, 위 순서를 지켜 먼저 리소스를 정리한다.)
 
 > 관련: 이론 2.  AWS EC2 - 배포 · 이론 3.  AWS VPC
+> 공식 문서: [Application Load Balancer 생성](https://docs.aws.amazon.com/ko_kr/elasticloadbalancing/latest/application/create-application-load-balancer.html)

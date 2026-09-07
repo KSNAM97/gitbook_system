@@ -22,3 +22,4 @@
 연결이 완료되면 EC2 인스턴스의 퍼블릭 IP 주소가 탄력적 IP에서 할당받은 주소로 변경된다. 이후 인스턴스를 중지하고 다시 시작해도 퍼블릭 IP 주소는 고정된 채로 유지된다.
 
 > 관련: 이론 2.  AWS EC2 - 배포
+> 공식 문서: [Elastic IP 주소 사용 시작하기](https://docs.aws.amazon.com/ko_kr/vpc/latest/userguide/WorkWithEIPs.html)

@@ -28,3 +28,4 @@ ssh -i [pem 파일 경로]/aws-prod.pem ubuntu@x.xx.xxx.xx
 권한을 400으로 변경한 뒤 다시 접속하면 터미널에서도 EC2 인스턴스에 정상적으로 접속할 수 있다.
 
 > 관련: 이론 2.  AWS EC2 - 배포
+> 공식 문서: [SSH를 사용하여 Linux 인스턴스에 연결](https://docs.aws.amazon.com/ko_kr/AWSEC2/latest/UserGuide/connect-to-linux-instance.html)

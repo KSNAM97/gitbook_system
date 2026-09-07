@@ -83,3 +83,4 @@ echo "<p>Instance ID: $INSTANCE_ID</p>" >> /var/www/html/index.html
 4. S3의 `index.html`을 수정한 뒤 인스턴스를 새로 교체(Instance Refresh 또는 종료 후 재생성)하면, 새 인스턴스에 수정된 콘텐츠가 반영되는 것을 확인할 수 있다.
 
 > 관련: 이론 3.  AWS VPC · 가이드 6.  AWS ALB + Auto Scaling + 대상 그룹 통합 가이드
+> 공식 문서: [Amazon S3용 게이트웨이 엔드포인트](https://docs.aws.amazon.com/ko_kr/vpc/latest/privatelink/vpc-endpoints-s3.html)

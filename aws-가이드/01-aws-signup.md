@@ -42,3 +42,4 @@ AWS 정책이나 계정 상태에 따라 전화번호 인증(SMS/음성 코드) 
 - **리전 확인**: 기본 리전이 의도한 곳(예: 서울 ap-northeast-2)인지 콘솔 우측 상단에서 확인한다.
 
 > 관련: 이론 1.  AWS - 클라우드 기초 개념
+> 공식 문서: [AWS 계정 관리](https://docs.aws.amazon.com/ko_kr/accounts/latest/reference/manage-acct-signing-up.html)
