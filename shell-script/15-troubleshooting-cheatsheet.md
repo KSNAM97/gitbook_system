@@ -120,6 +120,46 @@
 | `run-parts`가 daily_test.sh를 실행하지 않음 | 파일명에 `.sh` 확장자 있으면 제외 대상 | 파일명에서 확장자 제거, `run-parts --test` 로 사전 확인 |
 | cron 종료 코드가 0인데 작업이 실패한 것처럼 보임 | cron 자체 종료와 스크립트 내부 exit 코드 혼동 | `tail /var/log/cron` + 스크립트 로그 파일 동시 확인 |
 
+### 9. Shebang · 실행 방법 · Login/대화형
+
+| 증상 | 원인 | 조치 |
+| --- | --- | --- |
+| Shebang을 고쳤는데 적용되지 않음 | `bash script.sh`로 호출하면 Shebang이 무시됨 | `chmod +x` 후 `./script.sh`로 직접 실행 |
+| `chsh`로 쉘을 바꿨는데 세션에 반영 안 됨 | 로그인 쉘 필드는 다음 로그인부터 적용 | `exec /bin/bash`로 즉시 반영 |
+| 스크립트 안 `alias`가 동작하지 않음 | 스크립트는 비대화형 쉘, alias 비활성화 | alias 대신 함수로 정의 |
+| cron 스크립트에서 터미널의 명령을 못 찾음 | cron은 Non-Login·비대화형이라 PATH가 짧음 | 절대 경로 사용 또는 스크립트 내 `export PATH=` |
+| `chsh -s /bin/zsh`가 거부됨 | `/etc/shells`에 미등록 | 패키지 설치 시 자동 등록됨, `cat /etc/shells`로 확인 |
+
+### 10. Quotes · Escape Sequences
+
+| 증상 | 원인 | 조치 |
+| --- | --- | --- |
+| 변수에 공백 있는 값이 여러 인자로 쪼개짐 | quote 없이 `$변수` 참조 (word splitting) | `"$변수"`로 항상 참조 |
+| 변수 값의 `*`가 파일 목록으로 확장됨 | quote 없이 참조해 globbing 발생 | `"$변수"`로 quote |
+| 작은따옴표 안에 작은따옴표를 못 넣음 | 작은따옴표는 내부에서 어떤 것도 escape 불가 | `'...'\''...'` 또는 `'...'"'"'...'` 패턴 사용 |
+| `echo`로 `\t`,`\n`을 출력했더니 문자 그대로 나옴 | bash `echo`는 `-e` 없이 이스케이프 미해석 | `echo -e` 또는 `printf '%b'` 사용 |
+| `sh`에서 `\x41` 같은 16진수가 그대로 출력 | `sh`의 echo/printf는 16진수 미지원 | 8진수(`\NNN`)로 통일 |
+
+### 11. 함수(Functions)
+
+| 증상 | 원인 | 조치 |
+| --- | --- | --- |
+| 함수 호출 시 `command not found` | 함수가 호출 시점 이전에 정의되지 않음 | 함수 정의를 호출보다 먼저 배치 |
+| 함수 결과를 받았는데 빈 값/코드만 옴 | `return`은 종료 코드 전용, 값 반환 아님 | 결과는 `echo` 후 `result=$(func ...)`로 수신 |
+| 새 프로세스에서 함수가 안 보임 | 함수는 자식 프로세스에 자동 상속 안 됨 | `export -f 함수명` 사용 |
+| 함수 안 변수가 스크립트 전체에 영향 | `local` 미사용 시 기본 global | `local var=값`으로 선언 |
+| nesting된 내부 함수 호출 시 오류 | 외부 함수가 먼저 실행돼야 내부 함수가 정의됨 | 외부 함수를 먼저 한 번 호출 |
+
+### 12. 변수 기본값 · 슬라이싱 · Pattern Matching
+
+| 증상 | 원인 | 조치 |
+| --- | --- | --- |
+| `${VAR:-value}`로 VAR 값이 바뀌길 기대 | `-`/`:-`는 반환만, 대입 안 함 | 대입까지 필요하면 `${VAR:=value}` |
+| 파이프 중간 명령 실패가 감지 안 됨 | pipe 종료 코드는 기본적으로 마지막 명령 것만 | `set -o pipefail` 또는 명령 분리 |
+| `${string: -3}` 슬라이싱이 기본값 확장으로 오인됨 | 콜론 뒤 공백 없이 마이너스 작성 | `${string: -3}`처럼 공백 필수 |
+| `[[:alpha:]]` 클래스가 매칭 안 됨 | bracket 표현식 없이 단독 사용 | `[[:alpha:]]` 전체를 그대로 사용 |
+| 확장 패턴(`+()`, `@()` 등)이 그냥 문자로 매칭됨 | `extglob` 옵션 비활성화 상태 | `shopt -s extglob`으로 활성화 |
+
 ---
 
 ## 핵심 진단 명령어 모음 (Verification)
@@ -140,6 +180,10 @@ env | grep <변수명>              # 환경 변수 등록 여부 확인
 ls -l <스크립트>                 # 실행 권한(x) 여부 확인
 stat -c "%U %G %a %n" <경로>     # 소유자/그룹/권한/경로 한 번에 확인
 echo $BASH_VERSION              # 연관 배열(4.0+)·음수 인덱스(4.3+) 지원 확인
+echo $-                          # 옵션 플래그 (i 포함 시 대화형 쉘)
+echo $0                          # 맨 앞이 '-'면 Login Shell
+declare -F                       # 정의된 함수 목록 확인
+shopt extglob                    # 확장 패턴(extglob) 활성화 여부 확인
 ```
 
 ---
@@ -296,4 +340,5 @@ rm -rf "$1"/*                 # 확인 후 실행
 - 무한 루프/의도치 않은 종료 → 카운터 증가, `break`/`continue` 범위부터 확인
 - 배열·인자 이상 → `[@]` vs `[*]`, `${#arr[@]}` vs `${#arr}`, `${10}` 중괄호부터 확인
 - 파괴적 명령 전에는 항상 인자 검증 + `printf '%s\n'` 로 대상 사전 확인
-- 관련: **14.  Shell Script - 통합 정리** · **16.  Shell Script - 명령어 퀵 레퍼런스** · **9. ⏰ Shell Script - cron · anacron (스케줄 자동화)** · **4.  Shell Script - exit 상태와 test 명령** · **5.  Shell Script - 조건문 (if · case)** · **6.  Shell Script - 반복문 (for · while · until)** · **7.  Shell Script - 배열(Array)과 RANDOM** · **8.  Shell Script - 위치 매개변수 (Positional Parameters)**
+- 실행 환경 문제(alias·PATH 등)는 Login/대화형 여부부터, 함수 문제는 정의 순서·`local`·`export -f`부터 확인
+- 관련: **14.  Shell Script - 통합 정리** · **16.  Shell Script - 명령어 퀵 레퍼런스** · **9. Shell Script - cron · anacron (스케줄 자동화)** · **4.  Shell Script - exit 상태와 test 명령** · **5.  Shell Script - 조건문 (if · case)** · **6.  Shell Script - 반복문 (for · while · until)** · **7.  Shell Script - 배열(Array)과 RANDOM** · **8.  Shell Script - 위치 매개변수 (Positional Parameters)** · **10. Shell Script - Shebang · 실행 방법 · Login/Non-Login · 대화형/비대화형** · **11. Shell Script - Quotes와 Escape Sequences 심화** · **12. Shell Script - 함수(Functions) 심화** · **13. Shell Script - 변수 기본값 · 슬라이싱 · Pattern Matching 심화**

@@ -1,6 +1,8 @@
 # Shell Script - 통합 정리 (변수부터 cron · anacron까지 한눈에)
 
-쉘 스크립트는 **변수(문자열 저장) → 메타문자(패턴·치환·연결) → 산술 도구(expr/let/`$(( ))`) → 종료 코드·test(조건 판단의 단위) → 조건문(if/case) → 반복문(for/while/until) → 배열(다수 값 관리) → 위치 매개변수(외부 값 주입) → cron·anacron(시간 기반 자동화)** 순서로 계층을 쌓아 올라가는 구조다. 이 문서는 1~9번 문서를 한 장으로 닫는 색인이다.
+쉘 스크립트는 **실행 환경(Shebang·Login/대화형) → 변수(문자열 저장) → 메타문자·Quotes/Escape(패턴·치환·연결·인용) → 산술 도구(expr/let/`$(( ))`) → 종료 코드·test(조건 판단의 단위) → 조건문(if/case) → 반복문(for/while/until) → 배열(다수 값 관리) → 변수 기본값·슬라이싱·Pattern Matching(값 가공 심화) → 위치 매개변수(외부 값 주입) → 함수(재사용 단위) → cron·anacron(시간 기반 자동화)** 순서로 계층을 쌓아 올라가는 구조다. 이 문서는 1~13번 문서를 한 장으로 닫는 색인이다.
+
+가장 바깥쪽 계층은 **실행 환경**이다. Shebang이 어떤 인터프리터로 스크립트를 실행할지 정하고, 그 스크립트가 Login/Non-Login·대화형/비대화형 중 어떤 환경에서 실행되느냐에 따라 `~/.bashrc` 같은 설정 파일을 읽는지, alias·history가 활성화되는지가 갈린다. 자동화 스크립트(cron 등)는 예외 없이 Non-Login·비대화형이므로, 대화형 전용 기능(alias 등)에 의존하지 않도록 설계해야 한다. **함수**는 위치 매개변수·배열·조건문·반복문을 하나의 재사용 단위로 묶는 계층으로, 인자는 `$1`,`$2`,`$@`로 스크립트와 동일하게 받지만 `return`은 값이 아니라 종료 코드 전용이라는 점이 다르다. **변수 기본값·슬라이싱·Pattern Matching**은 변수·배열·메타문자 세 계층을 가로지르며 값을 다듬는 역할을 한다 — 미선언 변수에 기본값을 채우는 `${VAR:-default}`, 문자열/배열 일부만 뽑아내는 `${var:idx:len}`, 파일명·case문에 공통으로 쓰이는 glob·Character Class가 여기에 속한다.
 
 
 ---
@@ -45,18 +47,22 @@ cron은 스크립트를 자동 호출하는 **외부 진입점**이다. cron이 
 
 > **적용 환경:** Bash 기반 Linux 셸 환경 (RHEL 계열 기본 `/bin/bash`).
 
-### Step 1. 9대 문서 요약 흐름도
+### Step 1. 13대 문서 요약 흐름도
 
 ```text
-[1] 변수·환경변수        → 값을 저장/전달 (문자열 기본, export로 자식 프로세스 전달)
-[2] Metacharacters      → 패턴 매칭·치환·리다이렉션·명령 연결의 공통 문법
-[3] expr·let            → 정수 산술 계산 (외부 명령 expr / 내장 명령 let)
-[4] exit·test           → 종료 코드 판정 + 파일/문자열/숫자 조건 검사
-[5] 조건문(if/case)      → 종료 코드를 기준으로 분기 실행
-[6] 반복문(for/while/until) → 정해진 목록/조건 기반 반복 실행
-[7] 배열(Array)          → 여러 값을 인덱스로 묶어 관리 (반복문의 순회 대상)
-[8] 위치 매개변수        → 실행 시점에 외부 값을 주입 (자동화 스크립트의 진입점)
-[9] cron·anacron        → 시간 기반 자동 실행 (crond·crontab·anacron 연동)
+[1]  변수·환경변수        → 값을 저장/전달 (문자열 기본, export로 자식 프로세스 전달)
+[2]  Metacharacters      → 패턴 매칭·치환·리다이렉션·명령 연결의 공통 문법
+[3]  expr·let            → 정수 산술 계산 (외부 명령 expr / 내장 명령 let)
+[4]  exit·test           → 종료 코드 판정 + 파일/문자열/숫자 조건 검사
+[5]  조건문(if/case)      → 종료 코드를 기준으로 분기 실행
+[6]  반복문(for/while/until) → 정해진 목록/조건 기반 반복 실행
+[7]  배열(Array)          → 여러 값을 인덱스로 묶어 관리 (반복문의 순회 대상)
+[8]  위치 매개변수        → 실행 시점에 외부 값을 주입 (자동화 스크립트의 진입점)
+[9]  cron·anacron        → 시간 기반 자동 실행 (crond·crontab·anacron 연동)
+[10] Shebang·실행 방법·Login/대화형 → 어떤 인터프리터로, 어떤 환경에서 실행되는지 결정
+[11] Quotes·Escape Sequences → 단어 분리·globbing 방지, 이스케이프 문자 해석 방식
+[12] 함수(Functions)     → 위치 매개변수·조건문·반복문을 재사용 단위로 묶음
+[13] 변수 기본값·슬라이싱·Pattern Matching → 값 가공(기본값 채우기, 부분 추출, 패턴 매칭) 심화
 ```
 
 ### Step 2. 값 참조 · 산술 · 조건 문법 비교표
@@ -74,6 +80,11 @@ cron은 스크립트를 자동 호출하는 **외부 진입점**이다. cron이 
 | 산술 평가 | `(( 산술식 ))` | 종료 코드(0=참/1=거짓) |
 | 조건 검사 | `test`, `[ 조건 ]` | 종료 코드(0=참/1=거짓) |
 | 정규식 검사 | `[[ "$1" =~ ^[0-9]+$ ]]` | 종료 코드(Bash 전용) |
+| 변수 기본값(미변경) | `${VAR:-default}` | 문자열 값 (VAR은 그대로) |
+| 변수 기본값(대입) | `${VAR:=default}` | 문자열 값 (VAR에 대입됨) |
+| 문자열/배열 슬라이싱 | `${var:idx:len}`, `${arr[@]:idx:len}` | 부분 문자열/배열 |
+| 함수 정의·호출 | `name() { ...; }`, `name arg1 arg2` | 함수 내부 `$1`,`$2`로 인자 수신 |
+| 함수 종료 코드 | `return N` | 종료 코드(연산 결과 아님, 결과는 echo) |
 
 ### Step 3. 조건문 · 반복문 · 배열 · 인자 골격 한 장 요약
 
@@ -171,6 +182,28 @@ chmod +x ./script/logcheck.sh
 echo $?                                  # 경고가 있으면 1, 모두 정상이면 0
 ```
 
+### Step 5. 함수로 검증 로직 재사용하기
+
+입력 검증(①)처럼 여러 스크립트에서 반복되는 로직은 함수로 뽑아 `source`로 공유하면 중복을 없앨 수 있다.
+
+```bash
+# ~/.bashrc.d/functions/validate.sh
+require_args() {
+    local need="$1" have="$2"
+    if (( have < need )); then
+        echo "Usage: 인자가 최소 ${need}개 필요 (현재 ${have}개)" >&2
+        return 1
+    fi
+}
+
+# 사용하는 스크립트에서
+source ~/.bashrc.d/functions/validate.sh
+require_args 2 $# || exit 1
+limit="${1:-100}"       # 기본값도 함께 지정 (미전달 시 100)
+```
+
+`${1:-100}` 처럼 위치 매개변수에도 변수 기본값 확장을 그대로 적용할 수 있어, 필수 인자가 아닌 값은 미전달 시 합리적인 기본값으로 채울 수 있다.
+
 ---
 
 ## 검증 및 트러블슈팅 (Verification & Troubleshooting)
@@ -201,6 +234,10 @@ echo $?                                   # ⑤ 종료 코드로 성공/실패 �
 | `$10` 으로 10번째 인자 참조 | `$1` + 문자 `0` 으로 해석 | `${10}` 중괄호 필수 |
 | 인자 검증 없이 본 로직 실행 | 빈 값으로 파괴적 명령 수행 | 개수·형식·존재 3단 검증 후 `exit 1` |
 | `sh script.sh` 로 `**=~**` 사용 | 문법 오류 | `#!/bin/bash` + `./script.sh` 실행 |
+| 함수 안 `return`으로 계산값을 받으려 함 | 종료 코드만 남고 값은 사라짐 | 결과는 `echo` 후 `result=$(func ...)`로 수신 |
+| 스크립트에서 `alias` 정의 후 바로 사용 | 비대화형 쉘이라 미동작 | alias 대신 함수로 정의 |
+| `${VAR:-default}` 로 VAR 자체를 바꾸려 함 | VAR은 그대로 unset 상태 | 대입까지 하려면 `${VAR:=default}` 사용 |
+| `${string:idx:len}` 인덱스에 음수 붙일 때 공백 생략 | `${string:-...}` 기본값 문법으로 오인 | 음수 인덱스는 `${string: -idx}` 처럼 공백 필수 |
 
 ---
 
@@ -209,5 +246,7 @@ echo $?                                   # ⑤ 종료 코드로 성공/실패 �
 - 모든 판정은 **문자열(값) + 종료 코드(조건)** 두 축으로 귀결
 - 계산은 항상 별도 구문(`$(( ))`/`expr`/`let`) 경유
 - `"$@"` 와 `"${arr[@]}"` 는 동일 구조(개별 전개), `"$*"`/`"${arr[*]}"` 는 문자열 결합
+- 실행 환경(Login/대화형 여부)이 어떤 설정 파일·기능(alias 등)이 활성화되는지를 먼저 결정하고, 함수는 그 위에서 위치 매개변수·조건문·반복문을 재사용 단위로 묶는다
+- 변수 기본값(`${VAR:-}` 계열)·슬라이싱(`${var:idx:len}`)·Pattern Matching(glob·Character Class)은 변수·배열·메타문자 세 계층을 가로지르는 값 가공 도구다
 - 실무 설계 순서 : 입력 → 검증 → `exit 1` → 값 확보 → 계산 → 조건 → 분기 → 반복 → exit 코드
-- 관련: **1.  Shell Script - 변수와 환경변수 (커널·쉘 개념 포함)** · **2.  Shell Script - Metacharacters (메타문자)** · **3.  Shell Script - expr · let (산술 연산)** · **4.  Shell Script - exit 상태와 test 명령** · **5.  Shell Script - 조건문 (if · case)** · **6.  Shell Script - 반복문 (for · while · until)** · **7.  Shell Script - 배열(Array)과 RANDOM** · **8.  Shell Script - 위치 매개변수 (Positional Parameters)** · **9. ⏰ Shell Script - cron · anacron (스케줄 자동화)** · **15.  Shell Script - 트러블슈팅 치트시트** · **16.  Shell Script - 명령어 퀵 레퍼런스**
+- 관련: **1.  Shell Script - 변수와 환경변수 (커널·쉘 개념 포함)** · **2.  Shell Script - Metacharacters (메타문자)** · **3.  Shell Script - expr · let (산술 연산)** · **4.  Shell Script - exit 상태와 test 명령** · **5.  Shell Script - 조건문 (if · case)** · **6.  Shell Script - 반복문 (for · while · until)** · **7.  Shell Script - 배열(Array)과 RANDOM** · **8.  Shell Script - 위치 매개변수 (Positional Parameters)** · **9. Shell Script - cron · anacron (스케줄 자동화)** · **10. Shell Script - Shebang · 실행 방법 · Login/Non-Login · 대화형/비대화형** · **11. Shell Script - Quotes와 Escape Sequences 심화** · **12. Shell Script - 함수(Functions) 심화** · **13. Shell Script - 변수 기본값 · 슬라이싱 · Pattern Matching 심화** · **15.  Shell Script - 트러블슈팅 치트시트** · **16.  Shell Script - 명령어 퀵 레퍼런스**

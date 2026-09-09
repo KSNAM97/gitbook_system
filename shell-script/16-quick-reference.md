@@ -15,10 +15,14 @@
 6. [반복문 문법 (Configuration)](#반복문-문법-configuration)
 7. [배열 · RANDOM 문법 (Configuration)](#배열-random-문법-configuration)
 8. [위치 매개변수 문법 (Configuration)](#위치-매개변수-문법-configuration)
-9. [⏰ cron · anacron 문법 (Configuration)](#cron-anacron-문법-configuration)
-10. [빠른 조회표 (Configuration)](#빠른-조회표-configuration)
-11. [검증 명령어 모음 (Verification)](#검증-명령어-모음-verification)
-12. [요약](#요약)
+9. [cron · anacron 문법 (Configuration)](#cron-anacron-문법-configuration)
+10. [Shebang · 실행 · Login/대화형 문법 (Configuration)](#shebang-실행-login대화형-문법-configuration)
+11. [Quotes · Escape Sequences 문법 (Configuration)](#quotes-escape-sequences-문법-configuration)
+12. [함수(Functions) 문법 (Configuration)](#함수functions-문법-configuration)
+13. [변수 기본값 · 슬라이싱 · Pattern Matching 문법 (Configuration)](#변수-기본값-슬라이싱-pattern-matching-문법-configuration)
+14. [빠른 조회표 (Configuration)](#빠른-조회표-configuration)
+15. [검증 명령어 모음 (Verification)](#검증-명령어-모음-verification)
+16. [요약](#요약)
 
 ---
 
@@ -304,7 +308,7 @@ action="$1"; shift; targets=("$@")              # 첫 인자 소비 후 나머�
 
 ---
 
-## ⏰ cron · anacron 문법 (Configuration)
+## cron · anacron 문법 (Configuration)
 
 ### 1. cron 스케줄 형식
 
@@ -406,6 +410,94 @@ find /backup/log -type f -mtime +7 -delete          # 삭제 실행
 
 ---
 
+## Shebang · 실행 · Login/대화형 문법 (Configuration)
+
+```bash
+#!/bin/bash                   # bash 스크립트
+#!/usr/bin/env python           # $PATH에서 탐색
+
+chmod +x script.sh; ./script.sh   # 실행 권한 부여 후 직접 실행 (Shebang 적용)
+bash script.sh                     # 인터프리터로 직접 호출 (Shebang 무시)
+
+echo $0                        # 맨 앞 '-'면 Login Shell
+echo $-                        # i 포함 시 대화형 쉘
+exec /bin/bash                  # 현재 세션에 쉘 변경 즉시 반영
+bash -l                         # Non-Login에서 Login Shell처럼 시작
+export BASH_ENV=~/.bash_env     # 비대화형 쉘 시작 시 읽을 파일 지정
+```
+
+---
+
+## Quotes · Escape Sequences 문법 (Configuration)
+
+```bash
+echo "$var"                    # 큰따옴표: 변수·명령·산술 확장 O
+echo '$var'                    # 작은따옴표: 모든 확장 X
+
+echo 'it'\''s'                 # 작은따옴표 안에 ' 넣기 (방법 1)
+echo 'it'"'"'s'                # 작은따옴표 안에 ' 넣기 (방법 2)
+
+foo=$'a\nb'; echo "$foo"        # $' ' : 이스케이프 해석하는 작은따옴표
+
+echo -e "a\tb"                  # bash echo는 -e 필요
+printf '%b\n' "a\tb"            # printf %b : 모든 이스케이프 처리
+printf '%q\n' "$var"            # 다른 명령에 안전하게 전달할 형태로 escape
+
+"${arr[@]}"                     # 배열: 개별 인용 (각 원소 quote)
+"${arr[*]}"                     # 배열: 하나로 결합 (IFS 첫 글자로 연결)
+```
+
+---
+
+## 함수(Functions) 문법 (Configuration)
+
+```bash
+function_name() {               # 매개변수 없이 정의 (인자는 $1,$2로 자동 할당)
+    local var="지역변수"          # local: 함수 전용 변수
+    echo "$1 $2"                 # 결과는 echo로 출력
+    return 5                     # 종료 코드 지정 (연산 결과 아님)
+}
+
+function_name a b                # 호출 (괄호 없음)
+result=$(function_name a b)      # 결과 수신 (명령 치환)
+echo $?                          # 종료 코드(return 값) 확인
+
+declare -f function_name         # 함수 정의 확인
+declare -F                        # 함수명 목록
+unset -f function_name            # 함수 삭제
+export -f function_name           # 자식 프로세스에서도 사용 가능하게 export
+```
+
+---
+
+## 변수 기본값 · 슬라이싱 · Pattern Matching 문법 (Configuration)
+
+```bash
+${VAR-value}      # VAR 미선언 시 value 반환 (VAR 변경 없음)
+${VAR:-value}     # VAR 미선언·NULL 시 value 반환 (VAR 변경 없음)
+${VAR=value}      # VAR 미선언 시 value 대입 + 반환
+${VAR:=value}     # VAR 미선언·NULL 시 value 대입 + 반환
+${VAR+value}      # VAR 선언됨(NULL 포함) 시 value 반환
+${VAR:+value}     # VAR이 NULL 아닌 값으로 선언됨 시 value 반환
+${VAR?ERR}        # VAR 미선언 시 STDERR로 ERR
+${VAR:?ERR}       # VAR 미선언·NULL 시 STDERR로 ERR
+
+${string:idx}          # idx부터 끝까지
+${string:idx:len}       # idx부터 len개
+${string: -idx}         # 뒤에서 idx번째부터 (공백 필수)
+${string:idx:-len}      # idx부터, 뒤에서 len개를 제외한 나머지
+
+join_ws() { local d=$1 s=$2; shift 2 && printf %s "$s${@/#/$d}"; }   # 배열 join 구현
+
+[[:alpha:]] [[:digit:]] [[:upper:]] [[:lower:]] [[:space:]]   # POSIX Character Class
+shopt -s extglob
+?(패턴) *(패턴) +(패턴) @(패턴) !(패턴)     # 확장 패턴 (extglob 필요)
+
+set -o pipefail    # 파이프 중간 명령 실패도 전체 실패로 반영
+```
+
+---
+
 ## 빠른 조회표 (Configuration)
 
 ### 1. 산술 연산자
@@ -456,6 +548,9 @@ find /backup/log -type f -mtime +7 -delete          # 삭제 실행
 | `break` vs `continue` | 반복문 종료 vs 회차 건너뛰기 |
 | `exit` vs `return` | 스크립트 종료 vs 함수 종료 |
 | `unset arr` vs `unset 'arr[2]'` | 배열 전체 삭제 vs 요소 1개 삭제 |
+| `${VAR:-value}` vs `${VAR:=value}` | 반환만 vs 대입까지 |
+| `'...'` vs `$'...'` | 원문 그대로 vs 이스케이프 해석 |
+| Login Shell vs Non-Login Shell | `/etc/profile`계열 읽음 vs `~/.bashrc`만 읽음 |
 
 ---
 
@@ -486,4 +581,5 @@ echo $BASH_VERSION              # Bash 버전 확인 (연관 배열 4.0+)
 - 반복 목록에 변수 범위가 필요하면 `for (( ))` 사용
 - 배열·인자 전개는 예외 없이 `"${arr[@]}"` / `"$@"`, 개수는 `${#arr[@]}` / `$#`
 - 스크립트 첫 로직은 인자 3단 검증(개수 → 형식 → 존재) + `exit 1`
-- 관련: **14.  Shell Script - 통합 정리** · **15.  Shell Script - 트러블슈팅 치트시트** · **9. ⏰ Shell Script - cron · anacron (스케줄 자동화)** · **1.  Shell Script - 변수와 환경변수 (커널·쉘 개념 포함)** · **2.  Shell Script - Metacharacters (메타문자)** · **3.  Shell Script - expr · let (산술 연산)** · **4.  Shell Script - exit 상태와 test 명령** · **5.  Shell Script - 조건문 (if · case)** · **6.  Shell Script - 반복문 (for · while · until)** · **7.  Shell Script - 배열(Array)과 RANDOM** · **8.  Shell Script - 위치 매개변수 (Positional Parameters)**
+- 함수 결과는 `echo` + 명령 치환으로, 변수 기본값은 `-`/`:-`(반환) vs `=`/`:=`(대입) 구분
+- 관련: **14.  Shell Script - 통합 정리** · **15.  Shell Script - 트러블슈팅 치트시트** · **9. Shell Script - cron · anacron (스케줄 자동화)** · **1.  Shell Script - 변수와 환경변수 (커널·쉘 개념 포함)** · **2.  Shell Script - Metacharacters (메타문자)** · **3.  Shell Script - expr · let (산술 연산)** · **4.  Shell Script - exit 상태와 test 명령** · **5.  Shell Script - 조건문 (if · case)** · **6.  Shell Script - 반복문 (for · while · until)** · **7.  Shell Script - 배열(Array)과 RANDOM** · **8.  Shell Script - 위치 매개변수 (Positional Parameters)** · **10. Shell Script - Shebang · 실행 방법 · Login/Non-Login · 대화형/비대화형** · **11. Shell Script - Quotes와 Escape Sequences 심화** · **12. Shell Script - 함수(Functions) 심화** · **13. Shell Script - 변수 기본값 · 슬라이싱 · Pattern Matching 심화**
