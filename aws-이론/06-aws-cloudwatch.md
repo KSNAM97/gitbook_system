@@ -18,6 +18,8 @@ Amazon CloudWatch는 AWS가 제공하는 대표적인 모니터링 서비스다.
 
 **네임스페이스(Namespace)**: CloudWatch 지표를 논리적으로 묶는 컨테이너다. AWS 기본 네임스페이스 형식은 `AWS/{서비스명}`(예: `AWS/EC2`, `AWS/RDS`)이며, 필수 항목으로 반드시 직접 지정해야 한다(디폴트 없음).
 
+![AWS 서비스별 기본 제공 Namespace 목록 예시(Amplify, API Gateway, Athena, Aurora 등)](../aws/assets/cloudwatch-namespace-service-list.jpeg)
+
 **지표 이름(Metric Name)**: 네임스페이스 안에서 지표를 구분하는 세부 이름이다. 무엇에 관한 지표인지 명확히 표현해야 하며 필수 항목이다.
 
 **데이터 포인트(Data Point)**: 지표를 구성하는 시간-값 단위 데이터로, 초 단위까지 기록한다(예: `2025-10-31T23:59:59Z`). 통계 및 알람에 활용할 때는 UTC 기준 사용이 권장된다.
@@ -42,6 +44,10 @@ Amazon CloudWatch는 AWS가 제공하는 대표적인 모니터링 서비스다.
 ![여러 EC2에서 CloudWatch Agent가 커스텀 지표(mem_used_percent)를 수집해 CloudWatch로 전송하는 구조](../aws/assets/cloudwatch-custom-metric-collection.jpeg)
 
 ![AWS/EC2 네임스페이스의 CPUUtilization 지표가 InstanceID 차원으로 구분되어 데이터 포인트(타임스탬프+값)로 기록되는 구조](../aws/assets/cloudwatch-aws-metric-namespace-dimension.jpeg)
+
+위처럼 AWS가 기본 제공하는 지표(AWS/EC2 네임스페이스의 CPUUtilization)와 달리, 커스텀 지표는 사용자가 직접 정의한 네임스페이스(예: `AWSClassroom/MyCustomMetric`)에 CloudWatch Agent가 수집한 값(예: `mem_used_percent`)을 전송하는 구조다.
+
+![사용자 정의 네임스페이스(AWSClassroom/MyCustomMetric)에 CloudWatch Agent가 mem_used_percent 커스텀 지표를 전송하는 구조 — 위 AWS 기본 지표와 대조되는 예시](../aws/assets/cloudwatch-custom-metric-vs-aws-metric.jpeg)
 
 ## 3. 로그(Log)
 
