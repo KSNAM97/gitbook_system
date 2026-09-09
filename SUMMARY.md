@@ -142,9 +142,10 @@
 * [Shell Script - Quotes와 Escape Sequences 심화](shell-script/11-quotes-and-escape-sequences.md)
 * [Shell Script - 함수(Functions) 심화](shell-script/12-functions.md)
 * [Shell Script - 변수 기본값 · 슬라이싱 · Pattern Matching 심화](shell-script/13-parameter-expansion-slicing-pattern-matching.md)
-* [Shell Script - 통합 정리 (변수부터 cron · anacron까지 한눈에)](shell-script/14-integration-summary.md)
+* [Shell Script - 통합 정리 (변수부터 cron · anacron까지)](shell-script/14-integration-summary.md)
 * [Shell Script - 트러블슈팅 치트시트](shell-script/15-troubleshooting-cheatsheet.md)
 * [Shell Script - 명령어 퀵 레퍼런스](shell-script/16-quick-reference.md)
+* [Shell Script - 기초 문법 재정리와 read 입력](shell-script/17-basics-syntax-and-read-input.md)
 
 
 ## Database

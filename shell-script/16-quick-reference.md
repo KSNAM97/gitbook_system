@@ -20,9 +20,10 @@
 11. [Quotes · Escape Sequences 문법 (Configuration)](#quotes-escape-sequences-문법-configuration)
 12. [함수(Functions) 문법 (Configuration)](#함수functions-문법-configuration)
 13. [변수 기본값 · 슬라이싱 · Pattern Matching 문법 (Configuration)](#변수-기본값-슬라이싱-pattern-matching-문법-configuration)
-14. [빠른 조회표 (Configuration)](#빠른-조회표-configuration)
-15. [검증 명령어 모음 (Verification)](#검증-명령어-모음-verification)
-16. [요약](#요약)
+14. [기초 문법 · read 입력 문법 (Configuration)](#기초-문법-read-입력-문법-configuration)
+15. [빠른 조회표 (Configuration)](#빠른-조회표-configuration)
+16. [검증 명령어 모음 (Verification)](#검증-명령어-모음-verification)
+17. [요약](#요약)
 
 ---
 
@@ -498,6 +499,23 @@ set -o pipefail    # 파이프 중간 명령 실패도 전체 실패로 반영
 
 ---
 
+## 기초 문법 · read 입력 문법 (Configuration)
+
+```bash
+[ 10 -eq 10 ]          # [ 는 명령이라 앞뒤 공백 필수
+AA=10                   # 대입 연산은 공백 금지 (유일한 예외)
+
+cd "$dir" && rm -rf ./tmp/*     # cd 성공 확인 후 진행
+grep -r -- "-n" .                # -- 로 옵션/인수 경계 명시
+
+read -p "이름: " name             # 사용자 입력
+read line < file.txt              # 파일 한 줄 읽기
+while read -r line; do echo "$line"; done < file.txt   # 파일 전체 순회
+while read -r name age; do echo "$name $age"; done < file.txt  # 컬럼 단위 읽기
+```
+
+---
+
 ## 빠른 조회표 (Configuration)
 
 ### 1. 산술 연산자
@@ -582,4 +600,4 @@ echo $BASH_VERSION              # Bash 버전 확인 (연관 배열 4.0+)
 - 배열·인자 전개는 예외 없이 `"${arr[@]}"` / `"$@"`, 개수는 `${#arr[@]}` / `$#`
 - 스크립트 첫 로직은 인자 3단 검증(개수 → 형식 → 존재) + `exit 1`
 - 함수 결과는 `echo` + 명령 치환으로, 변수 기본값은 `-`/`:-`(반환) vs `=`/`:=`(대입) 구분
-- 관련: **14.  Shell Script - 통합 정리** · **15.  Shell Script - 트러블슈팅 치트시트** · **9. Shell Script - cron · anacron (스케줄 자동화)** · **1.  Shell Script - 변수와 환경변수 (커널·쉘 개념 포함)** · **2.  Shell Script - Metacharacters (메타문자)** · **3.  Shell Script - expr · let (산술 연산)** · **4.  Shell Script - exit 상태와 test 명령** · **5.  Shell Script - 조건문 (if · case)** · **6.  Shell Script - 반복문 (for · while · until)** · **7.  Shell Script - 배열(Array)과 RANDOM** · **8.  Shell Script - 위치 매개변수 (Positional Parameters)** · **10. Shell Script - Shebang · 실행 방법 · Login/Non-Login · 대화형/비대화형** · **11. Shell Script - Quotes와 Escape Sequences 심화** · **12. Shell Script - 함수(Functions) 심화** · **13. Shell Script - 변수 기본값 · 슬라이싱 · Pattern Matching 심화**
+- 관련: **14.  Shell Script - 통합 정리** · **15.  Shell Script - 트러블슈팅 치트시트** · **9. Shell Script - cron · anacron (스케줄 자동화)** · **1.  Shell Script - 변수와 환경변수 (커널·쉘 개념 포함)** · **2.  Shell Script - Metacharacters (메타문자)** · **3.  Shell Script - expr · let (산술 연산)** · **4.  Shell Script - exit 상태와 test 명령** · **5.  Shell Script - 조건문 (if · case)** · **6.  Shell Script - 반복문 (for · while · until)** · **7.  Shell Script - 배열(Array)과 RANDOM** · **8.  Shell Script - 위치 매개변수 (Positional Parameters)** · **10. Shell Script - Shebang · 실행 방법 · Login/Non-Login · 대화형/비대화형** · **11. Shell Script - Quotes와 Escape Sequences 심화** · **12. Shell Script - 함수(Functions) 심화** · **13. Shell Script - 변수 기본값 · 슬라이싱 · Pattern Matching 심화** · **17. Shell Script - 기초 문법 재정리와 read 입력**

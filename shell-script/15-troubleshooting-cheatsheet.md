@@ -160,6 +160,16 @@
 | `[[:alpha:]]` 클래스가 매칭 안 됨 | bracket 표현식 없이 단독 사용 | `[[:alpha:]]` 전체를 그대로 사용 |
 | 확장 패턴(`+()`, `@()` 등)이 그냥 문자로 매칭됨 | `extglob` 옵션 비활성화 상태 | `shopt -s extglob`으로 활성화 |
 
+### 13. 기초 문법 · read 입력
+
+| 증상 | 원인 | 조치 |
+| --- | --- | --- |
+| `[10 -eq 10 ]` 실행 시 `command not found` | `[`와 인수 사이 공백 누락 | `[ 10 -eq 10 ]`처럼 앞뒤 공백 필수 |
+| `AA = 10` 실행 시 `AA: command not found` | 대입 연산에 공백을 넣음 | 대입은 공백 없이 `AA=10` |
+| `cd` 실패 후 엉뚱한 위치에서 `rm -rf *` 실행 | `cd` 성공 여부 미확인 | `cd "$dir" && rm -rf *` 또는 `cd "$dir" || exit 1` |
+| `grep -r '-n' .` 이 옵션으로 오인됨 | `-`로 시작하는 검색어가 옵션과 충돌 | `grep -r -- '-n' .`로 경계 명시 |
+| `read name age`로 컬럼이 예상과 다르게 나뉨 | 파일 구분자가 공백/탭이 아님 | `IFS=',' read -r name age`처럼 IFS 임시 변경 |
+
 ---
 
 ## 핵심 진단 명령어 모음 (Verification)
@@ -341,4 +351,4 @@ rm -rf "$1"/*                 # 확인 후 실행
 - 배열·인자 이상 → `[@]` vs `[*]`, `${#arr[@]}` vs `${#arr}`, `${10}` 중괄호부터 확인
 - 파괴적 명령 전에는 항상 인자 검증 + `printf '%s\n'` 로 대상 사전 확인
 - 실행 환경 문제(alias·PATH 등)는 Login/대화형 여부부터, 함수 문제는 정의 순서·`local`·`export -f`부터 확인
-- 관련: **14.  Shell Script - 통합 정리** · **16.  Shell Script - 명령어 퀵 레퍼런스** · **9. Shell Script - cron · anacron (스케줄 자동화)** · **4.  Shell Script - exit 상태와 test 명령** · **5.  Shell Script - 조건문 (if · case)** · **6.  Shell Script - 반복문 (for · while · until)** · **7.  Shell Script - 배열(Array)과 RANDOM** · **8.  Shell Script - 위치 매개변수 (Positional Parameters)** · **10. Shell Script - Shebang · 실행 방법 · Login/Non-Login · 대화형/비대화형** · **11. Shell Script - Quotes와 Escape Sequences 심화** · **12. Shell Script - 함수(Functions) 심화** · **13. Shell Script - 변수 기본값 · 슬라이싱 · Pattern Matching 심화**
+- 관련: **14.  Shell Script - 통합 정리** · **16.  Shell Script - 명령어 퀵 레퍼런스** · **9. Shell Script - cron · anacron (스케줄 자동화)** · **4.  Shell Script - exit 상태와 test 명령** · **5.  Shell Script - 조건문 (if · case)** · **6.  Shell Script - 반복문 (for · while · until)** · **7.  Shell Script - 배열(Array)과 RANDOM** · **8.  Shell Script - 위치 매개변수 (Positional Parameters)** · **10. Shell Script - Shebang · 실행 방법 · Login/Non-Login · 대화형/비대화형** · **11. Shell Script - Quotes와 Escape Sequences 심화** · **12. Shell Script - 함수(Functions) 심화** · **13. Shell Script - 변수 기본값 · 슬라이싱 · Pattern Matching 심화** · **17. Shell Script - 기초 문법 재정리와 read 입력**
