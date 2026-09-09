@@ -232,6 +232,7 @@
 * [AWS EC2 - 배포](aws-이론/02-aws-ec2-deployment.md)
 * [AWS VPC](aws-이론/03-aws-vpc.md)
 * [AWS S3](aws-이론/04-aws-s3.md)
+* [AWS RDS](aws-이론/05-aws-rds.md)
 
 ### AWS 가이드
 
@@ -242,3 +243,4 @@
 * [AWS 탄력적 IP(Elastic IP) 적용하기](aws-가이드/05-aws-elastic-ip.md)
 * [AWS ALB + Auto Scaling + 대상 그룹 통합 가이드](aws-가이드/06-aws-elb-https-setup.md)
 * [S3 + VPC Endpoint로 프라이빗 EC2에 정적 사이트 배포하기](aws-가이드/07-aws-s3-static-site-vpc-endpoint.md)
+* [WordPress 3-Tier 클러스터 구성하기](aws-가이드/08-wordpress-3tier-cluster.md)
