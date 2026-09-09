@@ -92,6 +92,7 @@ AWS EFS(Elastic File System)는 여러 대의 EC2가 동시에 접근할 수 있
 1. S3 콘솔에서 [버킷 만들기]를 선택하고, 버킷 이름을 지정한다(전역적으로 고유해야 하므로 임의의 접미사를 붙인다).
 
 ![S3 버킷 만들기 화면: 버킷 이름 입력](../aws/assets/wp3tier-s3-bucket-create.jpeg)
+
 2. `wp-config.php` 템플릿 파일을 준비해 다음 항목을 RDS 정보에 맞게 채운다.
 
 ```php
@@ -269,6 +270,7 @@ Auto Scaling으로 생성된 인스턴스에 여전히 모든 트래픽을 허�
 3. 최초 수동 생성한 EC2 인스턴스의 보안 그룹을 EC2 전용 보안 그룹으로 교체하고 default는 제거한다.
 
 ![EC2 인스턴스에 연결된 보안 그룹을 변경/추가하는 화면](../aws/assets/wp3tier-security-group-attach.jpeg)
+
 4. 시작 템플릿의 새 버전을 만들어 네트워크 설정의 보안 그룹을 EC2 전용 보안 그룹으로 교체한다.
 5. Auto Scaling Group을 편집해 시작 템플릿 버전을 방금 만든 최신 버전(Latest)으로 변경한다. 이제부터 트래픽 증가로 새로 생성되는 인스턴스에는 EC2 전용 보안 그룹이 자동으로 적용된다.
 6. ALB의 보안 그룹도 default에서 ALB 전용 보안 그룹으로 교체한다.
