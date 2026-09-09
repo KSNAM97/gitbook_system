@@ -117,11 +117,15 @@ RDS 엔드포인트 주소는 RDS 콘솔에서 생성한 DB 인스턴스를 선�
 
 ![EC2 인스턴스 목록](../aws/assets/wp3tier-ec2-instances-list.jpeg)
 
-2. IAM 인스턴스 프로파일에 2번에서 만든 역할을 지정한다.
+2. 키 페어는 이후 SSH 접속 확인용으로 새로 만들거나 기존 키 페어를 지정한다. VPC·서브넷은 3번에서 만든 퍼블릭 서브넷을 명시적으로 선택한다.
+
+![키 페어 지정과 VPC·서브넷 네트워크 설정 화면](../aws/assets/wp3tier-ec2-keypair-network-settings.jpeg)
+
+3. IAM 인스턴스 프로파일에 2번에서 만든 역할을 지정한다.
 
 ![EC2 고급 세부 정보에서 IAM 인스턴스 프로파일을 지정하는 화면](../aws/assets/wp3tier-ec2-iam-instance-profile.jpeg)
 
-3. 사용자 데이터(User Data)에 다음 스크립트를 등록한다.
+4. 사용자 데이터(User Data)에 다음 스크립트를 등록한다.
 
 ```bash
 #!/bin/bash
@@ -162,8 +166,31 @@ aws s3 cp \
 
 `<EFS ID>`는 6번에서 만든 EFS 파일시스템 ID(`fs-` 로 시작), `<S3 버킷 이름>`은 7번에서 만든 버킷 이름으로 바꿔 넣는다.
 
-4. 인스턴스가 시작되면 퍼블릭 IP로 접속해 워드프레스 설치 마법사를 완료한다: `http://<EC2 퍼블릭 IP>/wordpress/`
-   - Site Title, Username, Password, Email을 입력하고 [Install WordPress]를 선택한다.
+> **실전 팁**: 여러 가용영역에 EFS 마운트 대상이 있는 경우, IMDSv2 토큰으로 현재 인스턴스의 가용영역을 조회해 EFS 마운트 주소에 반영하면 인스턴스가 어느 AZ에서 뜨든 같은 User Data로 항상 같은 AZ의 마운트 대상을 사용하게 만들 수 있다.
+>
+> ```bash
+> TOKEN=$(curl -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600")
+> AZ=$(curl -s -H "X-aws-ec2-metadata-token: $TOKEN" "http://169.254.169.254/latest/meta-data/placement/availability-zone")
+> echo "$AZ.<EFS ID>.efs.ap-northeast-2.amazonaws.com:/ /var/www/html/wordpress nfs4 defaults 0 0" >> /etc/fstab
+> ```
+>
+> ![실제 실습에서 사용한 User Data 스크립트: IMDSv2 토큰으로 가용영역을 조회해 EFS 마운트 주소에 반영하는 부분(S3 버킷 이름은 민감정보로 블러 처리됨)](../aws/assets/wp3tier-userdata-script-actual.jpeg)
+
+5. 인스턴스가 시작되면 SSH로 접속해 워드프레스 파일과 Apache 상태를 먼저 확인한다.
+
+```bash
+ssh -i <키 페어>.pem ec2-user@<EC2 퍼블릭 IP>
+sudo -s
+cd /var/www/html
+dir            # wordpress 디렉터리가 보이면 EFS 마운트·다운로드 성공
+systemctl status httpd    # active (running) 상태 확인
+```
+
+6. 브라우저로 퍼블릭 IP에 접속해 워드프레스 설치 마법사를 완료한다: `http://<EC2 퍼블릭 IP>/wordpress/`
+   - 언어를 선택하고 [Continue]를 누른 뒤, Site Title, Username, Password, Your Email을 입력하고 [Install WordPress]를 선택한다. (테스트용 약한 비밀번호를 쓸 경우 [Confirm use of weak password] 체크 필요)
+
+![워드프레스 설치 마법사 정보 입력 화면(Site Title, Username, Password, Your Email)](../aws/assets/wp3tier-wordpress-install-wizard-fields.jpeg)
+
    - 설치가 끝나면 주소 끝의 `wp-admin/install.php?step=2` 부분을 지우고 `http://<EC2 퍼블릭 IP>/wordpress/`로 다시 접속해 사이트가 정상적으로 뜨는지 확인한다.
 
 ## 9. AMI 생성과 시작 템플릿
@@ -246,7 +273,11 @@ Auto Scaling으로 생성된 인스턴스에 여전히 모든 트래픽을 허�
 5. Auto Scaling Group을 편집해 시작 템플릿 버전을 방금 만든 최신 버전(Latest)으로 변경한다. 이제부터 트래픽 증가로 새로 생성되는 인스턴스에는 EC2 전용 보안 그룹이 자동으로 적용된다.
 6. ALB의 보안 그룹도 default에서 ALB 전용 보안 그룹으로 교체한다.
 
-설정을 마치면 EC2 퍼블릭 주소로는 접속이 차단되고, ALB를 거친 요청만 EC2에 도달한다.
+설정을 마치면 EC2 퍼블릭 주소로는 접속이 차단되고, ALB를 거친 요청만 EC2에 도달한다. 실제로 EC2 퍼블릭 DNS로 직접 접속을 시도하면 타임아웃으로 연결에 실패하고, ALB DNS로 접속하면 정상적으로 사이트가 표시되는 것으로 검증할 수 있다.
+
+![EC2 퍼블릭 DNS로 직접 접속을 시도하면 ERR_CONNECTION_TIMED_OUT으로 차단되는 화면(주소는 민감정보로 블러 처리됨)](../aws/assets/wp3tier-ec2-direct-access-blocked.jpeg)
+
+![같은 시점에 ALB DNS로 접속하면 정상적으로 사이트가 표시되는 화면(주소는 민감정보로 블러 처리됨)](../aws/assets/wp3tier-alb-access-after-lockdown.jpeg)
 
 ## 14. Bastion Host를 통한 RDS 데이터 확인(선택)
 
