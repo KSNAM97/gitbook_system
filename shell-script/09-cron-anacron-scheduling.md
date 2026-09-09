@@ -453,5 +453,5 @@ test -x /usr/sbin/anacron; echo $?       # anacron 실행 권한 확인 (0=있�
 - 필수 3원칙: **절대 경로** · **실행 권한(`chmod +x`)** · **출력 리다이렉션(`>> log 2>&1`)**
 - anacron: 시스템이 꺼져 있는 동안 놓친 일·주·월 작업을 부팅 후 보완 실행 (`anacron -n -f`로 강제 실행)
 - cron·anacron 연동: `test -x /usr/sbin/anacron || run-parts /etc/cron.daily`
-- 관련: **8.  Shell Script - 위치 매개변수 (Positional Parameters)** · **5.  Shell Script - 조건문 (if · case)** · **6.  Shell Script - 반복문 (for · while · until)** · **10.  Shell Script - 통합 정리**
+- 관련: **8.  Shell Script - 위치 매개변수 (Positional Parameters)** · **5.  Shell Script - 조건문 (if · case)** · **6.  Shell Script - 반복문 (for · while · until)** · **14.  Shell Script - 통합 정리**
 

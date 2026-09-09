@@ -138,9 +138,13 @@
 * [Shell Script - 배열(Array)과 RANDOM](shell-script/07-arrays-and-random.md)
 * [Shell Script - 위치 매개변수 (Positional Parameters)](shell-script/08-positional-parameters.md)
 * [Shell Script - cron · anacron (스케줄 자동화)](shell-script/09-cron-anacron-scheduling.md)
-* [Shell Script - 통합 정리 (변수부터 cron · anacron까지 한눈에)](shell-script/10-integration-summary.md)
-* [Shell Script - 트러블슈팅 치트시트](shell-script/11-troubleshooting-cheatsheet.md)
-* [Shell Script - 명령어 퀵 레퍼런스](shell-script/12-quick-reference.md)
+* [Shell Script - Shebang · 실행 방법 · Login/Non-Login · 대화형/비대화형](shell-script/10-shebang-execution-shell-modes.md)
+* [Shell Script - Quotes와 Escape Sequences 심화](shell-script/11-quotes-and-escape-sequences.md)
+* [Shell Script - 함수(Functions) 심화](shell-script/12-functions.md)
+* [Shell Script - 변수 기본값 · 슬라이싱 · Pattern Matching 심화](shell-script/13-parameter-expansion-slicing-pattern-matching.md)
+* [Shell Script - 통합 정리 (변수부터 cron · anacron까지 한눈에)](shell-script/14-integration-summary.md)
+* [Shell Script - 트러블슈팅 치트시트](shell-script/15-troubleshooting-cheatsheet.md)
+* [Shell Script - 명령어 퀵 레퍼런스](shell-script/16-quick-reference.md)
 
 
 ## Database

@@ -296,4 +296,4 @@ rm -rf "$1"/*                 # 확인 후 실행
 - 무한 루프/의도치 않은 종료 → 카운터 증가, `break`/`continue` 범위부터 확인
 - 배열·인자 이상 → `[@]` vs `[*]`, `${#arr[@]}` vs `${#arr}`, `${10}` 중괄호부터 확인
 - 파괴적 명령 전에는 항상 인자 검증 + `printf '%s\n'` 로 대상 사전 확인
-- 관련: **10.  Shell Script - 통합 정리** · **12.  Shell Script - 명령어 퀵 레퍼런스** · **9. ⏰ Shell Script - cron · anacron (스케줄 자동화)** · **4.  Shell Script - exit 상태와 test 명령** · **5.  Shell Script - 조건문 (if · case)** · **6.  Shell Script - 반복문 (for · while · until)** · **7.  Shell Script - 배열(Array)과 RANDOM** · **8.  Shell Script - 위치 매개변수 (Positional Parameters)**
+- 관련: **14.  Shell Script - 통합 정리** · **16.  Shell Script - 명령어 퀵 레퍼런스** · **9. ⏰ Shell Script - cron · anacron (스케줄 자동화)** · **4.  Shell Script - exit 상태와 test 명령** · **5.  Shell Script - 조건문 (if · case)** · **6.  Shell Script - 반복문 (for · while · until)** · **7.  Shell Script - 배열(Array)과 RANDOM** · **8.  Shell Script - 위치 매개변수 (Positional Parameters)**
