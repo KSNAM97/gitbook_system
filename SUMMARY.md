@@ -241,6 +241,8 @@
 * [AWS CloudWatch](aws-이론/06-aws-cloudwatch.md)
 * [AWS CloudTrail](aws-이론/07-aws-cloudtrail.md)
 * [AWS KMS(Key Management Service)](aws-이론/08-aws-kms.md)
+* [AWS 디커플링 서비스와 Amazon SQS](aws-이론/09-aws-decoupling-sqs.md)
+* [Amazon SNS](aws-이론/10-aws-sns.md)
 
 ### AWS 가이드
 
@@ -253,3 +255,5 @@
 * [S3 + VPC Endpoint로 프라이빗 EC2에 정적 사이트 배포하기](aws-가이드/07-aws-s3-static-site-vpc-endpoint.md)
 * [WordPress 3-Tier 클러스터 구성하기](aws-가이드/08-wordpress-3tier-cluster.md)
 * [CloudWatch 실습: EC2 커스텀 지표 수집 및 404 에러 알람 받아보기](aws-가이드/09-cloudwatch-ec2-custom-metrics-404-alarm.md)
+* [SNS 실습: S3 업로드 알림](aws-가이드/10-sns-s3-upload-notification.md)
+* [SNS FIFO 실습: SQS FIFO 소비자 배포](aws-가이드/11-sns-fifo-sqs-consumer.md)
