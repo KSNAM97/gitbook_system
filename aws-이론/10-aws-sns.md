@@ -59,6 +59,8 @@ Amazon EC2 --> Amazon SNS --> AWS Lambda --> Slack / Teams / 텔레그램
                           --> Amazon Kinesis Data Firehose --> Amazon S3
 ```
 
+![EC2에서 발행한 메시지가 SNS를 거쳐 Lambda(Slack/Teams/텔레그램)·Email·Mobile·외부 서버·Kinesis Data Firehose(S3)로 동시에 팬아웃되는 구조](../aws/assets/sns-ec2-multichannel-architecture-example.jpeg)
+
 **영상 인코딩 파이프라인 예시**
 
 ```text
@@ -67,6 +69,8 @@ User 업로드 --> Amazon S3 --> Amazon SNS --> HQ 인코딩 EC2
                                         --> 1080p 인코딩 EC2
                                         --> 썸네일 만들기 EC2 --> 오디오 Only EC2
 ```
+
+![원본 영상 업로드가 S3를 거쳐 SNS로 발행되고, HQ·480p·1080p 인코딩과 썸네일 생성이 각각 별도 EC2에서 동시에 처리되는 구조](../aws/assets/sns-video-encoding-pipeline-example.jpeg)
 
 긴밀한 결합은 하나의 서비스가 모든 후속 작업을 직접 알고 처리해야 해서 변경에 취약한 반면, SNS 같은 이벤트 채널을 통한 느슨한 결합은 발행자가 구독자를 알 필요 없이 새로운 기능을 구독자 추가만으로 확장할 수 있어 대규모 아키텍처에서 훨씬 유리하다.
 
@@ -101,6 +105,8 @@ Publisher는 메시지를 만들어 Topic에 보내고, Subscriber는 Subscripti
 - Kinesis Data Firehose: 데이터 스트림으로 전달한다.
 
 즉 SNS는 단순한 알림 서비스가 아니라, 다양한 서비스와 연결할 수 있는 메시지 허브 역할을 한다.
+
+![Publisher(S3·Application·On-Prem)가 Topic A/Topic B에 메시지를 발행하면, 각 Topic을 구독한 Subscriber(Lambda·Email·Mobile / 외부 서버·Kinesis Data Firehose)에게 동시에 전달되는 구조](../aws/assets/sns-topic-subscription-fanout.jpeg)
 
 **최초 구독 확인(Subscription Confirmation)**: 구독을 신청하면 반드시 최초 확인 과정을 거쳐야 한다. 이메일 구독의 경우 확인 메일을 클릭해야 최종 구독이 완료되며, Lambda 구독의 경우 확인 이벤트가 발송되고 이를 승인해야 한다. 이 과정을 통해 원하지 않는 구독을 방지하고 보안을 강화한다.
 
@@ -187,6 +193,8 @@ Deduplication ID는 Content-based(본문 해시) 또는 Explicit(명시적 지�
 
 **SNS FIFO와의 관계**: SNS FIFO에서 Message Group ID를 붙여 메시지를 전달하면, 구독자가 SQS FIFO일 경우 그 Message Group ID까지 함께 전달되어 SQS FIFO에서 순서를 그대로 보장받는다.
 
+![message_group_id가 type-111인 메시지와 type-222인 메시지가 각각 다른 SQS FIFO 큐로 분리되어, 그룹 내부에서만 순서(m4,m3,m2,m1)가 유지되는 구조](../aws/assets/sns-message-group-id.jpeg)
+
 Message Group ID는 순서를 지키는 그룹 키다. 같은 ID끼리는 순서가 보장되지만 다른 ID끼리는 순서가 섞일 수 있고, SQS FIFO는 그룹별로 차례차례 처리하므로 맨 앞 메시지가 지연되면 뒤에 것도 모두 대기하게 되며, SNS FIFO는 메시지와 함께 Group ID를 넘겨서 SQS FIFO와 연동할 때 순서를 그대로 유지시킨다.
 
 ## 11. SNS FIFO
@@ -211,6 +219,8 @@ SNS FIFO는 순서 보장과 중복 제거라는 FIFO의 이점을 SNS 레벨까
 
 일반 SNS+SQS 조합은 순서를 보장하지 못해 m1-m2-m3가 m3-m1-m2처럼 뒤섞일 수 있는 반면, SNS FIFO+SQS FIFO 조합은 항상 증가하는 Message Sequence Number를 근거로 발행 순서 그대로 전달을 보장한다는 점이 두 조합의 근본적인 차이다.
 
+![SNS FIFO가 각 메시지(m2, m1)에 순서를 나타내는 타임스탬프(t1, t3 등)를 부여해 SQS FIFO·Standard 각각으로 전달하는 구조](../aws/assets/sns-fifo-message-sequence-number.jpeg)
+
 ## 13. SNS FIFO 필터링
 
 **메시지 필터링 개요**: SNS FIFO에서는 메시지 필터링 기능을 통해 모든 메시지를 구독자에게 전달하지 않고, 구독자가 원하는 조건에 맞는 메시지만 전달할 수 있다. 이를 통해 불필요한 트래픽을 줄이고, 각 구독자가 자신에게 필요한 메시지만 처리할 수 있다.
@@ -225,6 +235,8 @@ SNS FIFO는 순서 보장과 중복 제거라는 FIFO의 이점을 SNS 레벨까
 ```
 
 **활용 예시**: `orderType="NEW"`인 메시지만 특정 SQS로 전달하고, `orderType="CANCEL"`인 메시지는 다른 구독자로 전달한다. `priority="high"` 메시지만 알람 서비스로 전달하거나, `region="ap-northeast-2"` 메시지만 한국 서버 구독자가 받도록 설정할 수 있다.
+
+![SNS FIFO에서 type/price 속성 조건별로 서로 다른 SQS FIFO·Standard 큐로 메시지가 분기되는 필터링 구조](../aws/assets/sns-fifo-filter-policy.jpeg)
 
 **장점**: 불필요한 메시지 처리 비용을 절감하고, 각 구독자에게 맞는 맞춤형 메시징이 가능하며, 메시지 중복 전달을 최소화할 수 있다. SNS FIFO 필터링은 순서와 중복 제거가 보장된 메시지 흐름 위에서 구독자별로 필요한 메시지만 걸러 받도록 해, 비용 절감과 처리 효율을 동시에 달성하는 기능이다.
 
@@ -250,6 +262,8 @@ SNS FIFO는 전달된 메시지를 저장(Archive)해두고, 필요할 때 다�
 즉 많이 저장할수록 월 비용이 늘고, Replay할 때마다 처리 비용이 추가로 발생한다.
 
 **Replay 동작 방식**: 관리자가 원하는 시점을 지정하여 특정 시간대의 메시지를 Replay할 수 있다. Replay된 메시지는 마치 새롭게 발행된 것처럼 구독자에게 다시 전달되며, 순서 보장 및 중복 제거는 FIFO 특성을 그대로 유지한다.
+
+![SNS FIFO가 발행된 메시지를 Archive에 별도 보관해두고, 필요 시 SQS FIFO·Standard 구독자에게 다시 전달(Replay)할 수 있는 구조](../aws/assets/sns-fifo-archive-replay.jpeg)
 
 SNS FIFO Archive/Replay는 메시지 전달 신뢰성을 강화하는 기능으로, 보관에서 재전송으로 이어지는 흐름을 통해 장애 복구·테스트·신규 서비스 연동에 최적화되어 있다. 다만 저장 비용과 Replay 처리 비용이 추가로 발생하므로 사용 목적과 비용을 함께 고려해야 한다.
 

@@ -133,7 +133,13 @@ Standard Queue에서는 메시지가 여러 번 전달될 수 있기 때문에 �
 사용자 ---> S3(원본) ---> SQS ---> EC2(처리, Auto Scaling) ---> S3(결과물)
 ```
 
+![Queue 없이 S3 업로드 → Auto Scaling Group EC2가 직접 폴링해야 하는 한계 구조](../aws/assets/sqs-s3-asg-without-queue-limitation.jpeg)
+
 사용자가 영상을 업로드하면 S3에 저장되고, S3는 업로드 이벤트를 SQS Queue에 메시지로 전달해 어떤 파일이 업로드되었는지 알린다. Auto Scaling Group의 EC2 인스턴스들은 Queue를 모니터링하여 메시지를 가져오고, 처리가 완료된 메시지만 정상적으로 삭제되어 큐에서 제거된다.
+
+![S3 업로드 → SQS 처리대기 Queue → Auto Scaling Group이 Queue 숫자를 모니터링해 인스턴스를 증감시키는 해결 구조](../aws/assets/sqs-s3-asg-with-queue-solution.jpeg)
+
+![개발자가 업로드한 파일이 S3 event notification으로 SQS에 전달되고, EC2가 SQS를 폴링해 처리한 뒤 결과를 다른 S3 버킷에 업로드하는 전체 아키텍처](../aws/assets/sqs-s3-autoscaling-polling-architecture.jpeg)
 
 Queue에 쌓인 메시지 수를 기준으로 Auto Scaling이 동작한다. 메시지가 많으면 인스턴스 수를 늘려 빠르게 처리하고, 메시지가 적으면 줄여 비용을 절감한다. 또한 EC2 인스턴스가 갑자기 죽더라도 메시지는 Queue에 남아 있기 때문에 다른 인스턴스가 이어서 처리할 수 있다.
 
@@ -189,6 +195,8 @@ SQS는 다양한 AWS 서비스와 이벤트 기반으로 연동할 수 있다. S
 
 **Consumer(메시지 소비자)**는 큐에서 메시지를 가져와 처리하는 역할을 한다. 주기적으로 Poll 요청(API 호출)을 보내 큐에 메시지가 있는지 확인하며, 메시지를 받거나 삭제하려면 `sqs:ReceiveMessage`(메시지 받기)와 `sqs:DeleteMessage`(메시지 삭제) 권한이 필요하다.
 
+![EC2 Autoscaling·CodePipeline·DynamoDB·IAM은 EventBridge를 거쳐, S3·SNS는 직접 SQS Queue로 이벤트를 전달하는 Producer 연동 구조](../aws/assets/sqs-producer-integration-eventbridge.jpeg)
+
 Consumer의 기본 동작 흐름은 Poll → 처리 → 삭제다. Producer는 Queue URL과 `sqs:SendMessage` 권한을 가지고 메시지를 큐에 밀어 넣기만 하고, Consumer는 `sqs:ReceiveMessage`·`sqs:DeleteMessage` 권한을 가지고 Poll → 처리 → 삭제 흐름으로 메시지를 가져와 처리하며, Visibility Timeout 안에 삭제하지 않으면 메시지가 다시 큐로 돌아가 다른 Consumer에게 전달된다는 점을 함께 기억해야 한다.
 
 ## 11. Visibility Timeout
@@ -203,6 +211,10 @@ Visibility Timeout은 큐 단위 또는 메시지 단위로 설정할 수 있으
 
 예를 들어 10초 내에 끝나는 간단한 로그 처리라면 Visibility Timeout을 기본값인 30초로 설정해도 충분하지만, 동영상 인코딩처럼 수 분 이상 걸릴 수 있는 작업은 Visibility Timeout을 몇 분 단위로 늘려야 중복 처리를 막을 수 있다.
 
+![Application 1이 m1을 가져가 처리 중인 동안 Application 2는 같은 m1을 가져갈 수 없고, Visibility Timeout이 만료된 뒤에야 다시 큐에 노출되는 구조](../aws/assets/sqs-visibility-timeout-two-apps.jpeg)
+
+![Visibility Timeout 만료 전후로 발생할 수 있는 다섯 가지 시나리오: 정상 삭제, Lock 해제 후 처리완료, 처리 중 서버 종료, Timeout 연장, Timeout을 0으로 설정](../aws/assets/sqs-visibility-timeout-scenarios.jpeg)
+
 ## 12. SQS Polling 방식(Short/Long)
 
 SQS는 메시지를 자동으로 보내주지 않으며, 항상 서버가 먼저 할 일이 있는지 확인해야 하는데 이를 **Polling**이라고 한다. Amazon SQS는 내부적으로 여러 대의 서버에 메시지를 분산 저장하는 구조를 가진다 — 하나의 큐처럼 보이지만 실제로는 여러 서버에 나뉘어 저장되어 있다. 이 구조 때문에 Polling 방식이 필요하며, Short Polling과 Long Polling의 차이가 생긴다.
@@ -212,6 +224,10 @@ SQS는 메시지를 자동으로 보내주지 않으며, 항상 서버가 먼저
 **Long Polling**은 처리 서버가 SQS에 메시지를 요청한 뒤, 바로 응답을 받지 않고 일정 시간(최대 20초) 동안 기다리는 방식이다. SQS에 메시지가 없으면 즉시 없음이라고 응답하지 않고 최대 20초까지 대기 상태를 유지한다. 여러 서버를 돌아다니며 확인하는 구조가 아니라 요청을 걸어둔 채 메시지가 생성될 때까지 대기하며, AWS 내부 시스템이 메시지가 들어오면 알려서 깨워주는 이벤트 기반 구조로 동작한다.
 
 Long Polling의 동작 방식은 다음과 같다. 첫째, 처리 서버(EC2, Lambda 등)가 SQS에 요청한다. 둘째, SQS는 바로 응답하지 않고 요청을 대기 상태로 둔다. 셋째, 대기 중에 새로운 메시지가 들어오면 즉시 해당 메시지를 서버에게 전달한다. 넷째, 최대 대기 시간(최대 20초) 동안 메시지가 들어오지 않으면 없음으로 응답하고 연결을 종료한다.
+
+![Short Polling: SQS 내부 서버(A~F) 중 일부만 확인하고 즉시 응답하는 구조](../aws/assets/sqs-short-polling.jpeg)
+
+![Long Polling: 모든 내부 서버를 확인하며 메시지가 생성될 때까지 최대 20초 대기하는 구조](../aws/assets/sqs-long-polling.jpeg)
 
 Short Polling은 일부 서버만 즉시 확인하고 끝내는 방식이라 메시지를 놓치기 쉽고 비용도 늘어나는 반면, Long Polling은 최대 20초까지 대기하며 메시지가 들어오는 즉시 전달받는 방식이라 대부분의 실무 환경에서는 Long Polling을 사용하는 것이 합리적이다.
 
