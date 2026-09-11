@@ -78,6 +78,10 @@ Alias Record는 AWS 전용 기능이므로 연결 대상이 변경되어도 DNS 
 
 ## 5. Route 53 사용 과정
 
+![VPC(10.0.0.0/16) 2개 AZ에 Public/Private Subnet을 두고, Route 53 → ALB → Auto Scaling Group의 EC2로 트래픽이 전달되며 S3에서 정적 웹 리소스를 가져오는 고가용성 웹 서비스 아키텍처](../aws/assets/route53-ha-web-service-architecture.jpeg)
+
+Route 53은 이처럼 사용자 요청을 가장 먼저 받아 ALB로 연결해주는 진입점 역할을 하며, 이후 ALB → Target Group → Auto Scaling Group의 EC2로 트래픽이 이어진다. 이 아키텍처를 처음부터 구성하는 실습은 가이드 12. VPC부터 Route 53까지: 고가용성 웹 서비스 구축 문서를 참고한다.
+
 **1) 도메인 등록**
 
 - 도메인은 Route 53 또는 외부 도메인 등록 기관(Domain Registrar)에서 구입할 수 있다.

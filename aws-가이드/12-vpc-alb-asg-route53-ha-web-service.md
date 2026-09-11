@@ -149,8 +149,8 @@ echo "<hr><h3>Instance ID: $INSTANCE_ID</h3>" >> /var/www/html/index.html
 
 용량 설정
 
-- Desired Capacity: 2
-- Minimum Capacity: 3
+- Desired Capacity: 3
+- Minimum Capacity: 2
 - Maximum Capacity: 5
 
 ## 12. Route 53 구성
@@ -196,7 +196,7 @@ Auto Scaling 그룹에서 실행 중인 EC2 인스턴스 중 1대를 강제로 �
 
 1. 대상 그룹에서 종료된 인스턴스의 상태 변화
 2. Auto Scaling 그룹에서 새로운 EC2 생성 여부
-3. Desired Capacity가 다시 2개로 유지되는지 확인
+3. Desired Capacity가 다시 3개로 유지되는지 확인
 4. 새 EC2가 대상 그룹에 자동 등록되는지 확인
 5. Health Check 통과 후 ALB가 새로운 EC2로 트래픽을 전달하는지 확인
 
