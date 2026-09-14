@@ -259,3 +259,4 @@
 * [SNS 실습: S3 업로드 알림](aws-가이드/10-sns-s3-upload-notification.md)
 * [SNS FIFO 실습: SQS FIFO 소비자 배포](aws-가이드/11-sns-fifo-sqs-consumer.md)
 * [VPC부터 Route 53까지: 고가용성 웹 서비스 구축](aws-가이드/12-vpc-alb-asg-route53-ha-web-service.md)
+* [Route 53 Health Check와 라우팅 정책 실습](aws-가이드/13-route53-healthcheck-routing-policy-practice.md)
