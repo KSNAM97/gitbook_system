@@ -46,6 +46,8 @@ PAT는 가장 널리 사용되는 방식이다. 여러 개의 사설 IP가 하�
 
 기존 IP 체계는 A, B, C 클래스 방식으로 나뉘어 있었다. 이 방식은 유연성이 떨어지고 IP 낭비가 심했다. CIDR는 이러한 문제를 해결하기 위해 등장한 방식으로, IP 주소를 자유롭게 묶고 나눌 수 있도록 만든 구조이다. 현재 대부분의 네트워크 환경과 클라우드 환경에서는 CIDR 방식만 사용된다. AWS에서 VPC와 서브넷을 만들 때도 반드시 CIDR을 지정해야 한다.
 
+![VPC1과 VPC2는 IP 주소 대역이 달라야 한다. 화면](../aws/assets/03-aws-vpc-hwp05-7.png)
+
 CIDR는 다음과 같은 형태로 표현된다.
 
 ```
@@ -204,6 +206,10 @@ VPC를 생성하면 기본적으로 하나의 라우트 테이블이 자동으�
 - 목적지 `172.31.2.125` → `172.31.0.0/16` 경로 참조
 - 목적지 `1.23.5.123` → `0.0.0.0/0` 경로 참조
 
+![목적지 1.23.5.123: 0.0.0.0/0 경로 참조 화면](../aws/assets/03-aws-vpc-hwp04-5.png)
+
+![목적지 1.23.5.123: 0.0.0.0/0 경로 참조 화면](../aws/assets/03-aws-vpc-hwp04-6.png)
+
 ## 6. 서브넷의 종류와 인터넷 게이트웨이
 
 ### 퍼블릭 서브넷과 프라이빗 서브넷
@@ -302,6 +308,10 @@ Private Subnet은 Internet Gateway와 연결되지 않았기 때문에 외부로
 - 비용 절감 또는 세밀한 제어 필요: NAT Instance 선택 가능
 
 프라이빗 서브넷의 EC2 인스턴스는 관리자는 Bastion Host를 통해 접속하고, 소프트웨어 업데이트 및 외부 리소스 다운로드는 NAT Gateway/Instance를 통해 수행하는 이중 구조로 운영하는 것이 일반적이다.
+
+![외부에서 바로 접속 못 하고 반드시 Bastion Host를 거쳐야 함 접속 경로 제한 화면](../aws/assets/03-aws-vpc-hwp04-1.png)
+
+![NAT Gateway는 유료 서비스 화면](../aws/assets/03-aws-vpc-hwp04-28.png)
 
 ![Public Subnet의 NAT Gateway/NAT Instance를 통해 Private Subnet EC2가 아웃바운드 통신을 수행하는 구조](../aws/assets/vpc-nat-gateway-instance-diagram.jpeg)
 
@@ -421,6 +431,8 @@ AWS 제공 Prefix List 이름 예시: `com.amazonaws.ap-northeast-2.s3`, `com.am
 
 즉, 동일한 IP 목록을 대상으로 EC2 인스턴스에는 HTTP 접근을, RDS 인스턴스에는 MySQL 접근을 허용하는 규칙을 각각 설정한 사례이며, IP 목록이 바뀌면 Prefix List 하나만 수정하면 두 보안그룹 모두에 반영된다.
 
+![즉, 동일한 IP들을 대상으로 EC2 인스턴스에 HTTP 접근을 허용하는 규칙을 설정한 사례 화면](../aws/assets/03-aws-vpc-hwp04-15.png)
+
 ### 3) 다른 보안그룹을 Source로 지정 — 특정 서버 그룹만 허용
 
 Source에 CIDR이 아니라 보안그룹 자체를 넣는 방식이다. 의미는 해당 보안그룹에 속한 인스턴스들만 우리에게 접속 가능하다는 것이다.
@@ -449,6 +461,8 @@ Source에 CIDR이 아니라 보안그룹 자체를 넣는 방식이다. 의미�
 - 역할: 데이터베이스 보호
 - Inbound 설정: 포트 3306(MySQL 기준) / Source `sg-web`
 - 의미: 웹서버에서만 DB 접속 허용, 외부 및 다른 서버 접근 차단
+
+![즉, 여러 개의 개별 IP를 지정하여 DB 인스턴스RDS에 MySQL 접근을 허용하는 규칙을 설정한 사례 화면](../aws/assets/03-aws-vpc-hwp04-16.png)
 
 **Auto Scaling과의 연동**
 
@@ -610,6 +624,8 @@ NACL은 Stateless이므로 인바운드와 아웃바운드를 각각 허용해�
 ## 13. VPC Endpoint
 
 VPC Endpoint는 VPC 안의 리소스가 인터넷 게이트웨이(IGW)나 NAT 게이트웨이 없이도 AWS 서비스(S3, DynamoDB 등)에 직접 연결할 수 있게 해주는 기능이다. VPC 내부에서 특정 AWS 서비스에 사설 네트워크(Private Network)로 접속할 수 있도록 하는 엔드포인트이며, 트래픽이 인터넷으로 나가지 않고 AWS 내부망을 통해 서비스에 도달하므로 보안 강화와 비용 절감 효과가 있다.
+
+![트래픽이 인터넷으로 나가지 않고 AWS 내부망을 통해 서비스에 도달 --> 보안 강화 + 비용 절감 화면](../aws/assets/03-aws-vpc-hwp05-1.png)
 
 ### 1) Interface Endpoint(PrivateLink 기반)
 

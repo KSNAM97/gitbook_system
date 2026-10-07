@@ -545,6 +545,8 @@ Elastic IPv4 주소:
 
 사용 예: 고정 IP가 필요한 서비스(도메인 고정, 방화벽 화이트리스트 등록 등) / EC2 인스턴스 교체 시에도 동일한 IP 유지
 
+![# 유저 데이터User Data와 메타 데이터Meta Data 화면](../aws/assets/02-aws-ec2-deployment-hwp02-11.png)
+
 ## 11. 유저 데이터(User Data)와 메타 데이터(Meta Data)
 
 유저 데이터(User Data)와 메타 데이터(Meta Data)는 AWS EC2에서 인스턴스를 설정하거나 정보를 얻을 때 자주 쓰이는 기능이다.
@@ -592,6 +594,8 @@ echo "Hello AWS" > /var/www/html/index.html
   - 일반 인터넷을 통해 외부에서 직접 접근하는 주소가 아님
 - 일반적으로 해당 EC2 인스턴스 내부에서 IMDS에 접근하여 사용
 - HTTP 요청으로 `http://169.254.169.254/latest/meta-data/`에 접속해서 확인
+
+![# EC2 권한 부여 화면](../aws/assets/02-aws-ec2-deployment-hwp02-12.png)
 
 메타 데이터에서 확인 가능한 대표적인 정보: Instance ID / AMI ID / Instance Type / Private IP / Public IPv4 주소(있는 경우) / Hostname / MAC 주소 / 네트워크 인터페이스 관련 정보 / Security Group 정보 / IAM Role 관련 정보 / Availability Zone / Region 관련 정보 / Block Device Mapping 정보
 
@@ -1367,6 +1371,10 @@ AZRebalance와의 관계: AZRebalance 기능이 꺼져 있지 않다면, StandBy
 
 Amazon EFS는 여러 EC2 인스턴스가 동시에 접근할 수 있는 공유 파일 시스템이다. 기술적으로는 네트워크를 통해 연결되는 파일 서버이며, 사용자 입장에서는 하나의 공용 폴더처럼 사용된다. 모든 EC2 인스턴스는 동일한 EFS 파일 시스템을 마운트하여 사용한다. (예: EC2-1, EC2-2, EC2-3이 모두 `/mnt/efs`로 마운트) 모든 인스턴스가 동일한 디렉터리를 공유하므로, 어느 서버에 접속하더라도 동일한 데이터를 사용할 수 있다.
 
+![이로 인해 어느 서버에 접속하더라도 동일한 데이터를 사용할 수 있다. 화면](../aws/assets/02-aws-ec2-deployment-hwp03-3.png)
+
+![이로 인해 어느 서버에 접속하더라도 동일한 데이터를 사용할 수 있다. 화면](../aws/assets/02-aws-ec2-deployment-hwp05-10.png)
+
 ### EFS의 동작 방식(NFS 기반)
 
 EFS는 NFS(Network File System) 프로토콜을 기반으로 동작한다. NFS는 원격 서버의 파일 시스템을 로컬 디렉터리처럼 사용하는 기술이다. EC2에서는 EFS를 네트워크 드라이브처럼 마운트하여 사용하며, 마운트 이후에는 일반 디렉터리와 동일한 방식으로 파일을 읽고 쓸 수 있다.
@@ -1402,6 +1410,10 @@ EFS는 각 가용 영역마다 Mount Target을 생성한다. Mount Target은 EC2
 - **Max I/O**: 대규모 병렬 작업과 높은 처리량이 필요한 환경에 적합하다. 빅데이터 처리, 미디어 렌더링 등에 활용된다.
 
 주요 활용 사례: 로그인 세션 저장소 / 파일 업로드 저장 공간 / 로그 파일 저장 / 공용 설정 파일 관리 / 컨테이너 볼륨 공유
+
+![컨테이너 볼륨 공유 화면](../aws/assets/02-aws-ec2-deployment-hwp03-4.png)
+
+![컨테이너 볼륨 공유 화면](../aws/assets/02-aws-ec2-deployment-hwp05-11.png)
 
 ### 실습: User Data로 EFS 자동 마운트
 
@@ -1540,4 +1552,8 @@ EC2 인스턴스 타입 변경은 실행 중에는 불가능하기 때문에 반
 
 Elastic IP를 사용하면 Public IP는 유지된다.
 
+![Elastic IP를 사용하면 Public IP는 유지된다. 화면](../aws/assets/02-aws-ec2-deployment-hwp03-6.png)
+
 > 관련: 이론 1.  AWS - 클라우드 기초 개념
+
+![Elastic IP를 사용하면 Public IP는 유지된다. 화면](../aws/assets/02-aws-ec2-deployment-hwp03-7.jpg)

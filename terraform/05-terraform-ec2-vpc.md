@@ -1,17 +1,17 @@
 # Terraform - EC2 · VPC
 
-## 이론
+이 문서는 Terraform으로 EC2와 VPC(서브넷, 라우팅, NAT)를 구성하는 방법과 in-place update/replace 같은 변경 동작, 전체 네트워크 실습을 정리한다.
 
-#### VPC와 EC2의 개념 이해
+## 1. VPC와 EC2의 개념 이해
 
-#### VPC (Virtual Private Cloud)
+## 2. VPC (Virtual Private Cloud)
 
 - VPC는 AWS 클라우드 환경에서 사용자가 직접 네트워크를 설계하고 관리할 수 있는 가상 네트워크 서비스이다.
 - 사용자는 AWS 내부에 자신만의 독립적인 네트워크 환경을 만들 수 있으며,
 IP 주소 범위, 서브넷, 라우팅 정책 등을 직접 설정할 수 있다.
 즉 VPC는 클라우드 상의 데이터센터 네트워크를 직접 설계하는 기능이라고 볼 수 있다.
 
-#### VPC의 주요 구성 요소
+## 3. VPC의 주요 구성 요소
 
 - VPC는 여러 네트워크 리소스로 구성된다.
 
@@ -32,7 +32,7 @@ IP 주소 범위, 서브넷, 라우팅 정책 등을 직접 설정할 수 있다
 
 - 이러한 요소들을 조합하여 AWS 네트워크 아키텍처를 구성하게 된다.
 
-#### EC2 (Elastic Compute Cloud)
+## 4. EC2 (Elastic Compute Cloud)
 
 - EC2는 AWS에서 제공하는 가상 서버 서비스이다.
 
@@ -121,7 +121,7 @@ EC2 기본 구성 요소
   - 예) I, D, H
   - 특징 : 대용량 스토리지 처리, 분산 파일 시스템, 로그 분석,
 
-#### EC2 인스턴스 크기
+## 5. EC2 인스턴스 크기
 
 - 인스턴스는 다음과 같은 크기를 가진다.
   - nano
@@ -141,7 +141,7 @@ a1.xlarge48GB
 a1.2xlarge816GB
 ```
 
-#### VPC 네트워크 구조
+## 6. VPC 네트워크 구조
 
 - VPC는 보통 다음과 같은 구조를 가진다.
 
@@ -161,12 +161,12 @@ VPC
   - Subnet
   - Security Group
 
-#### Terraform을 활용한 VPC와 EC2 관리 이해
+## 7. Terraform을 활용한 VPC와 EC2 관리 이해
 
 - Terraform을 사용하면 AWS 인프라를 코드로 정의하고 자동으로 배포할 수 있다.
 - 이 방식을 Infrastructure as Code (IaC) 라고 한다.
 
-#### Terraform을 통한 VPC 관리
+## 8. Terraform을 통한 VPC 관리
 
 ```
 1) VPC 생성
@@ -253,7 +253,7 @@ resource "aws_route_table" "public_route_table" {
 
 - 즉 모든 인터넷 트래픽  -->  Internet Gateway
 
-#### Terraform을 통한 EC2 관리
+## 9. Terraform을 통한 EC2 관리
 
 ```hcl
 1) EC2 생성
@@ -402,7 +402,7 @@ tags = {
   - 비용 관리
   - 자동화
 
-#### 공식 테라폼 AWS 모듈을 활용한 인프라 배포
+## 10. 공식 테라폼 AWS 모듈을 활용한 인프라 배포
 
 - Terraform Registry에는 다양한 공개 모듈이 올라와 있고, 그중 terraform-aws-modules 네임스페이스는
 AWS 인프라를 빠르게 구성할 수 있도록 만든 대표적인 오픈소스 모듈 모음이다.
@@ -452,7 +452,7 @@ https://registry.terraform.io/search/modules?namespace=terraform-aws-modules
 특히 같은 유형의 인프라를 반복 배포해야 하는 교육 환경이나 실무 환경에서는 이 장점이 크다.
 ```
 
-#### 주요 특징
+## 11. 주요 특징
 
 - 재사용 가능한 검증된 구성
   - terraform-aws-modules는 AWS 자주 쓰는 서비스를 모듈화해두었기 때문에,
@@ -476,7 +476,7 @@ https://registry.terraform.io/search/modules?namespace=terraform-aws-modules
   - 예를 들어 EKS 모듈은 클러스터 본체만이 아니라 관련 기능을 서브모듈 형태로 제공하고,
 Registry에는 karpenter 같은 하위 모듈도 별도로 확인된다.
 
-#### 장점 정리 보강판
+## 12. 장점 정리 보강판
 
 - 시간 절약
   - 직접 리소스를 전부 작성하면, 단순히 VPC 하나여도 서브넷, 라우팅, IGW, NAT, 보안 관련 설정까지 손이 많이 간다.
@@ -484,9 +484,9 @@ Registry에는 karpenter 같은 하위 모듈도 별도로 확인된다.
 
 - 안정성 향상
 
-#### 많은 사용자가 쓰는 코드 구조를 기반으로 하기 때문에, 기초 단계에서 자주 발생하는 누락 실수나 연결 실수를 줄일 수 있다.
+## 13. 많은 사용자가 쓰는 코드 구조를 기반으로 하기 때문에, 기초 단계에서 자주 발생하는 누락 실수나 연결 실수를 줄일 수 있다.
 
-#### 예를 들어 S3 로깅 정책이나 EKS 관련 부가 구성처럼 손이 많이 가는 부분에서 장점이 더 크다.
+## 14. 예를 들어 S3 로깅 정책이나 EKS 관련 부가 구성처럼 손이 많이 가는 부분에서 장점이 더 크다.
 
 - 유지보수 편의성
   - 리소스를 직접 수십 개 나열한 코드보다, 모듈 단위로 나눈 코드가 구조적으로 읽기 쉽다.
@@ -497,7 +497,7 @@ Registry에는 karpenter 같은 하위 모듈도 별도로 확인된다.
   - 모듈 기반 코드는 리뷰, 재사용, 환경 분리(dev/stage/prod)에 유리하다.
   - 이 부분은 Registry와 GitHub의 표준화된 모듈 제공 방식에서 확인할 수 있다.
 
-#### 단점
+## 15. 단점
 
 - 모듈을 쓴다고 AWS 구조를 몰라도 되는 것은 아니다
 
@@ -516,7 +516,7 @@ Registry에는 karpenter 같은 하위 모듈도 별도로 확인된다.
   - 실무는 "모듈만 사용" 또는 "직접 작성만 사용"의 이분법이 아니라,
 공통 영역은 모듈, 특수 영역은 직접 리소스 작성 방식으로 혼합되는 경우가 많다.
 
-#### Terraform in-place update와 replace 이해
+## 16. Terraform in-place update와 replace 이해
 
 - Terraform으로 인프라를 관리할 때 가장 중요한 개념 중 하나는 리소스 변경이 어떻게 적용되는지 이해하는 것이다.
 
@@ -552,7 +552,7 @@ Registry에는 karpenter 같은 하위 모듈도 별도로 확인된다.
 
 - 여기서 핵심이 되는 개념이 바로 in-place update와 replace이다.
 
-#### in-place update
+## 17. in-place update
 
 - in-place update는 기존 리소스를 삭제하지 않고 속성만 수정하는 방식이다.
 
@@ -597,7 +597,7 @@ tags = {
   - Tag 값만 변경
   - 서비스 중단 없이 변경된다.
 
-#### replace (recreate)
+## 18. replace (recreate)
 
 - replace는 기존 리소스를 삭제하고 새로운 리소스를 생성하는 방식이다.
 
@@ -633,7 +633,7 @@ resource "aws_instance" "example" {
 
 - 이 과정에서 서비스 중단이 발생할 수 있다.
 
-#### Terraform이 in-place와 replace를 결정하는 기준
+## 19. Terraform이 in-place와 replace를 결정하는 기준
 
 - Terraform은 리소스 속성을 두 가지 유형으로 나눈다.
 
@@ -662,7 +662,7 @@ resource "aws_instance" "example" {
 
 Replace가 발생하는 주요 사례
 
-#### Terraform에서 replace가 자주 발생하는 사례
+## 20. Terraform에서 replace가 자주 발생하는 사례
 
 1. 네트워크 변경
 - 예
@@ -683,7 +683,7 @@ Replace가 발생하는 주요 사례
   - 다른 Subnet으로 이동
   - 새로운 네트워크 연결
 
-#### Terraform 변경 시 고려해야 할 사항
+## 21. Terraform 변경 시 고려해야 할 사항
 
 - Terraform을 운영 환경에서 사용할 때 가장 중요한 것은 변경으로 인한 서비스 영향 분석이다.
 - 특히 replace가 발생하는 경우 다음 문제가 생길 수 있다.
@@ -701,18 +701,16 @@ Replace가 발생하는 주요 사례
 
 plan 단계는 Terraform 운영에서 필수 단계다.
 
-## 실습
+## 22. 실습: VPC와 EC2의 개념 이해
 
-#### VPC와 EC2의 개념 이해
-
-#### VPC (Virtual Private Cloud)
+## 23. 실습: VPC (Virtual Private Cloud)
 
 - VPC는 AWS 클라우드 환경에서 사용자가 직접 네트워크를 설계하고 관리할 수 있는 가상 네트워크 서비스이다.
 - 사용자는 AWS 내부에 자신만의 독립적인 네트워크 환경을 만들 수 있으며,
 IP 주소 범위, 서브넷, 라우팅 정책 등을 직접 설정할 수 있다.
 즉 VPC는 클라우드 상의 데이터센터 네트워크를 직접 설계하는 기능이라고 볼 수 있다.
 
-#### VPC의 주요 구성 요소
+## 24. 실습: VPC의 주요 구성 요소
 
 - VPC는 여러 네트워크 리소스로 구성된다.
 
@@ -733,7 +731,7 @@ IP 주소 범위, 서브넷, 라우팅 정책 등을 직접 설정할 수 있다
 
 - 이러한 요소들을 조합하여 AWS 네트워크 아키텍처를 구성하게 된다.
 
-#### EC2 (Elastic Compute Cloud)
+## 25. 실습: EC2 (Elastic Compute Cloud)
 
 - EC2는 AWS에서 제공하는 가상 서버 서비스이다.
 
@@ -822,7 +820,7 @@ EC2 기본 구성 요소
   - 예) I, D, H
   - 특징 : 대용량 스토리지 처리, 분산 파일 시스템, 로그 분석,
 
-#### EC2 인스턴스 크기
+## 26. 실습: EC2 인스턴스 크기
 
 - 인스턴스는 다음과 같은 크기를 가진다.
   - nano
@@ -842,7 +840,7 @@ a1.xlarge48GB
 a1.2xlarge816GB
 ```
 
-#### VPC 네트워크 구조
+## 27. 실습: VPC 네트워크 구조
 
 - VPC는 보통 다음과 같은 구조를 가진다.
 
@@ -862,12 +860,12 @@ VPC
   - Subnet
   - Security Group
 
-#### Terraform을 활용한 VPC와 EC2 관리 이해
+## 28. 실습: Terraform을 활용한 VPC와 EC2 관리 이해
 
 - Terraform을 사용하면 AWS 인프라를 코드로 정의하고 자동으로 배포할 수 있다.
 - 이 방식을 Infrastructure as Code (IaC) 라고 한다.
 
-#### Terraform을 통한 VPC 관리
+## 29. 실습: Terraform을 통한 VPC 관리
 
 ```
 1) VPC 생성
@@ -954,7 +952,7 @@ resource "aws_route_table" "public_route_table" {
 
 - 즉 모든 인터넷 트래픽  -->  Internet Gateway
 
-#### Terraform을 통한 EC2 관리
+## 30. 실습: Terraform을 통한 EC2 관리
 
 ```hcl
 1) EC2 생성
@@ -1109,7 +1107,7 @@ data를 사용하여 조회한 후 해당 값을 사용하여 EC2생성 또는 V
 
 - 테라폼 설정 폴더 생성
 
-![이미지](assets/05-terraform-ec2-vpc/1.jpg)
+![테라폼 설정 폴더 생성 화면](assets/05-terraform-ec2-vpc/1.jpg)
 
 ```hcl
 # variables.tf
@@ -1332,7 +1330,7 @@ Changes to Outputs:
   + amazon_linux_2023_owner_id = "123456789012"
 ```
 
-#### Terraform을 활용한 VPC + EC2 서비스 구성
+## 31. 실습: Terraform을 활용한 VPC + EC2 서비스 구성
 
 - 이번 실습에서는 Terraform을 사용하여 VPC, Public Subnet, Internet Gateway,
 Route Table, Security Group, Key Pair, EC2 Instance 등의 AWS 리소스를 자동으로 생성한다.
@@ -1341,7 +1339,7 @@ Route Table, Security Group, Key Pair, EC2 Instance 등의 AWS 리소스를 자�
 - EC2 인스턴스는 Public Subnet에 생성하고 Public IP를 할당하여 외부에서 SSH로 접속할 수 있도록 구성한다.
 - 최신 Amazon Linux 2023 AMI는 AMI ID를 직접 입력하지 않고 AWS Data Source를 이용하여 자동으로 조회한다.
 
-#### Terraform 기본 설정
+## 32. 실습: Terraform 기본 설정
 
 - Terraform을 실행하기 위한 최소 버전과 사용할 Provider를 설정한다.
 
@@ -1372,7 +1370,7 @@ terraform {
 }
 ```
 
-#### VPC 구성
+## 33. 실습: VPC 구성
 
 - AWS Resource를 생성하기 위한 독립적인 가상 네트워크인 VPC를 생성한다.
 
@@ -1381,7 +1379,7 @@ terraform {
 
 - DNS Support와 DNS Hostname 기능도 활성화한다.
 
-#### Terraform 변수 설정
+## 34. 실습: Terraform 변수 설정
 
 - 실습에서 변경될 가능성이 있는 값은 variables.tf 파일에서 변수로 관리한다.
 
@@ -1440,12 +1438,12 @@ resource "aws_vpc" "my_vpc" {
 }
 ```
 
-#### 코드 설명
+## 35. 실습: 코드 설명
 
 - enable_dns_support: DNS 조회/해석 기능 사용
 - enable_dns_hostnames: 리소스에 DNS 호스트 이름 부여
 
-#### Public Subnet 구성
+## 36. 실습: Public Subnet 구성
 
 - VPC 내부에 EC2 Instance를 배치하기 위한 Public Subnet을 생성한다.
 
@@ -1473,7 +1471,7 @@ resource "aws_subnet" "public_subnet" {
 }
 ```
 
-#### 코드 설명
+## 37. 실습: 코드 설명
 
 - vpc_id
   - Subnet을 생성할 VPC를 지정한다.
@@ -1488,7 +1486,7 @@ resource "aws_subnet" "public_subnet" {
 - map_public_ip_on_launch = true
   - 해당 Subnet에 생성되는 EC2에 Public IP를 자동으로 할당한다.
 
-#### Internet Gateway 구성
+## 38. 실습: Internet Gateway 구성
 
 - VPC 내부의 Resource가 Internet과 통신하려면 Internet Gateway가 필요하다.
 - Internet Gateway를 생성한 후 앞에서 만든 VPC에 연결한다.
@@ -1505,12 +1503,12 @@ resource "aws_internet_gateway" "my_igw" {
 }
 ```
 
-#### 코드 설명
+## 39. 실습: 코드 설명
 
 - aws_internet_gateway
   - VPC가 Internet과 통신할 수 있도록 Internet Gateway를 생성한다.
 
-#### Public Route Table 구성
+## 40. 실습: Public Route Table 구성
 
 - Public Subnet에서 Internet으로 나가는 Traffic을
 Internet Gateway로 전달하기 위한 Route Table을 생성한다.
@@ -1533,7 +1531,7 @@ resource "aws_route_table" "public_route_table" {
 }
 ```
 
-#### 코드 설명
+## 41. 실습: 코드 설명
 
 - cidr_block = "0.0.0.0/0"
   - 모든 외부 목적지 주소를 의미한다.
@@ -1545,7 +1543,7 @@ resource "aws_route_table" "public_route_table" {
   - 10.0.0.0/16: local
   - 0.0.0.0/0: Internet Gateway
 
-#### Public Subnet과 Route Table 연결
+## 42. 실습: Public Subnet과 Route Table 연결
 
 - Route Table을 생성했다고 Subnet에서 자동으로 사용하는 것은 아니다.
 
@@ -1560,7 +1558,7 @@ resource "aws_route_table_association" "public_subnet_association" {
 }
 ```
 
-#### 코드 설명
+## 43. 실습: 코드 설명
 
 - route_table_id
   - Public Subnet에서 사용할 Route Table을 지정한다.
@@ -1568,7 +1566,7 @@ resource "aws_route_table_association" "public_subnet_association" {
 - subnet_id
   - Route Table을 연결할 Subnet을 지정한다.
 
-#### Security Group 구성
+## 44. 실습: Security Group 구성
 
 - EC2 Instance의 Network Traffic을 제어하기 위해 Security Group을 생성한다.
 - 현재 실습에서는 SSH 접속을 위해 TCP 22번 Port를 허용한다.
@@ -1600,7 +1598,7 @@ resource "aws_security_group" "my_sg" {
 }
 ```
 
-#### Amazon Linux 2023 AMI 조회
+## 45. 실습: Amazon Linux 2023 AMI 조회
 
 - EC2 Instance를 생성하려면 운영체제 이미지인 AMI가 필요하다.
 - AMI ID를 직접 입력하면 Region이나 시점에 따라 AMI ID가 변경될 수 있다.
@@ -1630,7 +1628,7 @@ data "aws_ami" "al2023" {
 }
 ```
 
-#### EC2 Instance 구성
+## 46. 실습: EC2 Instance 구성
 
 - 앞에서 구성한 Public Subnet에 EC2 Instance를 생성한다.
 - EC2 Instance에는 다음 설정을 적용한다.
@@ -1678,7 +1676,7 @@ resource "aws_instance" "my_ec2" {
 }
 ```
 
-#### 코드 설명
+## 47. 실습: 코드 설명
 
 - ami
   - EC2 Instance에서 사용할 AMI ID를 지정한다. (앞에서 Data Source로 조회한 최신 Amazon Linux 2023 AMI를 사용)
@@ -1778,7 +1776,7 @@ Mode                 LastWriteTime         Length Name
 
 - 테라폼으로 my-key.pub 키를 EC2에 등록하고 my-key 로 EC2로 접속
 
-#### Random 문자열을 이용한 Key Pair 이름 생성
+## 48. 실습: Random 문자열을 이용한 Key Pair 이름 생성
 
 - AWS Key Pair를 생성할 때 동일한 이름이 이미 존재하면 이름 충돌이 발생할 수 있다.
 
@@ -1793,7 +1791,7 @@ resource "random_string" "key_name_suffix" {
 }
 ```
 
-#### SSH Public Key 파일 조회
+## 49. 실습: SSH Public Key 파일 조회
 
 - EC2 SSH 접속에 사용할 Public Key 파일을 사용자 PC에서 읽는다.
 
@@ -1807,7 +1805,7 @@ data "local_file" "public_key" {
 }
 ```
 
-#### 코드 설명
+## 50. 실습: 코드 설명
 
 - local_file
   - Local PC에 존재하는 파일을 읽는 Data Source이다.
@@ -1818,7 +1816,7 @@ data "local_file" "public_key" {
 - pathexpand()
   - ~를 사용자 Home Directory 경로로 변환한다.
 
-#### AWS Key Pair 생성
+## 51. 실습: AWS Key Pair 생성
 
 - 사용자 PC에서 읽은 SSH Public Key를 AWS Key Pair로 등록한다.
 - Key Pair 이름 뒤에 Random 문자열을 추가하여 이름 중복을 방지한다.
@@ -1835,7 +1833,7 @@ resource "aws_key_pair" "my_key_pair" {
 }
 ```
 
-#### 코드 설명
+## 52. 실습: 코드 설명
 
 - key_name
   - AWS에 생성할 Key Pair 이름을 지정한다.
@@ -1957,27 +1955,27 @@ ec2_domain = "ec2-43-201-150-218.ap-northeast-2.compute.amazonaws.com"
 
 - EC2 생성 확인
 
-![이미지](assets/05-terraform-ec2-vpc/2.png)
+![EC2 생성 확인 화면](assets/05-terraform-ec2-vpc/2.png)
 
 - 서브넷, 라우팅 테이블, InternetGateway 생성 확인
 
-![이미지](assets/05-terraform-ec2-vpc/3.png)
+![서브넷, 라우팅 테이블, InternetGateway 생성 확인 화면](assets/05-terraform-ec2-vpc/3.png)
 
 - EC2 생성 확인
 
-![이미지](assets/05-terraform-ec2-vpc/4.png)
+![EC2 생성 확인 화면](assets/05-terraform-ec2-vpc/4.png)
 
 - 생성된 EC2 정보 확인 (SecurityGroup도 확인)
 
-![이미지](assets/05-terraform-ec2-vpc/5.png)
+![생성된 EC2 정보 확인 SecurityGroup도 확인 화면](assets/05-terraform-ec2-vpc/5.png)
 
 - EBS (스토리지)가 2개 장착된 것을 확인할 수 있다.
 
-![이미지](assets/05-terraform-ec2-vpc/6.png)
+![EBS 스토리지가 2개 장착된 것을 확인할 수 있다. 화면](assets/05-terraform-ec2-vpc/6.png)
 
 SecurityGroup도 확인
 
-![이미지](assets/05-terraform-ec2-vpc/7.png)
+![SecurityGroup도 확인 화면](assets/05-terraform-ec2-vpc/7.png)
 
 ```powershell
 PS C:\terraform\terraform-aws2\01_aws-config\1_vpc-and-ec2> terraform apply
@@ -2048,7 +2046,7 @@ Created symlink /etc/systemd/system/multi-user.target.wants/nginx.service → /u
 http://ec2-43-201-150-218.ap-northeast-2.compute.amazonaws.com/
 ```
 
-![이미지](assets/05-terraform-ec2-vpc/8.png)
+![http://ec2-43-201-150-218.ap-northeast-2.compute.amazonaws.c 화면](assets/05-terraform-ec2-vpc/8.png)
 
 ```hcl
 # main.tf
@@ -2108,29 +2106,29 @@ ec2_domain = "ec2-43-201-150-218.ap-northeast-2.compute.amazonaws.com"
 
 - 보안 그룹을 확인해보면 HTTP가 허용된 것을 확인할 수 있다.
 
-![이미지](assets/05-terraform-ec2-vpc/9.png)
+![보안 그룹을 확인해보면 HTTP가 허용된 것을 확인할 수 있다. 화면](assets/05-terraform-ec2-vpc/9.png)
 
 http://ec2-43-201-150-218.ap-northeast-2.compute.amazonaws.com/# HTTP 접속 허용
 
-![이미지](assets/05-terraform-ec2-vpc/10.png)
+![http://ec2-43-201-150-218.ap-northeast-2.compute.amazonaws.c 화면](assets/05-terraform-ec2-vpc/10.png)
 
 https://graphviz.org/download/
 
-![이미지](assets/05-terraform-ec2-vpc/11.png)
+![https://graphviz.org/download 화면](assets/05-terraform-ec2-vpc/11.png)
 
-![이미지](assets/05-terraform-ec2-vpc/12.png)
+![https://graphviz.org/download 화면](assets/05-terraform-ec2-vpc/12.png)
 
-![이미지](assets/05-terraform-ec2-vpc/13.png)
+![https://graphviz.org/download 화면](assets/05-terraform-ec2-vpc/13.png)
 
 Add Graphviz to the system PATH for all users
   - dot 명령을 어디서든 사용할 수 있게 됨
   - PowerShell / CMD / VSCode 모두 사용 가능
 
-![이미지](assets/05-terraform-ec2-vpc/14.png)
+![PowerShell / CMD / VSCode 모두 사용 가능 화면](assets/05-terraform-ec2-vpc/14.png)
 
-![이미지](assets/05-terraform-ec2-vpc/15.png)
+![PowerShell / CMD / VSCode 모두 사용 가능 화면](assets/05-terraform-ec2-vpc/15.png)
 
-![이미지](assets/05-terraform-ec2-vpc/16.png)
+![PowerShell / CMD / VSCode 모두 사용 가능 화면](assets/05-terraform-ec2-vpc/16.png)
 
 ```powershell
 PS C:\terraform\terraform-aws2\01_aws-config\1_vpc-and-ec2>
@@ -2165,7 +2163,7 @@ terraform graph | Out-File -Encoding ASCII graph.dot; dot -Tpng graph.dot -o gra
 terraform graph  -->  Out-File graph.dot  -->  dot -Tpng graph.dot  -->  graph.png 생성
 ```
 
-![이미지](assets/05-terraform-ec2-vpc/17.png)
+![terraform graph  -->  Out-File graph.dot  -->  dot -Tpng gra 화면](assets/05-terraform-ec2-vpc/17.png)
 
 ```powershell
 PS C:\terraform\terraform-aws2\01_aws-config\1_vpc-and-ec2> terraform  destroy  -auto-approve
@@ -2188,7 +2186,7 @@ Destroy complete! Resources: 11 destroyed.
 # AWS에서 VPC, EC2 , SG 삭제 확인
 ```
 
-#### 공식 테라폼 AWS 모듈을 활용한 인프라 배포
+## 53. 실습: 공식 테라폼 AWS 모듈을 활용한 인프라 배포
 
 - Terraform Registry에는 다양한 공개 모듈이 올라와 있고, 그중 terraform-aws-modules 네임스페이스는
 AWS 인프라를 빠르게 구성할 수 있도록 만든 대표적인 오픈소스 모듈 모음이다.
@@ -2238,7 +2236,7 @@ https://registry.terraform.io/search/modules?namespace=terraform-aws-modules
 특히 같은 유형의 인프라를 반복 배포해야 하는 교육 환경이나 실무 환경에서는 이 장점이 크다.
 ```
 
-#### 주요 특징
+## 54. 실습: 주요 특징
 
 - 재사용 가능한 검증된 구성
   - terraform-aws-modules는 AWS 자주 쓰는 서비스를 모듈화해두었기 때문에,
@@ -2262,7 +2260,7 @@ https://registry.terraform.io/search/modules?namespace=terraform-aws-modules
   - 예를 들어 EKS 모듈은 클러스터 본체만이 아니라 관련 기능을 서브모듈 형태로 제공하고,
 Registry에는 karpenter 같은 하위 모듈도 별도로 확인된다.
 
-#### 장점 정리 보강판
+## 55. 실습: 장점 정리 보강판
 
 - 시간 절약
   - 직접 리소스를 전부 작성하면, 단순히 VPC 하나여도 서브넷, 라우팅, IGW, NAT, 보안 관련 설정까지 손이 많이 간다.
@@ -2270,9 +2268,9 @@ Registry에는 karpenter 같은 하위 모듈도 별도로 확인된다.
 
 - 안정성 향상
 
-#### 많은 사용자가 쓰는 코드 구조를 기반으로 하기 때문에, 기초 단계에서 자주 발생하는 누락 실수나 연결 실수를 줄일 수 있다.
+## 56. 실습: 많은 사용자가 쓰는 코드 구조를 기반으로 하기 때문에, 기초 단계에서 자주 발생하는 누락 실수나 연결 실수를 줄일 수 있다.
 
-#### 예를 들어 S3 로깅 정책이나 EKS 관련 부가 구성처럼 손이 많이 가는 부분에서 장점이 더 크다.
+## 57. 실습: 예를 들어 S3 로깅 정책이나 EKS 관련 부가 구성처럼 손이 많이 가는 부분에서 장점이 더 크다.
 
 - 유지보수 편의성
   - 리소스를 직접 수십 개 나열한 코드보다, 모듈 단위로 나눈 코드가 구조적으로 읽기 쉽다.
@@ -2283,7 +2281,7 @@ Registry에는 karpenter 같은 하위 모듈도 별도로 확인된다.
   - 모듈 기반 코드는 리뷰, 재사용, 환경 분리(dev/stage/prod)에 유리하다.
   - 이 부분은 Registry와 GitHub의 표준화된 모듈 제공 방식에서 확인할 수 있다.
 
-#### 단점
+## 58. 실습: 단점
 
 - 모듈을 쓴다고 AWS 구조를 몰라도 되는 것은 아니다
 
@@ -2302,7 +2300,7 @@ Registry에는 karpenter 같은 하위 모듈도 별도로 확인된다.
   - 실무는 "모듈만 사용" 또는 "직접 작성만 사용"의 이분법이 아니라,
 공통 영역은 모듈, 특수 영역은 직접 리소스 작성 방식으로 혼합되는 경우가 많다.
 
-#### Terraform in-place update와 replace 이해
+## 59. 실습: Terraform in-place update와 replace 이해
 
 - Terraform으로 인프라를 관리할 때 가장 중요한 개념 중 하나는 리소스 변경이 어떻게 적용되는지 이해하는 것이다.
 
@@ -2338,7 +2336,7 @@ Registry에는 karpenter 같은 하위 모듈도 별도로 확인된다.
 
 - 여기서 핵심이 되는 개념이 바로 in-place update와 replace이다.
 
-#### in-place update
+## 60. 실습: in-place update
 
 - in-place update는 기존 리소스를 삭제하지 않고 속성만 수정하는 방식이다.
 
@@ -2383,7 +2381,7 @@ tags = {
   - Tag 값만 변경
   - 서비스 중단 없이 변경된다.
 
-#### replace (recreate)
+## 61. 실습: replace (recreate)
 
 - replace는 기존 리소스를 삭제하고 새로운 리소스를 생성하는 방식이다.
 
@@ -2419,7 +2417,7 @@ resource "aws_instance" "example" {
 
 - 이 과정에서 서비스 중단이 발생할 수 있다.
 
-#### Terraform이 in-place와 replace를 결정하는 기준
+## 62. 실습: Terraform이 in-place와 replace를 결정하는 기준
 
 - Terraform은 리소스 속성을 두 가지 유형으로 나눈다.
 
@@ -2448,7 +2446,7 @@ resource "aws_instance" "example" {
 
 Replace가 발생하는 주요 사례
 
-#### Terraform에서 replace가 자주 발생하는 사례
+## 63. 실습: Terraform에서 replace가 자주 발생하는 사례
 
 1. 네트워크 변경
 - 예
@@ -2469,7 +2467,7 @@ Replace가 발생하는 주요 사례
   - 다른 Subnet으로 이동
   - 새로운 네트워크 연결
 
-#### Terraform 변경 시 고려해야 할 사항
+## 64. 실습: Terraform 변경 시 고려해야 할 사항
 
 - Terraform을 운영 환경에서 사용할 때 가장 중요한 것은 변경으로 인한 서비스 영향 분석이다.
 - 특히 replace가 발생하는 경우 다음 문제가 생길 수 있다.
@@ -2487,7 +2485,7 @@ Replace가 발생하는 주요 사례
 
 plan 단계는 Terraform 운영에서 필수 단계다.
 
-![이미지](assets/05-terraform-ec2-vpc/18.png)
+![plan 단계는 Terraform 운영에서 필수 단계다. 화면](assets/05-terraform-ec2-vpc/18.png)
 
 ```powershell
 PS C:\terraform-aws\01_ec2-vpc\4_in-place-update-and-replace> terraform  init
@@ -2687,7 +2685,7 @@ Changes to Outputs:
   ~ ec_domain = "ec2-13-125-197-34.ap-northeast-2.compute.amazonaws.com" -> (known after apply)
 ```
 
-#### S3 저장소와 정적 웹서비스
+## 65. 실습: S3 저장소와 정적 웹서비스
 
 - AWS에서 웹사이트를 운영하는 방법은 여러 가지가 있다.
 
@@ -2702,7 +2700,7 @@ Changes to Outputs:
 
 - 이 구조에서는 EC2나 웹 서버가 필요하지 않기 때문에 운영 비용이 낮고 관리가 매우 단순하다.
 
-#### AWS S3 개요
+## 66. 실습: AWS S3 개요
 
 - S3(Simple Storage Service)는 AWS에서 제공하는 객체 기반 스토리지 서비스이다.
 - 파일을 저장하는 서비스이지만 일반적인 파일 시스템과는 구조가 다르다.
@@ -2725,9 +2723,9 @@ S3는 다음 구조로 데이터를 관리한다.
   - 파일의 경로 역할을 하는 문자열
   - 예 : images/logo.png (이 경로는 실제 폴더가 아니라 Object Key이다.)
 
-#### S3의 주요 특징
+## 67. 실습: S3의 주요 특징
 
-#### 무제한에 가까운 저장 용량
+## 68. 실습: 무제한에 가까운 저장 용량
 
 - S3는 사용자가 직접 디스크 크기를 관리하지 않는다.
 
@@ -2741,7 +2739,7 @@ S3는 다음 구조로 데이터를 관리한다.
 
 - 대규모 데이터 저장소로도 많이 사용된다.
 
-#### 높은 데이터 내구성
+## 69. 실습: 높은 데이터 내구성
 
 - S3는 AWS에서 가장 안정적인 스토리지 서비스 중 하나이다.
 
@@ -2758,7 +2756,7 @@ S3는 다음 구조로 데이터를 관리한다.
   - ap-northeast-2c
   - 여러 데이터센터에 데이터를 분산 저장한다.
 
-#### 높은 서비스 가용성
+## 70. 실습: 높은 서비스 가용성
 
 - S3는 높은 가용성을 제공한다.
 
@@ -2766,7 +2764,7 @@ S3는 다음 구조로 데이터를 관리한다.
   - 약 99.99%
   - 즉 대부분의 시간 동안 서비스가 정상적으로 동작한다는 의미이다.
 
-#### 객체 기반 스토리지 구조
+## 71. 실습: 객체 기반 스토리지 구조
 
 - S3는 일반적인 파일 시스템처럼 디렉터리 구조로 파일을 관리하지 않는다.
 
@@ -2782,7 +2780,7 @@ S3는 다음 구조로 데이터를 관리한다.
 
 - 이 구조는 실제 폴더가 아니라 문자열 기반 경로이다.
 
-#### 정적 웹 호스팅 기능
+## 72. 실습: 정적 웹 호스팅 기능
 
 - S3는 단순한 저장소 기능 외에도 정적 웹사이트 호스팅 기능을 제공한다.
   - HTML
@@ -2797,7 +2795,7 @@ S3는 다음 구조로 데이터를 관리한다.
   - React / Vue 프론트엔드
   - Landing Page
 
-#### 정적 웹사이트의 개념
+## 73. 실습: 정적 웹사이트의 개념
 
 - 정적 웹사이트는 서버에서 프로그램을 실행하지 않는 웹사이트를 의미한다.
 
@@ -2852,7 +2850,7 @@ S3는 다음 구조로 데이터를 관리한다.
   - 허용할 작업을 의미한다.
   - s3:GetObject = S3 객체(파일) 읽기 권한 즉 다운로드 가능
 
-#### S3 웹사이트 엔드포인트
+## 74. 실습: S3 웹사이트 엔드포인트
 
 - S3 정적 웹 호스팅을 활성화하면 AWS가 웹사이트 주소를 제공한다.
 
@@ -2861,7 +2859,7 @@ S3는 다음 구조로 데이터를 관리한다.
   - 예) http://kino-site.s3-website-ap-northeast-2.amazonaws.com
   - 이 주소로 웹사이트 접근이 가능하다.
 
-#### Terraform을 이용한 자동화
+## 75. 실습: Terraform을 이용한 자동화
 
 - AWS 콘솔에서 직접 설정할 수도 있지만 실무에서는 Terraform 같은 IaC 도구를 사용해 인프라를 코드로 관리한다.
 
@@ -2871,44 +2869,44 @@ S3는 다음 구조로 데이터를 관리한다.
   - 정적 웹 호스팅 설정
   - 파일 업로드
 
-#### 버킷 콘솔 실습
+## 76. 실습: 버킷 콘솔 실습
 
-![이미지](assets/05-terraform-ec2-vpc/19.png)
+![파일 업로드 화면](assets/05-terraform-ec2-vpc/19.png)
 
 - 버킷 이름: my-terraform-bucket-123456789012
 
-![이미지](assets/05-terraform-ec2-vpc/20.png)
+![버킷 이름: my-terraform-bucket-123456789012 화면](assets/05-terraform-ec2-vpc/20.png)
 
-![이미지](assets/05-terraform-ec2-vpc/21.png)
+![버킷 이름: my-terraform-bucket-123456789012 화면](assets/05-terraform-ec2-vpc/21.png)
 
 - index.html , error.html 파일 2개 업로드
 
-![이미지](assets/05-terraform-ec2-vpc/22.png)
+![index.html , error.html 파일 2개 업로드 화면](assets/05-terraform-ec2-vpc/22.png)
 
 - Amazon S3  -->  버킷  -->  my-terraform-bucket-123456789012  -->  속성  -->  정접 웹 사이트 호스팅  -->  편집
 
-![이미지](assets/05-terraform-ec2-vpc/23.png)
+![Amazon S3  -->  버킷  -->  my-terraform-bucket-123456789012 화면](assets/05-terraform-ec2-vpc/23.png)
 
 ~~~~~~~~~~~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~~~~~~~~~~~
 
-![이미지](assets/05-terraform-ec2-vpc/24.png)
+![~~~~~~~~~~~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~~~~~~~~~~~ 화면](assets/05-terraform-ec2-vpc/24.png)
 
 - 정적 웹 사이트 호스팅: 활성화
 - 호스팅 유형: 정적 웹 사이트 호스팅
 - 인덱스 문서: index.html
 - 오류 문서: error.html
 
-![이미지](assets/05-terraform-ec2-vpc/25.png)
+![오류 문서: error.html 화면](assets/05-terraform-ec2-vpc/25.png)
 
-![이미지](assets/05-terraform-ec2-vpc/26.png)
+![오류 문서: error.html 화면](assets/05-terraform-ec2-vpc/26.png)
 
 - 변경 사항을 저장하게되면 버킷 웹 사이트 엔드포인트가 생성된다.
 
-![이미지](assets/05-terraform-ec2-vpc/27.png)
+![변경 사항을 저장하게되면 버킷 웹 사이트 엔드포인트가 생성된다. 화면](assets/05-terraform-ec2-vpc/27.png)
 
 http://my-terraform-bucket-123456789012.s3-website.ap-northeast-2.amazonaws.com/
 
-![이미지](assets/05-terraform-ec2-vpc/28.png)
+![http://my-terraform-bucket-123456789012.s3-website.ap-northe 화면](assets/05-terraform-ec2-vpc/28.png)
 
 - 403 Forbidden
   - 서버는 요청을 이해했지만 접근 권한이 없어서 요청을 거부한 상태
@@ -2919,15 +2917,15 @@ http://my-terraform-bucket-123456789012.s3-website.ap-northeast-2.amazonaws.com/
 
 - Amazon S3  -->  버킷  -->  my-terraform-bucket-123456789012  -->  권한  -->  편집
 
-![이미지](assets/05-terraform-ec2-vpc/29.png)
+![Amazon S3  -->  버킷  -->  my-terraform-bucket-123456789012 화면](assets/05-terraform-ec2-vpc/29.png)
 
 - 퍼블릭 엑세스 차단 해제 (차단만 해제했을뿐 권한이 없기 때문에 아직까지는 접속되지 않는다.)
 
-![이미지](assets/05-terraform-ec2-vpc/30.png)
+![퍼블릭 엑세스 차단 해제 차단만 해제했을뿐 권한이 없기 때문에 아직까지는 접속되지 않는다. 화면](assets/05-terraform-ec2-vpc/30.png)
 
-![이미지](assets/05-terraform-ec2-vpc/31.png)
+![퍼블릭 엑세스 차단 해제 차단만 해제했을뿐 권한이 없기 때문에 아직까지는 접속되지 않는다. 화면](assets/05-terraform-ec2-vpc/31.png)
 
-![이미지](assets/05-terraform-ec2-vpc/26.png)
+![퍼블릭 엑세스 차단 해제 차단만 해제했을뿐 권한이 없기 때문에 아직까지는 접속되지 않는다. 화면](assets/05-terraform-ec2-vpc/26.png)
 
 ```json
 {
@@ -2945,15 +2943,15 @@ http://my-terraform-bucket-123456789012.s3-website.ap-northeast-2.amazonaws.com/
 http://my-terraform-bucket-123456789012.s3-website.ap-northeast-2.amazonaws.com/
 ```
 
-![이미지](assets/05-terraform-ec2-vpc/32.png)
+![http://my-terraform-bucket-123456789012.s3-website.ap-northe 화면](assets/05-terraform-ec2-vpc/32.png)
 
 http://my-terraform-bucket-123456789012.s3-website.ap-northeast-2.amazonaws.com/soldesk
 
-![이미지](assets/05-terraform-ec2-vpc/33.png)
+![http://my-terraform-bucket-123456789012.s3-website.ap-northe 화면](assets/05-terraform-ec2-vpc/33.png)
 
-#### S3 리소스 삭제
+## 77. 실습: S3 리소스 삭제
 
-#### Terraform VPC + Public/Private Subnet + NAT Gateway + EC2 실습
+## 78. 실습: Terraform VPC + Public/Private Subnet + NAT Gateway + EC2 실습
 
 Internet
 │
@@ -3351,7 +3349,7 @@ PS C:\trf2\1) VPC\1-3_VPC_total> terraform plan
 - 사용자 PC의 SSH Public Key를 읽어 AWS Key Pair로 등록
 - 현재 사용할 Public Key 경로
 
-#### C:/Users/soldesk/.ssh/my-key.pub
+## 79. 실습: C:/Users/soldesk/.ssh/my-key.pub
 
 ```hcl
 　　　# variables.tf
@@ -3832,7 +3830,7 @@ terraform-vpc-module/
 
   - STEP 1. 프로젝트 디렉터리 생성
 
-#### PowerShell
+## 80. 실습: PowerShell
 
 ```bash
 mkdir terraform-vpc-module
@@ -4053,7 +4051,7 @@ provider "aws" {
 
   - STEP 6. Network Child Module 테스트
 
-#### 실행 위치 : C:\   # terraform-vpc-module\modules\network
+## 81. 실습: 실행 위치 : C:\   # terraform-vpc-module\modules\network
 
 ```powershell
 PS C:\trf2\1) VPC\1-4_vpc_modue> terraform init

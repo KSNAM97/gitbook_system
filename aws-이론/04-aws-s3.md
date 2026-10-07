@@ -126,6 +126,8 @@ S3는 저장 목적과 예산에 따라 파일 저장 클래스(File Storage Cla
 | S3 Glacier Flexible Retrieval | 90일 | 분~시간 단위(검색 요청 필요) | $0.0045/GB |
 | S3 Glacier Deep Archive | 180일 | 12~48시간 소요 | $0.002/GB |
 
+![S3 Glacier Deep Archive: 최저가 보관, 복구에 수 시간~12시간 소요 화면](../aws/assets/04-aws-s3-hwp06-13.png)
+
 **제약 사항(Waterfall 모델)**: 시간이 지남에 따라 데이터를 점점 더 저렴한 티어로 이동시킬 수 있지만(`Standard → IA → Glacier → Glacier Deep Archive`), 다른 클래스에서 다시 Standard로 되돌리는 전환은 불가능하다. 128KB 미만 파일은 Standard-IA, Intelligent-Tiering, Glacier Instant Retrieval로 이동할 수 없다.
 
 ## 7. S3 권한
@@ -139,6 +141,8 @@ Amazon S3에서 권한(permissions)은 누가 어떤 작업을 어떤 객체(Obj
 ### 버킷 정책(Bucket Policy) 구조
 
 버킷 정책은 버킷 단위로 부여되는 리소스 기반 정책(Resource-based Policy)이다. 모든 S3 버킷은 기본적으로 Private이므로, 정책을 설정하지 않으면 외부에서 접근할 수 없다.
+
+![S3 버킷 정책 만들기 화면](../aws/assets/04-aws-s3-hwp07-1.png)
 
 ```json
 {
@@ -179,6 +183,8 @@ Amazon S3에서 권한(permissions)은 누가 어떤 작업을 어떤 객체(Obj
 4. JSON을 직접 작성하거나, 정책 생성기(Policy Generator)를 사용해 Effect·Principal·Action·Resource를 입력한 뒤 [Add Statement]로 목록에 추가하고 [Generate Policy]로 JSON을 생성한다.
 5. 생성된 JSON을 붙여넣고 저장하면 버킷 정책이 적용된다. 퍼블릭 액세스 차단 설정이 활성화되어 있으면 퍼블릭 권한을 부여하는 정책이 무시되므로, 공개가 필요하다면 퍼블릭 액세스 차단 설정도 함께 확인한다.
 
+![객체 소유권: ACL 비활성화됨권장 화면](../aws/assets/04-aws-s3-hwp07-3.png)
+
 ### 주요 S3 액션(Action) 목록
 
 - **Get 계열(조회/읽기)**: `s3:GetObject`(객체 다운로드), `s3:GetObjectAcl`, `s3:GetObjectTagging`, `s3:GetObjectVersion`, `s3:GetBucketAcl`, `s3:GetBucketPolicy`, `s3:GetBucketLocation`, `s3:GetLifecycleConfiguration`, `s3:GetEncryptionConfiguration`
@@ -189,9 +195,13 @@ Amazon S3에서 권한(permissions)은 누가 어떤 작업을 어떤 객체(Obj
 
 **ARN 예시**: `arn:aws:s3:::my-bucket/*`는 버킷 안의 모든 객체를, `arn:aws:s3:::my-bucket/upload/*`는 버킷 안에서 키가 `upload/`로 시작하는 모든 객체(폴더처럼 보이는 접두사)를 가리킨다.
 
+![Amazon S3  -->  버킷  -->  my-s3-role-123456789012  -->  권한 탭 이동 화면](../aws/assets/04-aws-s3-hwp07-4.png)
+
 ### 실습: IAM 사용자 이름 기반 홈 디렉토리 만들기
 
 `${aws:username}` 정책 변수를 사용하면, 로그인한 IAM 사용자 이름과 동일한 경로에만 접근을 허용하는 "나만의 S3 홈 디렉토리"를 만들 수 있다.
+
+![버킷 정책 편집 화면](../aws/assets/04-aws-s3-hwp07-5.png)
 
 ```json
 {
@@ -286,6 +296,8 @@ S3 객체를 삭제하거나 덮어쓰지 못하도록 보호하는 기능으로
   - **Compliance Mode**: 가장 강력한 보호 방식. 보존 기간이 끝날 때까지 객체 버전을 삭제할 수 없고, 보존 기간을 단축하거나 잠금을 해제할 수 없다. Root 사용자를 포함해 누구도 보존 설정을 우회할 수 없다(예: 금융 거래 기록 7년 의무 보관, 의료 데이터·감사 기록 보관).
   - **Governance Mode**: 일반 사용자·관리자에게는 객체 삭제가 제한되지만, `s3:BypassGovernanceRetention` 권한을 가진 사용자는 보존 설정을 우회할 수 있다. Compliance Mode보다 유연하며 내부 데이터 보호 정책이나 테스트 환경에 적합하다.
 - **Legal Hold**: 종료 날짜를 지정하지 않고, Hold가 해제될 때까지 객체를 무기한 보호한다. Retention Mode와 독립적으로(또는 동시에) 적용할 수 있다. 법적 분쟁 관련 자료, 감사 대응 자료, 내부 조사 대상 데이터처럼 삭제 시점을 미리 정할 수 없는 중요 데이터 보호에 사용한다.
+
+![삭제 시점을 미리 정할 수 없는 중요 데이터 보호 화면](../aws/assets/04-aws-s3-hwp06-12.png)
 
 ## 10. Amazon S3 수명 주기(Lifecycle)
 

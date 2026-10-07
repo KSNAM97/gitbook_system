@@ -1,8 +1,8 @@
 # Terraform - RDS
 
-## 이론
+이 문서는 Terraform으로 RDS(MySQL)와 Aurora를 구성하는 방법과 서브넷 그룹, 보안 그룹, 접속 확인 실습을 정리한다.
 
-#### RDS(Relational Database Service) 서비스 배포
+## 1. RDS(Relational Database Service) 서비스 배포
 
 AWS에서는 데이터베이스를 직접 서버에 설치하고 관리하지 않아도 되도록 RDS라는 완전 관리형 데이터베이스 서비스를 제공
 
@@ -17,7 +17,7 @@ RDS는 EC2 위에 데이터베이스를 직접 설치하는 방식과 달리, AW
 자동 백업, 장애 복구, 패치 관리, 모니터링 등의 기능이 기본적으로 포함되어 있다.
 또한 필요에 따라 스토리지 확장, 읽기 전용 복제본 생성, Multi-AZ 배포 등을 통해 고가용성과 확장성을 확보할 수 있다.
 
-#### RDS란?
+## 2. RDS란?
 
 RDS는 AWS에서 제공하는 완전 관리형 관계형 데이터베이스 서비스다.
 관계형 데이터베이스는 테이블 형태로 데이터를 저장하고 SQL을 통해 데이터를 조회하는 구조를 가진 데이터베이스를 의미
@@ -43,9 +43,9 @@ RDS의 핵심 목적은 데이터베이스 운영을 자동화하는 것이다.
 
 이 때문에 클라우드 환경에서는 대부분의 서비스가 EC2에 데이터베이스를 직접 설치하기보다 RDS를 사용하는 경우가 많다.
 
-#### RDS의 주요 기능
+## 3. RDS의 주요 기능
 
-#### 자동 백업 및 복구
+## 4. 자동 백업 및 복구
 
 - RDS는 자동 백업 기능을 제공 사용자가 백업 보존 기간을 설정하면 해당 기간 동안
 데이터베이스의 스냅샷과 트랜잭션 로그가 자동으로 저장된다.
@@ -58,7 +58,7 @@ RDS의 핵심 목적은 데이터베이스 운영을 자동화하는 것이다.
   - 이 경우 백업 기능을 통해 오전 10시 상태로 데이터베이스를 복구할 수 있다.
   - 이러한 자동 백업 기능은 운영 환경에서 매우 중요한 기능이며, 데이터 손실 위험을 크게 줄여준다.
 
-#### 고가용성 및 확장성
+## 5. 고가용성 및 확장성
 
 RDS는 Multi-AZ 배포 기능을 제공 Multi-AZ는 데이터베이스를 하나의 가용 영역(Availability Zone)이 아니라
 여러 가용 영역에 복제하는 구조다.
@@ -76,7 +76,7 @@ RDS는 Multi-AZ 배포 기능을 제공 Multi-AZ는 데이터베이스를 하나
 
 또한 읽기 전용 복제본(Read Replica)을 생성하여 읽기 트래픽을 분산할 수도 있다. 대규모 서비스에서는 읽기 요청이 많기 때문에 Read Replica를 활용하면 성능을 크게 향상시킬 수 있다.
 
-#### 보안 및 관리 기능
+## 6. 보안 및 관리 기능
 
 - RDS는 다양한 보안 기능을 제공
 
@@ -87,7 +87,7 @@ RDS는 Multi-AZ 배포 기능을 제공 Multi-AZ는 데이터베이스를 하나
   - CloudWatch 모니터링: CPU, 메모리, 디스크 I/O 등의 성능 지표를 모니터링할 수 있다.
   - 이러한 기능을 통해 데이터베이스 보안과 운영 관리를 효율적으로 수행할 수 있다.
 
-#### RDS의 지원 데이터베이스 엔진
+## 7. RDS의 지원 데이터베이스 엔진
 
 - RDS는 다양한 데이터베이스 엔진을 지원 사용자는 서비스 요구사항에 따라 적절한 데이터베이스를 선택할 수 있다.
 
@@ -100,7 +100,7 @@ RDS는 Multi-AZ 배포 기능을 제공 Multi-AZ는 데이터베이스를 하나
   - Microsoft SQL Server
   - 이 중에서 클라우드 환경에서 가장 많이 사용되는 엔진은 Aurora와 MySQL이다.
 
-#### Amazon Aurora
+## 8. Amazon Aurora
 
 - Amazon Aurora는 AWS에서 개발한 고성능 클라우드 데이터베이스다.
 MySQL과 PostgreSQL과 호환되는 구조를 가지고 있다.
@@ -126,7 +126,7 @@ Aurora는 기존 데이터베이스와 달리 스토리지 구조가 분리되�
 
 - Aurora는 대규모 트래픽을 처리하는 서비스에서 많이 사용된다.
 
-#### RDS MySQL
+## 9. RDS MySQL
 
 - RDS MySQL은 AWS에서 제공하는 관리형 MySQL 서비스다.
 기존 MySQL 데이터베이스와 동일한 방식으로 사용할 수 있다.
@@ -144,7 +144,7 @@ Aurora는 기존 데이터베이스와 달리 스토리지 구조가 분리되�
 - 대부분의 중소 규모 서비스에서는 RDS MySQL을 많이 사용하며,
 대규모 트래픽 서비스에서는 Aurora를 선택하는 경우가 많다.
 
-#### Terraform을 활용한 RDS 배포
+## 10. Terraform을 활용한 RDS 배포
 
 Terraform은 인프라를 코드로 관리하기 때문에 반복 가능한 배포와 관리가 가능하다.
 즉, AWS 콘솔에서 하나씩 클릭해서 만드는 방식이 아니라, Terraform 코드 파일에 원하는 인프라 구성을 작성한 뒤
@@ -160,7 +160,7 @@ Terraform은 인프라를 코드로 관리하기 때문에 반복 가능한 배�
 - Terraform은 단순히 서버 한 대를 만드는 도구가 아니라, VPC, Subnet, Security Group, EC2, RDS 같은
 AWS 자원 전체를 코드로 연결해 관리하는 도구
 
-#### Terraform을 통한 RDS 구성 이해
+## 11. Terraform을 통한 RDS 구성 이해
 
 - 아래 코드는 MySQL 기반 RDS를 생성하는 가장 기본적인 예시이다.
 
@@ -188,7 +188,7 @@ resource "aws_db_instance" "my_rds_instance" {
 - 이 코드는 AWS에 MySQL RDS 인스턴스를 하나 생성
 - 여기서 중요한 것은 단순히 DB만 만드는 것이 아니라, 운영에 필요한 주요 속성을 함께 정의하고 있다.
 
-#### RDS 주요 설정 상세 설명
+## 12. RDS 주요 설정 상세 설명
 
 - allocated_storage = 20
   - 이 설정은 RDS 인스턴스에 할당할 스토리지 크기를 의미
@@ -259,9 +259,9 @@ resource "aws_db_instance" "my_rds_instance" {
   - 장애 발생 시 Standby로 Failover
   - 즉, 읽기 분산용 복제본이 아니라 장애 대비용 대기 인스턴스
 
-#### VPC와 서브넷 그룹
+## 13. VPC와 서브넷 그룹
 
-#### VPC
+## 14. VPC
 
 - RDS 인스턴스는 AWS VPC 안에서 생성된다.
 - 서브넷 그룹을 설정하여 데이터베이스가 위치할 네트워크 영역을 지정할 수 있다.
@@ -274,7 +274,7 @@ resource "aws_db_instance" "my_rds_instance" {
 - 특히 Multi-AZ를 사용할 경우 서로 다른 AZ의 프라이빗 서브넷이 필요합니다.
 - 이를 통해 외부 접근을 제어하고 보안을 강화할 수 있다.
 
-#### 보안 그룹(Security Groups)
+## 15. 보안 그룹(Security Groups)
 
 - RDS 인스턴스에 적용되는 보안 그룹은 인바운드 및 아웃바운드 트래픽을 제어합니다.
 - 보안 그룹을 통해 특정 IP 또는 네트워크만 데이터베이스에 접근할 수 있도록 설정합니다.
@@ -301,14 +301,14 @@ resource "aws_security_group" "rds_sg" {
 }
 ```
 
-#### Terraform을 활용한 RDS 인스턴스 배포 및 검증
+## 16. Terraform을 활용한 RDS 인스턴스 배포 및 검증
 
 - 이 코드는 VPC와 EC2 인스턴스, 그리고 RDS용 보안 그룹 및 서브넷 그룹을 설정
 - vpc 모듈을 통해 VPC, 서브넷 및 가용 영역을 구성하고, ec2 모듈로 EC2 인스턴스를 퍼블릭 서브넷에 배포
 - 마지막으로, aws_security_group과 aws_db_subnet_group 리소스를 통해
 데이터베이스 접근을 제어하고, 프라이빗 서브넷에 RDS를 위한 서브넷 그룹을 생성
 
-#### 전체 흐름
+## 17. 전체 흐름
 
 - VPC 생성
   - Public / Private Subnet 생성
@@ -357,7 +357,7 @@ vpc_cidr
   - 서브넷을 어느 AZ에 배치할지 지정합니다.
   - Multi-AZ 구성이나 고가용성 구조를 위해 여러 AZ를 사용
 
-#### EC2 모듈
+## 18. EC2 모듈
 
 ```hcl
 module "ec2" {
@@ -386,7 +386,7 @@ module "ec2" {
 - vpc_id
   - EC2를 어느 VPC에 넣을지 지정합니다.
 
-#### RDS 보안 그룹
+## 19. RDS 보안 그룹
 
 ```hcl
 resource "aws_security_group" "rds_sg" {
@@ -428,7 +428,7 @@ DB Subnet Group을 통해 여러 서브넷을 묶어서 지정
 여기서는 module.vpc.private_subnets를 사용하므로 RDS는 프라이빗 서브넷에 배치
 즉, DB를 외부 인터넷에 공개하지 않겠다는 구조입니다.
 
-#### RDS 인스턴스 구성
+## 20. RDS 인스턴스 구성
 
 이 코드는 MySQL 기반 AWS RDS 인스턴스를 생성하고 구성하는 Terraform 코드입니다.
 aws_db_instance 리소스를 통해 인스턴스 스토리지 크기, 데이터베이스 이름, 파라미터 그룹, 보안 그룹 등 다양한 설정을 정의합니다. 또한 백업 및 유지보수 시간, 스토리지 유형 등을 지정하여 인스턴스 운영을 최적화하며, 퍼블릭 액세스를 비활성화하여 보안을 강화합니다.
@@ -532,14 +532,14 @@ resource "aws_db_instance" "my_rds_instance" {
   - backup_retention_period = 7(자동 백업을 며칠 동안 보관할지 지정, 7일)
   - backup_window           = "02:00-03:00"(자동 백업이 수행될 시간, UTC 기준 새벽 2시부터 3시 사이)
 
-#### 읽기 전용 인스턴스 구성
+## 21. 읽기 전용 인스턴스 구성
 
 - 다음 코드를 사용해 읽기 전용 인스턴스를 구성
 - RDS에서 읽기 복제본(Read Replica)을 생성할 때, "읽기 전용"은 따로 명시할 필요는 없다.
 - 읽기 복제본은 기본적으로 비동기적으로 원본 인스턴스의 데이터를 복제하고,
 읽기 요청만 처리하는 인스턴스로 설정
 
-#### 읽기 복제본 인스턴스
+## 22. 읽기 복제본 인스턴스
 
 ```hcl
 resource "aws_db_instance" "read_replica" {
@@ -573,9 +573,7 @@ resource "aws_db_instance" "read_replica" {
   - Multi-AZ : 장애 대비
   - Read Replica : 읽기 분산
 
-## 실습
-
-#### RDS(Relational Database Service) 서비스 배포
+## 23. 실습: RDS(Relational Database Service) 서비스 배포
 
 AWS에서는 데이터베이스를 직접 서버에 설치하고 관리하지 않아도 되도록 RDS라는 완전 관리형 데이터베이스 서비스를 제공
 
@@ -590,7 +588,7 @@ RDS는 EC2 위에 데이터베이스를 직접 설치하는 방식과 달리, AW
 자동 백업, 장애 복구, 패치 관리, 모니터링 등의 기능이 기본적으로 포함되어 있다.
 또한 필요에 따라 스토리지 확장, 읽기 전용 복제본 생성, Multi-AZ 배포 등을 통해 고가용성과 확장성을 확보할 수 있다.
 
-#### RDS란?
+## 24. 실습: RDS란?
 
 RDS는 AWS에서 제공하는 완전 관리형 관계형 데이터베이스 서비스다.
 관계형 데이터베이스는 테이블 형태로 데이터를 저장하고 SQL을 통해 데이터를 조회하는 구조를 가진 데이터베이스를 의미
@@ -616,9 +614,9 @@ RDS의 핵심 목적은 데이터베이스 운영을 자동화하는 것이다.
 
 이 때문에 클라우드 환경에서는 대부분의 서비스가 EC2에 데이터베이스를 직접 설치하기보다 RDS를 사용하는 경우가 많다.
 
-#### RDS의 주요 기능
+## 25. 실습: RDS의 주요 기능
 
-#### 자동 백업 및 복구
+## 26. 실습: 자동 백업 및 복구
 
 - RDS는 자동 백업 기능을 제공 사용자가 백업 보존 기간을 설정하면 해당 기간 동안
 데이터베이스의 스냅샷과 트랜잭션 로그가 자동으로 저장된다.
@@ -631,7 +629,7 @@ RDS의 핵심 목적은 데이터베이스 운영을 자동화하는 것이다.
   - 이 경우 백업 기능을 통해 오전 10시 상태로 데이터베이스를 복구할 수 있다.
   - 이러한 자동 백업 기능은 운영 환경에서 매우 중요한 기능이며, 데이터 손실 위험을 크게 줄여준다.
 
-#### 고가용성 및 확장성
+## 27. 실습: 고가용성 및 확장성
 
 RDS는 Multi-AZ 배포 기능을 제공 Multi-AZ는 데이터베이스를 하나의 가용 영역(Availability Zone)이 아니라
 여러 가용 영역에 복제하는 구조다.
@@ -649,7 +647,7 @@ RDS는 Multi-AZ 배포 기능을 제공 Multi-AZ는 데이터베이스를 하나
 
 또한 읽기 전용 복제본(Read Replica)을 생성하여 읽기 트래픽을 분산할 수도 있다. 대규모 서비스에서는 읽기 요청이 많기 때문에 Read Replica를 활용하면 성능을 크게 향상시킬 수 있다.
 
-#### 보안 및 관리 기능
+## 28. 실습: 보안 및 관리 기능
 
 - RDS는 다양한 보안 기능을 제공
 
@@ -660,7 +658,7 @@ RDS는 Multi-AZ 배포 기능을 제공 Multi-AZ는 데이터베이스를 하나
   - CloudWatch 모니터링: CPU, 메모리, 디스크 I/O 등의 성능 지표를 모니터링할 수 있다.
   - 이러한 기능을 통해 데이터베이스 보안과 운영 관리를 효율적으로 수행할 수 있다.
 
-#### RDS의 지원 데이터베이스 엔진
+## 29. 실습: RDS의 지원 데이터베이스 엔진
 
 - RDS는 다양한 데이터베이스 엔진을 지원 사용자는 서비스 요구사항에 따라 적절한 데이터베이스를 선택할 수 있다.
 
@@ -673,7 +671,7 @@ RDS는 Multi-AZ 배포 기능을 제공 Multi-AZ는 데이터베이스를 하나
   - Microsoft SQL Server
   - 이 중에서 클라우드 환경에서 가장 많이 사용되는 엔진은 Aurora와 MySQL이다.
 
-#### Amazon Aurora
+## 30. 실습: Amazon Aurora
 
 - Amazon Aurora는 AWS에서 개발한 고성능 클라우드 데이터베이스다.
 MySQL과 PostgreSQL과 호환되는 구조를 가지고 있다.
@@ -699,7 +697,7 @@ Aurora는 기존 데이터베이스와 달리 스토리지 구조가 분리되�
 
 - Aurora는 대규모 트래픽을 처리하는 서비스에서 많이 사용된다.
 
-#### RDS MySQL
+## 31. 실습: RDS MySQL
 
 - RDS MySQL은 AWS에서 제공하는 관리형 MySQL 서비스다.
 기존 MySQL 데이터베이스와 동일한 방식으로 사용할 수 있다.
@@ -717,7 +715,7 @@ Aurora는 기존 데이터베이스와 달리 스토리지 구조가 분리되�
 - 대부분의 중소 규모 서비스에서는 RDS MySQL을 많이 사용하며,
 대규모 트래픽 서비스에서는 Aurora를 선택하는 경우가 많다.
 
-#### Terraform을 활용한 RDS 배포
+## 32. 실습: Terraform을 활용한 RDS 배포
 
 Terraform은 인프라를 코드로 관리하기 때문에 반복 가능한 배포와 관리가 가능하다.
 즉, AWS 콘솔에서 하나씩 클릭해서 만드는 방식이 아니라, Terraform 코드 파일에 원하는 인프라 구성을 작성한 뒤
@@ -733,7 +731,7 @@ Terraform은 인프라를 코드로 관리하기 때문에 반복 가능한 배�
 - Terraform은 단순히 서버 한 대를 만드는 도구가 아니라, VPC, Subnet, Security Group, EC2, RDS 같은
 AWS 자원 전체를 코드로 연결해 관리하는 도구
 
-#### Terraform을 통한 RDS 구성 이해
+## 33. 실습: Terraform을 통한 RDS 구성 이해
 
 - 아래 코드는 MySQL 기반 RDS를 생성하는 가장 기본적인 예시이다.
 
@@ -761,7 +759,7 @@ resource "aws_db_instance" "my_rds_instance" {
 - 이 코드는 AWS에 MySQL RDS 인스턴스를 하나 생성
 - 여기서 중요한 것은 단순히 DB만 만드는 것이 아니라, 운영에 필요한 주요 속성을 함께 정의하고 있다.
 
-#### RDS 주요 설정 상세 설명
+## 34. 실습: RDS 주요 설정 상세 설명
 
 - allocated_storage = 20
   - 이 설정은 RDS 인스턴스에 할당할 스토리지 크기를 의미
@@ -832,9 +830,9 @@ resource "aws_db_instance" "my_rds_instance" {
   - 장애 발생 시 Standby로 Failover
   - 즉, 읽기 분산용 복제본이 아니라 장애 대비용 대기 인스턴스
 
-#### VPC와 서브넷 그룹
+## 35. 실습: VPC와 서브넷 그룹
 
-#### VPC
+## 36. 실습: VPC
 
 - RDS 인스턴스는 AWS VPC 안에서 생성된다.
 - 서브넷 그룹을 설정하여 데이터베이스가 위치할 네트워크 영역을 지정할 수 있다.
@@ -847,7 +845,7 @@ resource "aws_db_instance" "my_rds_instance" {
 - 특히 Multi-AZ를 사용할 경우 서로 다른 AZ의 프라이빗 서브넷이 필요합니다.
 - 이를 통해 외부 접근을 제어하고 보안을 강화할 수 있다.
 
-#### 보안 그룹(Security Groups)
+## 37. 실습: 보안 그룹(Security Groups)
 
 - RDS 인스턴스에 적용되는 보안 그룹은 인바운드 및 아웃바운드 트래픽을 제어합니다.
 - 보안 그룹을 통해 특정 IP 또는 네트워크만 데이터베이스에 접근할 수 있도록 설정합니다.
@@ -874,14 +872,14 @@ resource "aws_security_group" "rds_sg" {
 }
 ```
 
-#### Terraform을 활용한 RDS 인스턴스 배포 및 검증
+## 38. 실습: Terraform을 활용한 RDS 인스턴스 배포 및 검증
 
 - 이 코드는 VPC와 EC2 인스턴스, 그리고 RDS용 보안 그룹 및 서브넷 그룹을 설정
 - vpc 모듈을 통해 VPC, 서브넷 및 가용 영역을 구성하고, ec2 모듈로 EC2 인스턴스를 퍼블릭 서브넷에 배포
 - 마지막으로, aws_security_group과 aws_db_subnet_group 리소스를 통해
 데이터베이스 접근을 제어하고, 프라이빗 서브넷에 RDS를 위한 서브넷 그룹을 생성
 
-#### 전체 흐름
+## 39. 실습: 전체 흐름
 
 - VPC 생성
   - Public / Private Subnet 생성
@@ -930,7 +928,7 @@ vpc_cidr
   - 서브넷을 어느 AZ에 배치할지 지정합니다.
   - Multi-AZ 구성이나 고가용성 구조를 위해 여러 AZ를 사용
 
-#### EC2 모듈
+## 40. 실습: EC2 모듈
 
 ```hcl
 module "ec2" {
@@ -959,7 +957,7 @@ module "ec2" {
 - vpc_id
   - EC2를 어느 VPC에 넣을지 지정합니다.
 
-#### RDS 보안 그룹
+## 41. 실습: RDS 보안 그룹
 
 ```hcl
 resource "aws_security_group" "rds_sg" {
@@ -1001,7 +999,7 @@ DB Subnet Group을 통해 여러 서브넷을 묶어서 지정
 여기서는 module.vpc.private_subnets를 사용하므로 RDS는 프라이빗 서브넷에 배치
 즉, DB를 외부 인터넷에 공개하지 않겠다는 구조입니다.
 
-#### RDS 인스턴스 구성
+## 42. 실습: RDS 인스턴스 구성
 
 이 코드는 MySQL 기반 AWS RDS 인스턴스를 생성하고 구성하는 Terraform 코드입니다.
 aws_db_instance 리소스를 통해 인스턴스 스토리지 크기, 데이터베이스 이름, 파라미터 그룹, 보안 그룹 등 다양한 설정을 정의합니다. 또한 백업 및 유지보수 시간, 스토리지 유형 등을 지정하여 인스턴스 운영을 최적화하며, 퍼블릭 액세스를 비활성화하여 보안을 강화합니다.
@@ -1105,14 +1103,14 @@ resource "aws_db_instance" "my_rds_instance" {
   - backup_retention_period = 7(자동 백업을 며칠 동안 보관할지 지정, 7일)
   - backup_window           = "02:00-03:00"(자동 백업이 수행될 시간, UTC 기준 새벽 2시부터 3시 사이)
 
-#### 읽기 전용 인스턴스 구성
+## 43. 실습: 읽기 전용 인스턴스 구성
 
 - 다음 코드를 사용해 읽기 전용 인스턴스를 구성
 - RDS에서 읽기 복제본(Read Replica)을 생성할 때, "읽기 전용"은 따로 명시할 필요는 없다.
 - 읽기 복제본은 기본적으로 비동기적으로 원본 인스턴스의 데이터를 복제하고,
 읽기 요청만 처리하는 인스턴스로 설정
 
-#### 읽기 복제본 인스턴스
+## 44. 실습: 읽기 복제본 인스턴스
 
 ```hcl
 resource "aws_db_instance" "read_replica" {
@@ -1146,7 +1144,7 @@ resource "aws_db_instance" "read_replica" {
   - Multi-AZ : 장애 대비
   - Read Replica : 읽기 분산
 
-#### Terraform RDS MySQL + EC2 Client + Read Replica 실습
+## 45. 실습: Terraform RDS MySQL + EC2 Client + Read Replica 실습
 
   - 최종 프로젝트 구조
 
@@ -1175,7 +1173,7 @@ rds-mysql-service/
 ├── main.tf
 └── outputs.tf
 
-#### STEP 1. Network Child Module 변수 작성
+## 46. 실습: STEP 1. Network Child Module 변수 작성
 
 - VPC, Subnet, Internet Gateway, Route Table을 담당할
 - Network Child Module의 입력 변수를 작성
@@ -1224,7 +1222,7 @@ variable "availability_zones" {
 - availability_zones
   - Subnet을 서로 다른 Availability Zone에 분산
 
-#### STEP 2. VPC 생성
+## 47. 실습: STEP 2. VPC 생성
 
 - Network Child Module에서 VPC를 생성
 - RDS Endpoint와 AWS 내부 DNS를 사용할 수 있도록
@@ -1232,7 +1230,7 @@ variable "availability_zones" {
 
   - rds-mysql-service\modules\network\main.tf
 
-#### VPC 생성
+## 48. 실습: VPC 생성
 
 ```hcl
 resource "aws_vpc" "my_vpc" {
@@ -1275,13 +1273,13 @@ output "vpc_id" {
 - Network Child Module에서 생성한 VPC ID를 Root Module로 전달
 - Root에서는 module.network.vpc_id 형태로 사용
 
-#### STEP 3. Public Subnet 생성
+## 49. 실습: STEP 3. Public Subnet 생성
 
 - EC2 DB Client가 들어갈 Public Subnet 2개를 생성
 
   - rds-mysql-service\modules\network\main.tf
 
-#### Public Subnet 생성
+## 50. 실습: Public Subnet 생성
 
 ```hcl
 resource "aws_subnet" "public" {
@@ -1314,13 +1312,13 @@ output "public_subnets" {
 
 - Root에서는 module.network.public_subnets 형태로 사용
 
-#### STEP 4. Private Subnet 생성
+## 51. 실습: STEP 4. Private Subnet 생성
 
 - RDS를 배치할 Private Subnet 2개를 생성
 
   - rds-mysql-service\modules\network\main.tf
 
-#### Private Subnet 생성
+## 52. 실습: Private Subnet 생성
 
 ```hcl
 resource "aws_subnet" "private" {
@@ -1356,14 +1354,14 @@ output "private_subnets" {
 
 - 나중에 RDS DB Subnet Group에 module.network.private_subnets 전체를 전달
 
-#### STEP 5. Internet Gateway 생성
+## 53. 실습: STEP 5. Internet Gateway 생성
 
 - Public Subnet의 EC2가 인터넷과 통신할 수 있도록
 - Internet Gateway를 생성
 
   - rds-mysql-service\modules\network\main.tf
 
-#### Internet Gateway 생성
+## 54. 실습: Internet Gateway 생성
 
 ```hcl
 resource "aws_internet_gateway" "my_igw" {
@@ -1381,14 +1379,14 @@ resource "aws_internet_gateway" "my_igw" {
 
 - 단 Internet Gateway만 생성해서는 Public Subnet의 인터넷 통신이 완성되지 않는다.
 
-#### STEP 6. Public Route Table 생성
+## 55. 실습: STEP 6. Public Route Table 생성
 
 - Public Subnet에서 외부로 나가는 Traffic을
 - Internet Gateway로 전달
 
   - rds-mysql-service\modules\network\main.tf
 
-#### Public Route Table
+## 56. 실습: Public Route Table
 
 ```hcl
 resource "aws_route_table" "public" {
@@ -1460,14 +1458,14 @@ variable "vpc_id" {
 }
 ```
 
-#### STEP 8. EC2 Key Pair 생성
+## 57. 실습: STEP 8. EC2 Key Pair 생성
 
 - 로컬 PC의 Public Key를 AWS EC2 Key Pair로 등록
 - Key Pair 이름 중복 방지를 위해 Random Number를 사용
 
   - rds-mysql-service\modules\ec2\main.tf
 
-#### Key Pair 이름 중복 방지를 위한 Random Number
+## 58. 실습: Key Pair 이름 중복 방지를 위한 Random Number
 
 ```hcl
 resource "random_integer" "random_number" {
@@ -1493,13 +1491,13 @@ resource "aws_key_pair" "ec2_key_pair" {
 - pathexpand()
   - ~/.ssh/my-key.pub
 
-#### STEP 9. EC2 Security Group 생성
+## 59. 실습: STEP 9. EC2 Security Group 생성
 
 - DB Client EC2용 Security Group을 생성
 
   - rds-mysql-service\modules\ec2\main.tf
 
-#### DB Client EC2 Security Group
+## 60. 실습: DB Client EC2 Security Group
 
 ```hcl
 resource "aws_security_group" "ec2_sg" {
@@ -1532,13 +1530,13 @@ resource "aws_security_group" "ec2_sg" {
 }
 ```
 
-#### STEP 10. DB Client EC2 생성
+## 61. 실습: STEP 10. DB Client EC2 생성
 
 - Public Subnet에 RDS 접속용 EC2를 생성
 
   - rds-mysql-service\modules\ec2\main.tf
 
-#### RDS 접속용 EC2
+## 62. 실습: RDS 접속용 EC2
 
 ```hcl
 resource "aws_instance" "ec2_instance" {
@@ -1573,7 +1571,7 @@ output "public_dns" {
 }
 ```
 
-#### STEP 11. Root Module 기본 변수 작성
+## 63. 실습: STEP 11. Root Module 기본 변수 작성
 
 - Root Module에서 실제 Network와 EC2 값을 정의
 
@@ -1649,7 +1647,7 @@ variable "public_key_path" {
 }
 ```
 
-#### STEP 12. Root Provider 설정
+## 64. 실습: STEP 12. Root Provider 설정
 
 - Root Module에서 AWS Provider와 Random Provider를 설정
 
@@ -1679,7 +1677,7 @@ provider "aws" {
 }
 ```
 
-#### STEP 13. Root에서 Network Child Module 호출
+## 65. 실습: STEP 13. Root에서 Network Child Module 호출
 
 - Root Module에서 module 블록을 사용해 Child Module을 호출한다.
 - source는 사용할 Child Module의 경로를 지정한다.
@@ -1687,7 +1685,7 @@ provider "aws" {
 
   - rds-mysql-service\main.tf
 
-#### Network Child Module 호출
+## 66. 실습: Network Child Module 호출
 
 ```hcl
 module "network" {
@@ -1719,13 +1717,13 @@ output "private_subnets" {
 }
 ```
 
-#### STEP 14. Amazon Linux 2023 AMI 조회
+## 67. 실습: STEP 14. Amazon Linux 2023 AMI 조회
 
 - 고정 AMI ID 대신 Amazon Linux 2023 최신 AMI를 자동 조회
 
   - rds-mysql-service\main.tf
 
-#### 최신 Amazon Linux 2023 AMI 조회
+## 68. 실습: 최신 Amazon Linux 2023 AMI 조회
 
 ```hcl
 data "aws_ami" "al2023" {
@@ -1746,14 +1744,14 @@ data "aws_ami" "al2023" {
 }
 ```
 
-#### STEP 15. Root에서 EC2 Child Module 호출
+## 69. 실습: STEP 15. Root에서 EC2 Child Module 호출
 
 - Network Module에서 만든 첫 번째 Public Subnet에
 - DB Client EC2를 생성
 
   - rds-mysql-service\main.tf
 
-#### EC2 Child Module 호출
+## 70. 실습: EC2 Child Module 호출
 
 ```hcl
 module "ec2" {
@@ -1777,7 +1775,7 @@ output "public_dns" {
 terraform  plan
 ```
 
-#### STEP 16. RDS 변수 작성
+## 71. 실습: STEP 16. RDS 변수 작성
 
 - MySQL RDS에 사용할 변수를 Root Module에 추가
 
@@ -1805,7 +1803,7 @@ variable "allowed_cidr" {
 }
 ```
 
-#### STEP 17. RDS Security Group 생성
+## 72. 실습: STEP 17. RDS Security Group 생성
 
 - RDS MySQL에 접근할 수 있는 Network 범위를 제어하는 Security Group을 생성하는 단계
 - MySQL 기본 Port인 TCP 3306을 허용하고, RDS가 생성될 VPC는 Root Module에서 전달받은 vpc_id를 사용
@@ -1813,7 +1811,7 @@ variable "allowed_cidr" {
 
   - rds-mysql-service\modules\rds\variables.tf
 
-#### RDS Security Group
+## 73. 실습: RDS Security Group
 
 ```hcl
 resource "aws_security_group" "rds_sg" {
@@ -1845,7 +1843,7 @@ output "rds_security_group_id" {
 }
 ```
 
-#### STEP 18. DB Subnet Group 생성
+## 74. 실습: STEP 18. DB Subnet Group 생성
 
 - RDS가 배치될 Private Subnet들을 하나의 DB Subnet Group으로 묶는 단계
 - RDS는 일반 EC2처럼 특정 Subnet 하나를 직접 지정하는 것이 아니라,
@@ -1853,7 +1851,7 @@ output "rds_security_group_id" {
 
   - rds-mysql-service\modules\rds\main.tf
 
-#### RDS DB Subnet Group
+## 75. 실습: RDS DB Subnet Group
 
 ```hcl
 resource "aws_db_subnet_group" "my_db_subnet_group" {
@@ -1872,7 +1870,7 @@ output "db_subnet_group_name" {
 }
 ```
 
-#### STEP 19. Primary RDS MySQL 생성
+## 76. 실습: STEP 19. Primary RDS MySQL 생성
 
 - Private Subnet 환경에 MySQL Primary RDS를 생성
 
@@ -2053,7 +2051,7 @@ output "rds_endpoint" {
 }
 ```
 
-#### STEP 20. Read Replica 생성
+## 77. 실습: STEP 20. Read Replica 생성
 
 - Primary RDS의 데이터를 복제하는 Read Replica를 생성
 - Read Replica는 Primary RDS의 읽기 Traffic을 분산하기 위해 사용
@@ -2085,7 +2083,7 @@ Read Replica
 
   - rds-mysql-service\modules\rds\main.tf
 
-#### MySQL Read Replica
+## 78. 실습: MySQL Read Replica
 
 ```hcl
 resource "aws_db_instance" "read_replica" {
@@ -2117,7 +2115,7 @@ output "rds_endpoint_read_replica" {
 }
 ```
 
-#### STEP 21. Root Module의 variables.tf, terraform.tfvars 작성
+## 79. 실습: STEP 21. Root Module의 variables.tf, terraform.tfvars 작성
 
 - 최종 실습에서 사용할 실제 값을 입력
 
@@ -2276,25 +2274,25 @@ rds_endpoint_read_replica
 
 - VPC 생성 확인
 
-![이미지](assets/08-terraform-rds/1.png)
+![VPC 생성 확인 화면](assets/08-terraform-rds/1.png)
 
 - 퍼블릭 서브넷 , 프라이빗 서브넷 확인
 
-![이미지](assets/08-terraform-rds/2.png)
+![퍼블릭 서브넷 , 프라이빗 서브넷 확인 화면](assets/08-terraform-rds/2.png)
 
 - DB로 접속하기위해 생성한 EC2 확인
 
-![이미지](assets/08-terraform-rds/3.png)
+![DB로 접속하기위해 생성한 EC2 확인 화면](assets/08-terraform-rds/3.png)
 
 - Database 생성 확인
 
-![이미지](assets/08-terraform-rds/4.png)
+![Database 생성 확인 화면](assets/08-terraform-rds/4.png)
 
-![이미지](assets/08-terraform-rds/5.png)
+![Database 생성 확인 화면](assets/08-terraform-rds/5.png)
 
 - EC2 인스턴스로 이동
 
-![이미지](assets/08-terraform-rds/6.png)
+![EC2 인스턴스로 이동 화면](assets/08-terraform-rds/6.png)
 
 나타난 정보를 사용해 ec2로 접속
 
@@ -2370,15 +2368,15 @@ Username: admin
 Password: admin1234
 ```
 
-![이미지](assets/08-terraform-rds/7.png)
+![Password: admin1234 화면](assets/08-terraform-rds/7.png)
 
-![이미지](assets/08-terraform-rds/8.png)
+![Password: admin1234 화면](assets/08-terraform-rds/8.png)
 
-![이미지](assets/08-terraform-rds/9.png)
+![Password: admin1234 화면](assets/08-terraform-rds/9.png)
 
-#### Terraform Aurora MySQL + EC2 Client + Reader 실습
+## 80. 실습: Terraform Aurora MySQL + EC2 Client + Reader 실습
 
-#### 프로젝트 구조
+## 81. 실습: 프로젝트 구조
 
 aurora-mysql-service/
 │
@@ -2404,7 +2402,7 @@ aurora-mysql-service/
 ├── main.tf
 └── outputs.tf
 
-#### STEP 1. Network Child Module 변수 작성
+## 82. 실습: STEP 1. Network Child Module 변수 작성
 
 - VPC, Public Subnet, Private Subnet, Availability Zone을 생성하기 위해
 Network Child Module에서 사용할 입력 변수를 작성
@@ -2456,7 +2454,7 @@ variable "availability_zones" {
 
   - aurora\modules\network\main.tf
 
-#### VPC 생성
+## 83. 실습: VPC 생성
 
 ```hcl
 resource "aws_vpc" "my_vpc" {
@@ -2490,14 +2488,14 @@ output "vpc_id" {
 - vpc_id
   - 생성된 VPC ID를 Root Module에서 사용할 수 있도록 출력
 
-#### STEP 3. Public Subnet 생성
+## 84. 실습: STEP 3. Public Subnet 생성
 
 - Aurora MySQL에 접속하기 위한 DB Client EC2가 배치될 Public Subnet 2개를 생성
 - Subnet을 서로 다른 Availability Zone에 생성
 
   - aurora\modules\network\main.tf
 
-#### Public Subnet 생성
+## 85. 실습: Public Subnet 생성
 
 ```hcl
 resource "aws_subnet" "public" {
@@ -2535,14 +2533,14 @@ output "public_subnets" {
 - map_public_ip_on_launch
   - EC2 생성 시 Public IP 자동 할당
 
-#### STEP 4. Private Subnet 생성
+## 86. 실습: STEP 4. Private Subnet 생성
 
 - Aurora MySQL Cluster가 사용할 Private Subnet 2개를 생성
 - Aurora Database는 외부 Internet에 직접 공개하지 않고 Private Network 내부에 배치
 
   - aurora\modules\network\main.tf
 
-#### Private Subnet 생성
+## 87. 실습: Private Subnet 생성
 
 ```hcl
 resource "aws_subnet" "private" {
@@ -2576,13 +2574,13 @@ output "private_subnets" {
 - map_public_ip_on_launch를 사용하지 않는다.
   - Private Subnet의 Resource에 Public IP를 자동 할당하지 않음
 
-#### STEP 5. Internet Gateway 생성
+## 88. 실습: STEP 5. Internet Gateway 생성
 
 - Public Subnet의 EC2가 Internet과 통신할 수 있도록 Internet Gateway를 생성
 
   - aurora\modules\network\main.tf
 
-#### Internet Gateway 생성
+## 89. 실습: Internet Gateway 생성
 
 ```hcl
 resource "aws_internet_gateway" "my_igw" {
@@ -2593,14 +2591,14 @@ resource "aws_internet_gateway" "my_igw" {
 }
 ```
 
-#### STEP 6. Public Route Table 생성
+## 90. 실습: STEP 6. Public Route Table 생성
 
 - Public Subnet에서 외부로 나가는 Traffic을 Internet Gateway로 전달
 - 생성한 Public Route Table을 Public Subnet 2개에 연결
 
   - aurora\modules\network\main.tf
 
-#### Public Route Table 생성
+## 91. 실습: Public Route Table 생성
 
 ```hcl
 resource "aws_route_table" "public" {
@@ -2633,7 +2631,7 @@ resource "aws_route_table_association" "public" {
 - aws_route_table_association
   - Public Subnet과 Public Route Table 연결
 
-#### STEP 7. EC2 Child Module 변수 작성
+## 92. 실습: STEP 7. EC2 Child Module 변수 작성
 
 - Aurora MySQL에 접속할 DB Client EC2를 생성하기 위한 입력 변수를 작성
 
@@ -2693,14 +2691,14 @@ variable "vpc_id" {
 - vpc_id
   - Security Group을 생성할 VPC
 
-#### STEP 8. EC2 Key Pair 생성
+## 93. 실습: STEP 8. EC2 Key Pair 생성
 
 - 사용자 PC의 SSH Public Key를 AWS EC2 Key Pair로 등록
 - Key Pair 이름 중복을 방지하기 위해 Random Number를 사용
 
   - aurora\modules\ec2\main.tf
 
-#### Key Pair 이름 중복 방지를 위한 Random Number
+## 94. 실습: Key Pair 이름 중복 방지를 위한 Random Number
 
 ```hcl
 resource "random_integer" "random_number" {
@@ -2728,14 +2726,14 @@ resource "aws_key_pair" "ec2_key_pair" {
 - file()
   - Public Key 파일 내용을 읽어 AWS Key Pair에 등록
 
-#### STEP 9. EC2 Security Group 생성
+## 95. 실습: STEP 9. EC2 Security Group 생성
 
 - DB Client EC2에 적용할 Security Group을 생성
 - 사용자 PC에서 SSH 접속할 수 있도록 TCP 22 Port를 허용
 
   - aurora\modules\ec2\main.tf
 
-#### DB Client EC2 Security Group
+## 96. 실습: DB Client EC2 Security Group
 
 ```hcl
 resource "aws_security_group" "ec2_sg" {
@@ -2773,14 +2771,14 @@ resource "aws_security_group" "ec2_sg" {
 - egress
   - EC2에서 외부로 나가는 모든 Traffic 허용
 
-#### STEP 10. DB Client EC2 생성
+## 97. 실습: STEP 10. DB Client EC2 생성
 
 - Public Subnet에 Aurora MySQL 접속용 EC2를 생성
 - 이 EC2를 통해 Private Subnet에 있는 Aurora MySQL에 접속
 
   - aurora\modules\ec2\main.tf
 
-#### Aurora MySQL 접속용 EC2
+## 98. 실습: Aurora MySQL 접속용 EC2
 
 ```hcl
 resource "aws_instance" "ec2_instance" {
@@ -2813,7 +2811,7 @@ output "public_dns" {
 }
 ```
 
-#### STEP 11. Root Module 기본 변수 작성
+## 99. 실습: STEP 11. Root Module 기본 변수 작성
 
 - Root Module에서 Network와 EC2 Child Module에 전달할 실제 기본값을 정의
 
@@ -2893,7 +2891,7 @@ variable "public_key_path" {
 - Root Module에서 실제 Network와 EC2 설정 값을 관리
 - Child Module의 변수에 Root Module의 값을 전달하여 실제 AWS Resource를 생성
 
-#### STEP 12. Root Provider 설정
+## 100. 실습: STEP 12. Root Provider 설정
 
 - Terraform에서 AWS Provider와 Random Provider를 사용하도록 설정
 
@@ -2932,7 +2930,7 @@ provider "aws" {
 - profile
   - AWS CLI Profile 사용
 
-#### STEP 13. Root에서 Network Child Module 호출
+## 101. 실습: STEP 13. Root에서 Network Child Module 호출
 
 - 앞에서 작성한 Network Child Module을 Root Module에서 호출
 - VPC와 Public / Private Subnet을 실제로 생성할 값을 전달
@@ -2940,7 +2938,7 @@ provider "aws" {
 
   - aurora\main.tf
 
-#### Network Child Module 호출
+## 102. 실습: Network Child Module 호출
 
 ```hcl
 module "network" {
@@ -2974,13 +2972,13 @@ output "private_subnets" {
 - module.network.public_subnets: Public Subnet ID List
 - module.network.private_subnets: Private Subnet ID List
 
-#### STEP 14. Amazon Linux 2023 AMI 조회
+## 103. 실습: STEP 14. Amazon Linux 2023 AMI 조회
 
 - 고정된 AMI ID를 사용하지 않고 현재 Region의 최신 Amazon Linux 2023 AMI를 자동 조회
 
   - aurora\main.tf
 
-#### 최신 Amazon Linux 2023 AMI 조회
+## 104. 실습: 최신 Amazon Linux 2023 AMI 조회
 
 ```hcl
 data "aws_ami" "al2023" {
@@ -3004,13 +3002,13 @@ data "aws_ami" "al2023" {
 }
 ```
 
-#### STEP 15. Root에서 EC2 Child Module 호출
+## 105. 실습: STEP 15. Root에서 EC2 Child Module 호출
 
 - Network Module에서 생성한 첫 번째 Public Subnet에 Aurora MySQL DB Client EC2를 생성
 
   - aurora\main.tf
 
-#### EC2 Child Module 호출
+## 106. 실습: EC2 Child Module 호출
 
 ```hcl
 module "ec2" {
@@ -3047,7 +3045,7 @@ output "public_ip" {
 }
 ```
 
-#### STEP 16. Aurora MySQL 변수 작성
+## 107. 실습: STEP 16. Aurora MySQL 변수 작성
 
 - Aurora MySQL Cluster와 Writer / Reader Instance를 생성하기 위해 필요한 변수들을 Root Module에 추가
 
@@ -3104,7 +3102,7 @@ variable "db_password" {
 }
 ```
 
-#### STEP 17. Aurora Security Group 생성
+## 108. 실습: STEP 17. Aurora Security Group 생성
 
 - Aurora MySQL Cluster에 적용할 Security Group을 생성
 
@@ -3112,7 +3110,7 @@ variable "db_password" {
 
   - aurora\modules\rds\main.tf
 
-#### Aurora MySQL Security Group
+## 109. 실습: Aurora MySQL Security Group
 
 ```hcl
 resource "aws_security_group" "aurora_sg" {
@@ -3158,14 +3156,14 @@ output "aurora_security_group_id" {
 - vpc_id
   - Aurora Security Group이 생성될 VPC
 
-#### STEP 18. Aurora DB Subnet Group 생성
+## 110. 실습: STEP 18. Aurora DB Subnet Group 생성
 
 - Aurora가 사용할 Private Subnet 2개를 DB Subnet Group으로 묶는다.
 - Aurora Writer와 Reader는 이 DB Subnet Group에 포함된 Private Subnet에 배치된다.
 
   - aurora\modules\rds\main.tf
 
-#### Aurora DB Subnet Group
+## 111. 실습: Aurora DB Subnet Group
 
 ```hcl
 resource "aws_db_subnet_group" "aurora_subnet_group" {
@@ -3189,7 +3187,7 @@ resource "aws_db_subnet_group" "aurora_subnet_group" {
 - DB Subnet Group
   - Aurora DB Instance가 배치될 Network 영역 지정
 
-#### STEP 19. Aurora MySQL Cluster 생성
+## 112. 실습: STEP 19. Aurora MySQL Cluster 생성
 
 - Aurora MySQL의 중심이 되는 DB Cluster를 생성
 - Aurora에서는 먼저 Cluster를 생성하고 그 Cluster에 Writer와 Reader DB Instance를 추가
@@ -3197,7 +3195,7 @@ resource "aws_db_subnet_group" "aurora_subnet_group" {
 
   - aurora\modules\rds\main.tf
 
-#### Aurora MySQL Cluster
+## 113. 실습: Aurora MySQL Cluster
 
 ```hcl
 resource "aws_rds_cluster" "aurora_mysql" {
@@ -3305,7 +3303,7 @@ SHOW DATABASES;를 실행했을 때 mydatabase를 확인할 수 있다.
   - false: Cluster를 삭제하기 전에 마지막 Snapshot을 생성한다.
   - 실습에서는 빠르게 Resource를 삭제하고 불필요한 Snapshot 비용이 발생하지 않도록 true를 사용한다.
 
-#### STEP 20. Aurora Writer Instance 생성
+## 114. 실습: STEP 20. Aurora Writer Instance 생성
 
 - Aurora Cluster 내부에 실제 Database 작업을 처리할 Writer Instance를 생성
 
@@ -3322,7 +3320,7 @@ SHOW DATABASES;를 실행했을 때 mydatabase를 확인할 수 있다.
 
   - aurora\modules\rds\main.tf
 
-#### Aurora Writer Instance
+## 115. 실습: Aurora Writer Instance
 
 ```hcl
 resource "aws_rds_cluster_instance" "writer" {
@@ -3342,7 +3340,7 @@ resource "aws_rds_cluster_instance" "writer" {
 }
 ```
 
-#### STEP 21. Aurora Reader Instance 생성
+## 116. 실습: STEP 21. Aurora Reader Instance 생성
 
 - Aurora Cluster에 읽기 작업을 처리할 Reader Instance를 생성
 - Reader는 Aurora Replica 역할을
@@ -3352,7 +3350,7 @@ resource "aws_rds_cluster_instance" "writer" {
 
   - aurora\modules\rds\main.tf
 
-#### Aurora Reader Instance
+## 117. 실습: Aurora Reader Instance
 
 ```hcl
 resource "aws_rds_cluster_instance" "reader" {
@@ -3387,7 +3385,7 @@ resource "aws_rds_cluster_instance" "reader" {
 - promotion_tier = 1
   - Writer 장애 발생 시 Reader가 Writer로 승격될 수 있음
 
-#### STEP 22. Aurora Endpoint 출력
+## 118. 실습: STEP 22. Aurora Endpoint 출력
 
 - Aurora에는 일반 RDS와 달리 여러 종류의 Endpoint가 있다.
 - Cluster Endpoint는 현재 Writer Instance로 연결된다.
@@ -3479,7 +3477,7 @@ STEP 22-2. Root에서 RDS Child Module 호출
 
   - aurora\main.tf
 
-#### RDS Child Module 호출
+## 119. 실습: RDS Child Module 호출
 
 ```hcl
 module "rds" {
@@ -3561,7 +3559,7 @@ db_username = "admin"
 db_password = "admin1234"
 ```
 
-#### STEP 23. Terraform 전체 실행
+## 120. 실습: STEP 23. Terraform 전체 실행
 
 - 작성한 Terraform 코드를 초기화하고 실행 계획을 확인한 뒤 실제 AWS Resource를 생성
 
@@ -3572,7 +3570,7 @@ PS C:\my-terraform\aurora-mysql-service> terraform plan
 PS C:\my-terraform\aurora-mysql-service> terraform apply
 ```
 
-#### STEP 24. Terraform Output 확인
+## 121. 실습: STEP 24. Terraform Output 확인
 
 - Terraform으로 생성된 VPC, Subnet, EC2, Aurora Writer Endpoint와 Reader Endpoint를 확인
 
@@ -3662,13 +3660,13 @@ Username: admin
 Password: admin1234
 ```
 
-![이미지](assets/08-terraform-rds/7.png)
+![Password: admin1234 화면](assets/08-terraform-rds/7.png)
 
-![이미지](assets/08-terraform-rds/8.png)
+![Password: admin1234 화면](assets/08-terraform-rds/8.png)
 
-![이미지](assets/08-terraform-rds/9.png)
+![Password: admin1234 화면](assets/08-terraform-rds/9.png)
 
-#### STEP 31. Table 및 Data 생성
+## 122. 실습: STEP 31. Table 및 Data 생성
 
 ```
 [설명]
@@ -3705,7 +3703,7 @@ SELECT * FROM students;
 +------+-----------+-----------+
 ```
 
-#### STEP 32. Aurora Reader Endpoint 확인
+## 123. 실습: STEP 32. Aurora Reader Endpoint 확인
 
 - Aurora Reader Endpoint를 확인
 - Reader Endpoint는 Aurora Cluster의 Reader Instance로 읽기 요청을 전달
@@ -3718,7 +3716,7 @@ PS C:\my-terraform\aurora-mysql-service> terraform output -raw aurora_reader_end
 my-aurora-cluster.cluster-ro-xxxxxxxx.ap-northeast-2.rds.amazonaws.com
 ```
 
-#### STEP 33. Aurora Reader 접속
+## 124. 실습: STEP 33. Aurora Reader 접속
 
 - EC2에서 Reader Endpoint로 접속
 - Writer에서 입력한 Data가 Reader에서도 정상적으로 조회되는지 확인
@@ -3745,7 +3743,7 @@ SELECT * FROM students;
 
 - Writer에서 입력한 Data가 Reader에서도 조회되면 Aurora Replication이 정상적으로 동작하고 있는 것이다.
 
-#### STEP 34. Resource 삭제
+## 125. 실습: STEP 34. Resource 삭제
 
 - 실습 완료 후 비용 발생을 방지하기 위해 Terraform으로 생성한 AWS Resource를 삭제
 

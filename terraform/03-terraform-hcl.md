@@ -1,8 +1,8 @@
 # Terraform - HCL 문법
 
-## 이론
+이 문서는 Terraform 코드를 작성하는 HCL(HashiCorp Configuration Language)의 블록 구조, 변수·출력·조건·반복문·함수 문법을 개념과 실습 코드로 정리한다.
 
-#### HCL (HashiCorp Configuration Language)
+## 1. HCL (HashiCorp Configuration Language)
 
 - HCL(HashiCorp Configuration Language)은 Terraform에서 사용하는 구성 언어이다.
 - Terraform은 인프라를 코드로 관리하기 위한 도구이며, HCL은 그 인프라를 정의하기 위한 문법 체계다.
@@ -19,7 +19,7 @@
 
 - 이처럼 HCL은 절차를 나열하는 언어가 아니라 원하는 인프라의 최종 상태를 선언하는 언어다.
 
-#### 선언형 방식이 왜 중요한가
+## 2. 선언형 방식이 왜 중요한가
 
 - HCL은 선언형(Declarative) 언어이다.
 
@@ -38,7 +38,7 @@
 - 이 방식은 인프라 규모가 커질수록 엄청난 차이를 만든다.
 - 수십, 수백 개의 리소스가 얽혀 있을 때 사람이 순서를 관리하는 것은 사실상 불가능하다.
 
-#### HCL 문법 구조의 개념
+## 3. HCL 문법 구조의 개념
 
 - HCL은 블록 기반 언어이다.
 - 모든 구성은 블록 안에서 정의된다.
@@ -87,7 +87,7 @@ resource "aws_instance" "web" {
 
 - 여기서 첫 번째 라벨은 리소스 타입이고, 두 번째 라벨은 우리가 정의하는 이름이다.
 
-#### 키-값 구조의 의미
+## 4. 키-값 구조의 의미
 
 - 블록 내부는 모두 key = value 형태로 구성된다.
 
@@ -105,7 +105,7 @@ instance_type = "t3.micro"
 - HCL에서는 이 구조가 매우 중요하다.
 - 모든 설정은 결국 속성 정의이며, Terraform은 이 속성 값을 기준으로 실제 인프라 상태를 비교한다.
 
-#### 주석의 역할
+## 5. 주석의 역할
 
 - HCL에서는 주석을 두 가지 방식으로 작성할 수 있다.
 
@@ -126,7 +126,7 @@ instance_type = "t3.micro"
 - 하지만 협업과 유지보수에서 매우 중요하다.
 - 특히 실무에서는 인프라 변경 이유를 반드시 남겨야 한다.
 
-#### Terraform 프로젝트 구조
+## 6. Terraform 프로젝트 구조
 
 - Terraform은 일반적으로 하나의 디렉토리를 하나의 프로젝트 단위로 사용한다.
 - 예를 들어 my-terraform-project라는 폴더가 있다면 그 안에 여러 개의 .tf 파일을 구성한다.
@@ -195,7 +195,7 @@ my-terraform-project/
 
 - 이 파일들이 하나의 프로젝트를 구성한다.
 
-#### 환경 분리의 필요성
+## 7. 환경 분리의 필요성
 
 - 실무에서는 개발(dev), 테스트(test), 운영(production) 환경을 분리한다.
 
@@ -212,7 +212,7 @@ my-terraform-project/
 각 환경 폴더 안에 main.tf, variables.tf, outputs.tf 등을 둔다.
 이렇게 하면 환경 간 설정이 섞이지 않는다.
 
-#### 모듈화의 중요성
+## 8. 모듈화의 중요성
 
 - 프로젝트가 커지면 코드가 길어지고 복잡해진다.
 - 이때 모듈을 사용한다.
@@ -228,7 +228,7 @@ my-terraform-project/
   - 팀 단위 협업 가능
   - 대규모 인프라에서는 모듈 없이 관리하는 것이 거의 불가능하다.
 
-#### Terraform Provider
+## 9. Terraform Provider
 
 - Terraform을 처음 배울 때 가장 많이 헷갈리는 개념이 바로 프로바이더(provider)다.
 - Provider란 쉽게 말해 Terraform과 외부 시스템을 연결해주는 중간 계층이다.
@@ -244,7 +244,7 @@ my-terraform-project/
   - Provider: 해당 클라우드 API 호출
   - 클라우드: 실제 리소스 생성
 
-#### 프로바이더 정의 방식
+## 10. 프로바이더 정의 방식
 
 - Terraform에서 프로바이더는 .tf 파일 안에서 provider 블록으로 정의한다.
 
@@ -298,7 +298,7 @@ provider "aws" {
 - 이후 terraform plan이나 terraform apply를 실행하면 provider "aws" 설정을 사용하여 지
 정된 AWS 리전에 API 요청을 보낸다.
 
-#### 프로바이더는 왜 필요한가
+## 11. 프로바이더는 왜 필요한가
 
 - Terraform이 직접 AWS를 제어할 수 없다면 왜 이런 구조로 설계했을까?
 - 이유는 확장성 때문이다.
@@ -308,7 +308,7 @@ provider "aws" {
 각 플랫폼별로 별도의 플러그인을 연결할 수 있다.
 즉, Terraform은 플랫폼 중립적인 도구가 된다.
 
-#### 프로바이더 구성과 인증
+## 12. 프로바이더 구성과 인증
 
 - 프로바이더를 정의했다고 해서 바로 리소스를 만들 수 있는 것은 아니다.
 - 클라우드에 접근하려면 인증 정보가 필요하다.
@@ -350,7 +350,7 @@ Terraform은 이 파일을 자동으로 참조한다.
 - 실무에서는 절대 코드에 키를 직접 작성하지 않는다.
 - 이건 보안 기본 원칙이다.
 
-#### 멀티 프로바이더 구조
+## 13. 멀티 프로바이더 구조
 
 - Terraform은 하나의 프로젝트에서 여러 프로바이더를 동시에 사용할 수 있다.
 
@@ -409,7 +409,7 @@ provider "google" {
 - 이것은 AWS API가 아니라 Kubernetes API를 통해 생성된다.
 따라서 이 영역은 kubernetes 프로바이더 또는 helm 프로바이더가 담당한다.
 
-#### 다양한 프로바이더 종류
+## 14. 다양한 프로바이더 종류
 
 - Terraform에는 AWS만 있는 것이 아니다.
 
@@ -431,7 +431,7 @@ provider "google" {
 
 - 이 구조를 보면 Terraform은 단순한 클라우드 생성 도구가 아니라 인프라 통합 제어 엔진에 가깝다.
 
-#### 프로바이더 동작 원리
+## 15. 프로바이더 동작 원리
 
 - Terraform을 실행하면 다음과 같은 순서로 동작한다.
 
@@ -446,13 +446,13 @@ provider "google" {
 
 - 즉, 프로바이더는 terraform init 단계에서 설치되고 apply 단계에서 실제 API 호출을 수행한다.
 
-#### Terraform 블록의 개념
+## 16. Terraform 블록의 개념
 
 - Terraform에서 가장 중요한 개념은 블록(Block)이다.
 - Terraform 코드는 전부 블록으로 구성된다.
 - 변수도 블록, 리소스도 블록, 출력도 블록이다.
 
-#### 블록이란?
+## 17. 블록이란?
 
 - 블록은 구성(Configuration)을 정의하는 가장 기본 단위다.
 즉, Terraform은 선언형 언어이며 우리는 이런 상태가 되도록 구성해라라고 블록 단위로 명령한다.
@@ -468,7 +468,7 @@ provider "google" {
 
 - 이 모든 블록이 유기적으로 연결되어 최종 인프라 상태를 완성한다.
 
-#### 블록 간의 관계와 동작 방식
+## 18. 블록 간의 관계와 동작 방식
 
 - 각 블록은 문법적으로는 독립적이다.
 하지만 실제 프로젝트에서는 서로 참조하면서 동작한다.
@@ -484,7 +484,7 @@ provider "google" {
 - Terraform은 내부적으로 이 블록들의 참조 관계를 그래프로 계산한다.
 - 이를 Dependency Graph라고 한다.
 
-#### terraform 블록
+## 19. terraform 블록
 
 - terraform 블록은 Terraform 자체 설정을 정의하는 블록이다.
 
@@ -514,7 +514,7 @@ terraform {
 
 - 실무에서는 버전을 고정하지 않으면 나중에 버전 변경으로 동작이 달라질 수 있다.
 
-#### provider 블록
+## 20. provider 블록
 
 - provider 블록은 Terraform이 연결할 클라우드 또는 플랫폼을 정의한다.
 - 예를 들어 AWS를 사용할 경우 다음과 같이 작성한다.
@@ -532,7 +532,7 @@ provider "aws" {
 - provider는 실제로 Terraform과 외부 시스템을 연결하는 플러그인이다.
   - terraform init 시 다운로드되고 terraform apply 시 API 호출을 수행한다.
 
-#### backend 블록
+## 21. backend 블록
 
 - backend 블록은 Terraform 상태 파일(tfstate)의 저장 위치를 정의한다.
 - Terraform은 단순히 리소스를 만드는 도구가 아니다.
@@ -560,7 +560,7 @@ terraform {
 
 - 왜냐하면 팀 협업 시 로컬 tfstate는 충돌을 일으키기 때문이다.
 
-#### resource 블록 (가장 많이 사용하는 블록)
+## 22. resource 블록 (가장 많이 사용하는 블록)
 
 - resource 블록은 실제 인프라를 생성하는 블록이며 Terraform에서 가장 중요한 블록중 하나이다.
 
@@ -582,7 +582,7 @@ resource "aws_instance" "example" {
 
 - Terraform apply 시 aws 프로바이더가 AWS API를 호출하여 실제 인스턴스를 생성한다.
 
-#### data 블록
+## 23. data 블록
 
 - data 블록은 이미 존재하는 리소스 정보를 가져오는 블록이다.
 - 즉, 생성이 아니라 조회다.
@@ -611,7 +611,7 @@ data "aws_ami" "al2023" {
 
 - data 블록은 인프라 재사용과 자동화에 매우 중요하다.
 
-#### variable 블록
+## 24. variable 블록
 
 - variable 블록은 입력 변수를 정의한다.
 - Terraform 코드를 재사용 가능하게 만드는 핵심 요소다.
@@ -639,7 +639,7 @@ variable "instance_type" {
   - 환경 변수
   - .tfvars 파일 등이 있다.
 
-#### locals 블록
+## 25. locals 블록
 
 - locals 블록은 프로젝트 내부 계산용 변수다. (외부 입력을 받지 않는다.)
 
@@ -656,7 +656,7 @@ locals {
 
 - 예를 들어 태그를 여러 리소스에 동일하게 적용할 경우 locals로 정의해두면 관리가 쉬워진다.
 
-#### output 블록
+## 26. output 블록
 
 output 블록은 Terraform 실행 후 결과를 출력하는 블록이다.
 
@@ -678,7 +678,7 @@ output "instance_ip" {
   - 모듈 간 값 전달
   - 특히 모듈 구조에서는 output이 매우 중요하다.
 
-#### Terraform 데이터 타입
+## 27. Terraform 데이터 타입
 
 - Terraform에서는 모든 값(Value)이 특정 데이터 타입(Type)을 가진다.
 - Terraform은 선언형 언어이기 때문에 어떻게 만들 것인가보다 어떤 상태를 원하는가를 정의한다.
@@ -697,13 +697,13 @@ output "instance_ip" {
 
 - VPC, EC2, Auto Scaling, RDS, IAM처럼 설정이 복잡해질수록 데이터 타입을 정확히 이해하는 것이 중요하다.
 
-#### Terraform 데이터 타입의 구조
+## 28. Terraform 데이터 타입의 구조
 
 - Terraform 데이터 타입은 크게 다음과 같이 구분할 수 있다.
   - 기본 타입 (Primitive Types)
   - 복합 타입 (Collection / Structural Types)
 
-#### 기본 데이터 타입
+## 29. 기본 데이터 타입
 
 - 기본 타입은 하나의 단순한 값을 표현한다.
 
@@ -767,7 +767,7 @@ variable "public_subnet_count" {
 
 - bool 타입은 조건문이나 count 같은 조건 기반 설정에서 많이 사용된다.
 
-#### 복합 데이터 타입
+## 30. 복합 데이터 타입
 
 - 복합 타입은 여러 개의 값을 하나로 묶어서 관리할 때 사용한다.
 
@@ -887,7 +887,7 @@ object({
 
 - 하지만 각 값의 의미를 이름으로 표현하기 어려워 실무에서는 object가 더 많이 사용되는 경우가 많다.
 
-#### list와 set 차이
+## 31. list와 set 차이
 
 list
   - 순서 있음
@@ -908,7 +908,7 @@ object
   - 여러 속성을 하나의 구조로 관리
   - 속성마다 서로 다른 타입 사용 가능
 
-#### 실제 변수 선언 예제
+## 32. 실제 변수 선언 예제
 
 - 문자열 변수
 
@@ -978,7 +978,7 @@ variable "server_config" {
 - 이렇게 하면 잘못된 구조를 입력하면 plan 단계에서 바로 오류 발생한다.
 - 타입 검증을 통해 안정성이 올라간다.
 
-#### 데이터 타입이 코드 품질에 미치는 영향
+## 33. 데이터 타입이 코드 품질에 미치는 영향
 
 - 데이터 타입을 명확히 정의하면
   - 코드 자동 검증 가능
@@ -990,7 +990,7 @@ variable "server_config" {
 - 특히 EKS 모듈 설계 시 node group, VPC, IAM 설정을 object 구조로 설계하면
 대형 프로젝트에서도 관리가 가능하다.
 
-#### 예시 (EC2)
+## 34. 예시 (EC2)
 
 - 예를 들어 여러 EC2 서버의 설정을 이렇게 만들 수 있다.
 
@@ -1006,12 +1006,12 @@ variable "instances" {
 
 - 이렇게 하면 여러 노드 그룹을 구조적으로 관리할 수 있다.
 
-#### Terraform 명령어
+## 35. Terraform 명령어
 
 - Terraform CLI 명령어는 단순히 실행 순서가 있는 도구가 아니다.
 - 각 명령어는 Terraform의 내부 동작 단계와 정확히 대응한다.
 
-#### Terraform은 기본적으로 다음 4단계를 가진다.
+## 36. Terraform은 기본적으로 다음 4단계를 가진다.
 
 ```
 1) 초기화 (Initialization)
@@ -1020,7 +1020,7 @@ variable "instances" {
 4) 상태 관리 (State Management)
 ```
 
-#### 1) terraform init
+## 37. 1) terraform init
 
 - 프로젝트를 Terraform 환경으로 초기화한다.
 - 이 명령어는 반드시 가장 먼저 실행해야 한다.
@@ -1042,7 +1042,7 @@ PS C:\terrform> terraform init
 - backend를 변경하면 -reconfigure 옵션 사용
 - 모듈 구조 변경 시에도 init 재실행 필요
 
-#### 2) terraform plan
+## 38. 2) terraform plan
 
 - 코드가 실제 인프라에 어떤 영향을 줄지 미리 계산한다.
 
@@ -1069,7 +1069,7 @@ PS C:\terrform> terraform plan
 
 - 실무에서는 plan 없이 apply 금지가 기본 원칙이다.
 
-#### 3) terraform apply
+## 39. 3) terraform apply
 
 - plan에서 계산된 변경 사항을 실제 인프라에 적용한다.
 
@@ -1088,7 +1088,7 @@ PS C:\terrform> terraform apply -auto-approve# 자동 승인
 - 사람이 직접 운영 환경에 적용할 때는 확인 필수
 - apply 이후 tfstate가 반드시 최신 상태로 업데이트됨
 
-#### 4) terraform destroy
+## 40. 4) terraform destroy
 
 - 현재 상태 파일에 정의된 모든 리소스를 삭제한다.
 
@@ -1103,7 +1103,7 @@ PS C:\terrform> terraform destroy -auto-approve# 자동 승인
 - 운영 환경에서는 매우 신중하게 사용
 - destroy는 삭제 엔진이다.
 
-#### 5) terraform show
+## 41. 5) terraform show
 
 - 현재 상태 파일(tfstate)의 내용을 출력한다.
 
@@ -1117,7 +1117,7 @@ PS C:\terrform> terraform show
   - JSON 형태로 출력하여 자동화에 활용 가능
   - terraform show -json
 
-#### 6) terraform output
+## 42. 6) terraform output
 
 - output 블록에 정의된 값만 출력한다.
 
@@ -1132,7 +1132,7 @@ PS C:\terrform> terraform output instance_ip
 - 다른 시스템으로 값 전달
 - CI/CD 파이프라인에서 매우 중요하다.
 
-#### 7) terraform validate
+## 43. 7) terraform validate
 
 - 코드 문법과 내부 구조가 올바른지 검사한다.
 
@@ -1146,7 +1146,7 @@ PS C:\terrform> terraform validate
   - 타입 오류 검출
   - CI 파이프라인에서 필수 단계다.
 
-#### 8) terraform fmt
+## 44. 8) terraform fmt
 
 - 코드를 자동 정렬한다.
 
@@ -1174,7 +1174,7 @@ PS C:\terrform> terraform fmt
 - 모듈 구조 변경 시
 - state는 고급 기능이므로 초보자는 함부로 사용하면 안 된다.
 
-#### 10) terraform import
+## 45. 10) terraform import
 
 - 이미 존재하는 리소스를 Terraform 관리 대상으로 가져온다.
 
@@ -1187,7 +1187,7 @@ PS C:\terrform> terraform import aws_instance.example i-1234567890abcdef0
 
 - import는 코드 자동 생성이 아니라 state에만 등록한다.
 
-#### 11) terraform refresh
+## 46. 11) terraform refresh
 
 - 실제 클라우드 상태를 읽어서 tfstate를 최신 상태로 업데이트한다.
 
@@ -1198,7 +1198,7 @@ PS C:\terrform> terraform refresh
 - Terraform 1.0 이후에는 refresh는 plan 내부 동작에 포함되었다.
 - 단독 사용은 점점 줄어드는 추세다.
 
-#### Terraform 흐름 제어 (Flow Control)
+## 47. Terraform 흐름 제어 (Flow Control)
 
 - Terraform은 선언형 언어이지만 조건에 따라 리소스를 생성하거나 값을 동적으로 변경할 수 있다.
 즉, 코드의 흐름을 완전히 바꾸는 것은 아니지만 조건에 따라 결과를 다르게 만드는 기능을 제공한다.
@@ -1215,7 +1215,7 @@ PS C:\terrform> terraform refresh
   - 옵션 값이 있을 때만 속성을 적용해야 한다.
   - 비용 절감을 위해 조건부 리소스 생성이 필요하다.
 
-#### 조건 표현식 (삼항 연산자)
+## 48. 조건 표현식 (삼항 연산자)
 
 - Terraform의 조건 표현식은 C, Java와 동일한 삼항 연산자 형태를 사용한다.
 
@@ -1282,7 +1282,7 @@ resource "aws_instance" "example" {
 
 - 환경에 따라 동적으로 리소스 구성이 변경된다.
 
-#### 조건과 리소스 생성 제어 (count 활용)
+## 49. 조건과 리소스 생성 제어 (count 활용)
 
 - 조건이 true일 때만 리소스를 생성하고 싶을 경우 count를 사용한다.
 
@@ -1306,7 +1306,7 @@ resource "aws_s3_bucket" "example" {
   - create_bucket이 false이면 count = 0 (리소스 생성 안 됨)
   - 이 방식은 실무에서 매우 자주 사용된다.
 
-#### null 값과 조건 표현식
+## 50. null 값과 조건 표현식
 
 - Terraform에서 null은 값 없음을 의미한다.
 
@@ -1344,7 +1344,7 @@ resource "aws_instance" "example" {
   - 값이 없으면 null 설정 (user_data 속성 자체를 무시)
   - 이 방식은 선택 옵션 처리에 매우 유용하다.
 
-#### count vs for_each와 조건 결합
+## 51. count vs for_each와 조건 결합
 
 - 조건문은 반복문과 함께 사용할 수 있다.
 
@@ -1365,7 +1365,7 @@ resource "aws_instance" "example" {
 - 선택적 속성 적용
 - 비용 제어용 리소스 조건 생성
 
-#### Terraform 반복문
+## 52. Terraform 반복문
 
 - 인프라를 코드로 정의할 때 동일한 유형의 리소스를 여러 개 생성하거나 설정해야 하는 상황이 매우 자주 발생한다.
   - EC2 인스턴스를 3대 이상 생성해야 하는 경우
@@ -1386,7 +1386,7 @@ resource "aws_instance" "example" {
 
 - 이 네 가지는 모두 반복과 관련되어 있지만, 목적과 사용 방식이 서로 다르다.
 
-#### count를 사용한 반복
+## 53. count를 사용한 반복
 
 - count는 Terraform에서 가장 기본적인 반복 방식이다.
 - 특정 리소스를 몇 개 생성할 것인가를 정수 값으로 지정한다.
@@ -1442,7 +1442,7 @@ tags = {
   - 개수만 중요하고 개별 식별자가 중요하지 않을 때
   - 테스트 환경 등 단순 복제 구조일 때
 
-#### for_each를 사용한 반복
+## 54. for_each를 사용한 반복
 
 - for_each는 count와 유사하지만 훨씬 유연하다.
 - count가 개수 기준이라면 for_each는 키 또는 값 기준이다.
@@ -1590,7 +1590,7 @@ instance_type= t3.medium
 monitoring = true
 ```
 
-#### for 표현식을 사용한 값 생성
+## 55. for 표현식을 사용한 값 생성
 
 - for 표현식은 리소스를 생성하는 반복이 아니다.
 
@@ -1632,7 +1632,7 @@ locals {
 이 경우 db1은 제외된다.
 ```
 
-#### dynamic 블록을 사용한 리소스 내부 반복
+## 56. dynamic 블록을 사용한 리소스 내부 반복
 
 - dynamic은 리소스 자체를 반복하는 것이 아니다.
 - 리소스 내부 블록을 반복 생성하는 구조이다.
@@ -1670,7 +1670,7 @@ resource "aws_security_group" "example" {
   - IAM 정책 블록 반복
   - 특정 리소스의 하위 설정 반복
 
-#### 반복문 선택 기준
+## 57. 반복문 선택 기준
 
 - count
   - 동일 구성 리소스를 단순히 여러 개 생성할 때
@@ -1689,7 +1689,7 @@ resource "aws_security_group" "example" {
 - dynamic
   - 리소스 내부 블록 반복 생성
 
-#### 내장 함수
+## 58. 내장 함수
 
 - 함수(Function)는 어떤 값을 입력받아서 가공해서 새로운 값을 반환하는 도구다.
 
@@ -1708,7 +1708,7 @@ resource "aws_security_group" "example" {
   - 리스트를 가공해야 할 때
   - 이때 사용하는 게 내장 함수다.
 
-#### 함수의 기본 구조
+## 59. 함수의 기본 구조
 
 - Terraform 함수 구조 형태
   - 함수이름(입력값1, 입력값2, ...)
@@ -1726,7 +1726,7 @@ resource "aws_security_group" "example" {
 
 즉, Terraform은 정적인 YAML이 아니라 계산이 가능한 설정 언어다.
 
-#### 문자열 함수
+## 60. 문자열 함수
 
 - join(separator, list)
   - 리스트를 하나의 문자열로 결합한다.
@@ -1771,7 +1771,7 @@ locals {
 - replace(string, substring, replacement)
   - 문자열 치환
 
-#### world문자열을 Terraform 문자열로 치환
+## 61. world문자열을 Terraform 문자열로 치환
 
 ```
 replace("hello world", "world", "Terraform")
@@ -1795,7 +1795,7 @@ trimspace("   hello   ")
 
 - user_data나 templatefile 처리 시 불필요한 공백 제거
 
-#### 컬렉션 함수 (리스트 & 맵)
+## 62. 컬렉션 함수 (리스트 & 맵)
 
 - merge(map1, map2, ...)
   - 여러 map을 합친다.
@@ -1878,7 +1878,7 @@ values({ a = 1, b = 2 })
 결과 : [1, 2]
 ```
 
-#### 변환 함수 (Type Conversion Functions)
+## 63. 변환 함수 (Type Conversion Functions)
 
 - Terraform은 타입이 엄격하다.
 - 리소스 속성은 특정 타입만 허용한다.
@@ -1928,7 +1928,7 @@ locals {
 }
 ```
 
-#### tomap(value)
+## 64. tomap(value)
 
 - 값을 map 타입으로 변환
   - merge() 함수는 map만 받는다.
@@ -1949,7 +1949,7 @@ locals {
 }
 ```
 
-#### 파일 및 템플릿 함수
+## 65. 파일 및 템플릿 함수
 
 - file(path)
   - 파일 내용을 문자열로 읽어온다.
@@ -1966,14 +1966,14 @@ resource "aws_instance" "example" {
 
 - init.sh 파일의 내용이 그대로 user_data로 들어간다.
 
-#### filebase64(path)
+## 66. filebase64(path)
 
 - 파일 내용을 Base64로 인코딩해서 반환
   - Launch Template, EKS, 일부 AWS API는 Base64 인코딩된 문자열을 요구한다.
 
 - user_data_base64 = filebase64("init.sh")
 
-#### templatefile(path, vars)
+## 67. templatefile(path, vars)
 
 - templatefile는 파일 안에 있는 ${변수} 부분을 Terraform에서 넘겨준 값으로 치환해서 최종 문자열을 만들어주는 함수다.
 
@@ -2007,7 +2007,7 @@ templatefile("config.tpl", {
 3-4) ${name}를 "Terraform"으로 교체한다.
 3-5) 최종 문자열을 반환한다.
 
-#### 5. 네트워크 함수
+## 68. 5. 네트워크 함수
 
 - 네트워크 자동화에서 매우 중요하다.
 - CIDR 계산을 수동으로 하면 실수 가능성이 높다.
@@ -2058,9 +2058,7 @@ locals {
 
 - 고정 IP를 계산할 때 사용한다.
 
-## 실습
-
-#### HCL (HashiCorp Configuration Language)
+## 69. 실습: HCL (HashiCorp Configuration Language)
 
 - HCL(HashiCorp Configuration Language)은 Terraform에서 사용하는 구성 언어이다.
 - Terraform은 인프라를 코드로 관리하기 위한 도구이며, HCL은 그 인프라를 정의하기 위한 문법 체계다.
@@ -2077,7 +2075,7 @@ locals {
 
 - 이처럼 HCL은 절차를 나열하는 언어가 아니라 원하는 인프라의 최종 상태를 선언하는 언어다.
 
-#### 선언형 방식이 왜 중요한가
+## 70. 실습: 선언형 방식이 왜 중요한가
 
 - HCL은 선언형(Declarative) 언어이다.
 
@@ -2096,7 +2094,7 @@ locals {
 - 이 방식은 인프라 규모가 커질수록 엄청난 차이를 만든다.
 - 수십, 수백 개의 리소스가 얽혀 있을 때 사람이 순서를 관리하는 것은 사실상 불가능하다.
 
-#### HCL 문법 구조의 개념
+## 71. 실습: HCL 문법 구조의 개념
 
 - HCL은 블록 기반 언어이다.
 - 모든 구성은 블록 안에서 정의된다.
@@ -2145,7 +2143,7 @@ resource "aws_instance" "web" {
 
 - 여기서 첫 번째 라벨은 리소스 타입이고, 두 번째 라벨은 우리가 정의하는 이름이다.
 
-#### 키-값 구조의 의미
+## 72. 실습: 키-값 구조의 의미
 
 - 블록 내부는 모두 key = value 형태로 구성된다.
 
@@ -2163,7 +2161,7 @@ instance_type = "t3.micro"
 - HCL에서는 이 구조가 매우 중요하다.
 - 모든 설정은 결국 속성 정의이며, Terraform은 이 속성 값을 기준으로 실제 인프라 상태를 비교한다.
 
-#### 주석의 역할
+## 73. 실습: 주석의 역할
 
 - HCL에서는 주석을 두 가지 방식으로 작성할 수 있다.
 
@@ -2184,7 +2182,7 @@ instance_type = "t3.micro"
 - 하지만 협업과 유지보수에서 매우 중요하다.
 - 특히 실무에서는 인프라 변경 이유를 반드시 남겨야 한다.
 
-#### Terraform 프로젝트 구조
+## 74. 실습: Terraform 프로젝트 구조
 
 - Terraform은 일반적으로 하나의 디렉토리를 하나의 프로젝트 단위로 사용한다.
 - 예를 들어 my-terraform-project라는 폴더가 있다면 그 안에 여러 개의 .tf 파일을 구성한다.
@@ -2253,7 +2251,7 @@ my-terraform-project/
 
 - 이 파일들이 하나의 프로젝트를 구성한다.
 
-#### 환경 분리의 필요성
+## 75. 실습: 환경 분리의 필요성
 
 - 실무에서는 개발(dev), 테스트(test), 운영(production) 환경을 분리한다.
 
@@ -2270,7 +2268,7 @@ my-terraform-project/
 각 환경 폴더 안에 main.tf, variables.tf, outputs.tf 등을 둔다.
 이렇게 하면 환경 간 설정이 섞이지 않는다.
 
-#### 모듈화의 중요성
+## 76. 실습: 모듈화의 중요성
 
 - 프로젝트가 커지면 코드가 길어지고 복잡해진다.
 - 이때 모듈을 사용한다.
@@ -2286,7 +2284,7 @@ my-terraform-project/
   - 팀 단위 협업 가능
   - 대규모 인프라에서는 모듈 없이 관리하는 것이 거의 불가능하다.
 
-#### Terraform Provider
+## 77. 실습: Terraform Provider
 
 - Terraform을 처음 배울 때 가장 많이 헷갈리는 개념이 바로 프로바이더(provider)다.
 - Provider란 쉽게 말해 Terraform과 외부 시스템을 연결해주는 중간 계층이다.
@@ -2302,7 +2300,7 @@ my-terraform-project/
   - Provider: 해당 클라우드 API 호출
   - 클라우드: 실제 리소스 생성
 
-#### 프로바이더 정의 방식
+## 78. 실습: 프로바이더 정의 방식
 
 - Terraform에서 프로바이더는 .tf 파일 안에서 provider 블록으로 정의한다.
 
@@ -2356,7 +2354,7 @@ provider "aws" {
 - 이후 terraform plan이나 terraform apply를 실행하면 provider "aws" 설정을 사용하여 지
 정된 AWS 리전에 API 요청을 보낸다.
 
-#### 프로바이더는 왜 필요한가
+## 79. 실습: 프로바이더는 왜 필요한가
 
 - Terraform이 직접 AWS를 제어할 수 없다면 왜 이런 구조로 설계했을까?
 - 이유는 확장성 때문이다.
@@ -2366,7 +2364,7 @@ provider "aws" {
 각 플랫폼별로 별도의 플러그인을 연결할 수 있다.
 즉, Terraform은 플랫폼 중립적인 도구가 된다.
 
-#### 프로바이더 구성과 인증
+## 80. 실습: 프로바이더 구성과 인증
 
 - 프로바이더를 정의했다고 해서 바로 리소스를 만들 수 있는 것은 아니다.
 - 클라우드에 접근하려면 인증 정보가 필요하다.
@@ -2408,7 +2406,7 @@ Terraform은 이 파일을 자동으로 참조한다.
 - 실무에서는 절대 코드에 키를 직접 작성하지 않는다.
 - 이건 보안 기본 원칙이다.
 
-#### 멀티 프로바이더 구조
+## 81. 실습: 멀티 프로바이더 구조
 
 - Terraform은 하나의 프로젝트에서 여러 프로바이더를 동시에 사용할 수 있다.
 
@@ -2467,7 +2465,7 @@ provider "google" {
 - 이것은 AWS API가 아니라 Kubernetes API를 통해 생성된다.
 따라서 이 영역은 kubernetes 프로바이더 또는 helm 프로바이더가 담당한다.
 
-#### 다양한 프로바이더 종류
+## 82. 실습: 다양한 프로바이더 종류
 
 - Terraform에는 AWS만 있는 것이 아니다.
 
@@ -2489,7 +2487,7 @@ provider "google" {
 
 - 이 구조를 보면 Terraform은 단순한 클라우드 생성 도구가 아니라 인프라 통합 제어 엔진에 가깝다.
 
-#### 프로바이더 동작 원리
+## 83. 실습: 프로바이더 동작 원리
 
 - Terraform을 실행하면 다음과 같은 순서로 동작한다.
 
@@ -2504,13 +2502,13 @@ provider "google" {
 
 - 즉, 프로바이더는 terraform init 단계에서 설치되고 apply 단계에서 실제 API 호출을 수행한다.
 
-#### Terraform 블록의 개념
+## 84. 실습: Terraform 블록의 개념
 
 - Terraform에서 가장 중요한 개념은 블록(Block)이다.
 - Terraform 코드는 전부 블록으로 구성된다.
 - 변수도 블록, 리소스도 블록, 출력도 블록이다.
 
-#### 블록이란?
+## 85. 실습: 블록이란?
 
 - 블록은 구성(Configuration)을 정의하는 가장 기본 단위다.
 즉, Terraform은 선언형 언어이며 우리는 이런 상태가 되도록 구성해라라고 블록 단위로 명령한다.
@@ -2526,7 +2524,7 @@ provider "google" {
 
 - 이 모든 블록이 유기적으로 연결되어 최종 인프라 상태를 완성한다.
 
-#### 블록 간의 관계와 동작 방식
+## 86. 실습: 블록 간의 관계와 동작 방식
 
 - 각 블록은 문법적으로는 독립적이다.
 하지만 실제 프로젝트에서는 서로 참조하면서 동작한다.
@@ -2542,7 +2540,7 @@ provider "google" {
 - Terraform은 내부적으로 이 블록들의 참조 관계를 그래프로 계산한다.
 - 이를 Dependency Graph라고 한다.
 
-#### terraform 블록
+## 87. 실습: terraform 블록
 
 - terraform 블록은 Terraform 자체 설정을 정의하는 블록이다.
 
@@ -2572,7 +2570,7 @@ terraform {
 
 - 실무에서는 버전을 고정하지 않으면 나중에 버전 변경으로 동작이 달라질 수 있다.
 
-#### provider 블록
+## 88. 실습: provider 블록
 
 - provider 블록은 Terraform이 연결할 클라우드 또는 플랫폼을 정의한다.
 - 예를 들어 AWS를 사용할 경우 다음과 같이 작성한다.
@@ -2590,7 +2588,7 @@ provider "aws" {
 - provider는 실제로 Terraform과 외부 시스템을 연결하는 플러그인이다.
   - terraform init 시 다운로드되고 terraform apply 시 API 호출을 수행한다.
 
-#### backend 블록
+## 89. 실습: backend 블록
 
 - backend 블록은 Terraform 상태 파일(tfstate)의 저장 위치를 정의한다.
 - Terraform은 단순히 리소스를 만드는 도구가 아니다.
@@ -2618,7 +2616,7 @@ terraform {
 
 - 왜냐하면 팀 협업 시 로컬 tfstate는 충돌을 일으키기 때문이다.
 
-#### resource 블록 (가장 많이 사용하는 블록)
+## 90. 실습: resource 블록 (가장 많이 사용하는 블록)
 
 - resource 블록은 실제 인프라를 생성하는 블록이며 Terraform에서 가장 중요한 블록중 하나이다.
 
@@ -2640,7 +2638,7 @@ resource "aws_instance" "example" {
 
 - Terraform apply 시 aws 프로바이더가 AWS API를 호출하여 실제 인스턴스를 생성한다.
 
-#### data 블록
+## 91. 실습: data 블록
 
 - data 블록은 이미 존재하는 리소스 정보를 가져오는 블록이다.
 - 즉, 생성이 아니라 조회다.
@@ -2669,7 +2667,7 @@ data "aws_ami" "al2023" {
 
 - data 블록은 인프라 재사용과 자동화에 매우 중요하다.
 
-#### variable 블록
+## 92. 실습: variable 블록
 
 - variable 블록은 입력 변수를 정의한다.
 - Terraform 코드를 재사용 가능하게 만드는 핵심 요소다.
@@ -2697,7 +2695,7 @@ variable "instance_type" {
   - 환경 변수
   - .tfvars 파일 등이 있다.
 
-#### locals 블록
+## 93. 실습: locals 블록
 
 - locals 블록은 프로젝트 내부 계산용 변수다. (외부 입력을 받지 않는다.)
 
@@ -2714,7 +2712,7 @@ locals {
 
 - 예를 들어 태그를 여러 리소스에 동일하게 적용할 경우 locals로 정의해두면 관리가 쉬워진다.
 
-#### output 블록
+## 94. 실습: output 블록
 
 output 블록은 Terraform 실행 후 결과를 출력하는 블록이다.
 
@@ -2736,19 +2734,19 @@ output "instance_ip" {
   - 모듈 간 값 전달
   - 특히 모듈 구조에서는 output이 매우 중요하다.
 
-#### 실습
+## 95. 실습: 실습
 
 - C드라이브에 terraform 폴더 생성
 
-![이미지](assets/03-terraform-hcl/1.png)
+![C드라이브에 terraform 폴더 생성 화면](assets/03-terraform-hcl/1.png)
 
 - Terraform 폴더 안에 HCL-01-block 폴더 생성
 
-![이미지](assets/03-terraform-hcl/2.png)
+![Terraform 폴더 안에 HCL-01-block 폴더 생성 화면](assets/03-terraform-hcl/2.png)
 
 - HCL-01-block 폴더안에 main.tf, outputs,tf, variables.tf 파일 생성
 
-![이미지](assets/03-terraform-hcl/3.png)
+![HCL-01-block 폴더안에 main.tf, outputs,tf, variables.tf 파일 생성 화면](assets/03-terraform-hcl/3.png)
 
 ```hcl
 variables.tf
@@ -2858,15 +2856,15 @@ file_path = "./test.txt"
 
 - test.txt 파일이 생성되고 test.txt 파일안에 Hello, Terraform world 가 확인된다.
 
-![이미지](assets/03-terraform-hcl/4.png)
+![test.txt 파일이 생성되고 test.txt 파일안에 Hello, Terraform world 가 확인된 화면](assets/03-terraform-hcl/4.png)
 
-#### 변수를 변경할 때
+## 96. 실습: 변수를 변경할 때
 
 - terraform.tfvars 파일 생성
 
-![이미지](assets/03-terraform-hcl/5.png)
+![terraform.tfvars 파일 생성 화면](assets/03-terraform-hcl/5.png)
 
-#### terraform.tfvars (파일 생성)
+## 97. 실습: terraform.tfvars (파일 생성)
 
 ```hcl
 filename = "terraform-text-file.txt"
@@ -2943,7 +2941,7 @@ file_path = "./terraform-text-file.txt"
 
 - 기존 text.txt 파일이 삭제되고 terraform-text-file.txt 파일이 생성되어 있다.
 
-![이미지](assets/03-terraform-hcl/6.png)
+![기존 text.txt 파일이 삭제되고 terraform-text-file.txt 파일이 생성되어 있다. 화면](assets/03-terraform-hcl/6.png)
 
 ```powershell
 PS C:\terrform\HCL-01-block> terraform destroy -auto-approve
@@ -2971,7 +2969,7 @@ local_file.example: Destruction complete after 0s
 Destroy complete! Resources: 1 destroyed.
 ```
 
-#### Terraform 데이터 타입
+## 98. 실습: Terraform 데이터 타입
 
 - Terraform에서는 모든 값(Value)이 특정 데이터 타입(Type)을 가진다.
 - Terraform은 선언형 언어이기 때문에 어떻게 만들 것인가보다 어떤 상태를 원하는가를 정의한다.
@@ -2990,13 +2988,13 @@ Destroy complete! Resources: 1 destroyed.
 
 - VPC, EC2, Auto Scaling, RDS, IAM처럼 설정이 복잡해질수록 데이터 타입을 정확히 이해하는 것이 중요하다.
 
-#### Terraform 데이터 타입의 구조
+## 99. 실습: Terraform 데이터 타입의 구조
 
 - Terraform 데이터 타입은 크게 다음과 같이 구분할 수 있다.
   - 기본 타입 (Primitive Types)
   - 복합 타입 (Collection / Structural Types)
 
-#### 기본 데이터 타입
+## 100. 실습: 기본 데이터 타입
 
 - 기본 타입은 하나의 단순한 값을 표현한다.
 
@@ -3060,7 +3058,7 @@ variable "public_subnet_count" {
 
 - bool 타입은 조건문이나 count 같은 조건 기반 설정에서 많이 사용된다.
 
-#### 복합 데이터 타입
+## 101. 실습: 복합 데이터 타입
 
 - 복합 타입은 여러 개의 값을 하나로 묶어서 관리할 때 사용한다.
 
@@ -3180,7 +3178,7 @@ object({
 
 - 하지만 각 값의 의미를 이름으로 표현하기 어려워 실무에서는 object가 더 많이 사용되는 경우가 많다.
 
-#### list와 set 차이
+## 102. 실습: list와 set 차이
 
 list
   - 순서 있음
@@ -3201,7 +3199,7 @@ object
   - 여러 속성을 하나의 구조로 관리
   - 속성마다 서로 다른 타입 사용 가능
 
-#### 실제 변수 선언 예제
+## 103. 실습: 실제 변수 선언 예제
 
 - 문자열 변수
 
@@ -3271,7 +3269,7 @@ variable "server_config" {
 - 이렇게 하면 잘못된 구조를 입력하면 plan 단계에서 바로 오류 발생한다.
 - 타입 검증을 통해 안정성이 올라간다.
 
-#### 데이터 타입이 코드 품질에 미치는 영향
+## 104. 실습: 데이터 타입이 코드 품질에 미치는 영향
 
 - 데이터 타입을 명확히 정의하면
   - 코드 자동 검증 가능
@@ -3283,7 +3281,7 @@ variable "server_config" {
 - 특히 EKS 모듈 설계 시 node group, VPC, IAM 설정을 object 구조로 설계하면
 대형 프로젝트에서도 관리가 가능하다.
 
-#### 예시 (EC2)
+## 105. 실습: 예시 (EC2)
 
 - 예를 들어 여러 EC2 서버의 설정을 이렇게 만들 수 있다.
 
@@ -3299,7 +3297,7 @@ variable "instances" {
 
 - 이렇게 하면 여러 노드 그룹을 구조적으로 관리할 수 있다.
 
-#### 변수 실습
+## 106. 실습: 변수 실습
 
 ```hcl
 # variables.tf
@@ -3491,7 +3489,7 @@ Apply complete! Resources: 3 added, 0 changed, 0 destroyed.
 
 - file1, file2, file3이 생성되고 파일안에 값이 확인된다.
 
-![이미지](assets/03-terraform-hcl/7.png)
+![file1, file2, file3이 생성되고 파일안에 값이 확인된다. 화면](assets/03-terraform-hcl/7.png)
 
 ```hcl
 # main.tf
@@ -3573,7 +3571,7 @@ Apply complete! Resources: 3 added, 0 changed, 3 destroyed.
 
 - file1, file2, file3이 생성되고 파일안에 값이 확인된다.
 
-![이미지](assets/03-terraform-hcl/7.png)
+![file1, file2, file3이 생성되고 파일안에 값이 확인된다. 화면](assets/03-terraform-hcl/7.png)
 
 ```hcl
 # variables.tf
@@ -3662,9 +3660,9 @@ Apply complete! Resources: 0 added, 0 changed, 3 destroyed.
 
 - file1, file2, file3이 모두 삭제되어 확인되지 않는다.
 
-![이미지](assets/03-terraform-hcl/8.png)
+![file1, file2, file3이 모두 삭제되어 확인되지 않는다. 화면](assets/03-terraform-hcl/8.png)
 
-#### output.tf 출력
+## 107. 실습: output.tf 출력
 
 ```hcl
 # variables.tf
@@ -3763,12 +3761,12 @@ local_file.example[2]: Destruction complete after 0s
 Destroy complete! Resources: 3 destroyed.
 ```
 
-#### Terraform 명령어
+## 108. 실습: Terraform 명령어
 
 - Terraform CLI 명령어는 단순히 실행 순서가 있는 도구가 아니다.
 - 각 명령어는 Terraform의 내부 동작 단계와 정확히 대응한다.
 
-#### Terraform은 기본적으로 다음 4단계를 가진다.
+## 109. 실습: Terraform은 기본적으로 다음 4단계를 가진다.
 
 ```
 1) 초기화 (Initialization)
@@ -3777,7 +3775,7 @@ Destroy complete! Resources: 3 destroyed.
 4) 상태 관리 (State Management)
 ```
 
-#### 1) terraform init
+## 110. 실습: 1) terraform init
 
 - 프로젝트를 Terraform 환경으로 초기화한다.
 - 이 명령어는 반드시 가장 먼저 실행해야 한다.
@@ -3799,7 +3797,7 @@ PS C:\terrform> terraform init
 - backend를 변경하면 -reconfigure 옵션 사용
 - 모듈 구조 변경 시에도 init 재실행 필요
 
-#### 2) terraform plan
+## 111. 실습: 2) terraform plan
 
 - 코드가 실제 인프라에 어떤 영향을 줄지 미리 계산한다.
 
@@ -3826,7 +3824,7 @@ PS C:\terrform> terraform plan
 
 - 실무에서는 plan 없이 apply 금지가 기본 원칙이다.
 
-#### 3) terraform apply
+## 112. 실습: 3) terraform apply
 
 - plan에서 계산된 변경 사항을 실제 인프라에 적용한다.
 
@@ -3845,7 +3843,7 @@ PS C:\terrform> terraform apply -auto-approve# 자동 승인
 - 사람이 직접 운영 환경에 적용할 때는 확인 필수
 - apply 이후 tfstate가 반드시 최신 상태로 업데이트됨
 
-#### 4) terraform destroy
+## 113. 실습: 4) terraform destroy
 
 - 현재 상태 파일에 정의된 모든 리소스를 삭제한다.
 
@@ -3860,7 +3858,7 @@ PS C:\terrform> terraform destroy -auto-approve# 자동 승인
 - 운영 환경에서는 매우 신중하게 사용
 - destroy는 삭제 엔진이다.
 
-#### 5) terraform show
+## 114. 실습: 5) terraform show
 
 - 현재 상태 파일(tfstate)의 내용을 출력한다.
 
@@ -3874,7 +3872,7 @@ PS C:\terrform> terraform show
   - JSON 형태로 출력하여 자동화에 활용 가능
   - terraform show -json
 
-#### 6) terraform output
+## 115. 실습: 6) terraform output
 
 - output 블록에 정의된 값만 출력한다.
 
@@ -3889,7 +3887,7 @@ PS C:\terrform> terraform output instance_ip
 - 다른 시스템으로 값 전달
 - CI/CD 파이프라인에서 매우 중요하다.
 
-#### 7) terraform validate
+## 116. 실습: 7) terraform validate
 
 - 코드 문법과 내부 구조가 올바른지 검사한다.
 
@@ -3903,7 +3901,7 @@ PS C:\terrform> terraform validate
   - 타입 오류 검출
   - CI 파이프라인에서 필수 단계다.
 
-#### 8) terraform fmt
+## 117. 실습: 8) terraform fmt
 
 - 코드를 자동 정렬한다.
 
@@ -3931,7 +3929,7 @@ PS C:\terrform> terraform fmt
 - 모듈 구조 변경 시
 - state는 고급 기능이므로 초보자는 함부로 사용하면 안 된다.
 
-#### 10) terraform import
+## 118. 실습: 10) terraform import
 
 - 이미 존재하는 리소스를 Terraform 관리 대상으로 가져온다.
 
@@ -3944,7 +3942,7 @@ PS C:\terrform> terraform import aws_instance.example i-1234567890abcdef0
 
 - import는 코드 자동 생성이 아니라 state에만 등록한다.
 
-#### 11) terraform refresh
+## 119. 실습: 11) terraform refresh
 
 - 실제 클라우드 상태를 읽어서 tfstate를 최신 상태로 업데이트한다.
 
@@ -3955,9 +3953,9 @@ PS C:\terrform> terraform refresh
 - Terraform 1.0 이후에는 refresh는 plan 내부 동작에 포함되었다.
 - 단독 사용은 점점 줄어드는 추세다.
 
-#### Terraform 명령어 실습
+## 120. 실습: Terraform 명령어 실습
 
-![이미지](assets/03-terraform-hcl/9.png)
+![단독 사용은 점점 줄어드는 추세다. 화면](assets/03-terraform-hcl/9.png)
 
 ```powershell
 PS C:\terrform\HCL-02-data-type> terraform apply
@@ -4000,7 +3998,7 @@ PS C:\terrform\HCL-02-data-type> terraform apply
 - 여기에 리소스, 변수, 출력 등이 정의되어 있다.
 - 이게 원하는 상태(Desired State)다.
 
-#### terraform.tfstate
+## 121. 실습: terraform.tfstate
 
 - 이 파일이 Terraform의 기억이다.
 
@@ -4013,7 +4011,7 @@ PS C:\terrform\HCL-02-data-type> terraform apply
 
 - Terraform은 이 파일을 기준으로 다음 apply에서 무엇을 바꿀지 결정한다.
 
-#### terraform.tfstate.backup
+## 122. 실습: terraform.tfstate.backup
 
 - tfstate 백업 파일이다.
 
@@ -4023,7 +4021,7 @@ PS C:\terrform\HCL-02-data-type> terraform apply
 
 - terraform.tfstate
 
-![이미지](assets/03-terraform-hcl/10.png)
+![terraform.tfstate 화면](assets/03-terraform-hcl/10.png)
 
 ```powershell
 PS C:\terrform\HCL-02-data-type> terraform show# terraform.tfstate와 같은 정보이다. (보여지는 방식은 다르다.)
@@ -4064,7 +4062,7 @@ Destroy complete! Resources: 1 destroyed.
 
 - file2.txt 파일이 삭제된다.
 
-![이미지](assets/03-terraform-hcl/11.png)
+![file2.txt 파일이 삭제된다. 화면](assets/03-terraform-hcl/11.png)
 
 ```powershell
 PS C:\terrform\HCL-02-data-type> terraform apply -target local_file.example[1]
@@ -4110,7 +4108,7 @@ file_path = [
 
 - file2.txt 파일이 생성된다.
 
-![이미지](assets/03-terraform-hcl/12.png)
+![file2.txt 파일이 생성된다. 화면](assets/03-terraform-hcl/12.png)
 
 ```powershell
 PS C:\terrform\HCL-02-data-type> terraform  --help# 여러 가지 명령어를 사용할 수 있다.
@@ -4247,14 +4245,14 @@ instance_public_dns = "ec2-3-35-9-167.ap-northeast-2.compute.amazonaws.com"
 instance_public_ip = "3.35.9.167"
 ```
 
-#### import 실습
+## 123. 실습: import 실습
 
 - 콘솔에서 EC2 인스턴스 생성
 - 인스턴스 ID 복사
 
 - AWS 콘솔을 사용해서 EC2 1개 생성
 
-![이미지](assets/03-terraform-hcl/13.png)
+![AWS 콘솔을 사용해서 EC2 1개 생성 화면](assets/03-terraform-hcl/13.png)
 
 ```hcl
    # main.tf
@@ -4320,7 +4318,7 @@ PS C:\trf\HCL-01-block> terraform  destroy
 PS C:\trf\HCL_03_variables> terraform destroy -target="aws_instance.my-ec2-import"
 ```
 
-#### Terraform 흐름 제어 (Flow Control)
+## 124. 실습: Terraform 흐름 제어 (Flow Control)
 
 - Terraform은 선언형 언어이지만 조건에 따라 리소스를 생성하거나 값을 동적으로 변경할 수 있다.
 즉, 코드의 흐름을 완전히 바꾸는 것은 아니지만 조건에 따라 결과를 다르게 만드는 기능을 제공한다.
@@ -4337,7 +4335,7 @@ PS C:\trf\HCL_03_variables> terraform destroy -target="aws_instance.my-ec2-impor
   - 옵션 값이 있을 때만 속성을 적용해야 한다.
   - 비용 절감을 위해 조건부 리소스 생성이 필요하다.
 
-#### 조건 표현식 (삼항 연산자)
+## 125. 실습: 조건 표현식 (삼항 연산자)
 
 - Terraform의 조건 표현식은 C, Java와 동일한 삼항 연산자 형태를 사용한다.
 
@@ -4404,7 +4402,7 @@ resource "aws_instance" "example" {
 
 - 환경에 따라 동적으로 리소스 구성이 변경된다.
 
-#### 조건과 리소스 생성 제어 (count 활용)
+## 126. 실습: 조건과 리소스 생성 제어 (count 활용)
 
 - 조건이 true일 때만 리소스를 생성하고 싶을 경우 count를 사용한다.
 
@@ -4428,7 +4426,7 @@ resource "aws_s3_bucket" "example" {
   - create_bucket이 false이면 count = 0 (리소스 생성 안 됨)
   - 이 방식은 실무에서 매우 자주 사용된다.
 
-#### null 값과 조건 표현식
+## 127. 실습: null 값과 조건 표현식
 
 - Terraform에서 null은 “”dhk값 없음을 의미한다.
 
@@ -4466,7 +4464,7 @@ resource "aws_instance" "example" {
   - 값이 없으면 null 설정 (user_data 속성 자체를 무시)
   - 이 방식은 선택 옵션 처리에 매우 유용하다.
 
-#### count vs for_each와 조건 결합
+## 128. 실습: count vs for_each와 조건 결합
 
 - 조건문은 반복문과 함께 사용할 수 있다.
 
@@ -4487,12 +4485,12 @@ resource "aws_instance" "example" {
 - 선택적 속성 적용
 - 비용 제어용 리소스 조건 생성
 
-#### flow controll 실습
+## 129. 실습: flow controll 실습
 
 - HCL-03-flow controll 폴더 생성
 - HCL-03-flow controll 폴더 안에 main.tf 파일 생성
 
-![이미지](assets/03-terraform-hcl/14.png)
+![HCL-03-flow controll 폴더 안에 main.tf 파일 생성 화면](assets/03-terraform-hcl/14.png)
 
 ```powershell
 PS C:\terrform\HCL-03-flow-controll> terraform -version
@@ -4502,21 +4500,21 @@ on windows_amd64
 
 - EC2  -->  인스턴스  -->  인스턴스 생성 (서울 리전)
 
-![이미지](assets/03-terraform-hcl/15.png)
+![EC2  -->  인스턴스  -->  인스턴스 생성 서울 리전 화면](assets/03-terraform-hcl/15.png)
 
 - AIM-ID는 리전마다 값이 다르다.
 - AIM-ID : ami-0389ea382ca31bd7f
 
-![이미지](assets/03-terraform-hcl/16.png)
+![AIM-ID : ami-0389ea382ca31bd7f 화면](assets/03-terraform-hcl/16.png)
 
 - EC2  -->  인스턴스  -->  인스턴스 생성 (도쿄 리전)
 
-![이미지](assets/03-terraform-hcl/15.png)
+![EC2  -->  인스턴스  -->  인스턴스 생성 도쿄 리전 화면](assets/03-terraform-hcl/15.png)
 
 - AIM-ID는 리전마다 값이 다르다.
 - AIM-ID : ami-088103e734f7e0529
 
-![이미지](assets/03-terraform-hcl/17.png)
+![AIM-ID : ami-088103e734f7e0529 화면](assets/03-terraform-hcl/17.png)
 
 ```hcl
 # main.tf
@@ -4648,11 +4646,11 @@ Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
 
 - AWS EC2 인스턴스가 생성된다.
 
-![이미지](assets/03-terraform-hcl/18.png)
+![AWS EC2 인스턴스가 생성된다. 화면](assets/03-terraform-hcl/18.png)
 
 - 모니터링 기능이 disabled되어 있다.
 
-![이미지](assets/03-terraform-hcl/19.png)
+![모니터링 기능이 disabled되어 있다. 화면](assets/03-terraform-hcl/19.png)
 
 ```hcl
 # terraform.tfvars
@@ -4732,7 +4730,7 @@ Apply complete! Resources: 0 added, 1 changed, 0 destroyed.
 
 - 모니터링 기능이 enabled로 변경 확인
 
-![이미지](assets/03-terraform-hcl/20.png)
+![모니터링 기능이 enabled로 변경 확인 화면](assets/03-terraform-hcl/20.png)
 
 ```hcl
 # terraform.tfvars
@@ -4779,7 +4777,7 @@ Apply complete! Resources: 0 added, 1 changed, 0 destroyed.
 
 - 인스턴스 타입이 t3.small로 변경
 
-![이미지](assets/03-terraform-hcl/21.png)
+![인스턴스 타입이 t3.small로 변경 화면](assets/03-terraform-hcl/21.png)
 
 ```hcl
 # terraform.tfvars
@@ -4859,15 +4857,15 @@ PS C:\trf\HCL_04_flow_ctr> terraform  apply  -auto-approve
 
 - 서울 리전의 EC2 인스턴스가 삭제
 
-![이미지](assets/03-terraform-hcl/22.png)
+![서울 리전의 EC2 인스턴스가 삭제 화면](assets/03-terraform-hcl/22.png)
 
 - 도쿄 리전에 EC2 인스턴스가 생성
 
-![이미지](assets/03-terraform-hcl/23.png)
+![도쿄 리전에 EC2 인스턴스가 생성 화면](assets/03-terraform-hcl/23.png)
 
 http://ec2-13-196-206-60.ap-northeast-1.compute.amazonaws.com/
 
-![이미지](assets/03-terraform-hcl/24.png)
+![http://ec2-13-196-206-60.ap-northeast-1.compute.amazonaws.co 화면](assets/03-terraform-hcl/24.png)
 
 - 도쿄리전의 EC2로 접속하게되면 유저 데이터로 설정한 정보가 확인된다.
 
@@ -4914,7 +4912,7 @@ Plan: 0 to add, 0 to change, 1 to destroy.
 
 - EC2를 생성하지 않는다는 의미가 아니라 "EC2가 없어야 한다." 이므로 실행하게되면 생성된 EC2가 삭제된다.
 
-#### S3 Bucket 생성
+## 130. 실습: S3 Bucket 생성
 
 ```hcl
 # variables.tf
@@ -4994,9 +4992,9 @@ Apply complete! Resources: 1 added, 1 changed, 0 destroyed.
 
 - 도쿄 리전에 S3 버킷이 생성되어있다.
 
-![이미지](assets/03-terraform-hcl/25.png)
+![도쿄 리전에 S3 버킷이 생성되어있다. 화면](assets/03-terraform-hcl/25.png)
 
-#### S3 bucket만 삭제하기위한 plan
+## 131. 실습: S3 bucket만 삭제하기위한 plan
 
 ```powershell
 PS C:\trf\HCL_04_flow_ctr> terraform  plan  -destroy  -target="aws_s3_bucket.my-bucket"
@@ -5083,7 +5081,7 @@ PS C:\trf\HCL_04_flow_ctr> terraform  apply
 
 - EC2 생성은 ap-northeast-1 도쿄 리전에서 생성되며 S2 bucket은 ap-northeast-2 서울 리전에 생성된다.
 
-#### Terraform 반복문
+## 132. 실습: Terraform 반복문
 
 - 인프라를 코드로 정의할 때 동일한 유형의 리소스를 여러 개 생성하거나 설정해야 하는 상황이 매우 자주 발생한다.
   - EC2 인스턴스를 3대 이상 생성해야 하는 경우
@@ -5104,7 +5102,7 @@ PS C:\trf\HCL_04_flow_ctr> terraform  apply
 
 - 이 네 가지는 모두 반복과 관련되어 있지만, 목적과 사용 방식이 서로 다르다.
 
-#### count를 사용한 반복
+## 133. 실습: count를 사용한 반복
 
 - count는 Terraform에서 가장 기본적인 반복 방식이다.
 - 특정 리소스를 몇 개 생성할 것인가를 정수 값으로 지정한다.
@@ -5160,7 +5158,7 @@ tags = {
   - 개수만 중요하고 개별 식별자가 중요하지 않을 때
   - 테스트 환경 등 단순 복제 구조일 때
 
-#### for_each를 사용한 반복
+## 134. 실습: for_each를 사용한 반복
 
 - for_each는 count와 유사하지만 훨씬 유연하다.
 
@@ -5308,7 +5306,7 @@ instance_type= t3.medium
 monitoring = true
 ```
 
-#### for 표현식을 사용한 값 생성
+## 135. 실습: for 표현식을 사용한 값 생성
 
 - for 표현식은 리소스를 생성하는 반복이 아니다.
 
@@ -5349,7 +5347,7 @@ locals {
 이 경우 db1은 제외된다.
 ```
 
-#### dynamic 블록을 사용한 리소스 내부 반복
+## 136. 실습: dynamic 블록을 사용한 리소스 내부 반복
 
 - dynamic은 리소스 자체를 반복하는 것이 아니다.
 - 리소스 내부 블록을 반복 생성하는 구조이다.
@@ -5387,7 +5385,7 @@ resource "aws_security_group" "example" {
   - IAM 정책 블록 반복
   - 특정 리소스의 하위 설정 반복
 
-#### 반복문 선택 기준
+## 137. 실습: 반복문 선택 기준
 
 - count
   - 동일 구성 리소스를 단순히 여러 개 생성할 때
@@ -5406,14 +5404,14 @@ resource "aws_security_group" "example" {
 - dynamic
   - 리소스 내부 블록 반복 생성
 
-#### for loop 실습
+## 138. 실습: for loop 실습
 
 - HCL-04-for-loop 폴더 생성
   - main.tf 파일 생성
   - outputs.tf 파일 생성
   - variables.tf 파일 생성
 
-![이미지](assets/03-terraform-hcl/26.png)
+![variables.tf 파일 생성 화면](assets/03-terraform-hcl/26.png)
 
 EX1) count로 EC2 여러 개 생성
   - count 값을 이용해서 동일한 리소스를 여러 개 생성하는 가장 기본적인 형태
@@ -5704,14 +5702,14 @@ Changes to Outputs:
     ]
 ```
 
-#### for 표현식 (for expression)
+## 139. 실습: for 표현식 (for expression)
 
 - Terraform에서 리스트(list), 맵(map), 셋(set) 데이터를 변환하거나 새로운 값을 만들 때 사용하는 반복식
   - 즉 기존 데이터  -->  반복  -->  새로운 데이터 생성
 
 - 리소스를 만드는 것이 아니라 값을 가공하는 문법이다.
 
-#### 기본 문법
+## 140. 실습: 기본 문법
 
 - 리스트 생성 방식
 [for 변수 in 리스트 : 결과]
@@ -5903,7 +5901,7 @@ output "server_info" {
 }
 ```
 
-#### outputs.tf 해석
+## 141. 실습: outputs.tf 해석
 
 - for_each로 생성한 EC2는 아래의 구조를 갖게된다.
   - aws_instance.example["web"]
@@ -5958,7 +5956,7 @@ PS C:\trs\terraform-aws\02_HCL\HCL-04-for-loop> terraform apply
 
 - EC2 인스턴스가 생성된다.
 
-![이미지](assets/03-terraform-hcl/27.jpg)
+![EC2 인스턴스가 생성된다. 화면](assets/03-terraform-hcl/27.jpg)
 
 ```powershell
 PS C:\trs\terraform-aws\02_HCL\HCL-04-for-loop> terraform destory
@@ -6238,7 +6236,7 @@ output "subnet_azs" {
 }
 ```
 
-#### for_each
+## 142. 실습: for_each
 
 - for_each는 리소스를 여러 개 생성할 때 사용하는 반복 방식
   - 즉 데이터 개수만큼 리소스를 반복 생성
@@ -6516,7 +6514,7 @@ resource "aws_security_group" "example" {
 }
 ```
 
-#### 반복문 전체 복습
+## 143. 실습: 반복문 전체 복습
 
 - 아래 조건을 만족하도록 Terraform 코드를 작성
   - VPC CIDR은 10.20.0.0/16 으로 생성
@@ -6672,7 +6670,7 @@ resource "aws_security_group" "main_sg" {
 }
 ```
 
-#### EC2 생성
+## 144. 실습: EC2 생성
 
 - web
   - instance_type = t3.micro
@@ -6737,7 +6735,7 @@ output "ec2_instance_ids" {
 }
 ```
 
-#### 내장 함수
+## 145. 실습: 내장 함수
 
 - 함수(Function)는 어떤 값을 입력받아서 가공해서 새로운 값을 반환하는 도구다.
 
@@ -6756,7 +6754,7 @@ output "ec2_instance_ids" {
   - 리스트를 가공해야 할 때
   - 이때 사용하는 게 내장 함수다.
 
-#### 함수의 기본 구조
+## 146. 실습: 함수의 기본 구조
 
 - Terraform 함수 구조 형태
   - 함수이름(입력값1, 입력값2, ...)
@@ -6774,7 +6772,7 @@ output "ec2_instance_ids" {
 
 즉, Terraform은 정적인 YAML이 아니라 계산이 가능한 설정 언어다.
 
-#### 문자열 함수
+## 147. 실습: 문자열 함수
 
 - join(separator, list)
   - 리스트를 하나의 문자열로 결합한다.
@@ -6819,7 +6817,7 @@ locals {
 - replace(string, substring, replacement)
   - 문자열 치환
 
-#### world문자열을 Terraform 문자열로 치환
+## 148. 실습: world문자열을 Terraform 문자열로 치환
 
 ```
 replace("hello world", "world", "Terraform")
@@ -6843,7 +6841,7 @@ trimspace("   hello   ")
 
 - user_data나 templatefile 처리 시 불필요한 공백 제거
 
-#### 컬렉션 함수 (리스트 & 맵)
+## 149. 실습: 컬렉션 함수 (리스트 & 맵)
 
 - merge(map1, map2, ...)
   - 여러 map을 합친다.
@@ -6926,7 +6924,7 @@ values({ a = 1, b = 2 })
 결과 : [1, 2]
 ```
 
-#### 변환 함수 (Type Conversion Functions)
+## 150. 실습: 변환 함수 (Type Conversion Functions)
 
 - Terraform은 타입이 엄격하다.
 - 리소스 속성은 특정 타입만 허용한다.
@@ -6976,7 +6974,7 @@ locals {
 }
 ```
 
-#### tomap(value)
+## 151. 실습: tomap(value)
 
 - 값을 map 타입으로 변환
   - merge() 함수는 map만 받는다.
@@ -6997,7 +6995,7 @@ locals {
 }
 ```
 
-#### 파일 및 템플릿 함수
+## 152. 실습: 파일 및 템플릿 함수
 
 - file(path)
   - 파일 내용을 문자열로 읽어온다.
@@ -7014,14 +7012,14 @@ resource "aws_instance" "example" {
 
 - init.sh 파일의 내용이 그대로 user_data로 들어간다.
 
-#### filebase64(path)
+## 153. 실습: filebase64(path)
 
 - 파일 내용을 Base64로 인코딩해서 반환
   - Launch Template, EKS, 일부 AWS API는 Base64 인코딩된 문자열을 요구한다.
 
 - user_data_base64 = filebase64("init.sh")
 
-#### templatefile(path, vars)
+## 154. 실습: templatefile(path, vars)
 
 - templatefile는 파일 안에 있는 ${변수} 부분을 Terraform에서 넘겨준 값으로 치환해서 최종 문자열을 만들어주는 함수다.
 
@@ -7055,7 +7053,7 @@ templatefile("config.tpl", {
 3-4) ${name}를 "Terraform"으로 교체한다.
 3-5) 최종 문자열을 반환한다.
 
-#### 5. 네트워크 함수
+## 155. 실습: 5. 네트워크 함수
 
 - 네트워크 자동화에서 매우 중요하다.
 - CIDR 계산을 수동으로 하면 실수 가능성이 높다.
@@ -7387,13 +7385,13 @@ Changes to Outputs:
 
 - config.txt 파일 생성
 
-![이미지](assets/03-terraform-hcl/28.png)
+![config.txt 파일 생성 화면](assets/03-terraform-hcl/28.png)
 
 this is config.txt file
 
-![이미지](assets/03-terraform-hcl/29.png)
+![this is config.txt file 화면](assets/03-terraform-hcl/29.png)
 
-#### cnfig.txt 파일이 있기 때문에 에러가 발생하지 않는다.
+## 156. 실습: cnfig.txt 파일이 있기 때문에 에러가 발생하지 않는다.
 
 ```powershell
 PS C:\terrform\HCL-05-functions> terraform  plan
@@ -7695,13 +7693,13 @@ random_int = 59
 random_str = "2L7jopj!ZJAn?w2N"
 ```
 
-#### Check, Import
+## 157. 실습: Check, Import
 
 - Terraform 1.5부터는 단순히 리소스를 생성하는 도구를 넘어 검증과 상태 통합까지 코드로 관리하는 도구로 확장되었다.
 
 - 그 핵심이 check 블록과 import 블록 이다.
 
-#### check 블록
+## 158. 실습: check 블록
 
 - Terraform은 기본적으로
   - 코드 작성
@@ -7721,7 +7719,7 @@ random_str = "2L7jopj!ZJAn?w2N"
   - check 블록은 Terraform 실행 중 특정 조건이 참인지 검사하는 기능 이다.
   - 즉, 인프라를 만들기 전에 잘못된 설정을 차단하는 안전장치다.
 
-#### 기존 validation과 차이점
+## 159. 실습: 기존 validation과 차이점
 
 - variable validation
   - 변수 값만 검증 가능
@@ -7754,7 +7752,7 @@ check "valid_file_path" {
 - TLS 인증서 파일 존재 여부 확인
 - 외부 설정 파일 체크 같은 상황에서 매우 유용하다.
 
-#### import 블록 이해하기
+## 160. 실습: import 블록 이해하기
 
 - 기존 terraform import 방식은 CLI에서만 가능했다.
   - terraform import aws_s3_bucket.example my-existing-bucket
@@ -7782,7 +7780,7 @@ import {
 - to = 어떤 리소스 블록에 연결할지
 - id = 실제 AWS 리소스의 고유 식별자
 
-#### import 블록 동작 흐름
+## 161. 실습: import 블록 동작 흐름
 
 - terraform plan 실행 시
   - 1) Terraform은 import 블록을 읽는다.
@@ -7807,7 +7805,7 @@ import {
 - 예를 들어 실제 버킷에 versioning이 켜져 있는데 코드에 versioning이 없다면 다음 apply에서 꺼질 수 있다.
 그래서 import는 항상 신중하게 진행해야 한다.
 
-#### 실습
+## 162. 실습: 실습
 
 ```hcl
 # main.tf
@@ -7880,11 +7878,11 @@ Planning failed. Terraform encountered an error while generating this plan.
 
 - Amazon S3  -->  버킷  -->  버킷 만들기
 
-![이미지](assets/03-terraform-hcl/30.png)
+![Amazon S3  -->  버킷  -->  버킷 만들기 화면](assets/03-terraform-hcl/30.png)
 
-![이미지](assets/03-terraform-hcl/31.png)
+![Amazon S3  -->  버킷  -->  버킷 만들기 화면](assets/03-terraform-hcl/31.png)
 
-![이미지](assets/03-terraform-hcl/32.png)
+![Amazon S3  -->  버킷  -->  버킷 만들기 화면](assets/03-terraform-hcl/32.png)
 
 ```powershell
 PS C:\terrform\HCL-06-import> terraform plan
@@ -7949,7 +7947,7 @@ Apply complete! Resources: 1 imported, 0 added, 0 changed, 0 destroyed.
 
 - terraform.tfstate 파일을 확인해보면 S3 버킷이 Terraform에 의해 관리되고 있다.
 
-![이미지](assets/03-terraform-hcl/33.png)
+![terraform.tfstate 파일을 확인해보면 S3 버킷이 Terraform에 의해 관리되고 있다. 화면](assets/03-terraform-hcl/33.png)
 
 ```powershell
 PS C:\terrform\HCL-06-import> terraform  state  show  AWS_s3_bucket.example
@@ -7974,15 +7972,15 @@ Destroy complete! Resources: 1 destroyed
 
 - AWS S3 버킷을 확인하게되면 버킷이 확인되지 않는다.
 
-![이미지](assets/03-terraform-hcl/34.png)
+![AWS S3 버킷을 확인하게되면 버킷이 확인되지 않는다. 화면](assets/03-terraform-hcl/34.png)
 
-#### Terraform Module
+## 163. 실습: Terraform Module
 
 - Terraform에서 모듈(Module)은 리소스들을 하나의 논리적 단위로 묶은 재사용 가능한 구성 단위이다.
 
 - 쉽게 말하면 인프라 설계 블록을 캡슐화한 재사용 패키지이다.
 
-#### 모든 Terraform 프로젝트는 이미 하나의 모듈이다
+## 164. 실습: 모든 Terraform 프로젝트는 이미 하나의 모듈이다
 
 - Terraform에서 현재 작업 중인 디렉토리 자체가 이미 하나의 루트 모듈(Root Module)이다.
 
@@ -7990,7 +7988,7 @@ Destroy complete! Resources: 1 destroyed
 - terraform init, plan, apply를 실행하는 위치 이 자체가 루트 모듈이다.
 그리고 우리가 따로 만들어서 불러오는 모듈을 하위 모듈(Child Module)이라고 한다.
 
-#### 모듈이 왜 필요한가?
+## 165. 실습: 모듈이 왜 필요한가?
 
 - 예를 들어 dev 환경, stage 환경, prod 환경 각각에 VPC, Subnet, IGW, NAT, Route Table을 만들어야 한다.
 
@@ -8010,7 +8008,7 @@ Destroy complete! Resources: 1 destroyed
 
 - 즉, 모듈은 인프라의 라이브러리화다.
 
-#### 모듈의 기본 구조
+## 166. 실습: 모듈의 기본 구조
 
 - Terraform 모듈은 보통 다음 3개 파일로 구성된다.
 
@@ -8054,7 +8052,7 @@ Destroy complete! Resources: 1 destroyed
 
 - 이 출력값이 있어야 다른 모듈과 연결할 수 있다.
 
-#### 루트 모듈과 하위 모듈 관계
+## 167. 실습: 루트 모듈과 하위 모듈 관계
 
 루트 모듈은 실제 실행 지점이다.
 
@@ -8091,13 +8089,13 @@ module "vpc" {
 
 - 여기서 중요한 포인트는
 
-#### module "vpc": 모듈 호출 블록
+## 168. 실습: module "vpc": 모듈 호출 블록
 
-#### source: 모듈 위치
+## 169. 실습: source: 모듈 위치
 
-#### 아래 변수들: 모듈에 전달하는 입력값
+## 170. 실습: 아래 변수들: 모듈에 전달하는 입력값
 
-#### 모듈을 활용한 베스트 권장 구성
+## 171. 실습: 모듈을 활용한 베스트 권장 구성
 
 1) 코드 재사용성
 - dev, stage, prod에서 동일한 인프라 구조를 쓸 경우
@@ -8135,12 +8133,12 @@ module "vpc" {
 - 공유 모듈은 반드시 버전을 고정해야 한다.
 그렇지 않으면 누군가 모듈 수정 모든 프로젝트 영향을 받고 장애가 발생할 수 있다.
 
-#### VPC 생성 모듈 실습
+## 172. 실습: VPC 생성 모듈 실습
 
 - HCL-07-module 폴더 생성 : main.tf, outputs.tf 파일 생성
 - HCL-07-module/modules/vpc 폴더 생성: main.tf, outputs.tf, variables.tf 파일 생성
 
-![이미지](assets/03-terraform-hcl/35.png)
+![HCL-07-module/modules/vpc 폴더 생성: main.tf, outputs.tf, variab 화면](assets/03-terraform-hcl/35.png)
 
 ```hcl
 # ./module/vpc/main.tf
@@ -8248,15 +8246,15 @@ vpc_id = "vpc-0d66e697d12ea0ed2"
 
 - VPC 생성 확인
 
-![이미지](assets/03-terraform-hcl/36.png)
+![VPC 생성 확인 화면](assets/03-terraform-hcl/36.png)
 
 - CIDR 정보 확인
 
-![이미지](assets/03-terraform-hcl/37.png)
+![CIDR 정보 확인 화면](assets/03-terraform-hcl/37.png)
 
 - 태그 정보 확인
 
-![이미지](assets/03-terraform-hcl/38.png)
+![태그 정보 확인 화면](assets/03-terraform-hcl/38.png)
 
 ```hcl
 # main.tf

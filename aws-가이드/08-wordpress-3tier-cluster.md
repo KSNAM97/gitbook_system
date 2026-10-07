@@ -10,16 +10,30 @@
 - **EFS(공유 스토리지)**: 여러 EC2가 동일한 워드프레스 소스코드와 업로드 파일(이미지, 플러그인 등)을 공유해 데이터 일관성을 유지한다.
 - **S3**: `wp-config.php`(DB 접속 정보가 담긴 설정 파일)를 보관해두고, EC2가 부팅될 때 내려받아 적용한다.
 
+![AWS에서는 ALB-EC2-RDS 조합으로 구현하는 경우가 많다. 화면](../aws/assets/08-wordpress-3tier-cluster-hwp09-1.png)
+
+![AWS에서는 ALB-EC2-RDS 조합으로 구현하는 경우가 많다. 화면](../aws/assets/08-wordpress-3tier-cluster-hwp10-4.png)
+
 전체 구성 순서는 다음과 같다: IAM 역할 생성 → VPC 생성 → RDS 서브넷 그룹·RDS 생성 → 보안 그룹 정리 → EFS 생성 → S3 버킷 생성 → EC2에서 워드프레스 설치·wp-config 반영 → AMI 생성 → 시작 템플릿·대상 그룹·Auto Scaling Group·ALB 연결 → 트러블슈팅(사이트 주소 고정) → 보안 그룹 잠금.
+
+![고가용성 : 장애에도 서비스 멈추지 않음 화면](../aws/assets/08-wordpress-3tier-cluster-hwp10-5.png)
 
 ## 2. IAM 역할 생성
 
 EC2가 S3에서 `wp-config.php` 파일을 가져올 수 있도록 역할이 필요하다.
 
+![IAM  -->  역할  -->  역할 생성 화면](../aws/assets/08-wordpress-3tier-cluster-hwp10-7.png)
+
 1. IAM 콘솔의 [역할]에서 [역할 생성]을 선택한다.
 2. 신뢰할 수 있는 엔터티 유형은 [AWS 서비스], 사용 사례는 [EC2]를 선택한다.
 3. 권한 정책에서 `s3full`을 검색해 `AmazonS3FullAccess`를 체크한다. (운영 환경에서는 특정 버킷만 허용하는 커스텀 정책으로 좁히는 것을 권장한다.)
 4. 역할 이름을 입력하고(예: `wordpress-3tier-ec2-role`) 생성한다.
+
+![서비스 또는 사용 사례: EC2 화면](../aws/assets/08-wordpress-3tier-cluster-hwp10-9.png)
+
+![s3full 검색 후  AmazonS3FullAccess 체크박스 클릭 화면](../aws/assets/08-wordpress-3tier-cluster-hwp10-10.png)
+
+![역할 이름 : test-3-tier-ec2-role 화면](../aws/assets/08-wordpress-3tier-cluster-hwp10-12.png)
 
 ![IAM 역할 생성 시 신뢰할 수 있는 엔터티 유형으로 AWS 서비스, 사용 사례로 EC2를 선택하는 화면](../aws/assets/wp3tier-iam-role-trusted-entity.jpeg)
 
@@ -30,9 +44,17 @@ EC2가 S3에서 `wp-config.php` 파일을 가져올 수 있도록 역할이 필�
 3. NAT 게이트웨이는 이 실습에서는 [없음]으로 둔다(비용 절감 목적. 실제 운영에서는 프라이빗 서브넷의 아웃바운드가 필요하면 NAT Gateway를 구성한다).
 4. IPv4 CIDR 블록은 `10.0.0.0/16`으로 지정한다.
 
+![IPv4 CIDR 블록: 10.0.0.0/16-VPC 엔드포인트: 없음 화면](../aws/assets/08-wordpress-3tier-cluster-hwp10-15.png)
+
+![VPC가 생성된 것을 확인할 수 있다. 화면](../aws/assets/08-wordpress-3tier-cluster-hwp10-17.png)
+
 ![VPC 생성 설정 화면: 생성할 리소스 VPC 등, IPv4 CIDR 블록 10.0.0.0/16 지정](../aws/assets/wp3tier-vpc-create-cidr.jpeg)
 
 5. VPC를 생성하면 각 가용 영역에 퍼블릭 서브넷 1개, 프라이빗 서브넷 1개씩 총 4개의 서브넷이 만들어진다.
+
+![VPC이동  -->  VPC  -->  VPC 생성 화면](../aws/assets/08-wordpress-3tier-cluster-hwp10-13.png)
+
+![IPv4 CIDR 블록: 10.0.0.0/16-VPC 엔드포인트: 없음 화면](../aws/assets/08-wordpress-3tier-cluster-hwp10-16.png)
 
 ![VPC 생성 결과로 만들어진 4개 서브넷 목록](../aws/assets/wp3tier-vpc-subnets-result.jpeg)
 
@@ -44,6 +66,8 @@ EC2가 S3에서 `wp-config.php` 파일을 가져올 수 있도록 역할이 필�
 2. VPC는 3번에서 만든 VPC를 선택하고, 가용 영역은 두 AZ를 모두 선택한다.
 3. 서브넷은 두 AZ의 **프라이빗 서브넷**을 선택한다. RDS는 중요한 데이터(DB)를 저장하는 서비스라 외부 인터넷과 직접 연결되면 위험하므로, 프라이빗 서브넷에 두고 애플리케이션 서버(EC2)나 Bastion Host 같은 안전한 경유지에서만 접근하도록 설계한다.
 
+![RDS  -->  데이터베이스  -->  데이터베이스 생성 화면](../aws/assets/08-wordpress-3tier-cluster-hwp10-22.png)
+
 ![DB 서브넷 그룹 생성 화면: 두 가용 영역의 서브넷 추가](../aws/assets/wp3tier-rds-subnet-group.jpeg)
 
 이어서 데이터베이스를 생성한다.
@@ -51,11 +75,15 @@ EC2가 S3에서 `wp-config.php` 파일을 가져올 수 있도록 역할이 필�
 1. RDS 콘솔의 [데이터베이스]에서 [데이터베이스 생성]을 선택하고, 생성 방식은 [표준 생성], 엔진 옵션은 [MySQL]을 선택한다.
 2. DB 인스턴스 식별자, 마스터 사용자 이름(예: `admin`), 마스터 암호를 입력한다.
 
+![엔진 옵션: MySQL 화면](../aws/assets/08-wordpress-3tier-cluster-hwp10-23.png)
+
 ![RDS 데이터베이스 생성 설정: DB 인스턴스 식별자와 마스터 사용자 이름 admin 입력](../aws/assets/wp3tier-rds-create-instance.jpeg)
 
 3. VPC는 3번에서 만든 VPC, DB 서브넷 그룹은 방금 만든 서브넷 그룹을 선택한다.
 4. 퍼블릭 액세스는 [아니요]로 설정하고, VPC 보안 그룹은 기존 보안 그룹(default)을 선택한다.
 5. [추가 구성]을 펼쳐서 초기 데이터베이스 이름을 `wordpress`로 지정한다.
+
+![초기 데이터베이스 이름: wordpress 화면](../aws/assets/08-wordpress-3tier-cluster-hwp10-27.png)
 
 ![RDS 추가 구성에서 초기 데이터베이스 이름을 지정하는 화면](../aws/assets/wp3tier-rds-additional-config.jpeg)
 
@@ -64,6 +92,10 @@ EC2가 S3에서 `wp-config.php` 파일을 가져올 수 있도록 역할이 필�
 ## 5. 보안 그룹 임시 설정
 
 실습 초기 단계에서는 default 보안 그룹의 인바운드 규칙에 [모든 트래픽 / 소스 `0.0.0.0/0`]을 임시로 추가해 EC2·RDS·EFS가 서로 통신하도록 열어둔다. (이 설정은 8장에서 EC2·ALB 전용 보안 그룹으로 교체해 잠근다.) 여러 보안 그룹을 구분하기 쉽도록 이름 태그를 붙여둔다(예: `wordpress-3tier-default-sg`).
+
+![VPC 클릭 후 새로만든 VPC ID 확인 test-3-tier-vpc = vpc-0d0997c198ecf3cd1 화면](../aws/assets/08-wordpress-3tier-cluster-hwp10-28.png)
+
+![보안그룹을 구분하기위해서 Name 설정 test-3-tier-default-sg 화면](../aws/assets/08-wordpress-3tier-cluster-hwp10-31.png)
 
 ![VPC 보안 그룹 목록과 인바운드 규칙 편집 화면](../aws/assets/wp3tier-security-groups-list.jpeg)
 
@@ -75,7 +107,11 @@ AWS EFS(Elastic File System)는 여러 대의 EC2가 동시에 접근할 수 있
 - EC2 여러 대가 같은 EFS를 마운트하면 같은 파일을 함께 읽고 쓸 수 있어, 웹 서버 여러 대가 같은 업로드 파일을 공유할 때 유용하다.
 - 리전의 여러 가용영역(AZ)에 자동으로 복제되어, 한 곳에 장애가 나도 데이터가 안전하게 유지된다.
 
+![EFS  -->  파일시스템  -->  파일시스템 생성 화면](../aws/assets/08-wordpress-3tier-cluster-hwp10-33.png)
+
 1. EFS 콘솔의 [파일시스템]에서 [파일시스템 생성]을 선택한다.
+
+![이름: my-3tier-efs 화면](../aws/assets/08-wordpress-3tier-cluster-hwp10-34.png)
 
 ![EFS 서비스 검색 화면](../aws/assets/wp3tier-efs-service-search.jpeg)
 
@@ -108,7 +144,11 @@ define( 'DB_CHARSET', 'utf8' );
 
 RDS 엔드포인트 주소는 RDS 콘솔에서 생성한 DB 인스턴스를 선택하면 [연결 및 보안] 탭에서 확인할 수 있다.
 
+![S3  -->  버킷 만들기 화면](../aws/assets/08-wordpress-3tier-cluster-hwp10-37.png)
+
 3. 이 `wp-config.php` 파일을 S3 버킷에 업로드해 둔다. EC2가 부팅될 때 이 파일을 내려받아 적용한다.
+
+![버킷이른 : test-3-tier-source-bucket-123456789012 화면](../aws/assets/08-wordpress-3tier-cluster-hwp10-39.png)
 
 ## 8. EC2에서 워드프레스 설치
 
@@ -123,6 +163,8 @@ RDS 엔드포인트 주소는 RDS 콘솔에서 생성한 DB 인스턴스를 선�
 ![키 페어 지정과 VPC·서브넷 네트워크 설정 화면](../aws/assets/wp3tier-ec2-keypair-network-settings.jpeg)
 
 3. IAM 인스턴스 프로파일에 2번에서 만든 역할을 지정한다.
+
+![사용자 데이터에 demo_3_tier_userdata.txt 안의 데이터를 복사 후 붙여넣기 화면](../aws/assets/08-wordpress-3tier-cluster-hwp10-49.png)
 
 ![EC2 고급 세부 정보에서 IAM 인스턴스 프로파일을 지정하는 화면](../aws/assets/wp3tier-ec2-iam-instance-profile.jpeg)
 
@@ -190,9 +232,17 @@ systemctl status httpd    # active (running) 상태 확인
 6. 브라우저로 퍼블릭 IP에 접속해 워드프레스 설치 마법사를 완료한다: `http://<EC2 퍼블릭 IP>/wordpress/`
    - 언어를 선택하고 [Continue]를 누른 뒤, Site Title, Username, Password, Your Email을 입력하고 [Install WordPress]를 선택한다. (테스트용 약한 비밀번호를 쓸 경우 [Confirm use of weak password] 체크 필요)
 
+![s3://{S3버킷-ID}/wp-config.php \ 화면](../aws/assets/08-wordpress-3tier-cluster-hwp10-41.png)
+
+![EC2인스턴스 퍼블릭 IPv4 주소 복사 화면](../aws/assets/08-wordpress-3tier-cluster-hwp10-51.png)
+
 ![워드프레스 설치 마법사 정보 입력 화면(Site Title, Username, Password, Your Email)](../aws/assets/wp3tier-wordpress-install-wizard-fields.jpeg)
 
    - 설치가 끝나면 주소 끝의 `wp-admin/install.php?step=2` 부분을 지우고 `http://<EC2 퍼블릭 IP>/wordpress/`로 다시 접속해 사이트가 정상적으로 뜨는지 확인한다.
+
+![{S3버킷} = test-3-tier-source-bucket-123456789012 화면](../aws/assets/08-wordpress-3tier-cluster-hwp10-42.png)
+
+![EC2인스턴스 퍼블릭 IPv4 주소 복사 화면](../aws/assets/08-wordpress-3tier-cluster-hwp10-50.png)
 
 ## 9. AMI 생성과 시작 템플릿
 
@@ -201,18 +251,30 @@ systemctl status httpd    # active (running) 상태 확인
 1. 인스턴스를 선택하고 [작업] → [이미지 및 템플릿] → [이미지 생성]을 선택해 AMI를 만든다. IP·보안그룹·서브넷·인스턴스 ID, 그리고 EFS 같은 외부 스토리지의 데이터는 AMI에 포함되지 않는다는 점에 주의한다.
 2. EC2 콘솔의 [시작 템플릿]에서 [시작 템플릿 생성]을 선택하고, Amazon Machine Image로 방금 만든 AMI를 지정한다.
 
+![인스턴스  -->  test-3-tier-ec2 선택  -->  작업  -->  이미지 및 템플릿  -->  이미지 생성 화면](../aws/assets/08-wordpress-3tier-cluster-hwp10-54.png)
+
+![EC2  -->  시작 템플릿  -->  시작 템플릿 생성 화면](../aws/assets/08-wordpress-3tier-cluster-hwp10-57.png)
+
 ![시작 템플릿 생성 화면: 시작 템플릿 이름 및 설명 입력](../aws/assets/wp3tier-launch-template-name.jpeg)
 
 3. 인스턴스 유형(예: `t3.micro`)을 지정하고, 키 페어는 시작 템플릿에 포함하지 않는다(Auto Scaling으로 생성되는 인스턴스는 개별 SSH 접속이 필요 없는 경우가 많다).
+
+![이미지가 생성되고 있다. 화면](../aws/assets/08-wordpress-3tier-cluster-hwp10-56.png)
+
+![나머지는 모드 기본값 사용 화면](../aws/assets/08-wordpress-3tier-cluster-hwp10-60.png)
 
 ## 10. 대상 그룹과 Auto Scaling Group 생성
 
 1. EC2 콘솔의 [대상 그룹]에서 [대상 그룹 생성]을 선택한다. 대상 유형은 [인스턴스], VPC는 3번에서 만든 VPC를 선택한다.
 
+![EC2  -->  대상그룹  -->  대상그룹 생성 화면](../aws/assets/08-wordpress-3tier-cluster-hwp10-61.png)
+
 ![대상 그룹 생성 시 대상 유형으로 인스턴스를 선택하는 화면](../aws/assets/wp3tier-target-group-type.jpeg)
 
 2. 상태 검사 경로를 `/wordpress`로 지정한다. 워드프레스 설치가 끝난 뒤 루트 경로가 302/301로 리다이렉트되는 경우가 있으므로, [고급 상태 검사 설정]에서 성공 코드에 `301`을 추가로 지정한다.
 3. [Auto Scaling 그룹]에서 [Auto Scaling 그룹 생성]을 선택하고, 9번에서 만든 시작 템플릿을 지정한다.
+
+![성공 코드: 301 화면](../aws/assets/08-wordpress-3tier-cluster-hwp10-65.png)
 
 ![Auto Scaling 그룹 이름과 시작 템플릿을 지정하는 화면](../aws/assets/wp3tier-asg-name-template.jpeg)
 
@@ -220,19 +282,41 @@ systemctl status httpd    # active (running) 상태 확인
 5. 로드 밸런싱은 [기존 로드 밸런서에 연결]을 선택하고, 방금 만든 대상 그룹을 지정한다. Elastic Load Balancer 상태 확인을 켠다.
 6. 원하는 용량 2, 최소 용량 0, 최대 용량 2로 지정하고 그룹을 생성한다.
 
+![나머지 기본값 사용 화면](../aws/assets/08-wordpress-3tier-cluster-hwp10-73.png)
+
 ![Auto Scaling 그룹 크기 조정 구성: 원하는 용량 2, 최소 0, 최대 2](../aws/assets/wp3tier-asg-capacity-config.jpeg)
 
 7. 그룹이 생성되면 EC2 인스턴스 2대가 자동으로 만들어지고 대상 그룹에 등록되는 것을 확인할 수 있다.
 
+![EC2  -->  Auto Scaling 그룹 화면](../aws/assets/08-wordpress-3tier-cluster-hwp10-67.png)
+
+![키 = Name , 값 = test-3-tier-wordpress-asg 화면](../aws/assets/08-wordpress-3tier-cluster-hwp10-76.bmp)
+
+![인스턴스 관리 탭을 확인해보면 인스턴스 2개가 생성된 것을 확인할 수 있다. 화면](../aws/assets/08-wordpress-3tier-cluster-hwp10-77.png)
+
+![Name test-3-tier-wordpress-asg로 확인된다. 이미지속의 이름은 오타 : test-2-tier-wordp 화면](../aws/assets/08-wordpress-3tier-cluster-hwp10-78.bmp)
+
 ## 11. ALB 생성 및 접속 확인
 
 1. EC2 콘솔의 [로드밸런서]에서 [로드 밸런서 생성] → [Application Load Balancer]를 선택한다.
+
+![EC2  -->  로드밸런서  -->  로드밸런서 생성 화면](../aws/assets/08-wordpress-3tier-cluster-hwp10-79.png)
 
 ![ALB, NLB, GWLB 로드 밸런서 유형 비교 및 선택 화면](../aws/assets/wp3tier-alb-type-comparison.jpeg)
 
 2. VPC는 3번에서 만든 VPC, 서브넷은 두 AZ의 퍼블릭 서브넷을 선택한다.
 3. 리스너는 프로토콜 HTTP, 포트 80, 기본 작업은 10번에서 만든 대상 그룹을 지정한다.
 4. 로드 밸런서가 활성 상태가 되면 [세부 정보]에서 DNS 이름을 복사해 접속한다: `http://<ALB DNS 이름>/wordpress/`
+
+![프로토콜 : HTTP , 포트 : 80 , 기본 작업 : test-2-tier-target-group 화면](../aws/assets/08-wordpress-3tier-cluster-hwp10-84.png)
+
+![로드밸런서가 생성되고 시간이 지나면 상태가 활성으로 변경된다. 화면](../aws/assets/08-wordpress-3tier-cluster-hwp10-85.png)
+
+![사이트 접속후 F12 키를 누르면 에러가 확인된다. 화면](../aws/assets/08-wordpress-3tier-cluster-hwp10-88.png)
+
+![사이트 접속후 F12 키를 누르면 에러가 확인된다. 화면](../aws/assets/08-wordpress-3tier-cluster-hwp10-89.png)
+
+![처음 생성한 EC2 인스턴스의 퍼블릭 IP 주소를 확인해보면 위의 에러에서 표시되는 IP 주소와 동일하다. 화면](../aws/assets/08-wordpress-3tier-cluster-hwp10-90.png)
 
 ![로드 밸런서 세부 정보 화면: ARN과 DNS 이름은 민감정보로 블러 처리됨](../aws/assets/wp3tier-alb-detail-dns.jpeg)
 
@@ -252,22 +336,36 @@ ALB DNS로 접속했을 때 콘솔(F12)에 `Failed to load resource`, `CORS poli
 1. 최초 설치한 EC2(퍼블릭 IP)로 워드프레스 관리자 페이지(`/wordpress/wp-admin`)에 로그인한다.
 2. [Settings] → [General]에서 **WordPress Address (URL)**과 **Site Address (URL)**을 EC2 IP에서 ALB DNS 주소로 변경한다: `http://<ALB DNS 이름>/wordpress`
 
+![로그인 페이지에서 username과 password를 입력하면 로그인할 수 있다. 화면](../aws/assets/08-wordpress-3tier-cluster-hwp10-91.png)
+
+![로드밸런서 DNS 주소: test-2-tier-wordpress-alb-331906121.ap-northeast-2.elb.a 화면](../aws/assets/08-wordpress-3tier-cluster-hwp10-94.png)
+
 ![General Settings 화면: WordPress Address, Site Address, Administration Email 항목은 민감정보로 블러 처리됨. 실제로는 이 항목들에 EC2 퍼블릭 IP가 남아있던 것을 ALB DNS 주소로 바꿔주는 화면이다](../aws/assets/wp3tier-wordpress-general-settings.jpeg)
 
 3. 저장한 뒤 ALB 주소로 다시 접속하면 CORS 에러 없이 정상적으로 표시된다.
 
 이 문제를 애초에 피하려면, AMI를 만들기 전에 워드프레스 설치 자체를 ALB DNS 주소로 접속해서 진행하거나, 설치 직후 사이트 주소를 ALB DNS로 먼저 변경한 뒤 AMI를 생성한다.
 
+![로드밸런서의 DNS 이름을 복사 화면](../aws/assets/08-wordpress-3tier-cluster-hwp10-93.png)
+
 ## 13. 보안 그룹 잠금: EC2 직접 접속 차단
 
 Auto Scaling으로 생성된 인스턴스에 여전히 모든 트래픽을 허용하는 default 보안 그룹이 적용되어 있다면, 사용자가 ALB를 거치지 않고 EC2 퍼블릭 주소로 직접 접속할 수 있는 상태다. 이를 막기 위해 보안 그룹을 2개로 나눠 재구성한다.
 
+![default 보안그룹은 모든 트래픽을 허용한다. 화면](../aws/assets/08-wordpress-3tier-cluster-hwp10-96.png)
+
 1. **ALB 전용 보안 그룹**(예: `wordpress-alb-sg`)을 만들고, 아웃바운드는 HTTP(`0.0.0.0/0`)를 허용한다.
+
+![새 게시물 작성 화면](../aws/assets/08-wordpress-3tier-cluster-hwp10-1.png)
 
 ![보안 그룹 이름을 편집하는 화면](../aws/assets/wp3tier-security-group-name-edit.jpeg)
 
 2. **EC2 전용 보안 그룹**(예: `wordpress-ec2-sg`)을 만들고, 인바운드는 HTTP를 ALB 보안 그룹(`sg-xxxxxxxx`)만 소스로 허용한다. SSH가 필요하면 관리자 IP 대역만 별도로 허용한다.
 3. 최초 수동 생성한 EC2 인스턴스의 보안 그룹을 EC2 전용 보안 그룹으로 교체하고 default는 제거한다.
+
+![계시물 작성 화면](../aws/assets/08-wordpress-3tier-cluster-hwp10-2.png)
+
+![인스턴스  -->  test-3-tier-ec2 인스턴스 선택  -->  작업  -->  보안  -->  보안 그룹 변경 화면](../aws/assets/08-wordpress-3tier-cluster-hwp10-105.png)
 
 ![EC2 인스턴스에 연결된 보안 그룹을 변경/추가하는 화면](../aws/assets/wp3tier-security-group-attach.jpeg)
 
@@ -275,7 +373,23 @@ Auto Scaling으로 생성된 인스턴스에 여전히 모든 트래픽을 허�
 5. Auto Scaling Group을 편집해 시작 템플릿 버전을 방금 만든 최신 버전(Latest)으로 변경한다. 이제부터 트래픽 증가로 새로 생성되는 인스턴스에는 EC2 전용 보안 그룹이 자동으로 적용된다.
 6. ALB의 보안 그룹도 default에서 ALB 전용 보안 그룹으로 교체한다.
 
+![EC2  -->  보안 그룹  -->  보안 그룹 생성 화면](../aws/assets/08-wordpress-3tier-cluster-hwp10-97.png)
+
+![test-3-tier-ec2의 퍼블릭 DNS 주소 복사 화면](../aws/assets/08-wordpress-3tier-cluster-hwp10-107.png)
+
+![시작 템플릿 -->  test-3-tier-template 선택 -->  시작템플릿 버전 새부정보 -->  작업 -->  템플 화면](../aws/assets/08-wordpress-3tier-cluster-hwp10-111.png)
+
+![Auto Scaling  --> test-3-tier-wordpress 선택  -->  동작 -->  편집 화면](../aws/assets/08-wordpress-3tier-cluster-hwp10-114.png)
+
 설정을 마치면 EC2 퍼블릭 주소로는 접속이 차단되고, ALB를 거친 요청만 EC2에 도달한다. 실제로 EC2 퍼블릭 DNS로 직접 접속을 시도하면 타임아웃으로 연결에 실패하고, ALB DNS로 접속하면 정상적으로 사이트가 표시되는 것으로 검증할 수 있다.
+
+![아웃 바운드 규칙: HTTP , 0.0.0.0/0 화면](../aws/assets/08-wordpress-3tier-cluster-hwp10-99.png)
+
+![로드 밸런서의 DNS 주소를 복사 화면](../aws/assets/08-wordpress-3tier-cluster-hwp10-109.png)
+
+![나머지는 모두 그대로 사용 화면](../aws/assets/08-wordpress-3tier-cluster-hwp10-113.png)
+
+![앞으로 트래픽이 증가해서 EC2 인스턴스가 생성될 때 수정한 시작 템플릿의 보안그룹이 적용되어 생성된다. 화면](../aws/assets/08-wordpress-3tier-cluster-hwp10-116.png)
 
 ![EC2 퍼블릭 DNS로 직접 접속을 시도하면 ERR_CONNECTION_TIMED_OUT으로 차단되는 화면(주소는 민감정보로 블러 처리됨)](../aws/assets/wp3tier-ec2-direct-access-blocked.jpeg)
 

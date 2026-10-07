@@ -1,10 +1,10 @@
 # Terraform - ALB · ASG
 
-## 이론
+이 문서는 Packer로 AMI를 만들고 Terraform으로 ALB와 Auto Scaling Group을 구성하는 방법과 SNS 알림 연동 실습을 정리한다.
 
-#### ASG와 ELB 서비스 이해
+## 1. ASG와 ELB 서비스 이해
 
-#### Auto Scaling Group (ASG)의 이해
+## 2. Auto Scaling Group (ASG)의 이해
 
 Auto Scaling Group은 AWS에서 EC2 인스턴스의 수를 자동으로 관리하는 서비스이다.
 클라우드 환경에서 서비스 트래픽은 일정하지 않기 때문에, 서버 수를 사람이 직접 관리하는 것은 비효율적이다.
@@ -33,7 +33,7 @@ Auto Scaling Group을 사용하면 이러한 상황에서 트래픽 증가 시 E
 
 이러한 이유로 Auto Scaling Group은 클라우드 환경에서 안정적인 서비스를 운영하기 위한 핵심 기능 중 하나이다.
 
-#### ASG의 주요 개념
+## 3. ASG의 주요 개념
 
 Auto Scaling Group은 EC2 인스턴스를 관리하기 위해 최소, 최대, 목표 인스턴스 수라는 세 가지 핵심 개념을 사용한다.
 
@@ -101,7 +101,7 @@ Elastic Load Balancer는 이러한 문제를 해결하기 위해 사용자 요�
 또한 Load Balancer는 단순히 트래픽을 분산하는 기능뿐만 아니라 헬스 체크 기능을 통해
 장애가 발생한 서버를 자동으로 제외하는 기능도 제공한다.
 
-#### ELB의 종류
+## 4. ELB의 종류
 
 AWS에서는 네 가지 종류의 Load Balancer를 제공한다.
 
@@ -117,7 +117,7 @@ Network Load Balancer(NLB)는 네트워크 계층에서 동작하는 로드 밸�
 Gateway Load Balancer(GWLB)는 방화벽이나 침입 탐지 시스템과 같은
 네트워크 보안 장비를 배포하고 관리할 때 사용하는 로드 밸런서이다.
 
-#### ELB의 주요 기능
+## 5. ELB의 주요 기능
 
 Elastic Load Balancer의 가장 중요한 기능은 트래픽 분산 기능이다.
 ELB는 여러 EC2 인스턴스에 트래픽을 균등하게 분배하여 서버 부하를 줄이고 서비스 성능을 향상시킨다.
@@ -129,7 +129,7 @@ ELB는 Auto Scaling Group과 함께 사용될 때 더욱 강력한 기능을 제
 Auto Scaling Group이 새로운 EC2 인스턴스를 생성하면 ELB는 이를 자동으로 등록하여 트래픽을 전달한다.
 반대로 Auto Scaling Group이 인스턴스를 종료하면 ELB는 해당 인스턴스를 트래픽 분산 대상에서 제거한다.
 
-#### ASG와 ELB의 연동 구조
+## 6. ASG와 ELB의 연동 구조
 
 실제 AWS 환경에서는 ASG와 ELB를 함께 사용하여 안정적인 서비스 구조를 구축한다.
 
@@ -210,7 +210,7 @@ AMI를 사용하면 동일한 서버 환경을 반복적으로 생성할 수 있
 AWS에서는 AMI를 크게 세 가지 유형으로 구분한다.
 ```
 
-#### Public AMI
+## 7. Public AMI
 
 - Public AMI는 AWS 또는 커뮤니티에서 공개적으로 제공하는 이미지이다.
 
@@ -226,7 +226,7 @@ AWS에서는 AMI를 크게 세 가지 유형으로 구분한다.
 또한 일부 Public AMI에는 특정 소프트웨어 스택이 미리 설치되어 있는 경우도 있다.
 예를 들어 WordPress, Docker 환경과 같은 구성도 제공된다.
 
-#### Private AMI
+## 8. Private AMI
 
 - Private AMI는 사용자가 직접 생성하여 관리하는 이미지이다.
 
@@ -246,7 +246,7 @@ AWS에서는 AMI를 크게 세 가지 유형으로 구분한다.
 이 환경을 Private AMI로 만들어 두면 새로운 서버를 만들 때 항상 동일한 환경을 사용할 수 있다.
 Private AMI는 기본적으로 외부에 공개되지 않으며 특정 AWS 계정 또는 조직 내부에서만 사용할 수 있다.
 
-#### Marketplace AMI
+## 9. Marketplace AMI
 
 - Marketplace AMI는 AWS Marketplace에서 제공되는 상용 소프트웨어 이미지이다.
 
@@ -259,7 +259,7 @@ Private AMI는 기본적으로 외부에 공개되지 않으며 특정 AWS 계�
 
 이러한 이미지는 소프트웨어가 미리 설치된 상태로 제공되며 사용량에 따라 추가 비용이 발생할 수 있다
 
-#### Packer를 활용한 이미지 빌드
+## 10. Packer를 활용한 이미지 빌드
 
 - Packer는 HashiCorp에서 개발한 이미지 자동 생성 도구이다.
 - Packer를 사용하면 코드 기반으로 서버 이미지를 자동으로 생성할 수 있다.
@@ -276,7 +276,7 @@ Private AMI는 기본적으로 외부에 공개되지 않으며 특정 AWS 계�
 
 따라서 하나의 템플릿으로 여러 플랫폼에서 동일한 이미지를 생성할 수 있다.
 
-#### Packer 이미지 빌드 과정
+## 11. Packer 이미지 빌드 과정
 
 - Packer는 크게 세 가지 구성 요소로 동작한다.
 
@@ -323,7 +323,7 @@ Private AMI는 기본적으로 외부에 공개되지 않으며 특정 AWS 계�
 
 https://developer.hashicorp.com/packer/install
 
-#### Terraform을 활용한 ASG 서비스 구성
+## 12. Terraform을 활용한 ASG 서비스 구성
 
 이 구조는 단순히 EC2를 여러 대 만드는 것이 아니라,
 트래픽이 증가하면 EC2가 자동으로 늘어나고, 트래픽이 줄어들면 EC2가 자동으로 줄어드는 웹 서비스 구조를 만드는 것이다.
@@ -341,7 +341,7 @@ ASG에게 서버를 더 늘리라고 지시하고, 사용률이 낮아지면 서
 
 - 즉 이 구조는 로드밸런싱 + 자동확장 + 자동축소를 모두 갖춘 구조다.
 
-#### 런치 템플릿 구성
+## 13. 런치 템플릿 구성
 
 - ASG는 그냥 혼자서 EC2를 만들어내는 서비스가 아니다.
 - ASG가 EC2를 만들려면 어떤 AMI를 쓸지, 어떤 인스턴스 타입을 쓸지, 어떤 보안 그룹을 붙일지,
@@ -365,7 +365,7 @@ ASG에게 서버를 더 늘리라고 지시하고, 사용률이 낮아지면 서
 
 - 런치 템플릿 설정 예시 코드
 
-#### 부트스트랩 스크립트를 base64로 인코딩하여 로컬 변수에 저장
+## 14. 부트스트랩 스크립트를 base64로 인코딩하여 로컬 변수에 저장
 
 ```hcl
 locals {
@@ -409,7 +409,7 @@ resource "aws_launch_template" "example" {
 - key_name은 SSH 접속할 때 사용할 키페어이고,
 - network_interfaces 안의 security_groups는 EC2에 어떤 보안 그룹을 붙일지 정하는 부분이다.
 
-#### Auto Scaling Group 구성
+## 15. Auto Scaling Group 구성
 
 - Launch Template이 EC2 생성설정이라면,
 ASG는 그 템플릿을 바탕으로 EC2 개수를 자동으로 관리하는 서비스이다.
@@ -421,9 +421,9 @@ ASG는 그 템플릿을 바탕으로 EC2 개수를 자동으로 관리하는 서
   - 장애가 난 EC2가 있으면 자동 교체
 즉 ASG는 서버 수를 자동으로 유지하는 관리자 역할을 한다.
 
-#### ASG 설정 코드
+## 16. ASG 설정 코드
 
-#### 오토 스케일링 그룹 정의
+## 17. 오토 스케일링 그룹 정의
 
 ```hcl
 resource "aws_autoscaling_group" "example" {
@@ -465,7 +465,7 @@ max_size = 3은 아무리 늘어나도 최대 3대까지만 증가하도록 제�
 
 즉 이 코드는 최소 1대, 최대 3대, 기본 2대로 서버를 운영하라는 뜻이다.
 
-#### 스케일링 정책 구성
+## 18. 스케일링 정책 구성
 
 - ASG를 만들었다고 해서 자동으로 늘고 줄지는 않는다.
 늘고 줄어드는 기준이 있어야 한다. 이 기준이 바로 Scaling Policy다.
@@ -475,9 +475,9 @@ max_size = 3은 아무리 늘어나도 최대 3대까지만 증가하도록 제�
   - CPU 사용률이 너무 낮으면 서버를 1대 줄이도록 정책을 만드는 것이다.
 즉 Scaling Policy는 제 몇 대를 얼마나 늘리고 줄일 것인지를 정하는 규칙이다.
 
-#### 스케일 아웃 정책 코드
+## 19. 스케일 아웃 정책 코드
 
-#### 오토 스케일링 정책 정의 (스케일 아웃)
+## 20. 오토 스케일링 정책 정의 (스케일 아웃)
 
 ```hcl
 resource "aws_autoscaling_policy" "scale_out_policy" {
@@ -512,7 +512,7 @@ resource "aws_autoscaling_policy" "scale_in_policy" {
 - cooldown = 300은 한 번 정책이 실행된 뒤 300초 동안은 또 바로 실행되지 않게 하는 값이다.
 이 값을 두는 이유는 서버 수가 너무 빠르게 들쭉날쭉 변하지 않게 하기 위해서다.
 
-#### CloudWatch 알람 설정
+## 21. CloudWatch 알람 설정
 
 - Scaling Policy는 단독으로 실행되지 않는다.
 - 누군가가 지금 CPU가 높다, 지금 CPU가 낮다 라고 판단해서 정책을 호출하는 것이 CloudWatch Alarm이다.
@@ -522,9 +522,9 @@ resource "aws_autoscaling_policy" "scale_in_policy" {
   - CPU가 60% 이상이면 scale out 정책 실행
   - CPU가 30% 이하이면 scale in 정책 실행 처럼 연결하는 것이다.
 
-#### CPU 사용률이 높을 때 알람 코드
+## 22. CPU 사용률이 높을 때 알람 코드
 
-#### CPU 사용률이 높을 때 알람을 설정하여 스케일 아웃 트리거
+## 23. CPU 사용률이 높을 때 알람을 설정하여 스케일 아웃 트리거
 
 ```hcl
 resource "aws_cloudwatch_metric_alarm" "cpu_high" {
@@ -573,7 +573,7 @@ resource "aws_cloudwatch_metric_alarm" "cpu_low" {
 - evaluation_periods = "2"와 period = "120"을 같이 보면, 120초 간격으로 2번 연속 조건이 만족될 때 실행된다.
 즉 잠깐 CPU가 튄 것 때문에 바로 스케일 아웃하는 것이 아니라, 조금 안정적으로 평균을 보고 판단하겠다는 의미다.
 
-#### ELB 생성 및 설정
+## 24. ELB 생성 및 설정
 
 - 이제 서버 개수는 자동으로 늘고 줄 수 있게 되었지만, 사용자 요청을 어느 서버로 보낼지 결정하는 장치가 필요하다.
 - 그게 바로 ALB(Application Load Balancer)다.
@@ -584,12 +584,12 @@ resource "aws_cloudwatch_metric_alarm" "cpu_low" {
   - 여러 EC2로 요청 분산
   - 헬스 체크를 통해 죽은 서버 제외이다.
 
-#### ALB 보안 그룹 생성
+## 25. ALB 보안 그룹 생성
 
 - ALB도 하나의 AWS 리소스이므로 보안 그룹이 필요하다.
 - 웹 접속을 받기 위해 보통 HTTP 80 포트를 열어준다.
 
-#### HTTP 및 SSH 트래픽을 허용하는 보안 그룹 정의
+## 26. HTTP 및 SSH 트래픽을 허용하는 보안 그룹 정의
 
 ```hcl
 resource "aws_security_group" "example" {
@@ -632,9 +632,9 @@ resource "aws_security_group" "example" {
 - protocol = "-1"은 모든 프로토콜을 허용한다는 뜻이다.
 - 즉 나가는 트래픽은 전부 허용하겠다는 의미다.
 
-#### ALB 생성
+## 27. ALB 생성
 
-#### 애플리케이션 로드 밸런서 설정
+## 28. 애플리케이션 로드 밸런서 설정
 
 ```hcl
 resource "aws_lb" "example" {
@@ -658,7 +658,7 @@ resource "aws_lb" "example" {
 - subnets = module.vpc.public_subnets는 ALB를 public subnet에 배치하겠다는 뜻이다.
 - ALB는 외부 요청을 받아야 하므로 보통 public subnet에 둔다.
 
-#### ALB 리스너 및 대상 그룹 구성
+## 29. ALB 리스너 및 대상 그룹 구성
 
 - ALB가 어떤 포트로 요청을 받을지, 받은 요청을 어디로 보낼지를 알아야 한다.
 - 리스너는 로드밸런서가 들어오는 요청을 어떻게 처리할지 결정하는 규칙이다.
@@ -671,9 +671,9 @@ resource "aws_lb" "example" {
   - 리스너 = 입구
   - 대상 그룹 = 목적지
 
-#### 대상 그룹 생성
+## 30. 대상 그룹 생성
 
-#### 로드 밸런서의 타겟 그룹 설정
+## 31. 로드 밸런서의 타겟 그룹 설정
 
 ```hcl
 resource "aws_lb_target_group" "example" {
@@ -720,9 +720,9 @@ resource "aws_lb_listener" "example" {
 - 즉 사용자가 브라우저에서 ALB DNS 주소로 접속하면
   - ALB 80번 포트 수신  -->  리스너 동작  -->  Target Group으로 전달  -->  Target Group 안의 EC2로 연결
 
-#### ASG와 대상 그룹 연결
+## 32. ASG와 대상 그룹 연결
 
-#### 오토 스케일링 그룹 인스턴스를 타겟 그룹에 연결
+## 33. 오토 스케일링 그룹 인스턴스를 타겟 그룹에 연결
 
 ```hcl
 resource "aws_autoscaling_attachment" "example" {
@@ -740,11 +740,9 @@ resource "aws_autoscaling_attachment" "example" {
 
 - ASG만 있고 Target Group 연결이 없으면, EC2는 늘어나도 ALB가 그 서버들을 모를 수 있기 때문이다.
 
-## 실습
+## 34. 실습: ASG와 ELB 서비스 이해
 
-#### ASG와 ELB 서비스 이해
-
-#### Auto Scaling Group (ASG)의 이해
+## 35. 실습: Auto Scaling Group (ASG)의 이해
 
 Auto Scaling Group은 AWS에서 EC2 인스턴스의 수를 자동으로 관리하는 서비스이다.
 클라우드 환경에서 서비스 트래픽은 일정하지 않기 때문에, 서버 수를 사람이 직접 관리하는 것은 비효율적이다.
@@ -773,7 +771,7 @@ Auto Scaling Group을 사용하면 이러한 상황에서 트래픽 증가 시 E
 
 이러한 이유로 Auto Scaling Group은 클라우드 환경에서 안정적인 서비스를 운영하기 위한 핵심 기능 중 하나이다.
 
-#### ASG의 주요 개념
+## 36. 실습: ASG의 주요 개념
 
 Auto Scaling Group은 EC2 인스턴스를 관리하기 위해 최소, 최대, 목표 인스턴스 수라는 세 가지 핵심 개념을 사용한다.
 
@@ -841,7 +839,7 @@ Elastic Load Balancer는 이러한 문제를 해결하기 위해 사용자 요�
 또한 Load Balancer는 단순히 트래픽을 분산하는 기능뿐만 아니라 헬스 체크 기능을 통해
 장애가 발생한 서버를 자동으로 제외하는 기능도 제공한다.
 
-#### ELB의 종류
+## 37. 실습: ELB의 종류
 
 AWS에서는 네 가지 종류의 Load Balancer를 제공한다.
 
@@ -857,7 +855,7 @@ Network Load Balancer(NLB)는 네트워크 계층에서 동작하는 로드 밸�
 Gateway Load Balancer(GWLB)는 방화벽이나 침입 탐지 시스템과 같은
 네트워크 보안 장비를 배포하고 관리할 때 사용하는 로드 밸런서이다.
 
-#### ELB의 주요 기능
+## 38. 실습: ELB의 주요 기능
 
 Elastic Load Balancer의 가장 중요한 기능은 트래픽 분산 기능이다.
 ELB는 여러 EC2 인스턴스에 트래픽을 균등하게 분배하여 서버 부하를 줄이고 서비스 성능을 향상시킨다.
@@ -869,7 +867,7 @@ ELB는 Auto Scaling Group과 함께 사용될 때 더욱 강력한 기능을 제
 Auto Scaling Group이 새로운 EC2 인스턴스를 생성하면 ELB는 이를 자동으로 등록하여 트래픽을 전달한다.
 반대로 Auto Scaling Group이 인스턴스를 종료하면 ELB는 해당 인스턴스를 트래픽 분산 대상에서 제거한다.
 
-#### ASG와 ELB의 연동 구조
+## 39. 실습: ASG와 ELB의 연동 구조
 
 실제 AWS 환경에서는 ASG와 ELB를 함께 사용하여 안정적인 서비스 구조를 구축한다.
 
@@ -950,7 +948,7 @@ AMI를 사용하면 동일한 서버 환경을 반복적으로 생성할 수 있
 AWS에서는 AMI를 크게 세 가지 유형으로 구분한다.
 ```
 
-#### Public AMI
+## 40. 실습: Public AMI
 
 - Public AMI는 AWS 또는 커뮤니티에서 공개적으로 제공하는 이미지이다.
 
@@ -966,7 +964,7 @@ AWS에서는 AMI를 크게 세 가지 유형으로 구분한다.
 또한 일부 Public AMI에는 특정 소프트웨어 스택이 미리 설치되어 있는 경우도 있다.
 예를 들어 WordPress, Docker 환경과 같은 구성도 제공된다.
 
-#### Private AMI
+## 41. 실습: Private AMI
 
 - Private AMI는 사용자가 직접 생성하여 관리하는 이미지이다.
 
@@ -986,7 +984,7 @@ AWS에서는 AMI를 크게 세 가지 유형으로 구분한다.
 이 환경을 Private AMI로 만들어 두면 새로운 서버를 만들 때 항상 동일한 환경을 사용할 수 있다.
 Private AMI는 기본적으로 외부에 공개되지 않으며 특정 AWS 계정 또는 조직 내부에서만 사용할 수 있다.
 
-#### Marketplace AMI
+## 42. 실습: Marketplace AMI
 
 - Marketplace AMI는 AWS Marketplace에서 제공되는 상용 소프트웨어 이미지이다.
 
@@ -999,7 +997,7 @@ Private AMI는 기본적으로 외부에 공개되지 않으며 특정 AWS 계�
 
 이러한 이미지는 소프트웨어가 미리 설치된 상태로 제공되며 사용량에 따라 추가 비용이 발생할 수 있다
 
-#### Packer를 활용한 이미지 빌드
+## 43. 실습: Packer를 활용한 이미지 빌드
 
 - Packer는 HashiCorp에서 개발한 이미지 자동 생성 도구이다.
 - Packer를 사용하면 코드 기반으로 서버 이미지를 자동으로 생성할 수 있다.
@@ -1016,7 +1014,7 @@ Private AMI는 기본적으로 외부에 공개되지 않으며 특정 AWS 계�
 
 따라서 하나의 템플릿으로 여러 플랫폼에서 동일한 이미지를 생성할 수 있다.
 
-#### Packer 이미지 빌드 과정
+## 44. 실습: Packer 이미지 빌드 과정
 
 Packer는 크게 세 가지 구성 요소로 동작한다.
 
@@ -1061,17 +1059,17 @@ Packer는 크게 세 가지 구성 요소로 동작한다.
   - Docker 이미지 생성
   - 이미지 업로드
 
-#### Packer 설치
+## 45. 실습: Packer 설치
 
 https://developer.hashicorp.com/packer/install
 
 - 윈도우용 Packer 다운로드
 
-![이미지](assets/09-terraform-alb-asg/1.png)
+![윈도우용 Packer 다운로드 화면](assets/09-terraform-alb-asg/1.png)
 
 - terraform을 저장한 C드라이브 안의 tools 폴더에 복사 후 붙여넣기
 
-![이미지](assets/09-terraform-alb-asg/2.png)
+![terraform을 저장한 C드라이브 안의 tools 폴더에 복사 후 붙여넣기 화면](assets/09-terraform-alb-asg/2.png)
 
 ```powershell
 PS C:\Users\ryu> packer --version
@@ -1080,11 +1078,11 @@ Packer v1.15.0
 -
 ```
 
-![이미지](assets/09-terraform-alb-asg/3.png)
+![화면](assets/09-terraform-alb-asg/3.png)
 
 - C:/terraform-aws/03_elb-asg-terraform/01_packer-ami/al2023-httpd-ami.pkr.hcl 파일 확인
 
-![이미지](assets/09-terraform-alb-asg/4.png)
+![C:/terraform-aws/03_elb-asg-terraform/01_packer-ami/al2023-h 화면](assets/09-terraform-alb-asg/4.png)
 
 ```powershell
 PS C:\terraform-aws\03_elb-asg-terraform\01_packer-ami> packer  init .
@@ -1123,17 +1121,17 @@ ap-northeast-2: ami-0fcdfc058c5af99c1
 
 - EC2를 생성  -->  DNF로 패키지 설치  -->  EC2 종료  -->  AMI 생성
 
-![이미지](assets/09-terraform-alb-asg/5.png)
+![EC2를 생성  -->  DNF로 패키지 설치  -->  EC2 종료  -->  AMI 생성 화면](assets/09-terraform-alb-asg/5.png)
 
 - Packer를 사용해서 AMI 이미지 생성
 
-![이미지](assets/09-terraform-alb-asg/6.png)
+![Packer를 사용해서 AMI 이미지 생성 화면](assets/09-terraform-alb-asg/6.png)
 
 - 인스턴스가 종료된다.
 
-![이미지](assets/09-terraform-alb-asg/7.png)
+![인스턴스가 종료된다. 화면](assets/09-terraform-alb-asg/7.png)
 
-#### Packer AMI 생성 과정에서 EC2 인스턴스가 생성되는 이유
+## 46. 실습: Packer AMI 생성 과정에서 EC2 인스턴스가 생성되는 이유
 
 Packer는 서버 이미지를 자동으로 생성하기 위한 도구이다.
 AWS 환경에서는 주로 AMI(Amazon Machine Image)를 생성하는 용도로 사용한다.
@@ -1144,71 +1142,71 @@ Packer가 AMI를 생성할 때는 단순히 설정 파일만으로 이미지를 
 즉, Packer는 먼저 EC2 인스턴스를 하나 생성한 다음 그 인스턴스 안에서 프
 로그램 설치, 설정 변경, 파일 생성 등의 작업을 수행하고 그 결과를 AMI로 저장한다.
 
-#### EC2 인스턴스 생성 확인
+## 47. 실습: EC2 인스턴스 생성 확인
 
 - 인스턴스 시작
 
-![이미지](assets/09-terraform-alb-asg/8.png)
+![인스턴스 시작 화면](assets/09-terraform-alb-asg/8.png)
 
 - 이름: my-ec2-web
 - OS: 내 AIM  -->  생성한 AIM 선택
 
-![이미지](assets/09-terraform-alb-asg/9.png)
+![OS: 내 AIM  -->  생성한 AIM 선택 화면](assets/09-terraform-alb-asg/9.png)
 
-![이미지](assets/09-terraform-alb-asg/10.png)
+![OS: 내 AIM  -->  생성한 AIM 선택 화면](assets/09-terraform-alb-asg/10.png)
 
-![이미지](assets/09-terraform-alb-asg/11.png)
+![OS: 내 AIM  -->  생성한 AIM 선택 화면](assets/09-terraform-alb-asg/11.png)
 
-![이미지](assets/09-terraform-alb-asg/12.png)
+![OS: 내 AIM  -->  생성한 AIM 선택 화면](assets/09-terraform-alb-asg/12.png)
 
 - EC2 인스턴스 생성 확인
 
-![이미지](assets/09-terraform-alb-asg/13.png)
+![EC2 인스턴스 생성 확인 화면](assets/09-terraform-alb-asg/13.png)
 
 http://ec2-3-36-128-218.ap-northeast-2.compute.amazonaws.com
 
-![이미지](assets/09-terraform-alb-asg/14.png)
+![http://ec2-3-36-128-218.ap-northeast-2.compute.amazonaws.com 화면](assets/09-terraform-alb-asg/14.png)
 
-#### EC2 인스턴스 삭제
+## 48. 실습: EC2 인스턴스 삭제
 
-#### ASG , ELB 실습
+## 49. 실습: ASG , ELB 실습
 
-![이미지](assets/09-terraform-alb-asg/15.png)
+![http://ec2-3-36-128-218.ap-northeast-2.compute.amazonaws.com 화면](assets/09-terraform-alb-asg/15.png)
 
-#### 시작 템플릿 만들기
+## 50. 실습: 시작 템플릿 만들기
 
-![이미지](assets/09-terraform-alb-asg/16.png)
+![http://ec2-3-36-128-218.ap-northeast-2.compute.amazonaws.com 화면](assets/09-terraform-alb-asg/16.png)
 
 시작 템플릿 이름: my-template
 템플릿 버전 설명: my-web
 
-![이미지](assets/09-terraform-alb-asg/17.png)
+![템플릿 버전 설명: my-web 화면](assets/09-terraform-alb-asg/17.png)
 
 - Packer로 만든 AMI 선택
 - AMI: packer-amazon-linux-2023-20260310133721
 
-![이미지](assets/09-terraform-alb-asg/18.png)
+![AMI: packer-amazon-linux-2023-20260310133721 화면](assets/09-terraform-alb-asg/18.png)
 
 - 새 키페어 생성 : asg-keypair
 
-![이미지](assets/09-terraform-alb-asg/19.png)
+![새 키페어 생성 : asg-keypair 화면](assets/09-terraform-alb-asg/19.png)
 
 - 다른 브라우저에서 보안그룹 생성
 
-![이미지](assets/09-terraform-alb-asg/20.png)
+![다른 브라우저에서 보안그룹 생성 화면](assets/09-terraform-alb-asg/20.png)
 
 - 보안 그룹 이름: my-asg-elb-sg
 - HTTP, SSH 인바운드 규칙 추가
 
-![이미지](assets/09-terraform-alb-asg/21.png)
+![HTTP, SSH 인바운드 규칙 추가 화면](assets/09-terraform-alb-asg/21.png)
 
-![이미지](assets/09-terraform-alb-asg/22.png)
+![HTTP, SSH 인바운드 규칙 추가 화면](assets/09-terraform-alb-asg/22.png)
 
 - 새로 만든 보안 규칙 적용
 
-![이미지](assets/09-terraform-alb-asg/23.png)
+![새로 만든 보안 규칙 적용 화면](assets/09-terraform-alb-asg/23.png)
 
-![이미지](assets/09-terraform-alb-asg/24.png)
+![새로 만든 보안 규칙 적용 화면](assets/09-terraform-alb-asg/24.png)
 
 ```hcl
 # variables.tf
@@ -1391,65 +1389,65 @@ PS C:\terraform-aws\aaa> terraform  plan
 PS C:\terraform-aws\aaa> terraform  apply
 ```
 
-#### Terraform을 활용한 ASG 서비스 구성
+## 51. 실습: Terraform을 활용한 ASG 서비스 구성
 
 - EC2 --> 시작 템플릿
 
-![이미지](assets/09-terraform-alb-asg/25.png)
+![EC2 --> 시작 템플릿 화면](assets/09-terraform-alb-asg/25.png)
 
 시작 템플릿 이름: MyTemplate
 템플릿 버전: web-server
 
-![이미지](assets/09-terraform-alb-asg/26.png)
+![템플릿 버전: web-server 화면](assets/09-terraform-alb-asg/26.png)
 
-![이미지](assets/09-terraform-alb-asg/27.png)
+![템플릿 버전: web-server 화면](assets/09-terraform-alb-asg/27.png)
 
 - 인스턴스 유형: t3.micro
 - 키 페어 이름: 키페어 생성
 
-![이미지](assets/09-terraform-alb-asg/28.png)
+![키 페어 이름: 키페어 생성 화면](assets/09-terraform-alb-asg/28.png)
 
-![이미지](assets/09-terraform-alb-asg/29.png)
+![키 페어 이름: 키페어 생성 화면](assets/09-terraform-alb-asg/29.png)
 
-![이미지](assets/09-terraform-alb-asg/30.png)
+![키 페어 이름: 키페어 생성 화면](assets/09-terraform-alb-asg/30.png)
 
-#### ASG 생성
+## 52. 실습: ASG 생성
 
-![이미지](assets/09-terraform-alb-asg/31.png)
+![키 페어 이름: 키페어 생성 화면](assets/09-terraform-alb-asg/31.png)
 
 - Auto Scaling 그룹 이름: my-asg
 - 시작 템플릿: MyTemplate
 - 버전: Default (1)
 
-![이미지](assets/09-terraform-alb-asg/32.png)
+![버전: Default 1 화면](assets/09-terraform-alb-asg/32.png)
 
-![이미지](assets/09-terraform-alb-asg/33.png)
+![버전: Default 1 화면](assets/09-terraform-alb-asg/33.png)
 
 - default VPC
 
-![이미지](assets/09-terraform-alb-asg/34.png)
+![default VPC 화면](assets/09-terraform-alb-asg/34.png)
 
-![이미지](assets/09-terraform-alb-asg/35.png)
+![default VPC 화면](assets/09-terraform-alb-asg/35.png)
 
-![이미지](assets/09-terraform-alb-asg/36.png)
+![default VPC 화면](assets/09-terraform-alb-asg/36.png)
 
-![이미지](assets/09-terraform-alb-asg/37.png)
+![default VPC 화면](assets/09-terraform-alb-asg/37.png)
 
-![이미지](assets/09-terraform-alb-asg/38.png)
+![default VPC 화면](assets/09-terraform-alb-asg/38.png)
 
-![이미지](assets/09-terraform-alb-asg/33.png)
+![default VPC 화면](assets/09-terraform-alb-asg/33.png)
 
-![이미지](assets/09-terraform-alb-asg/33.png)
+![default VPC 화면](assets/09-terraform-alb-asg/33.png)
 
-![이미지](assets/09-terraform-alb-asg/33.png)
+![default VPC 화면](assets/09-terraform-alb-asg/33.png)
 
-![이미지](assets/09-terraform-alb-asg/39.png)
+![default VPC 화면](assets/09-terraform-alb-asg/39.png)
 
 http://my-asg-lb-1652433411.ap-northeast-2.elb.amazonaws.com/
 
-![이미지](assets/09-terraform-alb-asg/40.png)
+![http://my-asg-lb-1652433411.ap-northeast-2.elb.amazonaws.com 화면](assets/09-terraform-alb-asg/40.png)
 
-#### Terraform을 활용한 ASG 서비스 구성
+## 53. 실습: Terraform을 활용한 ASG 서비스 구성
 
 이 구조는 단순히 EC2를 여러 대 만드는 것이 아니라,
 트래픽이 증가하면 EC2가 자동으로 늘어나고, 트래픽이 줄어들면 EC2가 자동으로 줄어드는 웹 서비스 구조를 만드는 것이다.
@@ -1467,7 +1465,7 @@ ASG에게 서버를 더 늘리라고 지시하고, 사용률이 낮아지면 서
 
 - 즉 이 구조는 로드밸런싱 + 자동확장 + 자동축소를 모두 갖춘 구조다.
 
-#### 런치 템플릿 구성
+## 54. 실습: 런치 템플릿 구성
 
 - ASG는 그냥 혼자서 EC2를 만들어내는 서비스가 아니다.
 - ASG가 EC2를 만들려면 어떤 AMI를 쓸지, 어떤 인스턴스 타입을 쓸지, 어떤 보안 그룹을 붙일지,
@@ -1491,7 +1489,7 @@ ASG에게 서버를 더 늘리라고 지시하고, 사용률이 낮아지면 서
 
 - 런치 템플릿 설정 예시 코드
 
-#### 부트스트랩 스크립트를 base64로 인코딩하여 로컬 변수에 저장
+## 55. 실습: 부트스트랩 스크립트를 base64로 인코딩하여 로컬 변수에 저장
 
 ```hcl
 locals {
@@ -1535,7 +1533,7 @@ resource "aws_launch_template" "example" {
 - key_name은 SSH 접속할 때 사용할 키페어이고,
 - network_interfaces 안의 security_groups는 EC2에 어떤 보안 그룹을 붙일지 정하는 부분이다.
 
-#### Auto Scaling Group 구성
+## 56. 실습: Auto Scaling Group 구성
 
 - Launch Template이 EC2 생성설정이라면,
 ASG는 그 템플릿을 바탕으로 EC2 개수를 자동으로 관리하는 서비스이다.
@@ -1547,9 +1545,9 @@ ASG는 그 템플릿을 바탕으로 EC2 개수를 자동으로 관리하는 서
   - 장애가 난 EC2가 있으면 자동 교체
 즉 ASG는 서버 수를 자동으로 유지하는 관리자 역할을 한다.
 
-#### ASG 설정 코드
+## 57. 실습: ASG 설정 코드
 
-#### 오토 스케일링 그룹 정의
+## 58. 실습: 오토 스케일링 그룹 정의
 
 ```hcl
 resource "aws_autoscaling_group" "example" {
@@ -1591,7 +1589,7 @@ max_size = 3은 아무리 늘어나도 최대 3대까지만 증가하도록 제�
 
 즉 이 코드는 최소 1대, 최대 3대, 기본 2대로 서버를 운영하라는 뜻이다.
 
-#### 스케일링 정책 구성
+## 59. 실습: 스케일링 정책 구성
 
 - ASG를 만들었다고 해서 자동으로 늘고 줄지는 않는다.
 늘고 줄어드는 기준이 있어야 한다. 이 기준이 바로 Scaling Policy다.
@@ -1601,9 +1599,9 @@ max_size = 3은 아무리 늘어나도 최대 3대까지만 증가하도록 제�
   - CPU 사용률이 너무 낮으면 서버를 1대 줄이도록 정책을 만드는 것이다.
 즉 Scaling Policy는 제 몇 대를 얼마나 늘리고 줄일 것인지를 정하는 규칙이다.
 
-#### 스케일 아웃 정책 코드
+## 60. 실습: 스케일 아웃 정책 코드
 
-#### 오토 스케일링 정책 정의 (스케일 아웃)
+## 61. 실습: 오토 스케일링 정책 정의 (스케일 아웃)
 
 ```hcl
 resource "aws_autoscaling_policy" "scale_out_policy" {
@@ -1638,7 +1636,7 @@ resource "aws_autoscaling_policy" "scale_in_policy" {
 - cooldown = 300은 한 번 정책이 실행된 뒤 300초 동안은 또 바로 실행되지 않게 하는 값이다.
 이 값을 두는 이유는 서버 수가 너무 빠르게 들쭉날쭉 변하지 않게 하기 위해서다.
 
-#### CloudWatch 알람 설정
+## 62. 실습: CloudWatch 알람 설정
 
 - Scaling Policy는 단독으로 실행되지 않는다.
 - 누군가가 지금 CPU가 높다, 지금 CPU가 낮다 라고 판단해서 정책을 호출하는 것이 CloudWatch Alarm이다.
@@ -1648,9 +1646,9 @@ resource "aws_autoscaling_policy" "scale_in_policy" {
   - CPU가 60% 이상이면 scale out 정책 실행
   - CPU가 30% 이하이면 scale in 정책 실행 처럼 연결하는 것이다.
 
-#### CPU 사용률이 높을 때 알람 코드
+## 63. 실습: CPU 사용률이 높을 때 알람 코드
 
-#### CPU 사용률이 높을 때 알람을 설정하여 스케일 아웃 트리거
+## 64. 실습: CPU 사용률이 높을 때 알람을 설정하여 스케일 아웃 트리거
 
 ```hcl
 resource "aws_cloudwatch_metric_alarm" "cpu_high" {
@@ -1699,7 +1697,7 @@ resource "aws_cloudwatch_metric_alarm" "cpu_low" {
 - evaluation_periods = "2"와 period = "120"을 같이 보면, 120초 간격으로 2번 연속 조건이 만족될 때 실행된다.
 즉 잠깐 CPU가 튄 것 때문에 바로 스케일 아웃하는 것이 아니라, 조금 안정적으로 평균을 보고 판단하겠다는 의미다.
 
-#### ELB 생성 및 설정
+## 65. 실습: ELB 생성 및 설정
 
 - 이제 서버 개수는 자동으로 늘고 줄 수 있게 되었지만, 사용자 요청을 어느 서버로 보낼지 결정하는 장치가 필요하다.
 - 그게 바로 ALB(Application Load Balancer)다.
@@ -1710,12 +1708,12 @@ resource "aws_cloudwatch_metric_alarm" "cpu_low" {
   - 여러 EC2로 요청 분산
   - 헬스 체크를 통해 죽은 서버 제외이다.
 
-#### ALB 보안 그룹 생성
+## 66. 실습: ALB 보안 그룹 생성
 
 - ALB도 하나의 AWS 리소스이므로 보안 그룹이 필요하다.
 - 웹 접속을 받기 위해 보통 HTTP 80 포트를 열어준다.
 
-#### HTTP 및 SSH 트래픽을 허용하는 보안 그룹 정의
+## 67. 실습: HTTP 및 SSH 트래픽을 허용하는 보안 그룹 정의
 
 ```hcl
 resource "aws_security_group" "example" {
@@ -1758,9 +1756,9 @@ resource "aws_security_group" "example" {
 - protocol = "-1"은 모든 프로토콜을 허용한다는 뜻이다.
 - 즉 나가는 트래픽은 전부 허용하겠다는 의미다.
 
-#### ALB 생성
+## 68. 실습: ALB 생성
 
-#### 애플리케이션 로드 밸런서 설정
+## 69. 실습: 애플리케이션 로드 밸런서 설정
 
 ```hcl
 resource "aws_lb" "example" {
@@ -1784,7 +1782,7 @@ resource "aws_lb" "example" {
 - subnets = module.vpc.public_subnets는 ALB를 public subnet에 배치하겠다는 뜻이다.
 - ALB는 외부 요청을 받아야 하므로 보통 public subnet에 둔다.
 
-#### ALB 리스너 및 대상 그룹 구성
+## 70. 실습: ALB 리스너 및 대상 그룹 구성
 
 - ALB가 어떤 포트로 요청을 받을지, 받은 요청을 어디로 보낼지를 알아야 한다.
 - 리스너는 로드밸런서가 들어오는 요청을 어떻게 처리할지 결정하는 규칙이다.
@@ -1797,9 +1795,9 @@ resource "aws_lb" "example" {
   - 리스너 = 입구
   - 대상 그룹 = 목적지
 
-#### 대상 그룹 생성
+## 71. 실습: 대상 그룹 생성
 
-#### 로드 밸런서의 타겟 그룹 설정
+## 72. 실습: 로드 밸런서의 타겟 그룹 설정
 
 ```hcl
 resource "aws_lb_target_group" "example" {
@@ -1846,9 +1844,9 @@ resource "aws_lb_listener" "example" {
 - 즉 사용자가 브라우저에서 ALB DNS 주소로 접속하면
   - ALB 80번 포트 수신  -->  리스너 동작  -->  Target Group으로 전달  -->  Target Group 안의 EC2로 연결
 
-#### ASG와 대상 그룹 연결
+## 73. 실습: ASG와 대상 그룹 연결
 
-#### 오토 스케일링 그룹 인스턴스를 타겟 그룹에 연결
+## 74. 실습: 오토 스케일링 그룹 인스턴스를 타겟 그룹에 연결
 
 ```hcl
 resource "aws_autoscaling_attachment" "example" {
@@ -1942,7 +1940,7 @@ resource "aws_security_group" "my_alb_sg" {
 }
 ```
 
-#### STEP 3) Default VPC의 Subnet 조회
+## 75. 실습: STEP 3) Default VPC의 Subnet 조회
 
 - ALB와 Auto Scaling Group에서 사용할
 - Subnet ID를 직접 입력할 필요가 없다.
@@ -1958,7 +1956,7 @@ data "aws_subnets" "default" {
 }
 ```
 
-#### STEP 4) Target Group 생성
+## 76. 실습: STEP 4) Target Group 생성
 
 - ALB가 실제 요청을 전달할 대상 그룹을 만든다.
 - Target Group은 EC2의 HTTP 80번 Port로 요청을 전달하고, "/" 경로를 이용하여 Web Server 상태를 검사한다.
@@ -1990,7 +1988,7 @@ resource "aws_lb_target_group" "my_tg" {
 }
 ```
 
-#### STEP 5) Application Load Balancer 생성
+## 77. 실습: STEP 5) Application Load Balancer 생성
 
 - 외부 사용자의 HTTP 요청을 받을 Application Load Balancer를 생성한다.
 - ALB는 Default VPC의 여러 Subnet에 배치된다.
@@ -2013,7 +2011,7 @@ resource "aws_lb" "my_alb" {
 }
 ```
 
-#### STEP 6) ALB Listener 생성
+## 78. 실습: STEP 6) ALB Listener 생성
 
 - Listener는 ALB의 특정 Port에서 요청을 기다린다.
 
@@ -2032,7 +2030,7 @@ resource "aws_lb_listener" "my_listener" {
 }
 ```
 
-#### STEP 7) Auto Scaling Group 생성
+## 79. 실습: STEP 7) Auto Scaling Group 생성
 
 - 앞에서 이미 만든 Launch Template을 이용해서 EC2를 자동으로 생성하는 Auto Scaling Group을 만든다.
 
@@ -2070,21 +2068,21 @@ resource "aws_autoscaling_group" "my_asg" {
 }
 ```
 
-#### STEP 8) ALB 접속 확인
+## 80. 실습: STEP 8) ALB 접속 확인
 
 - ALB의 DNS 주소를 복사해서 브라우저로 접속
 
-![이미지](assets/09-terraform-alb-asg/43.png)
+![ALB의 DNS 주소를 복사해서 브라우저로 접속 화면](assets/09-terraform-alb-asg/43.png)
 
 http://my-asg-alb-1101140626.ap-northeast-2.elb.amazonaws.com/
 
-![이미지](assets/09-terraform-alb-asg/44.png)
+![http://my-asg-alb-1101140626.ap-northeast-2.elb.amazonaws.co 화면](assets/09-terraform-alb-asg/44.png)
 
 새로고침 (Instace-ID가 변경되는 것을 확인)
 
-![이미지](assets/09-terraform-alb-asg/45.png)
+![새로고침 Instace-ID가 변경되는 것을 확인 화면](assets/09-terraform-alb-asg/45.png)
 
-#### STEP 9) Scale Out Policy 생성
+## 81. 실습: STEP 9) Scale Out Policy 생성
 
 - CloudWatch CPU High Alarm이 발생했을 때
 - EC2를 1대 증가시키는 정책이다.
@@ -2103,9 +2101,9 @@ resource "aws_autoscaling_policy" "scale_out" {
 - cooldown = 300
   - EC2가 새로 생성된 직후 CPU가 계속 높다고 해서 바로 또 +1, 또 +1 되지 않도록 5분간 추가 스케일링을 잠깐 막는 역할
 
-#### STEP 10. Scale In Policy 생성
+## 82. 실습: STEP 10. Scale In Policy 생성
 
-#### CPU 사용률이 낮아지면 EC2를 1대 감소시키는 정책이다.
+## 83. 실습: CPU 사용률이 낮아지면 EC2를 1대 감소시키는 정책이다.
 
 ```hcl
 resource "aws_autoscaling_policy" "scale_in" {
@@ -2117,7 +2115,7 @@ resource "aws_autoscaling_policy" "scale_in" {
 }
 ```
 
-#### STEP 10. CPU High CloudWatch Alarm 생성
+## 84. 실습: STEP 10. CPU High CloudWatch Alarm 생성
 
 - ASG에 속한 EC2들의 평균 CPU 사용률이
 - 60% 이상인 상태가 2번 연속 발생하면 Scale Out Policy를 실행
@@ -2143,7 +2141,7 @@ resource "aws_cloudwatch_metric_alarm" "cpu_high" {
 }
 ```
 
-#### STEP 11. CPU Low CloudWatch Alarm 생성
+## 85. 실습: STEP 11. CPU Low CloudWatch Alarm 생성
 
 - ASG 평균 CPU가 30% 이하인 상태가
 - 2번 연속 발생하면 Scale In Policy를 실행한다.
@@ -2204,9 +2202,9 @@ PS C:\trf2\4) ELB,ASG\4_1_ELB-ALB> terraform  apply
 
 - t3.micro는 vcpu를 2개 지원하기 때문에 1개의 CPU만큼 부하를 주면 50%까지만 상승한다.
 
-![이미지](assets/09-terraform-alb-asg/46.png)
+![t3.micro는 vcpu를 2개 지원하기 때문에 1개의 CPU만큼 부하를 주면 50%까지만 상승한다. 화면](assets/09-terraform-alb-asg/46.png)
 
-#### 첫 번째 EC2 접속
+## 86. 실습: 첫 번째 EC2 접속
 
 ```
 [root@ip-172-31-28-13 ~]# stress --cpu 2
@@ -2217,13 +2215,13 @@ PS C:\trf2\4) ELB,ASG\4_1_ELB-ALB> terraform  apply
 
 - 경보상태가 확인되며 EC2 인스턴스 개수가 증가해야 한다.
 
-![이미지](assets/09-terraform-alb-asg/47.png)
+![경보상태가 확인되며 EC2 인스턴스 개수가 증가해야 한다. 화면](assets/09-terraform-alb-asg/47.png)
 
 - EC2 인스턴스가 2대에서 3대로 증가한다.
 
-![이미지](assets/09-terraform-alb-asg/48.png)
+![EC2 인스턴스가 2대에서 3대로 증가한다. 화면](assets/09-terraform-alb-asg/48.png)
 
-#### SNS Topic 구성
+## 87. 실습: SNS Topic 구성
 
 - Auto Scaling에서 Scale Out 또는 Scale In이 발생했을 때 관리자에게 알림을 전송하기 위해 SNS를 사용한다.
 - SNS Topic을 생성하고 이메일 구독을 연결하여 CloudWatch Alarm 발생 시 이메일 알림을 전송한다.
@@ -2249,7 +2247,7 @@ resource "aws_sns_topic" "asg_alert" {
 }
 ```
 
-#### SNS Email 구독 구성
+## 88. 실습: SNS Email 구독 구성
 
 - SNS Topic에서 발생한 메시지를 이메일로 전달하기 위해 Email Subscription을 생성한다.
 
@@ -2271,12 +2269,12 @@ PS C:\trf2\4) ELB,ASG\4_1_ELB-ALB> terraform  plan
 PS C:\trf2\4) ELB,ASG\4_1_ELB-ALB> terraform  apply -auto-approve
 ```
 
-#### SNS Email 구독 확인
+## 89. 실습: SNS Email 구독 확인
 
 - Terraform Apply 후 설정한 이메일 주소로 AWS에서 Subscription Confirmation 메일이 전송된다.
 - 메일에서 Confirm subscription을 클릭해야 실제 SNS 알림을 받을 수 있다.
 
-#### CPU High CloudWatch Alarm + SNS 구성
+## 90. 실습: CPU High CloudWatch Alarm + SNS 구성
 
 - CPU 평균 사용률이 60% 이상이면 Scale Out Policy를 실행한다.
 - 동시에 SNS Topic으로 알림을 전송하여 관리자에게 이메일로 알린다.
@@ -2329,7 +2327,7 @@ resource "aws_cloudwatch_metric_alarm" "cpu_low" {
 }
 ```
 
-#### Terraform Output 구성
+## 91. 실습: Terraform Output 구성
 
 - Terraform Apply 완료 후 생성된 SNS Topic의 ARN을 확인하기 위해 Output을 설정한다.
 
@@ -2352,17 +2350,17 @@ PS C:\trf2\4) ELB,ASG\4_1_ELB-ALB> terraform  apply -auto-approve
 
 - 경보상태가 확인되며 EC2 인스턴스 개수가 증가해야 한다.
 
-![이미지](assets/09-terraform-alb-asg/47.png)
+![경보상태가 확인되며 EC2 인스턴스 개수가 증가해야 한다. 화면](assets/09-terraform-alb-asg/47.png)
 
 - EC2 인스턴스가 2대에서 3대로 증가한다.
 
-![이미지](assets/09-terraform-alb-asg/48.png)
+![EC2 인스턴스가 2대에서 3대로 증가한다. 화면](assets/09-terraform-alb-asg/48.png)
 
 - ASG에 의해 EC2가 증가 또는 감소시 SNS에 의해 Email, SMS가 수신되는지 확인
 
-#### Terraform Module을 활용한 ALB + ASG + CloudWatch + SNS 구성
+## 92. 실습: Terraform Module을 활용한 ALB + ASG + CloudWatch + SNS 구성
 
-#### 전체 구조
+## 93. 실습: 전체 구조
 
 ```hcl
 terraform-asg-alb-module/
@@ -2407,11 +2405,11 @@ terraform-asg-alb-module/
 - Module = AWS Resource를 정의하는 부품
 - Root Module = 여러 Module을 연결하는 조립 공간
 
-![이미지](assets/09-terraform-alb-asg/41.jpg)
+![Root Module = 여러 Module을 연결하는 조립 공간 화면](assets/09-terraform-alb-asg/41.jpg)
 
-![이미지](assets/09-terraform-alb-asg/42.jpg)
+![Root Module = 여러 Module을 연결하는 조립 공간 화면](assets/09-terraform-alb-asg/42.jpg)
 
-#### STEP 1) Network Module 작성
+## 94. 실습: STEP 1) Network Module 작성
 
 - 작성 위치: terraform-asg-alb-module/modules/network/
 
@@ -2601,7 +2599,7 @@ NAT Gateway를 여러 개 만들지 않고 한 개만 사용하겠다는 의미�
 VPC Module에 필요한 값을 전달하면 Module 내부의 Terraform 코드가 이러한 Resource를 생성하고
 연결해주는 방식이다.
 
-#### STEP 1-6. VPC vpc 중간 Plan
+## 95. 실습: STEP 1-6. VPC vpc 중간 Plan
 
 실행 위치 :
 
@@ -2671,7 +2669,7 @@ Root에서는 다음처럼 사용할 수 있다.
   - Root
   - 다른 Module에 전달
 
-#### STEP 1-8. VPC Module 최종 Plan
+## 96. 실습: STEP 1-8. VPC Module 최종 Plan
 
 ```hcl
 실행 위치 : C:\terraform-asg-alb-module\modules\network
@@ -2680,12 +2678,12 @@ powershell
 terraform fmt
 ```
 
-#### STEP 2) ALB Module 작성
+## 97. 실습: STEP 2) ALB Module 작성
 
 - 작성 위치 : terraform-asg-alb-module/modules/alb/
 - 생성 파일 : main.tf , variables.tf , outputs.tf
 
-#### STEP 2-1. Provider 요구사항 작성
+## 98. 실습: STEP 2-1. Provider 요구사항 작성
 
 ```hcl
    # modules/alb/main.tf
@@ -2898,7 +2896,7 @@ powershell
 terraform plan
 ```
 
-#### STEP 3) ASG Module 작성
+## 99. 실습: STEP 3) ASG Module 작성
 
 - 작성 위치 : terraform-asg-alb-module/modules/asg/
 
@@ -2998,7 +2996,7 @@ data "aws_ami" "al2023" {
 - AMI ID를 직접 고정하지 않고 최신 Amazon Linux 2023 AMI를 조회한다.
 ```
 
-#### STEP 3-8. EC2 Security Group 생성
+## 100. 실습: STEP 3-8. EC2 Security Group 생성
 
 - Launch Template을 만들기 전에 EC2에 적용할 Security Group을 먼저 생성한다.
 
@@ -3058,7 +3056,7 @@ resource "aws_security_group" "ec2_sg" {
 - HTTP 80 Port를 허용하여 ALB에서 전달되는 웹 요청을 받을 수 있도록 한다.
 - 이후 Launch Template에서는 별도의 `security_group_id` 변수를 받지 않고 다음처럼 직접 참조한다.
 
-#### STEP 3-9 Launch Template 변수 추가
+## 101. 실습: STEP 3-9 Launch Template 변수 추가
 
 ```hcl
    # modules/asg/variables.tf
@@ -3117,7 +3115,7 @@ locals {
   - index.html 생성
   - 브라우저 출력 예: i-0123456789abcdef0
 
-#### STEP 3-11. Launch Template 생성
+## 102. 실습: STEP 3-11. Launch Template 생성
 
 ```hcl
    # modules/asg/main.tf
@@ -3181,7 +3179,7 @@ variable "health_check_grace_period" {
   - 기본 EC2 = 2대
   - 최대 EC2 = 3대
 
-#### STEP 3-13 Auto Scaling Group 생성
+## 103. 실습: STEP 3-13 Auto Scaling Group 생성
 
 ```hcl
    # modules/asg/main.tf
@@ -3226,7 +3224,7 @@ resource "aws_autoscaling_attachment" "tg_attachment" {
 
 - Scale In으로 EC2가 제거되면 Target Group에서도 자동으로 제거된다.
 
-#### STEP 3-16. Scale Out 변수 추가
+## 104. 실습: STEP 3-16. Scale Out 변수 추가
 
 ```hcl
    # modules/asg/variables.tf
@@ -3286,7 +3284,7 @@ resource "aws_autoscaling_policy" "scale_in_policy" {
   - EC2 1대
   - 단 min_size = 1 이므로 EC2가 0대까지 감소하지 않는다.
 
-#### STEP 3-20. Scaling 중간 Plan
+## 105. 실습: STEP 3-20. Scaling 중간 Plan
 
 ```hcl
 terraform plan
@@ -3400,7 +3398,7 @@ resource "aws_cloudwatch_metric_alarm" "cpu_high" {
 - 평가 주기 : 120초
 - 연속 평가: 2회
 
-#### STEP 3-29. CPU Low Alarm 생성
+## 106. 실습: STEP 3-29. CPU Low Alarm 생성
 
 ```hcl
    # modules/asg/main.tf
@@ -3434,7 +3432,7 @@ resource "aws_cloudwatch_metric_alarm" "cpu_low" {
 
 연속 2회 만족
 
-#### STEP 3-30. ASG Output 작성
+## 107. 실습: STEP 3-30. ASG Output 작성
 
 ```hcl
    # modules/asg/outputs.tf
@@ -3481,9 +3479,9 @@ modules/asg/.terraform.lock.hcl
 
 - 최종 실행은 Root에서 다시 초기화할 것이므로 Child Module 테스트 파일을 정리한다.
 
-#### STEP 4-1. VPC 테스트 파일 삭제
+## 108. 실습: STEP 4-1. VPC 테스트 파일 삭제
 
-#### VPC Module 디렉터리로 이동한다.
+## 109. 실습: VPC Module 디렉터리로 이동한다.
 
 ```bash
 cd C:\terraform-asg-alb-module\modules\network
@@ -3521,7 +3519,7 @@ Remove-Item -Recurse -Force .terraform
 Remove-Item -Force .terraform.lock.hcl
 ```
 
-#### STEP 4-4. 불필요한 테스트 파일 확인
+## 110. 실습: STEP 4-4. 불필요한 테스트 파일 확인
 
 - Child Module에 다음 테스트 파일을 따로 만들었다면 삭제한다.
 
@@ -3536,7 +3534,7 @@ Remove-Item -Force .terraform.lock.hcl
 - Child Module에서 실제 "terraform apply"를 실행했다면 State 파일을 임의로 삭제하면 안 된다.
 ```
 
-#### STEP 5) Root Module 작성
+## 111. 실습: STEP 5) Root Module 작성
 
 - Root 위치: C:\terraform-asg-alb-module
 
@@ -3760,7 +3758,7 @@ variable "health_check_grace_period" {
 
 - Health Check Grace Period = 300초
 
-#### STEP 5-9. Root Scaling 변수 추가
+## 112. 실습: STEP 5-9. Root Scaling 변수 추가
 
 ```hcl
    # variables.tf
@@ -3787,7 +3785,7 @@ variable "scaling_cooldown" {
 - Scale In: EC2 -1
 - Cooldown: 300초
 
-#### STEP 5-10. Root SNS 변수 추가
+## 113. 실습: STEP 5-10. Root SNS 변수 추가
 
 ```hcl
    # variables.tf
@@ -3842,7 +3840,7 @@ variable "evaluation_periods" {
 - 평가 주기 = 120초
 - 연속 평가 = 2회
 
-#### STEP 5-12. Root에서 ASG Module 호출
+## 114. 실습: STEP 5-12. Root에서 ASG Module 호출
 
 ```hcl
    # main.tf
@@ -3980,9 +3978,9 @@ output "sns_topic_arn" {
 
 - 최종 생성된 주요 AWS Resource 정보를 확인하기 위한 Output이다.
 
-#### STEP 6) Root 최종 실행
+## 115. 실습: STEP 6) Root 최종 실행
 
-#### 최종 Terraform 실행을 위해 Root 디렉터리로 이동
+## 116. 실습: 최종 Terraform 실행을 위해 Root 디렉터리로 이동
 
 ```bash
 cd C:\terraform-asg-alb-module
@@ -3990,7 +3988,7 @@ cd C:\terraform-asg-alb-module
 - 최종 Terraform 실행을 위해 Root 디렉터리로 이동한다.
 ```
 
-#### STEP 6-1. Root 초기화
+## 117. 실습: STEP 6-1. Root 초기화
 
 - Root Terraform 프로젝트를 초기화
 - 다음 Child Module을 모두 읽는다.

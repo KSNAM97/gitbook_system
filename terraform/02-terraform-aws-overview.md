@@ -1,10 +1,10 @@
 # Terraform - AWS와 Terraform 개요
 
-## 이론
+이 문서는 Terraform이 무엇이고 AWS 인프라를 코드로 관리하는 방식이 기존 콘솔 방식과 어떻게 다른지, 기본 워크플로우와 첫 실습을 정리한다. 환경 구축 문서의 설정이 끝났다는 전제로 진행한다.
 
-#### AWS와 Terraform 개요와 워크플로우 이해
+## 1. AWS와 Terraform 개요와 워크플로우 이해
 
-#### Terraform의 정의와 역할
+## 2. Terraform의 정의와 역할
 
 - Terraform은 HashiCorp에서 개발한 IaC(Infrastructure as Code) 도구이다.
 
@@ -30,7 +30,7 @@
   - S3 버킷 생성
   - IAM 역할 생성
 
-#### Terraform이 필요한 이유
+## 3. Terraform이 필요한 이유
 
 - 반복 가능성 (Reproducibility)
   - 같은 코드로 동일한 인프라를 여러 번 생성 가능
@@ -48,7 +48,7 @@
   - 기업에서는 콘솔 클릭으로 운영하지 않는다.
   - Terraform, CloudFormation 같은 IaC를 사용한다.
 
-#### 기존 방식 vs Terraform 방식
+## 4. 기존 방식 vs Terraform 방식
 
 - 기존 콘솔 방식
   - 사람이 클릭
@@ -74,7 +74,7 @@ instance_type = "t3.micro"
 
 - 이 코드는 "t3.micro EC2 인스턴스를 하나 만들어라" 라고 선언
 
-#### 프로바이더(Provider) 기반 아키텍처
+## 5. 프로바이더(Provider) 기반 아키텍처
 
 - Provider
   - Terraform은 직접 AWS를 제어하지 않는다.
@@ -128,7 +128,7 @@ resource "aws_instance" "example" {
 - terraform destroy
   - 전체 삭제
 
-#### HCL (HashiCorp Configuration Language)
+## 6. HCL (HashiCorp Configuration Language)
 
 5-1. HCL이란?
 
@@ -154,7 +154,7 @@ resource "aws_s3_bucket" "mybucket" {
 }
 ```
 
-#### Terraform 기본 Workflow
+## 7. Terraform 기본 Workflow
 
 - Terraform의 전체 동작 흐름을 의미한다.
 
@@ -192,13 +192,13 @@ terraform destroy
   - 다음 변경 시 비교 기준
   - drift(콘솔에서 몰래 수정한 변경) 탐지
 
-#### Terraform 전체 워크플로우 이해
+## 8. Terraform 전체 워크플로우 이해
 
 - Terraform은 현재 인프라 상태와 원하는 상태를 비교하여 차이만 반영하는 선언형 인프라 관리 시스템이다.
 
 - 시스템이 동작하는 흐름이 바로 다음 6단계이다.
 
-#### 1단계: 코드 작성 (main.tf 작성)
+## 9. 1단계: 코드 작성 (main.tf 작성)
 
 - Terraform의 출발점은 명령 실행이 아니라 원하는 인프라의 최종 상태 정의이다.
 
@@ -241,7 +241,7 @@ resource "aws_instance" "web" {
   - 단지 목표 상태를 선언했을 뿐이다.
   - 이 코드가 Terraform의 기준이 된다.
 
-#### 2단계: 초기화 (terraform init)
+## 10. 2단계: 초기화 (terraform init)
 
 - 현재 작업 디렉토리를 Terraform 실행 환경으로 준비한다.
 - Terraform은 실행 전에 필요한 구성 요소를 준비해야 한다.
@@ -268,7 +268,7 @@ resource "aws_instance" "web" {
   - 모듈 추가 시 재실행 필요
   - 새로운 프로젝트 디렉토리에서는 항상 실행해야 한다
 
-#### 3단계: 실행 계획 수립 (terraform plan)
+## 11. 3단계: 실행 계획 수립 (terraform plan)
 
 - plan은 단순 미리보기가 아니다.
 - 이 단계는 Terraform이 변경 전략을 계산하는 과정이다.
@@ -306,7 +306,7 @@ resource "aws_instance" "web" {
 
 - Terraform은 자동으로 리소스 생성 순서를 계산한다.
 
-#### 5단계: 상태 관리 (terraform.tfstate)
+## 12. 5단계: 상태 관리 (terraform.tfstate)
 
 - Terraform이 현재 인프라 상태를 기억하기 위한 데이터 저장소이다.
 
@@ -317,7 +317,7 @@ resource "aws_instance" "web" {
 
 - Terraform의 멱등성은 이 state를 기반으로 유지된다.
 
-#### 6단계: 삭제 (terraform destroy)
+## 13. 6단계: 삭제 (terraform destroy)
 
 - Terraform이 관리하는 리소스를 모두 제거하는 단계이다.
 
@@ -328,9 +328,9 @@ resource "aws_instance" "web" {
   - state 기준 삭제 대상 계산
   - 의존성 역순 삭제
 
-#### vsCode를 사용한 Terraform 환경 구성
+## 14. vsCode를 사용한 Terraform 환경 구성
 
-#### 설치와 환경 구성
+## 15. 설치와 환경 구성
 
 - VSCode 환경에서 Terraform 설치와 환경 구성
 
@@ -356,11 +356,9 @@ Prettier - Code Formatter
 일관된 포맷으로 정리해 가독성 증가
   - 자동 포맷팅 지원: 코드 저장 시 자동으로 포맷팅이 적용되어 코드를 항상 깔끔하게 유지
 
-## 실습
+## 16. 실습: AWS와 Terraform 개요와 워크플로우 이해
 
-#### AWS와 Terraform 개요와 워크플로우 이해
-
-#### Terraform의 정의와 역할
+## 17. 실습: Terraform의 정의와 역할
 
 - Terraform은 HashiCorp에서 개발한 IaC(Infrastructure as Code) 도구이다.
 
@@ -388,7 +386,7 @@ Prettier - Code Formatter
   - S3 버킷 생성
   - IAM 역할 생성
 
-#### Terraform이 필요한 이유
+## 18. 실습: Terraform이 필요한 이유
 
 - 반복 가능성 (Reproducibility)
   - 같은 코드로 동일한 인프라를 여러 번 생성 가능
@@ -406,7 +404,7 @@ Prettier - Code Formatter
   - 기업에서는 콘솔 클릭으로 운영하지 않는다.
   - Terraform, CloudFormation 같은 IaC를 사용한다.
 
-#### 기존 방식 vs Terraform 방식
+## 19. 실습: 기존 방식 vs Terraform 방식
 
 - 기존 콘솔 방식:
   - 사람이 클릭
@@ -432,7 +430,7 @@ instance_type = "t3.micro"
 
 - 이 코드는 "t3.micro EC2 인스턴스를 하나 만들어라" 라고 선언
 
-#### 프로바이더(Provider) 기반 아키텍처
+## 20. 실습: 프로바이더(Provider) 기반 아키텍처
 
 - Provider
   - Terraform은 직접 AWS를 제어하지 않는다.
@@ -486,7 +484,7 @@ instance_type = "t3.micro"
 - terraform destroy
   - 전체 삭제
 
-#### HCL (HashiCorp Configuration Language)
+## 21. 실습: HCL (HashiCorp Configuration Language)
 
 5-1. HCL이란?
 
@@ -512,7 +510,7 @@ bucket = "my-unique-bucket-name"
 }
 ```
 
-#### Terraform 기본 Workflow
+## 22. 실습: Terraform 기본 Workflow
 
 - Terraform의 전체 동작 흐름을 의미한다.
 
@@ -550,13 +548,13 @@ terraform destroy
   - 다음 변경 시 비교 기준
   - drift(콘솔에서 몰래 수정한 변경) 탐지
 
-#### Terraform 전체 워크플로우 이해
+## 23. 실습: Terraform 전체 워크플로우 이해
 
 - Terraform은 현재 인프라 상태와 원하는 상태를 비교하여 차이만 반영하는 선언형 인프라 관리 시스템이다.
 
 - 시스템이 동작하는 흐름이 바로 다음 6단계이다.
 
-#### 1단계: 코드 작성 (main.tf 작성)
+## 24. 실습: 1단계: 코드 작성 (main.tf 작성)
 
 Terraform의 출발점은 명령 실행이 아니라 원하는 인프라의 최종 상태 정의이다.
 
@@ -599,7 +597,7 @@ resource "aws_instance" "web" {
   - 단지 목표 상태를 선언했을 뿐이다.
   - 이 코드가 Terraform의 기준이 된다.
 
-#### 2단계: 초기화 (terraform init)
+## 25. 실습: 2단계: 초기화 (terraform init)
 
 - 현재 작업 디렉토리를 Terraform 실행 환경으로 준비한다.
 - Terraform은 실행 전에 필요한 구성 요소를 준비해야 한다.
@@ -626,7 +624,7 @@ resource "aws_instance" "web" {
   - 모듈 추가 시 재실행 필요
   - 새로운 프로젝트 디렉토리에서는 항상 실행해야 한다
 
-#### 3단계: 실행 계획 수립 (terraform plan)
+## 26. 실습: 3단계: 실행 계획 수립 (terraform plan)
 
 - plan은 단순 미리보기가 아니다.
 - 이 단계는 Terraform이 변경 전략을 계산하는 과정이다.
@@ -664,7 +662,7 @@ resource "aws_instance" "web" {
 
 - Terraform은 자동으로 리소스 생성 순서를 계산한다.
 
-#### 5단계: 상태 관리 (terraform.tfstate)
+## 27. 실습: 5단계: 상태 관리 (terraform.tfstate)
 
 - Terraform이 현재 인프라 상태를 기억하기 위한 데이터 저장소이다.
 
@@ -675,7 +673,7 @@ resource "aws_instance" "web" {
 
 - Terraform의 멱등성은 이 state를 기반으로 유지된다.
 
-#### 6단계: 삭제 (terraform destroy)
+## 28. 실습: 6단계: 삭제 (terraform destroy)
 
 - Terraform이 관리하는 리소스를 모두 제거하는 단계이다.
 
@@ -686,9 +684,9 @@ resource "aws_instance" "web" {
   - state 기준 삭제 대상 계산
   - 의존성 역순 삭제
 
-#### vsCode를 사용한 Terraform 환경 구성
+## 29. 실습: vsCode를 사용한 Terraform 환경 구성
 
-#### 설치와 환경 구성
+## 30. 실습: 설치와 환경 구성
 
 - VSCode 환경에서 Terraform 설치와 환경 구성
 
@@ -714,29 +712,29 @@ Prettier - Code Formatter
 일관된 포맷으로 정리해 가독성 증가
   - 자동 포맷팅 지원: 코드 저장 시 자동으로 포맷팅이 적용되어 코드를 항상 깔끔하게 유지
 
-#### 플러그인 설치
+## 31. 실습: 플러그인 설치
 
 - HashiCorp Terraform
 - IntelliCode (GitHub Copilot)
 - Prettier - Code formatter
 - Hashicorp HCL
 
-![이미지](assets/02-terraform-aws-overview/1.png)
+![Hashicorp HCL 화면](assets/02-terraform-aws-overview/1.png)
 
-![이미지](assets/02-terraform-aws-overview/2.png)
+![Hashicorp HCL 화면](assets/02-terraform-aws-overview/2.png)
 
-![이미지](assets/02-terraform-aws-overview/3.png)
+![Hashicorp HCL 화면](assets/02-terraform-aws-overview/3.png)
 
-![이미지](assets/02-terraform-aws-overview/4.png)
+![Hashicorp HCL 화면](assets/02-terraform-aws-overview/4.png)
 
-#### 환경 설정
+## 32. 실습: 환경 설정
 
 - F1 키  -->  setting json
 - 기본 설정 : 사용자 설정 열기
 
-![이미지](assets/02-terraform-aws-overview/5.png)
+![기본 설정 : 사용자 설정 열기 화면](assets/02-terraform-aws-overview/5.png)
 
-#### 기존 설정에 붙여넣기
+## 33. 실습: 기존 설정에 붙여넣기
 
 ```json
 {
@@ -778,29 +776,29 @@ Prettier - Code Formatter
 
 - C드라이브에 trf 폴더 생성
 
-![이미지](assets/02-terraform-aws-overview/6.png)
+![C드라이브에 trf 폴더 생성 화면](assets/02-terraform-aws-overview/6.png)
 
 https://developer.hashicorp.com/terraform/install#windows# 다운로드
 
-![이미지](assets/02-terraform-aws-overview/7.png)
+![https://developer.hashicorp.com/terraform/install#windows# 다 화면](assets/02-terraform-aws-overview/7.png)
 
 - C드라이브에 tool 폴더 생성  -->  압축 해제한 폴더의 내용을 tool 폴더로 복사 또는 이동
 
-![이미지](assets/02-terraform-aws-overview/8.png)
+![C드라이브에 tool 폴더 생성  -->  압축 해제한 폴더의 내용을 tool 폴더로 복사 또는 이동 화면](assets/02-terraform-aws-overview/8.png)
 
 - 찿기  -->  시스템 환경 변수 편집  -->  고급  -->  환경 변수
 
-![이미지](assets/02-terraform-aws-overview/9.png)
+![찿기  -->  시스템 환경 변수 편집  -->  고급  -->  환경 변수 화면](assets/02-terraform-aws-overview/9.png)
 
 - path 클릭  -->  편집
 
-![이미지](assets/02-terraform-aws-overview/10.png)
+![path 클릭  -->  편집 화면](assets/02-terraform-aws-overview/10.png)
 
 - 조금전 만든 C:\tool 설정  -->  확인  -->  확인
 
-![이미지](assets/02-terraform-aws-overview/11.png)
+![조금전 만든 C:\tool 설정  -->  확인  -->  확인 화면](assets/02-terraform-aws-overview/11.png)
 
-#### cmd
+## 34. 실습: cmd
 
 ```
 C:\Users\ryu> terraform -v
@@ -810,11 +808,11 @@ on windows_amd64
 # AWS CLI 설치 (이미 설치 완료)
 ```
 
-![이미지](assets/02-terraform-aws-overview/16.png)
+![on windows_amd64 화면](assets/02-terraform-aws-overview/16.png)
 
 - 다운로드 후 설치까지
 
-![이미지](assets/02-terraform-aws-overview/17.png)
+![다운로드 후 설치까지 화면](assets/02-terraform-aws-overview/17.png)
 
 ```powershell
 PS C:\trf\HCL_01> aws  configure
@@ -845,7 +843,7 @@ my-profile
 
 - 테라폼 코드 압축파일을 압축 해제 후 vsCode를 사용해서 실행
 
-![이미지](assets/02-terraform-aws-overview/12.png)
+![테라폼 코드 압축파일을 압축 해제 후 vsCode를 사용해서 실행 화면](assets/02-terraform-aws-overview/12.png)
 
 ```hcl
 # main.tf
@@ -967,7 +965,7 @@ output "public_ip" {# EC2 퍼블릭 IP 출력
 
 - main.tf  우클릭  -->  통합 터미널에서 열기
 
-![이미지](assets/02-terraform-aws-overview/13.png)
+![main.tf  우클릭  -->  통합 터미널에서 열기 화면](assets/02-terraform-aws-overview/13.png)
 
 ```powershell
 PS C:\trf\terraform-main\01_aws-terraform\terraform-project> terraform -v
@@ -1003,7 +1001,7 @@ commands will detect it and remind you to do so if necessary.
  .terraform.lock.hcl 생성
 ```
 
-![이미지](assets/02-terraform-aws-overview/14.png)
+![.terraform.lock.hcl 생성 화면](assets/02-terraform-aws-overview/14.png)
 
 .terraform 폴더는 Terraform이 AWS 같은 Provider 실행파일을 다운로드해서 저장하는 작업용 폴더
 
@@ -1045,7 +1043,7 @@ Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
 
 - AWS에 접속해서 확인하면 EC2 인스턴스가 생성되어 있다.
 
-![이미지](assets/02-terraform-aws-overview/15.png)
+![AWS에 접속해서 확인하면 EC2 인스턴스가 생성되어 있다. 화면](assets/02-terraform-aws-overview/15.png)
 
 ```powershell
 PS C:\trf\terraform-main\01_aws-terraform\terraform-project> terraform  destroy

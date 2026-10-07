@@ -1,10 +1,10 @@
 # Terraform - S3
 
-## 이론
+이 문서는 Terraform으로 S3 버킷, 버저닝, 정적 웹 호스팅을 구성하는 방법과 관련 실습을 정리한다.
 
-#### Amazon S3 (Simple Storage Service) 서비스 이해
+## 1. Amazon S3 (Simple Storage Service) 서비스 이해
 
-#### Amazon S3란?
+## 2. Amazon S3란?
 
 - Amazon S3(Simple Storage Service)는 AWS에서 제공하는 객체 스토리지(Object Storage) 서비스이다.
 
@@ -26,14 +26,14 @@
 - EC2에 파일을 저장하는 경우에는 EBS 용량을 직접 결정해야 하지만,
 S3는 저장되는 데이터 양에 따라 자동으로 확장된다.
 
-#### S3와 EBS의 차이
+## 3. S3와 EBS의 차이
 
 - EBS와 S3는 모두 데이터를 저장하지만 저장 방식과 사용 목적이 다르다.
 
 - EBS는 EC2에 디스크처럼 연결해서 사용하는 Block Storage이다.
 - S3는 Network를 통해 Object를 저장하고 가져오는 Object Storage이다.
 
-#### 주요 차이
+## 4. 주요 차이
 
 구분EBSS3
 저장 방식Block StorageObject Storage
@@ -43,7 +43,7 @@ File System사용사용하지 않음
 확장Volume 크기 관리자동 확장
 대표 사용OS, DB DiskImage, Backup, Log
 
-#### S3 기본 구조
+## 5. S3 기본 구조
 
 - S3는 크게 다음 구조로 데이터를 관리
 
@@ -65,7 +65,7 @@ S3 Bucket
   - Value
   - Metadata
 
-#### Bucket
+## 6. Bucket
 
 - Bucket은 S3에서 Object를 저장하는 가장 상위의 저장 공간이다.
 - 일반적인 File System으로 생각하면 최상위 Directory와 비슷하게 보일 수 있지만,
@@ -81,7 +81,7 @@ my-soldesk-bucket
 
 - 여기서 my-soldesk-bucket 이 Bucket 이름이다.
 
-#### Object
+## 7. Object
 
 - S3에 실제로 저장되는 데이터를 Object라고 한다.
 
@@ -114,7 +114,7 @@ my-soldesk-bucket
 - Value: 실제 파일 내용
 - Metadata: 그 파일에 대한 부가 정보 (파일 크기, 업로드 날짜 ,암호화 정보)
 
-#### S3의 Folder 구조
+## 8. S3의 Folder 구조
 
 - S3 Console에서는 Folder가 존재하는 것처럼 보인다.
 
@@ -143,7 +143,7 @@ images/linux.png
 
 - 위 Object의 공통 Prefix는 “images/” 이다.
 
-#### S3 데이터 접근 방식
+## 9. S3 데이터 접근 방식
 
 - S3는 일반적으로 HTTP 또는 HTTPS 기반 API를 통해 데이터에 접근
 - AWS CLI를 이용할 수도 있다.
@@ -154,7 +154,7 @@ images/linux.png
 - 특정 Bucket 확인
   - aws s3 ls s3://my-soldesk-bucket
 
-#### S3 Bucket 생성
+## 10. S3 Bucket 생성
 
 - Terraform에서는 aws_s3_bucket Resource를 사용하여 Bucket을 생성할 수 있다.
 
@@ -183,7 +183,7 @@ resource "aws_s3_bucket" "my_bucket" {
 - tags
   - S3 Bucket 관리에 사용할 Tag
 
-#### S3 Bucket 이름
+## 11. S3 Bucket 이름
 
 - S3 Bucket 이름은 같은 AWS Account 안에서만 구분되는 이름이 아니다.
 - S3 General Purpose Bucket 이름은 전역 Namespace에서 고유해야
@@ -193,7 +193,7 @@ resource "aws_s3_bucket" "my_bucket" {
 - 다른 사용자가 위 이름을 이미 사용 중이라면 같은 이름으로 Bucket을 생성할 수 없다.
 따라서 실습에서는 AWS Account ID를 Bucket 이름에 포함하는 방법을 많이 사용
 
-#### AWS Account ID를 이용한 Bucket 이름 생성
+## 12. AWS Account ID를 이용한 Bucket 이름 생성
 
 ```hcl
    # main.tf
@@ -217,7 +217,7 @@ resource "aws_s3_bucket" "my_bucket" {
 
 - 예를 들어 Account ID가 “123456789012” 이라면 Bucket 이름은 "soldesk-s3-123456789012"이 된다.
 
-#### S3 ARN
+## 13. S3 ARN
 
 - AWS Resource는 ARN(Amazon Resource Name)을 사용하여 식별할 수 있다.
 
@@ -230,7 +230,7 @@ resource "aws_s3_bucket" "my_bucket" {
 
 - IAM Policy나 Bucket Policy를 작성할 때 자주 사용된다.
 
-#### S3 Object Upload
+## 14. S3 Object Upload
 
 - Terraform으로 S3 Bucket에 파일을 업로드할 수도 있다.
 
@@ -248,7 +248,7 @@ resource "aws_s3_object" "index" {
 }
 ```
 
-#### 코드 설명
+## 15. 코드 설명
 
 - bucket
   - Object를 업로드할 S3 Bucket
@@ -262,7 +262,7 @@ resource "aws_s3_object" "index" {
 - content_type
   - Object의 Content-Type 지정
 
-#### S3 Object 경로
+## 16. S3 Object 경로
 
 - 위 Terraform으로 생성되는 구조
 
@@ -278,7 +278,7 @@ images
 
 - 하지만 실제 Object Key는"images/aws.png"이다.
 
-#### S3 Versioning
+## 17. S3 Versioning
 
 - Versioning은 동일한 Object의 여러 Version을 저장하는 기능이다.
 
@@ -321,7 +321,7 @@ index.html
   - Object 삭제
   - 이전 Version 복구
 
-#### Terraform으로 Versioning 활성화
+## 18. Terraform으로 Versioning 활성화
 
 ```hcl
    # main.tf
@@ -333,7 +333,7 @@ resource "aws_s3_bucket_versioning" "my_bucket_versioning" {
 }
 ```
 
-#### 코드 설명
+## 19. 코드 설명
 
 - bucket
   - Versioning을 적용할 S3 Bucket
@@ -354,7 +354,7 @@ index.html
  └ Version 1
 ```
 
-#### Versioning에서 Object 삭제
+## 20. Versioning에서 Object 삭제
 
 - Versioning을 사용하는 Bucket에서 Object를 일반적으로 삭제하면
 기존 Version 자체가 즉시 완전히 삭제되는 방식과 다르게 동작
@@ -372,11 +372,9 @@ index.html
 
 - 필요하면 이전 Version을 다시 사용할 수 있다.
 
-## 실습
+## 21. 실습: Amazon S3 (Simple Storage Service) 서비스 이해
 
-#### Amazon S3 (Simple Storage Service) 서비스 이해
-
-#### Amazon S3란?
+## 22. 실습: Amazon S3란?
 
 - Amazon S3(Simple Storage Service)는 AWS에서 제공하는 객체 스토리지(Object Storage) 서비스이다.
 
@@ -398,14 +396,14 @@ index.html
 - EC2에 파일을 저장하는 경우에는 EBS 용량을 직접 결정해야 하지만,
 S3는 저장되는 데이터 양에 따라 자동으로 확장된다.
 
-#### S3와 EBS의 차이
+## 23. 실습: S3와 EBS의 차이
 
 - EBS와 S3는 모두 데이터를 저장하지만 저장 방식과 사용 목적이 다르다.
 
 - EBS는 EC2에 디스크처럼 연결해서 사용하는 Block Storage이다.
 - S3는 Network를 통해 Object를 저장하고 가져오는 Object Storage이다.
 
-#### 주요 차이
+## 24. 실습: 주요 차이
 
 구분EBSS3
 저장 방식Block StorageObject Storage
@@ -415,7 +413,7 @@ File System사용사용하지 않음
 확장Volume 크기 관리자동 확장
 대표 사용OS, DB DiskImage, Backup, Log
 
-#### S3 기본 구조
+## 25. 실습: S3 기본 구조
 
 - S3는 크게 다음 구조로 데이터를 관리
 
@@ -437,7 +435,7 @@ S3 Bucket
   - Value
   - Metadata
 
-#### Bucket
+## 26. 실습: Bucket
 
 - Bucket은 S3에서 Object를 저장하는 가장 상위의 저장 공간이다.
 - 일반적인 File System으로 생각하면 최상위 Directory와 비슷하게 보일 수 있지만,
@@ -453,7 +451,7 @@ my-soldesk-bucket
 
 - 여기서 my-soldesk-bucket 이 Bucket 이름이다.
 
-#### Object
+## 27. 실습: Object
 
 - S3에 실제로 저장되는 데이터를 Object라고
 
@@ -487,7 +485,7 @@ my-soldesk-bucket
 - Value: 실제 파일 내용
 - Metadata: 그 파일에 대한 부가 정보 (파일 크기, 업로드 날짜 ,암호화 정보)
 
-#### S3의 Folder 구조
+## 28. 실습: S3의 Folder 구조
 
 - S3 Console에서는 Folder가 존재하는 것처럼 보인다.
 
@@ -516,7 +514,7 @@ images/linux.png
 
 - 위 Object의 공통 Prefix는 “images/” 이다.
 
-#### S3 데이터 접근 방식
+## 29. 실습: S3 데이터 접근 방식
 
 - S3는 일반적으로 HTTP 또는 HTTPS 기반 API를 통해 데이터에 접근
 - AWS CLI를 이용할 수도 있다.
@@ -527,7 +525,7 @@ images/linux.png
 - 특정 Bucket 확인
   - aws s3 ls s3://my-soldesk-bucket
 
-#### S3 Bucket 생성
+## 30. 실습: S3 Bucket 생성
 
 - Terraform에서는 aws_s3_bucket Resource를 사용하여 Bucket을 생성할 수 있다.
 
@@ -556,7 +554,7 @@ resource "aws_s3_bucket" "my_bucket" {
 - tags
   - S3 Bucket 관리에 사용할 Tag
 
-#### S3 Bucket 이름
+## 31. 실습: S3 Bucket 이름
 
 - S3 Bucket 이름은 같은 AWS Account 안에서만 구분되는 이름이 아니다.
 - S3 General Purpose Bucket 이름은 전역 Namespace에서 고유해야
@@ -566,7 +564,7 @@ resource "aws_s3_bucket" "my_bucket" {
 - 다른 사용자가 위 이름을 이미 사용 중이라면 같은 이름으로 Bucket을 생성할 수 없다.
 따라서 실습에서는 AWS Account ID를 Bucket 이름에 포함하는 방법을 많이 사용
 
-#### AWS Account ID를 이용한 Bucket 이름 생성
+## 32. 실습: AWS Account ID를 이용한 Bucket 이름 생성
 
 ```hcl
    # main.tf
@@ -590,7 +588,7 @@ resource "aws_s3_bucket" "my_bucket" {
 
 - 예를 들어 Account ID가 “123456789012” 이라면 Bucket 이름은 "soldesk-s3-123456789012"이 된다.
 
-#### S3 ARN
+## 33. 실습: S3 ARN
 
 - AWS Resource는 ARN(Amazon Resource Name)을 사용하여 식별할 수 있다.
 
@@ -603,7 +601,7 @@ resource "aws_s3_bucket" "my_bucket" {
 
 - IAM Policy나 Bucket Policy를 작성할 때 자주 사용된다.
 
-#### S3 Object Upload
+## 34. 실습: S3 Object Upload
 
 - Terraform으로 S3 Bucket에 파일을 업로드할 수도 있다.
 
@@ -621,7 +619,7 @@ resource "aws_s3_object" "index" {
 }
 ```
 
-#### 코드 설명
+## 35. 실습: 코드 설명
 
 - bucket
   - Object를 업로드할 S3 Bucket
@@ -635,7 +633,7 @@ resource "aws_s3_object" "index" {
 - content_type
   - Object의 Content-Type 지정
 
-#### S3 Object 경로
+## 36. 실습: S3 Object 경로
 
 - 위 Terraform으로 생성되는 구조
 
@@ -651,7 +649,7 @@ images
 
 - 하지만 실제 Object Key는"images/aws.png"이다.
 
-#### S3 Versioning
+## 37. 실습: S3 Versioning
 
 - Versioning은 동일한 Object의 여러 Version을 저장하는 기능이다.
 
@@ -694,7 +692,7 @@ index.html
   - Object 삭제
   - 이전 Version 복구
 
-#### Terraform으로 Versioning 활성화
+## 38. 실습: Terraform으로 Versioning 활성화
 
 ```hcl
    # main.tf
@@ -706,7 +704,7 @@ resource "aws_s3_bucket_versioning" "my_bucket_versioning" {
 }
 ```
 
-#### 코드 설명
+## 39. 실습: 코드 설명
 
 - bucket
   - Versioning을 적용할 S3 Bucket
@@ -727,7 +725,7 @@ index.html
  └ Version 1
 ```
 
-#### Versioning에서 Object 삭제
+## 40. 실습: Versioning에서 Object 삭제
 
 - Versioning을 사용하는 Bucket에서 Object를 일반적으로 삭제하면
 기존 Version 자체가 즉시 완전히 삭제되는 방식과 다르게 동작
@@ -745,7 +743,7 @@ index.html
 
 - 필요하면 이전 Version을 다시 사용할 수 있다.
 
-#### Terraform S3 Static File Public Access 실습
+## 41. 실습: Terraform S3 Static File Public Access 실습
 
 - Terraform을 사용하여 다음 환경을 구성
   - 1. AWS Provider 설정
@@ -765,7 +763,7 @@ index.html
 ├── terraform.tfvars
 └── index.html
 
-#### STEP 0. 실습 디렉터리 생성
+## 42. 실습: STEP 0. 실습 디렉터리 생성
 
 - Terraform 실습을 진행할 디렉터리를 생성
 
@@ -893,7 +891,7 @@ PS C:\my-terraform> terraform validate
 PS C:\my-terraform> terraform plan
 ```
 
-#### STEP 2. index.html을 S3 Object로 업로드
+## 43. 실습: STEP 2. index.html을 S3 Object로 업로드
 
 - 이번 단계에서는 생성한 S3 Bucket에 index.html 파일을 업로드
 
@@ -905,7 +903,7 @@ PS C:\my-terraform> terraform plan
 
   - terraform-s3-lab\main.tf
 
-#### index.html 파일을 S3 Bucket에 업로드
+## 44. 실습: index.html 파일을 S3 Bucket에 업로드
 
 ```hcl
 resource "aws_s3_object" "index" {
@@ -922,7 +920,7 @@ PS C:\my-terraform> terraform validate
 PS C:\my-terraform> terraform plan
 ```
 
-#### STEP 3. S3 Public Access Block 해제
+## 45. 실습: STEP 3. S3 Public Access Block 해제
 
 - S3는 기본적으로 외부에서 Public 접근하지 못하도록 Public Access Block 기능이 활성화되어 있다.
 - 이번 실습에서는 index.html 파일을 인터넷에서 조회할 것이므로 Public Access Block을 해제
@@ -931,7 +929,7 @@ PS C:\my-terraform> terraform plan
 
   - terraform-s3-lab\main.tf
 
-#### S3 Public Access Block 해제
+## 46. 실습: S3 Public Access Block 해제
 
 ```hcl
 resource "aws_s3_bucket_public_access_block" "public_access" {
@@ -948,16 +946,16 @@ PS C:\my-terraform> terraform plan
 
 - S3 Bucket  -->  권한  -->  퍼블릭 액세스 차단(버킷 설정) 확인
 
-![이미지](assets/07-terraform-s3/1.png)
+![S3 Bucket  -->  권한  -->  퍼블릭 액세스 차단버킷 설정 확인 화면](assets/07-terraform-s3/1.png)
 
-#### STEP 4. Bucket Policy를 이용하여 index.html Public 공개
+## 47. 실습: STEP 4. Bucket Policy를 이용하여 index.html Public 공개
 
 - Public Access Block을 해제했으므로 이번에는 Bucket Policy를 생성
 - Bucket Policy에서 모든 사용자에게 "s3:GetObject" 권한을 허용하면 인터넷 사용자들이 S3 Object를 읽을 수 있게 된다.
 
   - terraform-s3-lab\main.tf
 
-#### S3 Bucket Policy :  인터넷의 모든 사용자가 Bucket 내부의 Object를 읽을 수 있도록 허용
+## 48. 실습: S3 Bucket Policy :  인터넷의 모든 사용자가 Bucket 내부의 Object를 읽을 수 있도록 허용
 
 ```hcl
 resource "aws_s3_bucket_policy" "public_read" {
@@ -992,15 +990,15 @@ PS C:\my-terraform> terraform plan
 PS C:\my-terraform> terraform apply
 ```
 
-![이미지](assets/07-terraform-s3/2.png)
+![PS C:\my-terraform> terraform apply 화면](assets/07-terraform-s3/2.png)
 
-#### output으로 출력된 경로로 브라우저를 통해서 접속
+## 49. 실습: output으로 출력된 경로로 브라우저를 통해서 접속
 
 https://soldesk-s3-bucket-basic-123456789012-ap-northeast-2.s3.ap-northeast-2.amazonaws.com/index.html
 
-![이미지](assets/07-terraform-s3/3.png)
+![https://soldesk-s3-bucket-basic-123456789012-ap-northeast-2. 화면](assets/07-terraform-s3/3.png)
 
-#### STEP 5. terraform.tfvars 작성
+## 50. 실습: STEP 5. terraform.tfvars 작성
 
 - variables.tf에는 Variable의 구조와 기본값을 정의
 
@@ -1010,7 +1008,7 @@ https://soldesk-s3-bucket-basic-123456789012-ap-northeast-2.s3.ap-northeast-2.am
 
   - terraform-s3-lab\terraform.tfvars
 
-#### AWS Region
+## 51. 실습: AWS Region
 
 ```hcl
 aws_region = "ap-northeast-2"
@@ -1043,7 +1041,7 @@ PS C:\trf2\2) S3\2-1_S3_basic> aws s3 ls s3://soldesk-s3-bucket-basic-1234567890
 
 - 예: aws s3 ls s3://soldesk-s3-basic-123456789012-ap-northeast-2 --profile my-profile
 
-#### 파일 업로드
+## 52. 실습: 파일 업로드
 
 형식 :　aws s3 cp ./index.html s3://버킷이름/index.html
 
@@ -1068,7 +1066,7 @@ download: s3://soldesk-s3-bucket-basic-123456789012-ap-northeast-2/index.html to
 PS C:\my-terraform> terraform destroy
 ```
 
-#### Terraform을 활용한 S3 Versioning 실습
+## 53. 실습: Terraform을 활용한 S3 Versioning 실습
 
 - S3 Bucket을 Terraform으로 생성
 - S3 Bucket에 Versioning을 활성화
@@ -1076,7 +1074,7 @@ PS C:\my-terraform> terraform destroy
 - document.txt의 내용을 변경한 뒤 다시 terraform apply를 실행
 - 같은 Key의 Object가 덮어써지는 것이 아니라 새로운 Version으로 저장되는 것을 확인
 
-#### STEP 1. Terraform 기본 설정
+## 54. 실습: STEP 1. Terraform 기본 설정
 
 - Terraform에서 사용할 AWS Provider와 AWS Region, AWS CLI Profile을 설정
 - 이 단계에서는 아직 S3 Bucket을 생성하지 않는다.
@@ -1119,7 +1117,7 @@ aws_profile = "default"
 terraform init
 ```
 
-#### STEP 2. 현재 AWS Account 정보 조회
+## 55. 실습: STEP 2. 현재 AWS Account 정보 조회
 
 - S3 Bucket 이름은 다른 AWS 사용자와 중복될 수 없다.
 따라서 현재 Terraform이 접속한 AWS Account ID를 조회하여 Bucket 이름에 사용할 수 있도록
@@ -1145,7 +1143,7 @@ output "account_id" {
 terraform plan
 ```
 
-#### STEP 3. S3 Bucket 이름 생성
+## 56. 실습: STEP 3. S3 Bucket 이름 생성
 
 - S3 Bucket 이름은 고유해야
 - 실습마다 이름 충돌이 발생하지 않도록 다음 정보를 조합하여 Bucket 이름을 생성
@@ -1188,7 +1186,7 @@ PS C:\trf2\2) S3\2-２_S3_versioning>　terraform plan
 - 다음과 같은 형식으로 Bucket 이름이 생성되는지 확인
   - soldesk-s3-versioning-123456789012-ap-northeast-2
 
-#### STEP 4. S3 Bucket 생성
+## 57. 실습: STEP 4. S3 Bucket 생성
 
 - 실제 S3 Bucket을 생성
 - 앞에서 이해한 Bucket 이름 생성 방식을 적용
@@ -1227,7 +1225,7 @@ PS C:\trf2\2) S3\2-２_S3_versioning>　terraform plan
 PS C:\trf2\2) S3\2-２_S3_versioning>　terraform apply
 ```
 
-#### STEP 5. S3 Versioning 활성화
+## 58. 실습: STEP 5. S3 Versioning 활성화
 
 - S3 Versioning은 동일한 Key의 Object가 다시 업로드되었을 때
 기존 Object를 완전히 덮어쓰지 않고 각각의 Version으로 보관하는 기능이다.
@@ -1243,7 +1241,7 @@ document.txt
 
 - Version 관리는 기본값으로 비활성화 되어있다.
 
-![이미지](assets/07-terraform-s3/4.png)
+![Version 관리는 기본값으로 비활성화 되어있다. 화면](assets/07-terraform-s3/4.png)
 
 ```hcl
    # main.tf
@@ -1272,9 +1270,9 @@ PS C:\trf2\2) S3\2-２_S3_versioning>　terraform apply
 
 - S3 Bucket을 생성하고 해당 Bucket에 Versioning을 활성화
 
-![이미지](assets/07-terraform-s3/5.png)
+![S3 Bucket을 생성하고 해당 Bucket에 Versioning을 활성화 화면](assets/07-terraform-s3/5.png)
 
-#### STEP 6. Versioning 테스트 Object 생성
+## 59. 실습: STEP 6. Versioning 테스트 Object 생성
 
 - Versioning이 실제로 동작하는지 확인하기 위해 document.txt Object를 생성
 - Object의 실제 내용은 Variable을 사용
@@ -1361,9 +1359,9 @@ PS C:\trf2\2) S3\2-2_S3_versioing>
 download: s3://soldesk-s3-versioning-123456789012-ap-northeast-2/document.txt to .\document.txt
 ```
 
-![이미지](assets/07-terraform-s3/6.png)
+![download: s3://soldesk-s3-versioning-123456789012-ap-northea 화면](assets/07-terraform-s3/6.png)
 
-#### STEP 7. Version 2 생성
+## 60. 실습: STEP 7. Version 2 생성
 
 - 동일한 Object Key인 document.txt의 내용만 변경
 - Key는 변경하지 않는다.
@@ -1401,7 +1399,7 @@ document.txt
 ├── Version 2
 └── Version 1
 
-#### STEP 8. Version 3 생성
+## 61. 실습: STEP 8. Version 3 생성
 
 - 같은 방법으로 Object 내용을 한 번 더 변경
 
@@ -1422,9 +1420,9 @@ Changes to Outputs:
 
 - AWS Console로 접속해서 확인해보면 3개의 버전이 확인된다.
 
-![이미지](assets/07-terraform-s3/7.png)
+![AWS Console로 접속해서 확인해보면 3개의 버전이 확인된다. 화면](assets/07-terraform-s3/7.png)
 
-#### STEP 10. AWS CLI를 이용한 Delete Marker 생성 및 복구 실습
+## 62. 실습: STEP 10. AWS CLI를 이용한 Delete Marker 생성 및 복구 실습
 
 - 이번 단계에서는 Versioning이 활성화된 S3 Bucket에서 document.txt Object를 삭제한다.
 
@@ -1444,7 +1442,7 @@ document.txt
 ├── Version 2
 └── Version 1
 
-#### STEP 10-1. 현재 Object 확인
+## 63. 실습: STEP 10-1. 현재 Object 확인
 
 - 먼저 document.txt가 정상적으로 존재하는지 확인한다.
 
@@ -1463,7 +1461,7 @@ PS C:\trf2\2) S3\2-2_S3_versioning> Get-Content .\document-current.txt
 S3 Bucket Version 3 Test 3
 ```
 
-#### STEP 10-2. 현재 Object Version 목록 확인
+## 64. 실습: STEP 10-2. 현재 Object Version 목록 확인
 
 - Version을 삭제하기 전에 현재 Version 정보를 확인한다.
 
@@ -1509,7 +1507,7 @@ Version 1
 "IsLatest": false
 ```
 
-#### STEP 10-3. document.txt 삭제
+## 65. 실습: STEP 10-3. document.txt 삭제
 
 - Version ID를 지정하지 않고 document.txt를 삭제한다.
 
@@ -1535,7 +1533,7 @@ document.txt
 - 실제 Version 1, Version 2, Version 3은 삭제되지 않는다.
 - Delete Marker만 새로운 최신 Version으로 추가된다.
 
-#### STEP 10-4. 일반 AWS CLI에서 document.txt가 안 보이는지 확인
+## 66. 실습: STEP 10-4. 일반 AWS CLI에서 document.txt가 안 보이는지 확인
 
 - Delete Marker가 최신 Version이 되었기 때문에 일반 Object 목록에서는
 document.txt가 존재하지 않는 것처럼 보인다.
@@ -1550,13 +1548,13 @@ PS C:\trf2\2) S3\2-2_S3_versioning> aws s3 ls s3://soldesk-s3-versioning-1234567
 
 - document.txt 파일이 확인되지 않는다.
 
-![이미지](assets/07-terraform-s3/8.png)
+![document.txt 파일이 확인되지 않는다. 화면](assets/07-terraform-s3/8.png)
 
 - 버전 표시를 활성화하면 확인된다.
 
-![이미지](assets/07-terraform-s3/9.png)
+![버전 표시를 활성화하면 확인된다. 화면](assets/07-terraform-s3/9.png)
 
-#### STEP 10-5. document.txt 다운로드 테스트
+## 67. 실습: STEP 10-5. document.txt 다운로드 테스트
 
 - 일반적인 방법으로 document.txt 다운로드를 시도한다.
 
@@ -1571,7 +1569,7 @@ fatal error: An error occurred (404) when calling the HeadObject operation: Key 
 - 이것은 Version 1, Version 2, Version 3이 실제로 삭제되었다는 의미가 아니다.
 - Delete Marker가 현재 Version이기 때문에 일반적인 방법으로 Object를 조회할 수 없는 상태이다.
 
-#### STEP 10-6. Version 목록을 조회해서 Delete Marker 확인
+## 68. 실습: STEP 10-6. Version 목록을 조회해서 Delete Marker 확인
 
 - 일반 aws s3 ls에서는 document.txt가 보이지 않지만
 list-object-versions 명령어를 사용하면 기존 Version과 Delete Marker를 확인할 수 있다.
@@ -1605,7 +1603,7 @@ document.txt
    └── Version 1        ← IsLatest = false
 ```
 
-#### STEP 10-7 Delete Marker 삭제
+## 69. 실습: STEP 10-7 Delete Marker 삭제
 
 - 이번에는 document.txt를 삭제하는 것이 아니라 Delete Marker 자체를 삭제한다.
 
@@ -1724,7 +1722,7 @@ s3:GetObject 권한을 허용한다.
 
 http://www.aws-esk.com
 
-#### STEP 1. S3 정적 웹사이트용 Bucket 생성
+## 70. 실습: STEP 1. S3 정적 웹사이트용 Bucket 생성
 
 - Route 53까지 연결할 예정이므로 S3 Bucket 이름을 최종 도메인과 동일하게 생성한다.
 - 최종 접속 주소 : http://www.aws-esk.com
@@ -1841,7 +1839,7 @@ Changes to Outputs:
   + domain_name = "www.aws-esk.com"
 ```
 
-#### STEP 2. S3 Static Website Hosting 설정
+## 71. 실습: STEP 2. S3 Static Website Hosting 설정
 
 - STEP 1에서 생성한 S3 Bucket에 정적 웹사이트 기능을 추가한다.
 - STEP 1에서 생성한 aws_s3_bucket.website Resource를 그대로 사용한다.
@@ -1897,11 +1895,11 @@ PS C:\my-terraform> plan
 PS C:\my-terraform> apply
 ```
 
-![이미지](assets/07-terraform-s3/11.png)
+![PS C:\my-terraform> apply 화면](assets/07-terraform-s3/11.png)
 
-![이미지](assets/07-terraform-s3/12.png)
+![PS C:\my-terraform> apply 화면](assets/07-terraform-s3/12.png)
 
-#### STEP 3. S3 Public Access 설정
+## 72. 실습: STEP 3. S3 Public Access 설정
 
 - S3 Static Website는 인터넷 사용자가 index.html과 error.html을 읽을 수 있어야 한다.
 
@@ -1960,7 +1958,7 @@ PS C:\my-terraform> plan
 PS C:\my-terraform> apply
 ```
 
-#### STEP 4. index.html / error.html 업로드
+## 73. 실습: STEP 4. index.html / error.html 업로드
 
 - 이번 단계에서는 기존 S3 Bucket에 index.html, error.html 두 개의 HTML 파일을 업로드한다.
 - 현재 프로젝트 구조:
@@ -2036,9 +2034,9 @@ PS C:\my-terraform> apply
 
 - index.html, error.html 파일이 업로드되어 있다.
 
-![이미지](assets/07-terraform-s3/10.png)
+![index.html, error.html 파일이 업로드되어 있다. 화면](assets/07-terraform-s3/10.png)
 
-#### STEP 5. S3 Static Website 접속 테스트
+## 74. 실습: STEP 5. S3 Static Website 접속 테스트
 
 - Route 53을 연결하기 전에 S3 Static Website 자체가 정상 동작하는지 확인한다.
 
@@ -2053,16 +2051,16 @@ output "website_url" {
 http://www.aws-esk.com.s3-website.ap-northeast-2.amazonaws.com/
 ```
 
-![이미지](assets/07-terraform-s3/13.png)
+![http://www.aws-esk.com.s3-website.ap-northeast-2.amazonaws.c 화면](assets/07-terraform-s3/13.png)
 
 - 존재하지 않는 페이지에 접속한다.
 http://www.aws-esk.com.s3-website.ap-northeast-2.amazonaws.com/test.html
 
-![이미지](assets/07-terraform-s3/14.png)
+![http://www.aws-esk.com.s3-website.ap-northeast-2.amazonaws.c 화면](assets/07-terraform-s3/14.png)
 
 - 메인 페이지로 이동을 클릭하게되면 다시 index.html로 이동한다.
 
-#### STEP 6. Route 53 기존 Hosted Zone 조회
+## 75. 실습: STEP 6. Route 53 기존 Hosted Zone 조회
 
 - Route 53에 이미 존재하는 "aws-esk.com" Public Hosted Zone을 Terraform에서 조회한다.
 
@@ -2097,7 +2095,7 @@ PS C:\my-terraform> plan
 - 다음 Data Source가 정상 조회되는지 확인한다.
   - data.aws_route53_zone.main
 
-#### STEP 7. Route 53 A Alias Record 생성
+## 76. 실습: STEP 7. Route 53 A Alias Record 생성
 
 - Route 53에서 "www.aws-esk.com" A Record를 생성한다.
 그리고 이 Record를 S3 Static Website 로 연결한다.
@@ -2163,9 +2161,9 @@ website_url = "http://www.aws-esk.com"
 또는 PowerShell:
 Resolve-DnsName www.aws-esk.com
 
-![이미지](assets/07-terraform-s3/15.png)
+![Resolve-DnsName www.aws-esk.com 화면](assets/07-terraform-s3/15.png)
 
-#### STEP 9. 최종 웹사이트 확인
+## 77. 실습: STEP 9. 최종 웹사이트 확인
 
 [정상 페이지]
 http://www.aws-esk.com

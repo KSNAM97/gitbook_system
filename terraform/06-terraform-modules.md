@@ -1,10 +1,10 @@
 # Terraform - Modules
 
-## 이론
+이 문서는 반복되는 Terraform 코드를 재사용 가능한 단위로 묶는 Module의 개념과 구조, 사용 방법을 정리한다.
 
-#### Terraform Module
+## 1. Terraform Module
 
-#### Terraform Module이란?
+## 2. Terraform Module이란?
 
 - Terraform Module은 여러 Terraform 설정과 Resource를 하나의 기능 단위로 묶어
 재사용할 수 있도록 만든 코드 집합
@@ -39,7 +39,7 @@ resource "aws_nat_gateway" "example" {
 - 이처럼 관련 Resource가 많아지면 코드가 길어지고 반복되는 설정도 많아진다.
 이러한 관련 Resource를 하나의 묶음으로 만든 것이 Module이다.
 
-#### Module을 사용하는 이유
+## 3. Module을 사용하는 이유
 
 Module을 사용하면 다음과 같은 장점이 있다.
   - 코드 재사용
@@ -66,7 +66,7 @@ VPC Module
 
 - 처럼 VPC 관련 Resource를 하나의 단위로 관리할 수 있다.
 
-#### Module 기본 형식
+## 4. Module 기본 형식
 
 - Terraform에서 Module은 "module" 블록으로 호출한다.
 
@@ -87,7 +87,7 @@ source
 
 - module "vpc" 는 사용할 Module의 이름이고, source = "./modules/vpc" 는 Module 코드가 어디에 있는지를 지정한다.
 
-#### Root Module과 Child Module
+## 5. Root Module과 Child Module
 
 - Terraform에서는 현재 실행하는 최상위 Terraform 프로젝트를 Root Module이라고 한다.
 
@@ -112,7 +112,7 @@ module "vpc" {
 - 그러면 "Root Module  -->  VPC Module" 형태가 된다.
 - Root Module에서 호출되는 Module을 일반적으로 Child Module이라고 한다.
 
-#### Local Module
+## 6. Local Module
 
 - 현재 프로젝트 내부에 직접 만든 Module을 Local Module이라고 할 수 있다.
 
@@ -138,7 +138,7 @@ module "vpc" {
 
 - 여기서 source = "./modules/vpc" 는 현재 프로젝트 내부의 modules/vpc 디렉터리에 있는 Module을 사용한는 의미
 
-#### source란?
+## 7. source란?
 
 - source는 Module 코드를 어디에서 가져올 것인지 지정하는 설정이다.
 
@@ -161,7 +161,7 @@ module "vpc" {
 - 이 경우 Terraform Registry에 공개된 Module을 사용한다.
 즉 source는 이 Module의 코드는 어디에 있는가를 Terraform에게 알려주는 역할을 한다.
 
-#### Terraform Registry Module
+## 8. Terraform Registry Module
 
 - Terraform Registry에는 다른 사용자가 미리 만들어 공개한 Module들이 있다.
 
@@ -205,7 +205,7 @@ VPC Module
 AWS에 Resource 생성
 ```
 
-#### terraform-aws-modules/vpc/aws 의미
+## 9. terraform-aws-modules/vpc/aws 의미
 
 - 코드 : source = "terraform-aws-modules/vpc/aws"
 
@@ -226,7 +226,7 @@ aws
 
 - 즉 terraform-aws-modules에서 제공하는 AWS용 vpc Module을 사용한다.
 
-#### Terraform Registry Module 방식 (VPC + EC2)
+## 10. Terraform Registry Module 방식 (VPC + EC2)
 
   - 구조
 

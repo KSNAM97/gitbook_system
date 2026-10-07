@@ -1,8 +1,8 @@
 # Terraform - Provider
 
-## 이론
+이 문서는 Terraform이 AWS 등 외부 서비스와 통신하는 방법인 Provider의 개념, 버전 제약, 인증 방식과 멀티 프로바이더 구성을 정리한다.
 
-#### Terraform 프로바이더 이해
+## 1. Terraform 프로바이더 이해
 
 - Terraform에서 프로바이더(Provider)는 Terraform이 외부 시스템과 통신할 수 있도록 해주는 플러그인이다.
 
@@ -19,7 +19,7 @@
 
 - 따라서 Terraform에서 프로바이더는 Terraform과 클라우드 서비스 사이의 연결 역할을 하는 핵심 구성 요소이다.
 
-#### Terraform AWS 프로바이더 구성
+## 2. Terraform AWS 프로바이더 구성
 
 - Terraform에서 AWS 리소스를 생성하려면 AWS Provider를 먼저 설정해야 한다.
 
@@ -28,7 +28,7 @@
   - 2 어떤 리전(region)에 리소스를 생성할 것인지 지정
   - 3 AWS에 접근하기 위한 인증 정보 설정
 
-#### 1) AWS 프로바이더 기본 설정
+## 3. 1) AWS 프로바이더 기본 설정
 
 - Terraform에서 AWS를 사용하려면 provider 블록을 작성해야 한다.
 
@@ -45,7 +45,7 @@ provider "aws" {
 - region: 리소스를 생성할 AWS 리전
 - Terraform은 이 설정을 통해 어느 AWS 리전에 리소스를 생성할지 결정한다.
 
-#### 2) AWS 인증 정보 설정
+## 4. 2) AWS 인증 정보 설정
 
 - Terraform이 AWS 리소스를 생성하려면 AWS API에 접근할 수 있는 인증 정보(credentials)가 필요하다.
 
@@ -89,7 +89,7 @@ aws_secret_access_key = xxxxxxxxx
 
 - Terraform은 이 파일을 자동으로 읽어 인증을 수행한다.
 
-#### 3) AWS Profile 사용
+## 5. 3) AWS Profile 사용
 
 - 여러 개의 AWS 계정을 사용할 경우 Profile을 지정할 수 있다.
 
@@ -123,7 +123,7 @@ aws_secret_access_key = your-secret-access-key
 PS C:\Users\ryu> notepad $env:USERPROFILE\.aws\credentials
 ```
 
-#### Terraform Provider 버전 관리
+## 6. Terraform Provider 버전 관리
 
 - Terraform Provider는 계속 업데이트되기 때문에 버전을 명시적으로 관리하는 것이 중요하다.
 
@@ -159,7 +159,7 @@ version
  # 사용할 Provider 버전
 ```
 
-#### Terraform 버전 제약 연산자
+## 7. Terraform 버전 제약 연산자
 
 - Terraform에서는 다양한 버전 조건을 설정할 수 있다.
 =: 특정 버전만 사용
@@ -180,7 +180,7 @@ version
 
 - 즉 major 버전 변경은 막고 minor 업데이트만 허용한다.
 
-#### AWS Provider 리소스 목록 확인
+## 8. AWS Provider 리소스 목록 확인
 
 - Terraform AWS Provider는 매우 많은 리소스를 제공한다.
 
@@ -199,7 +199,7 @@ https://registry.terraform.io/providers/hashicorp/aws/latest/docs
 
 이 문서는 Terraform으로 생성할 수 있는 모든 AWS 리소스의 목록과 사용법을 제공한다.
 
-#### Terraform Provider 플러그인 캐시
+## 9. Terraform Provider 플러그인 캐시
 
 - Terraform은 실행 시 필요한 Provider 플러그인을 자동으로 다운로드한다.
 
@@ -246,9 +246,7 @@ https://registry.terraform.io/providers/hashicorp/aws/latest/docs
 포함하게 될수 있으며, 이러한 버전은 수동으로 삭제해야 한다.
   - 플러그인 캐시 디렉토리는 동시성에 안전하지 않을 수 있음
 
-## 실습
-
-#### Terraform 프로바이더 이해
+## 10. 실습: Terraform 프로바이더 이해
 
 - Terraform에서 프로바이더(Provider)는 Terraform이 외부 시스템과 통신할 수 있도록 해주는 플러그인이다.
 
@@ -265,7 +263,7 @@ https://registry.terraform.io/providers/hashicorp/aws/latest/docs
 
 - 따라서 Terraform에서 프로바이더는 Terraform과 클라우드 서비스 사이의 연결 역할을 하는 핵심 구성 요소이다.
 
-#### Terraform AWS 프로바이더 구성
+## 11. 실습: Terraform AWS 프로바이더 구성
 
 - Terraform에서 AWS 리소스를 생성하려면 AWS Provider를 먼저 설정해야 한다.
 
@@ -274,7 +272,7 @@ https://registry.terraform.io/providers/hashicorp/aws/latest/docs
   - 2 어떤 리전(region)에 리소스를 생성할 것인지 지정
   - 3 AWS에 접근하기 위한 인증 정보 설정
 
-#### 1) AWS 프로바이더 기본 설정
+## 12. 실습: 1) AWS 프로바이더 기본 설정
 
 - Terraform에서 AWS를 사용하려면 provider 블록을 작성해야 한다.
 
@@ -291,7 +289,7 @@ provider "aws" {
 - region: 리소스를 생성할 AWS 리전
 - Terraform은 이 설정을 통해 어느 AWS 리전에 리소스를 생성할지 결정한다.
 
-#### 2) AWS 인증 정보 설정
+## 13. 실습: 2) AWS 인증 정보 설정
 
 - Terraform이 AWS 리소스를 생성하려면 AWS API에 접근할 수 있는 인증 정보(credentials)가 필요하다.
 
@@ -335,7 +333,7 @@ aws_secret_access_key = xxxxxxxxx
 
 - Terraform은 이 파일을 자동으로 읽어 인증을 수행한다.
 
-#### 3) AWS Profile 사용
+## 14. 실습: 3) AWS Profile 사용
 
 - 여러 개의 AWS 계정을 사용할 경우 Profile을 지정할 수 있다.
 
@@ -369,7 +367,7 @@ aws_secret_access_key = your-secret-access-key
 PS C:\Users\ryu> notepad $env:USERPROFILE\.aws\credentials
 ```
 
-#### Terraform Provider 버전 관리
+## 15. 실습: Terraform Provider 버전 관리
 
 - Terraform Provider는 계속 업데이트되기 때문에 버전을 명시적으로 관리하는 것이 중요하다.
 
@@ -405,7 +403,7 @@ version
  # 사용할 Provider 버전
 ```
 
-#### Terraform 버전 제약 연산자
+## 16. 실습: Terraform 버전 제약 연산자
 
 - Terraform에서는 다양한 버전 조건을 설정할 수 있다.
 =: 특정 버전만 사용
@@ -426,7 +424,7 @@ version
 
 - 즉 major 버전 변경은 막고 minor 업데이트만 허용한다.
 
-#### AWS Provider 리소스 목록 확인
+## 17. 실습: AWS Provider 리소스 목록 확인
 
 - Terraform AWS Provider는 매우 많은 리소스를 제공한다.
 
@@ -445,7 +443,7 @@ https://registry.terraform.io/providers/hashicorp/aws/latest/docs
 
 이 문서는 Terraform으로 생성할 수 있는 모든 AWS 리소스의 목록과 사용법을 제공한다.
 
-#### Terraform Provider 플러그인 캐시
+## 18. 실습: Terraform Provider 플러그인 캐시
 
 - Terraform은 실행 시 필요한 Provider 플러그인을 자동으로 다운로드한다.
 
@@ -492,7 +490,7 @@ https://registry.terraform.io/providers/hashicorp/aws/latest/docs
 포함하게 될수 있으며, 이러한 버전은 수동으로 삭제해야 한다.
   - 플러그인 캐시 디렉토리는 동시성에 안전하지 않을 수 있음
 
-#### 파워쉘 업데이트
+## 19. 실습: 파워쉘 업데이트
 
 ```powershell
 PS C:\Users\soldesk> winget install --id Microsoft.PowerShell --source winget
@@ -532,9 +530,9 @@ C:\WINDOWS\system32> setx TF_PLUGIN_CACHE_DIR "C:\terraform-plugin-cache"# 환�
 성공: 지정한 값을 저장했습니다.
 ```
 
-![이미지](assets/04-terraform-provider/1.png)
+![성공: 지정한 값을 저장했습니다. 화면](assets/04-terraform-provider/1.png)
 
-#### 윈도우 사용시 심볼릭 링크 제한
+## 20. 실습: 윈도우 사용시 심볼릭 링크 제한
 
 - Windows에서는 기본적으로 일반 사용자에게 심볼릭 링크(Symbolic Link) 생성 권한이 제한되어 있다.
 그래서 mklink 명령을 실행하면 다음과 같은 오류가 발생할 수 있다.
@@ -578,13 +576,13 @@ You do not have sufficient privilege to perform this operation.
 
 - 업데이트 및 보안
 
-![이미지](assets/04-terraform-provider/2.png)
+![업데이트 및 보안 화면](assets/04-terraform-provider/2.png)
 
 - 개발자용  -->  개발자 모드 켬  -->  예
 
-![이미지](assets/04-terraform-provider/3.png)
+![개발자용  -->  개발자 모드 켬  -->  예 화면](assets/04-terraform-provider/3.png)
 
-#### 임시 테스트
+## 21. 실습: 임시 테스트
 
 ```
 C:\WINDOWS\system32> mklink TestLink TestTarget
@@ -593,7 +591,7 @@ TestLink <<===>> TestTarget에 대한 기호화된 링크를 만들었습니다.
 
 - 심볼릭 링크를 생성하기위해서 terraform  init 진행
 
-![이미지](assets/04-terraform-provider/4.png)
+![심볼릭 링크를 생성하기위해서 terraform  init 진행 화면](assets/04-terraform-provider/4.png)
 
 ```powershell
 PS C:\terraform-aws\01_terraform-aws-config\ec2-practice> terraform  init
@@ -614,7 +612,7 @@ rerun this command to reinitialize your working directory. If you forget, other
 commands will detect it and remind you to do so if necessary.
 ```
 
-![이미지](assets/04-terraform-provider/5.png)
+![commands will detect it and remind you to do so if necessary 화면](assets/04-terraform-provider/5.png)
 
 - aws (hashicorp/aws)
   - AWS Provider 즉 Terraform이 AWS 리소스를 생성할 때 사용하는 플러그인이다.
@@ -649,11 +647,11 @@ resource "random_password" "db" {
 - DB 비밀번호 같은 랜덤 값을 생성할 때 사용한다.
 - 로컬에도 파일이 같이 생성된다.
 
-![이미지](assets/04-terraform-provider/6.png)
+![로컬에도 파일이 같이 생성된다. 화면](assets/04-terraform-provider/6.png)
 
-![이미지](assets/04-terraform-provider/7.png)
+![로컬에도 파일이 같이 생성된다. 화면](assets/04-terraform-provider/7.png)
 
-#### 버전은 다운로드 받은 것으로 수정해야 한다.
+## 22. 실습: 버전은 다운로드 받은 것으로 수정해야 한다.
 
 ```powershell
 PS C:\Users\ryu>

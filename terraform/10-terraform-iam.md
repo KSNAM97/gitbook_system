@@ -1,8 +1,8 @@
 # Terraform - IAM
 
-## 이론
+이 문서는 Terraform으로 IAM 사용자, 역할, 정책과 AssumeRole을 구성하는 방법과 실습을 정리한다.
 
-#### IAM(Identity and Access Management) 서비스 이해
+## 1. IAM(Identity and Access Management) 서비스 이해
 
 AWS 인프라를 운영할 때 가장 중요한 요소 중 하나는 보안 관리이다.
 AWS 환경에서는 EC2, S3, RDS, VPC와 같은 다양한 리소스를 생성하고 운영하게 되며,
@@ -20,7 +20,7 @@ AWS를 실제로 운영하다 보면 여러 사람이 하나의 AWS 환경을 �
 IAM을 통해 조직의 보안 정책을 적용하고, 사용자별 역할에 맞는 권한을 설정함으로써
 AWS 환경을 보다 안전하게 운영할 수 있다.
 
-#### IAM 유저 기본 이해
+## 2. IAM 유저 기본 이해
 
 IAM은 Identity and Access Management의 약자로,
 AWS 리소스에 대한 접근을 안전하게 제어할 수 있도록 해주는 서비스이다.
@@ -35,7 +35,7 @@ IAM 유저를 생성하여 필요한 권한을 부여하는 방식으로 AWS 환
 IAM을 사용하면 사용자별로 AWS 리소스 접근 권한을 설정할 수 있으며,
 이를 통해 조직의 역할에 맞는 권한 관리 체계를 구축할 수 있다.
 
-#### IAM 유저란?
+## 3. IAM 유저란?
 
 IAM 유저는 AWS에 접근할 수 있는 개별 사용자 계정이다.
 예를 들어, 회사 내에서 개발자, 운영자, 관리자 등 각각의 역할을 가진 사람들을 IAM 유저로 관리할 수 있다.
@@ -61,25 +61,25 @@ IAM 유저는 실제 사람을 의미하는 경우도 있지만, 프로그램이
 이러한 다양한 접근 방식에서도 동일하게 IAM 유저의 권한이 적용되며,
 IAM 정책을 통해 어떤 작업을 수행할 수 있는지가 결정된다.
 
-#### IAM 유저의 목적과 특징
+## 4. IAM 유저의 목적과 특징
 
 IAM 유저를 사용하는 가장 큰 목적은 AWS 리소스에 대한 접근 권한을 사용자 단위로 관리하기 위함이다.
 
-#### 개별 권한 관리
+## 5. 개별 권한 관리
 
 IAM 유저마다 서로 다른 권한을 부여할 수 있기 때문에 조직 내 역할에 맞는 권한 설정이 가능하다.
 예를 들어 개발자는 EC2 인스턴스를 생성하거나 수정할 수 있는 권한이 필요할 수 있지만,
 결제 관리나 계정 설정과 같은 권한은 필요하지 않을 수 있다.
 이러한 경우 IAM 정책을 사용하여 필요한 권한만 부여할 수 있다.
 
-#### 액세스 관리
+## 6. 액세스 관리
 
 유저가 AWS 콘솔, CLI, SDK 등을 통해 특정 서비스에 접근할 수 있는지 제어할 수 있다.
 예를 들어 특정 사용자는 S3 버킷을 읽기만 할 수 있도록 설정할 수 있으며,
 다른 사용자는 EC2 인스턴스를 생성하거나 시작할 수 있도록 설정할 수 있다.
 이러한 방식으로 서비스별 접근 권한을 세밀하게 관리할 수 있다.
 
-#### 정책의 적용
+## 7. 정책의 적용
 
 유저가 어떤 AWS 리소스에 어떤 작업을 할 수 있는지를 정의하는 IAM 정책을 유저에게 부여하여 권한을 관리한다.
 
@@ -90,7 +90,7 @@ Root 계정은 AWS 계정 전체에 대한 모든 권한을 가지고 있기 때
 대신 IAM 유저를 생성하고 각 사용자에게 필요한 권한만 부여하는 방식으로
 AWS 환경을 운영하는 것이 보안 측면에서 훨씬 안전하다.
 
-#### IAM 정책(Policy)과 권한
+## 8. IAM 정책(Policy)과 권한
 
 IAM 유저의 권한은 IAM 정책(Policy)을 통해 제어된다.
 정책은 JSON 형식의 문서로, 유저가 어떤 AWS 서비스에 어떤 작업을 수행할 수 있는지를 정의한다.
@@ -100,23 +100,23 @@ IAM 정책은 AWS 권한 관리의 핵심 요소이며, 정책을 통해 사용�
 IAM 정책을 적절하게 설계하면 조직 내 사용자들이 필요한 작업만 수행하도록 제한할 수 있으며,
 이를 통해 AWS 환경의 보안을 강화할 수 있다.
 
-#### IAM 정책의 구성 요소
+## 9. IAM 정책의 구성 요소
 
 - 정책은 크게 두 가지로 나눌 수 있습니다.
 
-#### AWS 관리형 정책
+## 10. AWS 관리형 정책
 
 AWS에서 사전 구성하여 제공하는 표준 정책이다.
 예를 들어, AmazonS3ReadOnlyAccess 정책은 S3 버킷에 읽기 전용 권한을 부여한다.
 이러한 정책은 AWS에서 일반적인 사용 사례를 기반으로 만들어져 있기 때문에
 초기 권한 설정 시 매우 편리하게 사용할 수 있다.
 
-#### 사용자 정의 정책(커스텀 정책)
+## 11. 사용자 정의 정책(커스텀 정책)
 
 유저가 필요에 따라 직접 작성하는 정책으로, JSON 형식으로 구성된다.
 특정 리소스에 대해서만 권한을 부여하거나 특정 작업만 허용하는 등 보다 세밀한 권한 제어가 가능하다.
 
-#### 정책의 세부 요소
+## 12. 정책의 세부 요소
 
 - Effect
   - 권한을 Allow하거나 Deny할지 정의
@@ -147,7 +147,7 @@ AWS에서 사전 구성하여 제공하는 표준 정책이다.
 }
 ```
 
-#### AssumeRole 권한 부여
+## 13. AssumeRole 권한 부여
 
 - AssumeRole은 AWS에서 다른 IAM Role의 권한을 임시로 빌려서 사용하는 기능이다.
 
@@ -184,7 +184,7 @@ AWS에서 사전 구성하여 제공하는 표준 정책이다.
 
 - 그리고 필요할 때 해당 Role을 사용한다.
 
-#### AssumeRole의 핵심
+## 14. AssumeRole의 핵심
 
 - AssumeRole을 사용하려면 기본적으로 2가지를 이해해야 한다.
   - 1. 누가 이 Role을 사용할 수 있는가?
@@ -194,7 +194,7 @@ AWS에서 사전 구성하여 제공하는 표준 정책이다.
   - Trust Policy: 누가 Role을 사용할 수 있는지 설정
   - Permission Policy: Role이 어떤 AWS 작업을 할 수 있는지 설정
 
-#### 1) Trust Policy
+## 15. 1) Trust Policy
 
 - Trust Policy는 "누가 이 Role을 사용할 수 있는가?" 를 정의한다.
 - 예를 들어 EC2가 Role을 사용할 수 있도록 설정하려면 다음과 같다.
@@ -235,7 +235,7 @@ AWS에서 사전 구성하여 제공하는 표준 정책이다.
 - 즉 전체 의미는 다음과 같다.
   - EC2 서비스가 이 IAM Role의 권한을 임시로 Assume해서 사용할 수 있도록 허용한다.
 
-#### 2)  Permission Policy
+## 16. 2)  Permission Policy
 
 - Permission Policy는 "이 Role을 사용하면 무엇을 할 수 있는가?" 를 정의한다.
 
@@ -267,7 +267,7 @@ AWS에서 사전 구성하여 제공하는 표준 정책이다.
 - Permission Policy
   - Role을 사용해서 무엇을 할 수 있는가?
 
-#### STS (Security Token Service)
+## 17. STS (Security Token Service)
 
 - STS는 Security Token Service의 약자이다.
 
@@ -289,7 +289,7 @@ AWS에서 사전 구성하여 제공하는 표준 정책이다.
 
 - EC2 안에 AWS Access Key를 직접 저장하지 않아도 된다.
 
-#### EC2에서 사용하는 AssumeRole 예제
+## 18. EC2에서 사용하는 AssumeRole 예제
 
 - EC2가 IAM Role을 사용할 수 있도록 하는 Trust Policy이다.
 
@@ -347,7 +347,7 @@ AWS에서 사전 구성하여 제공하는 표준 정책이다.
 - Permission Policy
   - Role을 사용해서 S3 작업을 할 수 있도록 허용
 
-#### 다른 AWS 계정의 Role 사용
+## 19. 다른 AWS 계정의 Role 사용
 
 - AssumeRole은 다른 AWS 계정의 Role도 사용할 수 있다.
 
@@ -380,7 +380,7 @@ AWS에서 사전 구성하여 제공하는 표준 정책이다.
 
 - 이처럼 다른 AWS 계정의 Role을 사용하는 방식을 Cross Account AssumeRole이라고 한다.
 
-#### AWS CLI로 AssumeRole 실행
+## 20. AWS CLI로 AssumeRole 실행
 
 - AWS CLI에서도 직접 AssumeRole을 실행할 수 있다.
 
@@ -466,9 +466,7 @@ provider "aws" {
 - assume_role
   - 로그인 후 어떤 Role의 권한을 사용할지 지정다.
 
-## 실습
-
-#### IAM(Identity and Access Management) 서비스 이해
+## 21. 실습: IAM(Identity and Access Management) 서비스 이해
 
 AWS 인프라를 운영할 때 가장 중요한 요소 중 하나는 보안 관리이다.
 AWS 환경에서는 EC2, S3, RDS, VPC와 같은 다양한 리소스를 생성하고 운영하게 되며,
@@ -486,7 +484,7 @@ AWS를 실제로 운영하다 보면 여러 사람이 하나의 AWS 환경을 �
 IAM을 통해 조직의 보안 정책을 적용하고, 사용자별 역할에 맞는 권한을 설정함으로써
 AWS 환경을 보다 안전하게 운영할 수 있다.
 
-#### IAM 유저 기본 이해
+## 22. 실습: IAM 유저 기본 이해
 
 IAM은 Identity and Access Management의 약자로,
 AWS 리소스에 대한 접근을 안전하게 제어할 수 있도록 해주는 서비스이다.
@@ -501,7 +499,7 @@ IAM 유저를 생성하여 필요한 권한을 부여하는 방식으로 AWS 환
 IAM을 사용하면 사용자별로 AWS 리소스 접근 권한을 설정할 수 있으며,
 이를 통해 조직의 역할에 맞는 권한 관리 체계를 구축할 수 있다.
 
-#### IAM 유저란?
+## 23. 실습: IAM 유저란?
 
 IAM 유저는 AWS에 접근할 수 있는 개별 사용자 계정이다.
 예를 들어, 회사 내에서 개발자, 운영자, 관리자 등 각각의 역할을 가진 사람들을 IAM 유저로 관리할 수 있다.
@@ -527,25 +525,25 @@ IAM 유저는 실제 사람을 의미하는 경우도 있지만, 프로그램이
 이러한 다양한 접근 방식에서도 동일하게 IAM 유저의 권한이 적용되며,
 IAM 정책을 통해 어떤 작업을 수행할 수 있는지가 결정된다.
 
-#### IAM 유저의 목적과 특징
+## 24. 실습: IAM 유저의 목적과 특징
 
 IAM 유저를 사용하는 가장 큰 목적은 AWS 리소스에 대한 접근 권한을 사용자 단위로 관리하기 위함이다.
 
-#### 개별 권한 관리
+## 25. 실습: 개별 권한 관리
 
 IAM 유저마다 서로 다른 권한을 부여할 수 있기 때문에 조직 내 역할에 맞는 권한 설정이 가능하다.
 예를 들어 개발자는 EC2 인스턴스를 생성하거나 수정할 수 있는 권한이 필요할 수 있지만,
 결제 관리나 계정 설정과 같은 권한은 필요하지 않을 수 있다.
 이러한 경우 IAM 정책을 사용하여 필요한 권한만 부여할 수 있다.
 
-#### 액세스 관리
+## 26. 실습: 액세스 관리
 
 유저가 AWS 콘솔, CLI, SDK 등을 통해 특정 서비스에 접근할 수 있는지 제어할 수 있다.
 예를 들어 특정 사용자는 S3 버킷을 읽기만 할 수 있도록 설정할 수 있으며,
 다른 사용자는 EC2 인스턴스를 생성하거나 시작할 수 있도록 설정할 수 있다.
 이러한 방식으로 서비스별 접근 권한을 세밀하게 관리할 수 있다.
 
-#### 정책의 적용
+## 27. 실습: 정책의 적용
 
 유저가 어떤 AWS 리소스에 어떤 작업을 할 수 있는지를 정의하는 IAM 정책을 유저에게 부여하여 권한을 관리한다.
 
@@ -556,7 +554,7 @@ Root 계정은 AWS 계정 전체에 대한 모든 권한을 가지고 있기 때
 대신 IAM 유저를 생성하고 각 사용자에게 필요한 권한만 부여하는 방식으로
 AWS 환경을 운영하는 것이 보안 측면에서 훨씬 안전하다.
 
-#### IAM 정책(Policy)과 권한
+## 28. 실습: IAM 정책(Policy)과 권한
 
 IAM 유저의 권한은 IAM 정책(Policy)을 통해 제어된다.
 정책은 JSON 형식의 문서로, 유저가 어떤 AWS 서비스에 어떤 작업을 수행할 수 있는지를 정의한다.
@@ -566,23 +564,23 @@ IAM 정책은 AWS 권한 관리의 핵심 요소이며, 정책을 통해 사용�
 IAM 정책을 적절하게 설계하면 조직 내 사용자들이 필요한 작업만 수행하도록 제한할 수 있으며,
 이를 통해 AWS 환경의 보안을 강화할 수 있다.
 
-#### IAM 정책의 구성 요소
+## 29. 실습: IAM 정책의 구성 요소
 
 - 정책은 크게 두 가지로 나눌 수 있습니다.
 
-#### AWS 관리형 정책
+## 30. 실습: AWS 관리형 정책
 
 AWS에서 사전 구성하여 제공하는 표준 정책이다.
 예를 들어, AmazonS3ReadOnlyAccess 정책은 S3 버킷에 읽기 전용 권한을 부여한다.
 이러한 정책은 AWS에서 일반적인 사용 사례를 기반으로 만들어져 있기 때문에
 초기 권한 설정 시 매우 편리하게 사용할 수 있다.
 
-#### 사용자 정의 정책(커스텀 정책)
+## 31. 실습: 사용자 정의 정책(커스텀 정책)
 
 유저가 필요에 따라 직접 작성하는 정책으로, JSON 형식으로 구성된다.
 특정 리소스에 대해서만 권한을 부여하거나 특정 작업만 허용하는 등 보다 세밀한 권한 제어가 가능하다.
 
-#### 정책의 세부 요소
+## 32. 실습: 정책의 세부 요소
 
 - Effect
   - 권한을 Allow하거나 Deny할지 정의
@@ -615,64 +613,64 @@ AWS에서 사전 구성하여 제공하는 표준 정책이다.
 
 - IAM  -->  사용자  -->  사용자 생성
 
-![이미지](assets/10-terraform-iam/1.png)
+![IAM  -->  사용자  -->  사용자 생성 화면](assets/10-terraform-iam/1.png)
 
 - 사용자 이름: sol-user
 - AWS Management Console에 대한 사용자 액세스 권한 제공
 
-![이미지](assets/10-terraform-iam/2.png)
+![AWS Management Console에 대한 사용자 액세스 권한 제공 화면](assets/10-terraform-iam/2.png)
 
 - 권한 옵션: 직접 정책 연결
 - 권한 정책: AdministratorAccess
 
-![이미지](assets/10-terraform-iam/3.png)
+![권한 정책: AdministratorAccess 화면](assets/10-terraform-iam/3.png)
 
-![이미지](assets/10-terraform-iam/4.png)
+![권한 정책: AdministratorAccess 화면](assets/10-terraform-iam/4.png)
 
 - IAM  -->  정책  -->  정책 생성
 
-![이미지](assets/10-terraform-iam/5.png)
+![IAM  -->  정책  -->  정책 생성 화면](assets/10-terraform-iam/5.png)
 
 - 서비스 : S3
 
-![이미지](assets/10-terraform-iam/6.png)
+![서비스 : S3 화면](assets/10-terraform-iam/6.png)
 
 - 모든 읽기 권한
 
-![이미지](assets/10-terraform-iam/7.png)
+![모든 읽기 권한 화면](assets/10-terraform-iam/7.png)
 
 - 리소스: 모든
 
-![이미지](assets/10-terraform-iam/8.png)
+![리소스: 모든 화면](assets/10-terraform-iam/8.png)
 
 - 정책 이름 : S3_Read_only
 
-![이미지](assets/10-terraform-iam/9.png)
+![정책 이름 : S3_Read_only 화면](assets/10-terraform-iam/9.png)
 
 - 생성된 정책 확인
 
-![이미지](assets/10-terraform-iam/10.png)
+![생성된 정책 확인 화면](assets/10-terraform-iam/10.png)
 
-#### 사용자 계정 생성시 정책 적용
+## 33. 실습: 사용자 계정 생성시 정책 적용
 
-![이미지](assets/10-terraform-iam/1.png)
+![생성된 정책 확인 화면](assets/10-terraform-iam/1.png)
 
 - 사용자 이름: sol-user1
 - 사용자 지정 암호: soluser1iam!@#$
 
-![이미지](assets/10-terraform-iam/11.png)
+![사용자 지정 암호: soluser1iam!@#$ 화면](assets/10-terraform-iam/11.png)
 
-![이미지](assets/10-terraform-iam/12.png)
+![사용자 지정 암호: soluser1iam!@#$ 화면](assets/10-terraform-iam/12.png)
 
-![이미지](assets/10-terraform-iam/13.png)
+![사용자 지정 암호: soluser1iam!@#$ 화면](assets/10-terraform-iam/13.png)
 
 ```
 IAM  -->  사용자  -->  sol-user1
 ```
 
-![이미지](assets/10-terraform-iam/14.png)
+![IAM  -->  사용자  -->  sol-user1 화면](assets/10-terraform-iam/14.png)
 
-#### AssumeRole 권한 부여
+## 34. 실습: AssumeRole 권한 부여
 
 - AssumeRole은 AWS에서 다른 IAM Role의 권한을 임시로 빌려서 사용하는 기능이다.
 
@@ -709,7 +707,7 @@ IAM  -->  사용자  -->  sol-user1
 
 - 그리고 필요할 때 해당 Role을 사용한다.
 
-#### AssumeRole의 핵심
+## 35. 실습: AssumeRole의 핵심
 
 - AssumeRole을 사용하려면 기본적으로 2가지를 이해해야 한다.
   - 1. 누가 이 Role을 사용할 수 있는가?
@@ -719,7 +717,7 @@ IAM  -->  사용자  -->  sol-user1
   - Trust Policy: 누가 Role을 사용할 수 있는지 설정
   - Permission Policy: Role이 어떤 AWS 작업을 할 수 있는지 설정
 
-#### 1) Trust Policy
+## 36. 실습: 1) Trust Policy
 
 - Trust Policy는 "누가 이 Role을 사용할 수 있는가?" 를 정의한다.
 - 예를 들어 EC2가 Role을 사용할 수 있도록 설정하려면 다음과 같다.
@@ -760,7 +758,7 @@ IAM  -->  사용자  -->  sol-user1
 - 즉 전체 의미는 다음과 같다.
   - EC2 서비스가 이 IAM Role의 권한을 임시로 Assume해서 사용할 수 있도록 허용한다.
 
-#### 2)  Permission Policy
+## 37. 실습: 2)  Permission Policy
 
 - Permission Policy는 "이 Role을 사용하면 무엇을 할 수 있는가?" 를 정의한다.
 
@@ -792,7 +790,7 @@ IAM  -->  사용자  -->  sol-user1
 - Permission Policy
   - Role을 사용해서 무엇을 할 수 있는가?
 
-#### STS (Security Token Service)
+## 38. 실습: STS (Security Token Service)
 
 - STS는 Security Token Service의 약자이다.
 
@@ -814,7 +812,7 @@ IAM  -->  사용자  -->  sol-user1
 
 - EC2 안에 AWS Access Key를 직접 저장하지 않아도 된다.
 
-#### EC2에서 사용하는 AssumeRole 예제
+## 39. 실습: EC2에서 사용하는 AssumeRole 예제
 
 - EC2가 IAM Role을 사용할 수 있도록 하는 Trust Policy이다.
 
@@ -872,7 +870,7 @@ IAM  -->  사용자  -->  sol-user1
 - Permission Policy
   - Role을 사용해서 S3 작업을 할 수 있도록 허용
 
-#### 다른 AWS 계정의 Role 사용
+## 40. 실습: 다른 AWS 계정의 Role 사용
 
 - AssumeRole은 다른 AWS 계정의 Role도 사용할 수 있다.
 
@@ -905,7 +903,7 @@ IAM  -->  사용자  -->  sol-user1
 
 - 이처럼 다른 AWS 계정의 Role을 사용하는 방식을 Cross Account AssumeRole이라고 한다.
 
-#### AWS CLI로 AssumeRole 실행
+## 41. 실습: AWS CLI로 AssumeRole 실행
 
 - AWS CLI에서도 직접 AssumeRole을 실행할 수 있다.
 
@@ -991,7 +989,7 @@ provider "aws" {
 - assume_role
   - 로그인 후 어떤 Role의 권한을 사용할지 지정다.
 
-#### 실습
+## 42. 실습: 실습
 
 EX) IAM User는 S3 접근 불가, Role Assume 후 S3 접근 가능
 
@@ -1001,61 +999,61 @@ EX) IAM User는 S3 접근 불가, Role Assume 후 S3 접근 가능
   - 셋째, IAM User가 Role을 Assume하면 자신의 원래 권한 대신 Role 권한으로 동작한다는 점
   - 넷째, 콘솔과 CLI 모두 결국 AssumeRole 구조로 동작한다는 점
 
-#### 1단계 S3 버킷 만들기
+## 43. 실습: 1단계 S3 버킷 만들기
 
 - 먼저 Role 권한으로 조회할 대상이 있어야 하므로 S3 버킷을 생성
 
-![이미지](assets/10-terraform-iam/15.png)
+![먼저 Role 권한으로 조회할 대상이 있어야 하므로 S3 버킷을 생성 화면](assets/10-terraform-iam/15.png)
 
 - 버킷 이름 : iam-assume-bucket-123456789012 (버킷 생성)
 
-![이미지](assets/10-terraform-iam/16.png)
+![버킷 이름 : iam-assume-bucket-123456789012 버킷 생성 화면](assets/10-terraform-iam/16.png)
 
 - S3에 파일 1개 업로드
 
-![이미지](assets/10-terraform-iam/17.png)
+![S3에 파일 1개 업로드 화면](assets/10-terraform-iam/17.png)
 
-#### 2 단계 IAM User 만들기
+## 44. 실습: 2 단계 IAM User 만들기
 
 - S3 권한이 없는 사용자 생성
 
 - IAM  -->  사용자  -->  사용자 생성
 
-![이미지](assets/10-terraform-iam/18.png)
+![IAM  -->  사용자  -->  사용자 생성 화면](assets/10-terraform-iam/18.png)
 
 - 사용자 이름: assume-user
 - 콘솔 엑세스 권한 : O
 - 사용자 지정 암호: admin1234!@#$
 
-![이미지](assets/10-terraform-iam/19.png)
+![사용자 지정 암호: admin1234!@#$ 화면](assets/10-terraform-iam/19.png)
 
 - 지금은 어떠한 권한도 주지 않을것이기 때문에 바로 다음 단계로 진행한다.
 
-![이미지](assets/10-terraform-iam/20.png)
+![지금은 어떠한 권한도 주지 않을것이기 때문에 바로 다음 단계로 진행한다. 화면](assets/10-terraform-iam/20.png)
 
 - 사용자 생성
 
-![이미지](assets/10-terraform-iam/21.png)
+![사용자 생성 화면](assets/10-terraform-iam/21.png)
 
 - 엣지에서 assume-user 계정으로 로그인
 
-![이미지](assets/10-terraform-iam/22.png)
+![엣지에서 assume-user 계정으로 로그인 화면](assets/10-terraform-iam/22.png)
 
 - S3로 이동하게되면 버킷에 관한 아무런 권한이 없기 때문에 목록도 확인되지 않는다.
 
-![이미지](assets/10-terraform-iam/23.png)
+![S3로 이동하게되면 버킷에 관한 아무런 권한이 없기 때문에 목록도 확인되지 않는다. 화면](assets/10-terraform-iam/23.png)
 
 - IAM  -->  사용자  -->  assume-user
 
-![이미지](assets/10-terraform-iam/24.png)
+![IAM  -->  사용자  -->  assume-user 화면](assets/10-terraform-iam/24.png)
 
 - Command Line Interface (CLI)
 
-![이미지](assets/10-terraform-iam/25.png)
+![Command Line Interface CLI 화면](assets/10-terraform-iam/25.png)
 
 - CSV 파일로 다운로드
 
-![이미지](assets/10-terraform-iam/26.png)
+![CSV 파일로 다운로드 화면](assets/10-terraform-iam/26.png)
 
 ```powershell
 PS C:\Users\ryu> aws configure --profile assume-user
@@ -1084,9 +1082,9 @@ aws  s3  ls  s3://my-assume-bucket-123456789012-ap-northeast-2-an  --profile  my
 
 - IAM  -->  역할  -->  역할 생성
 
-![이미지](assets/10-terraform-iam/27.png)
+![IAM  -->  역할  -->  역할 생성 화면](assets/10-terraform-iam/27.png)
 
-#### Terraform IAM User + AssumeRole + S3 ReadOnly 실습
+## 45. 실습: Terraform IAM User + AssumeRole + S3 ReadOnly 실습
 
 - Terraform을 사용하여 IAM User를 생성
 - IAM User가 AWS CLI에서 사용할 Access Key를 생성한
@@ -1097,7 +1095,7 @@ aws  s3  ls  s3://my-assume-bucket-123456789012-ap-northeast-2-an  --profile  my
 - AWS STS AssumeRole을 실행하여 임시 자격 증명을 발급
 - 임시 자격 증명을 사용하여 S3의 Bucket과 Object를 조회
 
-#### 전체 동작 구조
+## 46. 실습: 전체 동작 구조
 
 IAM User
 │
@@ -1122,7 +1120,7 @@ Amazon S3
 - IAM User는 S3ReadOnlyRole을 Assume한다.
 - 실제 S3 접근 권한은 Role에 연결된 S3ReadOnlyPolicy에서 가져온다.
 
-#### 최종 프로젝트 구조
+## 47. 실습: 최종 프로젝트 구조
 
 iam-assumerole-s3/
 │
@@ -1134,7 +1132,7 @@ iam-assumerole-s3/
 │
 └── s3-readonly-policy.json
 
-#### STEP 1. Provider 변수 작성
+## 48. 실습: STEP 1. Provider 변수 작성
 
 - Terraform에서 AWS에 접속하기 위해 사용할 AWS Region과 AWS CLI Profile 변수를 생성한다.
 - 실제 값은 나중에 terraform.tfvars에서 입력한다.
@@ -1163,7 +1161,7 @@ variable "aws_profile" {
   - 예를 들어 my-profile을 사용하면
   - ~/.aws/credentials에 저장된 my-profile의 자격 증명을 사용한다.
 
-#### STEP 2. IAM User 변수 작성
+## 49. 실습: STEP 2. IAM User 변수 작성
 
 - 새로 생성할 IAM User의 이름을 변수로 정의한다.
 - 이 IAM User는 직접 S3 권한을 가지는 것이 아니라 나중에 S3ReadOnlyRole을 Assume하는 사용자로 사용한다.
@@ -1183,7 +1181,7 @@ variable "user_name" {
   - 현재 기본값은 s3_read_user이다.
   - 이후 Role의 Trust Policy에서 이 User를 Role을 사용할 수 있는 Principal로 지정한다.
 
-#### STEP 3. AWS Provider 설정
+## 50. 실습: STEP 3. AWS Provider 설정
 
 - Terraform에서 사용할 Terraform Version과 AWS Provider Version을 정의한다.
 - AWS Provider는 terraform.tfvars에서 지정한 Region과 Profile을 사용한다.
@@ -1207,14 +1205,14 @@ provider "aws" {
 }
 ```
 
-#### STEP 4. IAM User 생성
+## 51. 실습: STEP 4. IAM User 생성
 
 - S3ReadOnlyRole을 Assume할 IAM User를 생성한다.
 - 이 단계에서는 User만 생성하며 S3 접근 권한은 아직 부여하지 않는다.
 
   - iam-assumerole-s3\main.tf
 
-#### IAM User 생성
+## 52. 실습: IAM User 생성
 
 ```hcl
 resource "aws_iam_user" "example_user" {
@@ -1234,7 +1232,7 @@ resource "aws_iam_user" "example_user" {
   - IAM User가 생성될 IAM Path로 "/"는 기본 Root Path를 의미한다.
   - IAM의 기본 Root 경로에 User를 생성
 
-#### STEP 5. IAM User Access Key 생성
+## 53. 실습: STEP 5. IAM User Access Key 생성
 
 - 생성한 IAM User가 AWS CLI에서 사용할 Access Key를 생성한다.
 
@@ -1246,7 +1244,7 @@ resource "aws_iam_user" "example_user" {
 
   - iam-assumerole-s3\main.tf
 
-#### IAM User Access Key 생성
+## 54. 실습: IAM User Access Key 생성
 
 ```hcl
 resource "aws_iam_access_key" "example_user_key" {
@@ -1265,7 +1263,7 @@ resource "aws_iam_access_key" "example_user_key" {
   - Access Key ID와 함께 인증에 사용하는 비밀 값이다.
   - Password처럼 외부에 노출하지 않아야 한다.
 
-#### STEP 7. S3 ReadOnly Policy JSON 작성
+## 55. 실습: STEP 7. S3 ReadOnly Policy JSON 작성
 
 - Role에 부여할 S3 읽기 전용 권한을 정의한다.
 
@@ -1342,7 +1340,7 @@ variable "s3_policy_file" {
 - arn:aws:s3:::*/*
   - 모든 S3 Bucket 내부의 모든 Object를 의미한다.
 
-#### STEP 7. S3 ReadOnly IAM Policy 생성
+## 56. 실습: STEP 7. S3 ReadOnly IAM Policy 생성
 
 - STEP 8에서 작성한 JSON 파일을 읽어 AWS IAM Managed Policy를 생성한다.
 - 이 Policy는 아직 User에게 직접 연결하지 않는다.
@@ -1350,7 +1348,7 @@ variable "s3_policy_file" {
 
   - iam-assumerole-s3\main.tf
 
-#### S3 ReadOnly Managed Policy 생성
+## 57. 실습: S3 ReadOnly Managed Policy 생성
 
 ```hcl
 resource "aws_iam_policy" "s3_readonly_policy" {
@@ -1371,14 +1369,14 @@ resource "aws_iam_policy" "s3_readonly_policy" {
  # s3-readonly-policy.json
 ```
 
-#### STEP 8. 현재 AWS Account ID 조회
+## 58. 실습: STEP 8. 현재 AWS Account ID 조회
 
 - IAM Role의 Trust Policy에서 생성한 IAM User의 ARN을 만들어야 한다.
 - IAM ARN에는 AWS Account ID가 필요하므로 현재 Terraform이 인증된 AWS Account ID를 자동으로 조회한다.
 
   - iam-assumerole-s3\main.tf
 
-#### 현재 AWS Account 정보 조회
+## 59. 실습: 현재 AWS Account 정보 조회
 
 ```hcl
 data "aws_caller_identity" "current" {}
@@ -1392,7 +1390,7 @@ data "aws_caller_identity" "current" {}
   - data.aws_caller_identity.current.account_id
   - 예 : 123456789012
 
-#### STEP 9. S3 ReadOnly IAM Role 생성
+## 60. 실습: STEP 9. S3 ReadOnly IAM Role 생성
 
 - S3 ReadOnly 권한을 사용할 IAM Role을 생성한다.
 - Role의 Trust Policy에는 STEP 5에서 생성한 IAM User를 Principal로 지정한다.
@@ -1400,7 +1398,7 @@ data "aws_caller_identity" "current" {}
 
   - iam-assumerole-s3\main.tf
 
-#### S3 ReadOnly IAM Role 생성
+## 61. 실습: S3 ReadOnly IAM Role 생성
 
 ```hcl
 resource "aws_iam_role" "s3_read_role" {
@@ -1434,7 +1432,7 @@ resource "aws_iam_role" "s3_read_role" {
   - 지정된 Principal이 이 Role로 전환할 수 있도록 허용한다.
   - AWS STS가 임시 자격 증명을 발급한다.
 
-#### STEP 10. S3 ReadOnly Policy를 Role에 연결
+## 62. 실습: STEP 10. S3 ReadOnly Policy를 Role에 연결
 
 - S3 ReadOnly 권한을 가진 IAM Policy를 앞에서 생성한 S3ReadOnlyRole에 연결
 
@@ -1452,7 +1450,7 @@ Role에 연결된 S3 ReadOnly 권한을 임시로 사용할 수 있다.
 
   - iam-assumerole-s3\main.tf
 
-#### S3 ReadOnly Policy를 Role에 연결
+## 63. 실습: S3 ReadOnly Policy를 Role에 연결
 
 ```hcl
 resource "aws_iam_role_policy_attachment" "s3_policy_attach" {
@@ -1479,7 +1477,7 @@ S3ReadOnlyPolicy
 
 - 따라서 Role 자체가 S3 ReadOnly 권한을 가지게 된다.
 
-#### STEP 11. IAM User 정보 Output 작성
+## 64. 실습: STEP 11. IAM User 정보 Output 작성
 
 - Terraform으로 생성한 IAM User 이름을 terraform output 명령으로 확인할 수 있도록 설정한다.
 
@@ -1497,7 +1495,7 @@ output "user_name" {
   - 예상 값
   - s3_read_user
 
-#### STEP 12. IAM Role ARN Output 작성
+## 65. 실습: STEP 12. IAM Role ARN Output 작성
 
 - AWS CLI에서 sts assume-role을 실행할 때 Role ARN이 필요하다.
 - Terraform Output을 통해 생성된 Role ARN을 확인한다.
@@ -1518,7 +1516,7 @@ output "s3_read_role_arn" {
 - AssumeRole 실행 시
   - --role-arn 옵션에 이 값을 사용한다.
 
-#### STEP 13. Access Key Output 작성
+## 66. 실습: STEP 13. Access Key Output 작성
 
 - 생성한 IAM User의 Access Key ID와 Secret Access Key를 Terraform Output으로 확인한다.
 
@@ -1553,7 +1551,7 @@ output "user_secret_access_key" {
   - sensitive는 Terraform 화면 출력을 숨기는 기능이다.
   - Terraform State에는 Secret 값이 저장될 수 있으므로 terraform.tfstate 파일 역시 안전하게 관리해야 한다.
 
-#### STEP 14. terraform.tfvars 작성
+## 67. 실습: STEP 14. terraform.tfvars 작성
 
   - iam-assumerole-s3\terraform.tfvars
 
@@ -1576,7 +1574,7 @@ s3_policy_file = "s3-readonly-policy.json"
 - s3_policy_file
   - IAM S3 ReadOnly Policy JSON 파일
 
-#### STEP 15. Terraform 초기화 및 검증
+## 68. 실습: STEP 15. Terraform 초기화 및 검증
 
 ```
 [설명]
@@ -1614,7 +1612,7 @@ user_access_key_id
 user_secret_access_key
 ```
 
-#### STEP 17. Access Key 확인
+## 69. 실습: STEP 17. Access Key 확인
 
 - IAM User를 AWS CLI Profile에 등록하기 위해 Access Key 값을 확인한다.
 
@@ -1630,7 +1628,7 @@ JTYWA5OMa6RtaWRhGZaqBlwgTGRCSINk6KXEVlD4
 
 - Secret Access Key는 외부에 노출하지 않는다.
 
-#### STEP 18. IAM User AWS CLI Profile 생성
+## 70. 실습: STEP 18. IAM User AWS CLI Profile 생성
 
 - Terraform에서 생성한 IAM User의 Access Key를 사용하여 별도의 AWS CLI Profile을 만든다.
 - 이 Profile은 앞으로 IAM User 권한으로 AWS CLI 명령을 실행할 때 사용한다.
@@ -1652,7 +1650,7 @@ assume-user
 s3-read-user
 ```
 
-#### STEP 19. IAM User 인증 확인
+## 71. 실습: STEP 19. IAM User 인증 확인
 
 - 새로 생성한 AWS CLI Profile이 실제 IAM User로 인증되는지 확인한다.
 
@@ -1674,7 +1672,7 @@ PS C:\terraform\iam-assumerole-s3> aws  sts  get-caller-identity --profile s3-re
 - Arn
   - 현재 IAM User가 s3_read_user인지 확인한다.
 
-#### STEP 20. 테스트용 S3 Bucket 생성
+## 72. 실습: STEP 20. 테스트용 S3 Bucket 생성
 
 - AssumeRole 전과 후의 S3 접근 권한 차이를 확인하기 위해 테스트용 S3 Bucket을 생성한다.
 
@@ -1686,7 +1684,7 @@ PS C:\terraform\iam-assumerole-s3> aws  sts  get-caller-identity --profile s3-re
 
   - iam-assumerole-s3\main.tf
 
-#### AssumeRole 테스트용 S3 Bucket 생성
+## 73. 실습: AssumeRole 테스트용 S3 Bucket 생성
 
 ```hcl
 resource "aws_s3_bucket" "assume_test_bucket" {
@@ -1716,7 +1714,7 @@ output "s3_bucket_name" {
 - data.aws_caller_identity.current.account_id
   - STEP 8에서 조회한 현재 AWS Account ID를 사용한다.
 
-#### STEP 21. 테스트용 S3 Object 업로드
+## 74. 실습: STEP 21. 테스트용 S3 Object 업로드
 
 - S3 ReadOnlyRole의 조회와 다운로드 권한을 테스트하기 위해 앞에서 생성한 S3 Bucket에 테스트 파일을 하나 생성
 
@@ -1731,7 +1729,7 @@ output "s3_bucket_name" {
 
   - iam-assumerole-s3\main.tf
 
-#### AssumeRole 테스트용 Object 생성
+## 75. 실습: AssumeRole 테스트용 Object 생성
 
 ```hcl
 resource "aws_s3_object" "test_object" {
@@ -1784,7 +1782,7 @@ aws: [ERROR]: An error occurred (AccessDenied) when calling the ListObjectsV2 op
 - S3 읽기 권한은 S3ReadOnlyRole에만 연결되어 있다.
 - 따라서 이후 S3ReadOnlyRole을 Assume한 뒤 동일한 Bucket에 다시 접근하여 성공하는지 확인한다.
 
-#### STEP 22 S3ReadOnlyRole ARN 확인
+## 76. 실습: STEP 22 S3ReadOnlyRole ARN 확인
 
 - AssumeRole을 실행하기 위해 Terraform에서 생성한 Role ARN을 확인한다.
 
@@ -1794,7 +1792,7 @@ PS C:\terraform\iam-assumerole-s3> terraform output -raw s3_read_role_arn
 arn:aws:iam::123456789012:role/S3ReadOnlyRole
 ```
 
-#### STEP 23. AssumeRole 임시 Credential을 PowerShell 변수에 저장
+## 77. 실습: STEP 23. AssumeRole 임시 Credential을 PowerShell 변수에 저장
 
 - STEP 22에서 AssumeRole을 실행하면 AWS STS가 S3ReadOnlyRole 권한을 사용할 수 있는
 임시 자격 증명을 반환한다.
@@ -1848,7 +1846,7 @@ PS C:\terraform\iam-assumerole-s3> $env:AWS_SESSION_TOKEN = $creds.Credentials.S
 
 - 이 세 값을 Environment Variable로 설정하면 AWS CLI는 임시 Role Credential을 사용하게 된다.
 
-#### STEP 26. AssumeRole 성공 확인
+## 78. 실습: STEP 26. AssumeRole 성공 확인
 
 - 현재 AWS CLI가 IAM User가 아니라 S3ReadOnlyRole 자격으로 실행되고 있는지 확인한다.
 
@@ -1870,7 +1868,7 @@ PS C:\terraform\iam-assumerole-s3> aws sts get-caller-identity
 
 - 즉 IAM User에서 Role Session으로 Identity가 변경되었다.
 
-#### STEP 27. S3 Bucket 목록 조회
+## 79. 실습: STEP 27. S3 Bucket 목록 조회
 
 - S3ReadOnlyRole에 포함된 s3:ListAllMyBuckets 권한을 확인한다.
 
@@ -1883,7 +1881,7 @@ PS C:\trf2\5) IAM> aws  s3  ls
 
 - 현재 AWS Account에서 접근 가능한 S3 Bucket 목록이 출력되는지 확인한다.
 
-#### STEP 28. S3 Bucket 내부 Object 조회
+## 80. 실습: STEP 28. S3 Bucket 내부 Object 조회
 
 - S3ReadOnlyRole의 s3:ListBucket 권한을 확인한다.
 
@@ -1895,7 +1893,7 @@ PS C:\terraform\iam-assumerole-s3> aws  s3  ls  s3://$BUCKET
 
 - Bucket 내부의 Object 목록이 출력되는지 확인한다.
 
-#### STEP 29. S3 Object 다운로드
+## 81. 실습: STEP 29. S3 Object 다운로드
 
 - S3ReadOnlyRole의 s3:GetObject 권한을 확인한다.
 - S3의 Object를 사용자 PC로 다운로드한다.
@@ -1911,7 +1909,7 @@ download: s3://my-test-bucket/test.txt to .\test.txt
 
 - 현재 Role에는 GetObject 권한이 있으므로 Object 다운로드가 가능하다.
 
-#### STEP 30. S3 Upload 권한 차단 확인
+## 82. 실습: STEP 30. S3 Upload 권한 차단 확인
 
 - 현재 Role은 ReadOnly Role이다.
 - s3:PutObject 권한을 부여하지 않았기 때문에 S3로 새로운 파일을 Upload할 수 없어야 한다.
@@ -1928,7 +1926,7 @@ upload failed: .\upload-test.txt to s3://iam-s3-bucket-123456789012/upload-test.
 
 - 읽기는 가능하지만 쓰기는 불가능하다.
 
-#### STEP 31. S3 Delete 권한 차단 확인
+## 83. 실습: STEP 31. S3 Delete 권한 차단 확인
 
 - ReadOnly Role에는 s3:DeleteObject 권한도 없다.
 - 따라서 기존 Object 삭제가 차단되는지 확인한다.
@@ -1939,7 +1937,7 @@ PS C:\terraform\iam-assumerole-s3> aws  s3  rm  s3://$BUCKET/upload-test.txt
 delete failed: s3://iam-s3-bucket-123456789012/upload-test.txt An error occurred (AccessDenied) when calling the DeleteObject operation: User: arn:aws:sts::123456789012:assumed-role/S3ReadOnlyRole/s3-read-session is not authorized to perform: s3:DeleteObject on resource: "arn:aws:s3:::iam-s3-bucket-123456789012/upload-test.txt" because no identity-based policy allows the s3:DeleteObject action
 ```
 
-#### STEP 32. 임시 Credential 제거
+## 84. 실습: STEP 32. 임시 Credential 제거
 
 - 실습이 끝난 후 PowerShell에 설정한 AssumeRole 임시 Credential을 제거한다.
 
@@ -1959,7 +1957,7 @@ PS C:\trf2\5) IAM> aws  s3  rm  s3://$BUCKET/upload-test.txt
 delete: s3://iam-s3-bucket-123456789012/upload-test.txt
 ```
 
-#### STEP 35. Terraform Resource 삭제
+## 85. 실습: STEP 35. Terraform Resource 삭제
 
 - 실습이 끝난 후 Terraform으로 생성한 IAM Resource를 삭제한다.
 

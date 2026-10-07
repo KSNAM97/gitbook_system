@@ -83,6 +83,8 @@ Amazon SQS의 큐 유형은 **Standard Queue**와 **FIFO Queue** 두 가지로 �
 
 속도가 중요하면 Standard, 정확성이 중요하면 FIFO를 쓴다는 것이 기본 선택 기준이다.
 
+![속도가 중요하면 Standard 정확성이 중요하면 FIFO를 쓴다. 화면](../aws/assets/09-aws-decoupling-sqs-hwp12-1.png)
+
 | 구분 | Standard Queue | FIFO Queue |
 |---|---|---|
 | 처리량 | 무제한(높음) | 제한적(낮음) |
