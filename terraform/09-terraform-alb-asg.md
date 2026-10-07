@@ -52,17 +52,16 @@ Auto Scaling Group은 EC2 인스턴스를 관리하기 위해 최소, 최대, �
 
 예를 들어 다음과 같이 설정했다고 가정하자.
 
-```
+```hcl
 Minimum = 1
 Desired = 2
 Maximum = 4
-```
 
 이 경우 기본적으로 EC2 인스턴스는 2개가 실행된다.
 트래픽이 증가하면 인스턴스가 3개, 4개까지 자동으로 증가할 수 있으며,
 트래픽이 감소하면 다시 2개 또는 1개까지 줄어들 수 있다.
 
-#### ASG의 동작 방식
+# ASG의 동작 방식
 
 Auto Scaling Group은 Scale Out과 Scale In이라는 두 가지 방식으로 동작한다.
 
@@ -80,7 +79,7 @@ CPU 사용률이 20% 이하로 떨어지면 서버를 줄이는 방식으로 정
 
 이와 같은 자동 확장 기능을 통해 Auto Scaling Group은 서비스 성능과 비용 효율성을 동시에 유지할 수 있다.
 
-#### Elastic Load Balancer (ELB)의 이해
+# Elastic Load Balancer (ELB)의 이해
 
 Elastic Load Balancer는 여러 EC2 인스턴스에 네트워크 트래픽을 분산시키는 AWS 서비스이다.
 
@@ -90,11 +89,12 @@ Elastic Load Balancer는 여러 EC2 인스턴스에 네트워크 트래픽을 �
 Elastic Load Balancer는 이러한 문제를 해결하기 위해 사용자 요청을 여러 EC2 인스턴스에 분산하여 전달한다.
 
 예를 들어 사용자의 요청이 들어오면 ELB는 다음과 같이 트래픽을 분산시킨다.
+```
 
 - 사용자 요청  --->  Load Balancer
--->  EC2 Instance 1
--->  EC2 Instance 2
--->  EC2 Instance 3
+- ->  EC2 Instance 1
+- ->  EC2 Instance 2
+- ->  EC2 Instance 3
 
 이러한 구조를 통해 서버 부하를 분산하고 시스템의 안정성을 높일 수 있다.
 
@@ -137,14 +137,13 @@ Auto Scaling Group이 새로운 EC2 인스턴스를 생성하면 ELB는 이를 �
 
 ```
 사용자  -->  Route53 (DNS)  -->  Load Balancer  -->  Auto Scaling Group  -->  EC2 Instances
-```
 
 사용자의 요청은 먼저 DNS를 통해 Load Balancer로 전달된다.
 Load Balancer는 트래픽을 여러 EC2 인스턴스에 분산시키고, Auto Scaling Group은 EC2 인스턴스 수를 자동으로 관리한다.
 
 이러한 구조를 통해 트래픽 증가에도 안정적인 서비스 운영이 가능하다.
 
-#### ASG와 ELB 연동 시 고려사항
+# ASG와 ELB 연동 시 고려사항
 
 ASG와 ELB를 함께 사용할 때는 몇 가지 중요한 설정을 고려해야 한다.
 
@@ -158,8 +157,7 @@ Application Load Balancer는 URL 기반 또는 Host 기반 라우팅 기능을 �
 
 마지막으로 보안 설정도 중요하다. Load Balancer와 EC2 인스턴스 사이의 통신을 제어하기 위해
 보안 그룹을 적절히 설정해야 하며, HTTPS 트래픽을 처리하기 위해 SSL 인증서를 구성해야 한다.
-
-#### EC2 이미지의 역할과 개념
+# EC2 이미지의 역할과 개념
 
 EC2 인스턴스를 실행하려면 단순히 가상 서버만 준비되는 것이 아니라,
 서버가 부팅될 때 필요한 운영체제와 여러 설정 정보가 함께 필요하다.
@@ -169,36 +167,36 @@ EC2 이미지는 서버를 실행하기 위한 운영체제, 애플리케이션,
 이 이미지를 기반으로 EC2 인스턴스를 생성하면 동일한 환경의 서버를 매우 빠르게 만들 수 있다.
 
 예를 들어 다음과 같은 환경을 갖춘 서버를 만든다고 가정해 보자.
-  - Amazon Linux 운영체제
-  - Nginx 웹 서버
-  - 특정 애플리케이션 코드
-  - 보안 설정
-  - 네트워크 설정
+ # Amazon Linux 운영체제
+ # Nginx 웹 서버
+ # 특정 애플리케이션 코드
+ # 보안 설정
+ # 네트워크 설정
 
 이러한 환경을 매번 새로 설치하면 시간이 오래 걸리고 설정이 달라질 가능성이 있다.
 하지만 이미지를 만들어 두면 동일한 환경을 가진 서버를 언제든지 빠르게 생성할 수 있다.
 
 따라서 EC2 이미지는 다음과 같은 중요한 역할을 한다.
-  - 서버 환경을 템플릿 형태로 저장
-  - 동일한 서버 환경을 빠르게 복제
-  - 인프라 환경의 일관성 유지
-  - 자동화된 인프라 배포 지원
+ # 서버 환경을 템플릿 형태로 저장
+ # 동일한 서버 환경을 빠르게 복제
+ # 인프라 환경의 일관성 유지
+ # 자동화된 인프라 배포 지원
 
 이러한 특성 때문에 EC2 이미지는 Infrastructure as Code 환경에서 매우 중요한 구성 요소로 사용된다.
 
-#### AMI (Amazon Machine Image)
+# AMI (Amazon Machine Image)
 
 EC2에서 사용하는 이미지의 공식 이름은 AMI(Amazon Machine Image)이다.
 AMI는 AWS에서 제공하는 EC2 인스턴스용 이미지로, 새로운 EC2 인스턴스를 생성할 때 기준이 되는 템플릿 역할을 한다.
 
 AMI에는 다음과 같은 구성 요소가 포함된다.
-  - 운영체제(OS)
-  - 애플리케이션
-  - 서버 설정
-  - 보안 설정
-  - 라이브러리 및 패키지
-  - 부팅 설정
-  - 루트 디스크 정보
+ # 운영체제(OS)
+ # 애플리케이션
+ # 서버 설정
+ # 보안 설정
+ # 라이브러리 및 패키지
+ # 부팅 설정
+ # 루트 디스크 정보
 
 즉 AMI는 단순한 파일이 아니라 EC2 인스턴스를 실행하는 데 필요한 모든 구성 정보를 포함한 이미지 패키지라고 볼 수 있다.
 
@@ -207,9 +205,10 @@ AMI를 사용하면 동일한 서버 환경을 반복적으로 생성할 수 있
 
 또한 Auto Scaling 환경에서는 새로운 서버가 필요할 때 AMI를 기반으로 EC2 인스턴스를 자동으로 생성한다.
 
-#### AMI의 유형
+# AMI의 유형
 
 AWS에서는 AMI를 크게 세 가지 유형으로 구분한다.
+```
 
 #### Public AMI
 
@@ -322,9 +321,7 @@ Private AMI는 기본적으로 외부에 공개되지 않으며 특정 AWS 계�
   - Docker 이미지 생성
   - 이미지 업로드
 
-```
 https://developer.hashicorp.com/packer/install
-```
 
 #### Terraform을 활용한 ASG 서비스 구성
 
@@ -380,11 +377,8 @@ locals {
   EOT
   )
 }
-```
 
-#### Launch Template을 정의하여 인스턴스 시작 템플릿 설정
-
-```hcl
+# Launch Template을 정의하여 인스턴스 시작 템플릿 설정
 resource "aws_launch_template" "example" {
   name_prefix   = "example-launch-template"      # 시작 템플릿 이름 prefix
   image_id      = data.aws_ami.al2023.id            # 위에서 가져온 AMI ID 사용
@@ -393,17 +387,16 @@ resource "aws_launch_template" "example" {
   user_data = local.bootstrap_script                 # 부트스트랩 스크립트 사용
 
   key_name = aws_key_pair.example.key_name     # 생성된 키 페어 이름 설정
-```
 
-  - 네트워크 인터페이스 설정 (보안 그룹 포함)
-```
+  # 네트워크 인터페이스 설정 (보안 그룹 포함)
   network_interfaces {
     security_groups = [aws_security_group.example.id]# EC2에 적용할 보안 그룹
   }
 }
-```
 
 코드 설명
+```
+
 - 이 코드에서 먼저 locals 블록은 EC2가 처음 실행될 때 사용할 쉘 스크립트를 저장하는 부분이다.
 - 여기서는 nginx를 설치하고, nginx를 실행하고, 웹 브라우저에서 접속했을 때 보일 index.html 파일을 생성한다.
 - 그 다음 aws_launch_template 리소스는 ASG가 사용할 EC2 생성 템플릿이다.
@@ -494,13 +487,9 @@ resource "aws_autoscaling_policy" "scale_out_policy" {
   cooldown               = 300                     # 정책 쿨다운 기간 300초
   autoscaling_group_name = aws_autoscaling_group.example.name  # 대상 오토 스케일링 그룹 이름
 }
-```
 
-#### 스케일 인 정책 코드
-
-#### 오토 스케일링 정책 정의 (스케일 인)
-
-```hcl
+# 스케일 인 정책 코드
+# 오토 스케일링 정책 정의 (스케일 인)
 resource "aws_autoscaling_policy" "scale_in_policy" {
   name                   = "scale-in-policy"           # 스케일 인 정책 이름
   scaling_adjustment     = -1                          # 인스턴스 1개 감소
@@ -508,9 +497,9 @@ resource "aws_autoscaling_policy" "scale_in_policy" {
   cooldown               = 300                         # 정책 쿨다운 기간 300초
   autoscaling_group_name = aws_autoscaling_group.example.name  # 대상 오토 스케일링 그룹 이름
 }
+코드 설명
 ```
 
-코드 설명
 - scale_out_policy는 서버를 늘리는 정책이다.
 - scaling_adjustment = 1이므로 한 번 실행되면 EC2를 1대 늘린다.
 
@@ -553,13 +542,10 @@ resource "aws_cloudwatch_metric_alarm" "cpu_high" {
     AutoScalingGroupName = aws_autoscaling_group.example.name# 오토 스케일링 그룹 이름과 연결
   }
 }
-```
 
-#### CPU 사용률이 낮을 때 알람 코드
+# CPU 사용률이 낮을 때 알람 코드
 
-#### CPU 사용률이 낮을 때 알람을 설정하여 스케일 인 트리거
-
-```hcl
+# CPU 사용률이 낮을 때 알람을 설정하여 스케일 인 트리거
 resource "aws_cloudwatch_metric_alarm" "cpu_low" {
   alarm_name        = "cpu_low"                      # 알람 이름
   comparison_operator= "LessThanOrEqualToThreshold" # 임계값 이하일 때 트리거
@@ -575,9 +561,10 @@ resource "aws_cloudwatch_metric_alarm" "cpu_low" {
     AutoScalingGroupName = aws_autoscaling_group.example.name# 오토 스케일링 그룹 이름과 연결
   }
 }
-```
 
 코드 설명
+```
+
 - metric_name = "CPUUtilization"은 CPU 사용률을 감시하겠다는 뜻이다.
 - threshold = "60"이면 CPU 평균 사용률이 60% 이상일 때 알람이 울린다.
 그리고 alarm_actions에 연결된 scale_out_policy가 실행된다. (즉 서버가 늘어난다.)
@@ -635,9 +622,9 @@ resource "aws_security_group" "example" {
     Name = "example-sg"                               # 보안 그룹 이름 태그 추가
   }
 }
-```
 
 코드 설명
+```
 
 - 이 보안 그룹은 ALB 또는 예시 리소스가 외부에서 HTTP 요청을 받을 수 있게 해준다.
 - ingress는 들어오는 규칙이고, egress는 나가는 규칙이다.
@@ -708,17 +695,13 @@ resource "aws_lb_target_group" "example" {
 - ALB는 EC2 인스턴스가 살아있는지 확인하기 위해 지정한 경로로 주기적으로 health_check 요청을 보낸다.
 - 여기서는 /index.html을 검사하므로, 앞에서 user_data에서 만든 index.html이 제대로 응답해야 정상 서버로 인정된다.
 - 즉 앞의 Launch Template에서 만든
-```bash
-echo "Hello, Nginx! $(hostname)" > /usr/share/nginx/html/index.html
-```
-
-이 코드와 지금 Target Group의 health check가 서로 연결되는 구조다.
-
-#### 리스너 생성
-
-#### 로드 밸런서 리스너 설정
 
 ```hcl
+echo "Hello, Nginx! $(hostname)" > /usr/share/nginx/html/index.html
+이 코드와 지금 Target Group의 health check가 서로 연결되는 구조다.
+
+# 리스너 생성
+# 로드 밸런서 리스너 설정
 resource "aws_lb_listener" "example" {
   load_balancer_arn = aws_lb.example.arn     # 연결할 로드 밸런서 ARN
   port              = "80"                      # 리스너 포트 번호 (HTTP)
@@ -746,9 +729,10 @@ resource "aws_autoscaling_attachment" "example" {
   autoscaling_group_name = aws_autoscaling_group.example.name# 연결할 오토 스케일링 그룹
   lb_target_group_arn    = aws_lb_target_group.example.arn     # 연결할 타겟 그룹 ARN
 }
-```
 
 코드 설명
+```
+
 - 이 리소스는 ASG와 Target Group을 연결해 주는 역할을 한다.
 - 이 연결이 있어야 ASG가 만든 EC2 인스턴스들이 자동으로 Target Group에 등록된다.
 - 즉 서버가 늘어나면 새로 생성된 EC2도 자동으로 로드밸런서 뒤에 붙고,
@@ -808,17 +792,16 @@ Auto Scaling Group은 EC2 인스턴스를 관리하기 위해 최소, 최대, �
 
 예를 들어 다음과 같이 설정했다고 가정하자.
 
-```
+```hcl
 Minimum = 1
 Desired = 2
 Maximum = 4
-```
 
 이 경우 기본적으로 EC2 인스턴스는 2개가 실행된다.
 트래픽이 증가하면 인스턴스가 3개, 4개까지 자동으로 증가할 수 있으며,
 트래픽이 감소하면 다시 2개 또는 1개까지 줄어들 수 있다.
 
-#### ASG의 동작 방식
+# ASG의 동작 방식
 
 Auto Scaling Group은 Scale Out과 Scale In이라는 두 가지 방식으로 동작한다.
 
@@ -836,7 +819,7 @@ CPU 사용률이 20% 이하로 떨어지면 서버를 줄이는 방식으로 정
 
 이와 같은 자동 확장 기능을 통해 Auto Scaling Group은 서비스 성능과 비용 효율성을 동시에 유지할 수 있다.
 
-#### Elastic Load Balancer (ELB)의 이해
+# Elastic Load Balancer (ELB)의 이해
 
 Elastic Load Balancer는 여러 EC2 인스턴스에 네트워크 트래픽을 분산시키는 AWS 서비스이다.
 
@@ -846,11 +829,12 @@ Elastic Load Balancer는 여러 EC2 인스턴스에 네트워크 트래픽을 �
 Elastic Load Balancer는 이러한 문제를 해결하기 위해 사용자 요청을 여러 EC2 인스턴스에 분산하여 전달한다.
 
 예를 들어 사용자의 요청이 들어오면 ELB는 다음과 같이 트래픽을 분산시킨다.
+```
 
 - 사용자 요청  --->  Load Balancer
--->  EC2 Instance 1
--->  EC2 Instance 2
--->  EC2 Instance 3
+- ->  EC2 Instance 1
+- ->  EC2 Instance 2
+- ->  EC2 Instance 3
 
 이러한 구조를 통해 서버 부하를 분산하고 시스템의 안정성을 높일 수 있다.
 
@@ -893,14 +877,13 @@ Auto Scaling Group이 새로운 EC2 인스턴스를 생성하면 ELB는 이를 �
 
 ```
 사용자  -->  Route53 (DNS)  -->  Load Balancer  -->  Auto Scaling Group  -->  EC2 Instances
-```
 
 사용자의 요청은 먼저 DNS를 통해 Load Balancer로 전달된다.
 Load Balancer는 트래픽을 여러 EC2 인스턴스에 분산시키고, Auto Scaling Group은 EC2 인스턴스 수를 자동으로 관리한다.
 
 이러한 구조를 통해 트래픽 증가에도 안정적인 서비스 운영이 가능하다.
 
-#### ASG와 ELB 연동 시 고려사항
+# ASG와 ELB 연동 시 고려사항
 
 ASG와 ELB를 함께 사용할 때는 몇 가지 중요한 설정을 고려해야 한다.
 
@@ -914,8 +897,7 @@ Application Load Balancer는 URL 기반 또는 Host 기반 라우팅 기능을 �
 
 마지막으로 보안 설정도 중요하다. Load Balancer와 EC2 인스턴스 사이의 통신을 제어하기 위해
 보안 그룹을 적절히 설정해야 하며, HTTPS 트래픽을 처리하기 위해 SSL 인증서를 구성해야 한다.
-
-#### EC2 이미지의 역할과 개념
+# EC2 이미지의 역할과 개념
 
 EC2 인스턴스를 실행하려면 단순히 가상 서버만 준비되는 것이 아니라,
 서버가 부팅될 때 필요한 운영체제와 여러 설정 정보가 함께 필요하다.
@@ -925,36 +907,36 @@ EC2 이미지는 서버를 실행하기 위한 운영체제, 애플리케이션,
 이 이미지를 기반으로 EC2 인스턴스를 생성하면 동일한 환경의 서버를 매우 빠르게 만들 수 있다.
 
 예를 들어 다음과 같은 환경을 갖춘 서버를 만든다고 가정해 보자.
-  - Amazon Linux 운영체제
-  - Nginx 웹 서버
-  - 특정 애플리케이션 코드
-  - 보안 설정
-  - 네트워크 설정
+ # Amazon Linux 운영체제
+ # Nginx 웹 서버
+ # 특정 애플리케이션 코드
+ # 보안 설정
+ # 네트워크 설정
 
 이러한 환경을 매번 새로 설치하면 시간이 오래 걸리고 설정이 달라질 가능성이 있다.
 하지만 이미지를 만들어 두면 동일한 환경을 가진 서버를 언제든지 빠르게 생성할 수 있다.
 
 따라서 EC2 이미지는 다음과 같은 중요한 역할을 한다.
-  - 서버 환경을 템플릿 형태로 저장
-  - 동일한 서버 환경을 빠르게 복제
-  - 인프라 환경의 일관성 유지
-  - 자동화된 인프라 배포 지원
+ # 서버 환경을 템플릿 형태로 저장
+ # 동일한 서버 환경을 빠르게 복제
+ # 인프라 환경의 일관성 유지
+ # 자동화된 인프라 배포 지원
 
 이러한 특성 때문에 EC2 이미지는 Infrastructure as Code 환경에서 매우 중요한 구성 요소로 사용된다.
 
-#### AMI (Amazon Machine Image)
+# AMI (Amazon Machine Image)
 
 EC2에서 사용하는 이미지의 공식 이름은 AMI(Amazon Machine Image)이다.
 AMI는 AWS에서 제공하는 EC2 인스턴스용 이미지로, 새로운 EC2 인스턴스를 생성할 때 기준이 되는 템플릿 역할을 한다.
 
 AMI에는 다음과 같은 구성 요소가 포함된다.
-  - 운영체제(OS)
-  - 애플리케이션
-  - 서버 설정
-  - 보안 설정
-  - 라이브러리 및 패키지
-  - 부팅 설정
-  - 루트 디스크 정보
+ # 운영체제(OS)
+ # 애플리케이션
+ # 서버 설정
+ # 보안 설정
+ # 라이브러리 및 패키지
+ # 부팅 설정
+ # 루트 디스크 정보
 
 즉 AMI는 단순한 파일이 아니라 EC2 인스턴스를 실행하는 데 필요한 모든 구성 정보를 포함한 이미지 패키지라고 볼 수 있다.
 
@@ -963,9 +945,10 @@ AMI를 사용하면 동일한 서버 환경을 반복적으로 생성할 수 있
 
 또한 Auto Scaling 환경에서는 새로운 서버가 필요할 때 AMI를 기반으로 EC2 인스턴스를 자동으로 생성한다.
 
-#### AMI의 유형
+# AMI의 유형
 
 AWS에서는 AMI를 크게 세 가지 유형으로 구분한다.
+```
 
 #### Public AMI
 
@@ -1080,9 +1063,7 @@ Packer는 크게 세 가지 구성 요소로 동작한다.
 
 #### Packer 설치
 
-```
 https://developer.hashicorp.com/packer/install
-```
 
 - 윈도우용 Packer 다운로드
 
@@ -1092,12 +1073,12 @@ https://developer.hashicorp.com/packer/install
 
 ![이미지](assets/09-terraform-alb-asg/2.png)
 
-```bash
+```powershell
 PS C:\Users\ryu> packer --version
 Packer v1.15.0
-```
 
 -
+```
 
 ![이미지](assets/09-terraform-alb-asg/3.png)
 
@@ -1105,26 +1086,19 @@ Packer v1.15.0
 
 ![이미지](assets/09-terraform-alb-asg/4.png)
 
-```bash
+```powershell
 PS C:\terraform-aws\03_elb-asg-terraform\01_packer-ami> packer  init .
 Installed plugin github.com/hashicorp/amazon v1.8.0 in "C:/Users/ryu/AppData/Roaming/packer.d/plugins/github.com/hashicorp/amazon/packer-plugin-amazon_v1.8.0_x5.0_windows_amd64.exe"
-```
 
-```bash
 PS C:\terraform-aws\03_elb-asg-terraform\01_packer-ami> packer  build  al2023-httpd-ami.pkr.hcl
 amazon-ebs.example: output will be in this color.
-```
 
-```
 ==> amazon-ebs.example: Prevalidating any provided VPC information
 ==> amazon-ebs.example: Prevalidating AMI Name: packer-amazon-linux-2023-20260310133721
 ==> amazon-ebs.example: Found Image ID: ami-00d2265ac70838f15
 ==> amazon-ebs.example: Creating temporary keypair: packer_69b01e91-8741-181a-2400-5c9c7ea0ef65
 ==> amazon-ebs.example: Creating temporary security group for this instance: packer_69b01e92-de56-9045-1f60-61c2465f0711
-```
-
 ~~~~~~~~~~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~~~~~~~~~~
-```
 ==> amazon-ebs.example: Waiting for the instance to stop...
 ==> amazon-ebs.example: Creating AMI packer-amazon-linux-2023-20260310133721 from instance i-0057637377e7b6f54
 ==> amazon-ebs.example: Attaching run tags to AMI...
@@ -1138,13 +1112,9 @@ amazon-ebs.example: output will be in this color.
 ==> amazon-ebs.example: Deleting temporary security group...
 ==> amazon-ebs.example: Deleting temporary keypair...
 Build 'amazon-ebs.example' finished after 3 minutes 55 seconds.
-```
 
-```
 ==> Wait completed after 3 minutes 55 seconds
-```
 
-```
 ==> Builds finished. The artifacts of successful builds are:
 ```
 
@@ -1195,9 +1165,7 @@ Packer가 AMI를 생성할 때는 단순히 설정 파일만으로 이미지를 
 
 ![이미지](assets/09-terraform-alb-asg/13.png)
 
-```
 http://ec2-3-36-128-218.ap-northeast-2.compute.amazonaws.com
-```
 
 ![이미지](assets/09-terraform-alb-asg/14.png)
 
@@ -1242,25 +1210,19 @@ http://ec2-3-36-128-218.ap-northeast-2.compute.amazonaws.com
 
 ![이미지](assets/09-terraform-alb-asg/24.png)
 
-#### variables.tf
-
 ```hcl
+# variables.tf
 variable "aws_region" {
   description = "AWS Region"
   default     = "ap-northeast-2"
 }
-```
 
-```hcl
 variable "aws_profile" {
   description = "AWS CLI Profile"
   default     = "default"
 }
-```
 
-#### main.tf
-
-```hcl
+# main.tf
 terraform {
   required_version = ">= 1.16.0"
 
@@ -1271,28 +1233,19 @@ terraform {
     }
   }
 }
-```
 
-```hcl
 provider "aws" {
   region  = var.aws_region
   profile = var.aws_profile
 }
-```
 
-#### main.tf
-
-#### 기본 VPC 조회
-
-```hcl
+# main.tf
+# 기본 VPC 조회
 data "aws_vpc" "default" {
   default = true
 }
-```
 
-#### 보안 그룹 생성
-
-```hcl
+# 보안 그룹 생성
 resource "aws_security_group" "my_ec2_sg" {
   name        = "my-asg-elb-sg"
   description = "my-asg-elb-sg"
@@ -1326,31 +1279,21 @@ resource "aws_security_group" "my_ec2_sg" {
     Name = "my-asg-elb-sg"
   }
 }
-```
 
-#### variables.tf
-
-#### AMI를 AWS Console에서 직접 복사 (방법 1)
-
-```hcl
+# variables.tf
+# AMI를 AWS Console에서 직접 복사 (방법 1)
 variable "ami_id" {
   description = "Packer로 생성한 AMI ID"
   default     = "ami-XXXXXXXXXXXXXX"
 }
-```
 
-```hcl
 variable "instance_type" {
   description = "EC2 Instance Type"
   default     = "t3.micro"
 }
-```
 
-  - main.tf
-
-#### AMI를 Terraform에서 data로 조회 (방법 2)
-
-```hcl
+   # main.tf
+# AMI를 Terraform에서 data로 조회 (방법 2)
 data "aws_ami" "packer_ami" {
   most_recent = true
 
@@ -1366,47 +1309,31 @@ data "aws_ami" "packer_ami" {
     values = ["available"]
   }
 }
-```
 
-#### outputs.tf
-
-```hcl
+# outputs.tf
 output "packer_ami_id" {
   value = data.aws_ami.packer_ami.id
 }
-```
 
-```hcl
 output "packer_ami_name" {
   value = data.aws_ami.packer_ami.name
 }
-```
 
-```bash
 PS C:\trf2\4) ELB,ASG\4_1_ELB-ALB> terraform  plan
 Plan: 1 to add, 0 to change, 0 to destroy.
-```
 
 Changes to Outputs:
-```
   + packer_ami_id   = "ami-0c5f1916198b5360e"
   + packer_ami_name= "packer-amazon-linux-2023-20260923011059"
-```
 
-#### main.tf (시작 템플릿 생성)
-
-#### 로컬에 있는 public key를 AWS에 등록해서 Key Pair 생성
-
-#### ~/.ssh/my-key.pub 파일을 읽어서 AWS EC2 KeyPair로 등록한다
-
-```hcl
+# main.tf (시작 템플릿 생성)
+# 로컬에 있는 public key를 AWS에 등록해서 Key Pair 생성
+# ~/.ssh/my-key.pub 파일을 읽어서 AWS EC2 KeyPair로 등록한다
 resource "aws_key_pair" "asg_keypair" {
   key_name = "asg-keypair" # AWS에 생성될 키페어 이름
   public_key = file("~/.ssh/my-key.pub")  # ~/.ssh/my-key.pub 파일의 내용을 AWS에 업로드
 }
-```
 
-```hcl
 resource "aws_launch_template" "my_template" {
   name = "my-template2"  # 시작 템플릿 이름
   description = "my-web"  # 템플릿 설명
@@ -1414,25 +1341,18 @@ resource "aws_launch_template" "my_template" {
 #  image_id = data.aws_ami.packer_ami.id# Packer로 생성한 AMI 사용 (방법2)
   instance_type = var.instance_type# EC2 인스턴스 타입
   key_name = aws_key_pair.asg_keypair.key_name# Terraform으로 생성한 Key Pair 연결
-```
 
-  - EC2에 적용될 보안 그룹
-vpc_security_group_ids = [# tag_specifications : 이 템플릿으로 생성되는 리소스에 태그를 붙여라
-aws_security_group.my_asg_elb_sg.id
-```
+  # EC2에 적용될 보안 그룹
+  vpc_security_group_ids = [# tag_specifications : 이 템플릿으로 생성되는 리소스에 태그를 붙여라
+    aws_security_group.my_asg_elb_sg.id
   ]
-```
 
-#### 세부 모니터링 기능 활성화
-
-```
+# 세부 모니터링 기능 활성화
  monitoring {
     enabled = true
   }
-```
 
-  - EC2 인스턴스에 붙을 태그
-```
+  # EC2 인스턴스에 붙을 태그
   tag_specifications {
     resource_type = "instance"
 
@@ -1440,51 +1360,34 @@ aws_security_group.my_asg_elb_sg.id
       Name = "my-web"
     }
   }
-```
 
-  - Launch Template 자체 태그
-```
+  # Launch Template 자체 태그
   tags = {
     Name = "my-template"
   }
 }
-```
 
-#### outputs.tf
-
-```hcl
+# outputs.tf
 output "default_vpc_id" {
   value = data.aws_vpc.default.id
 }
-```
 
-```hcl
 output "security_group_id" {
   value = aws_security_group.my_asg_elb_sg.id
 }
-```
 
-```hcl
 output "launch_template_id" {
   value = aws_launch_template.my_template.id
 }
-```
 
-```hcl
 output "launch_template_latest_version" {
   value = aws_launch_template.my_template.latest_version
 }
-```
 
-```bash
 PS C:\terraform-aws\aaa> terraform  init
-```
 
-```bash
 PS C:\terraform-aws\aaa> terraform  plan
-```
 
-```bash
 PS C:\terraform-aws\aaa> terraform  apply
 ```
 
@@ -1542,9 +1445,7 @@ PS C:\terraform-aws\aaa> terraform  apply
 
 ![이미지](assets/09-terraform-alb-asg/39.png)
 
-```
 http://my-asg-lb-1652433411.ap-northeast-2.elb.amazonaws.com/
-```
 
 ![이미지](assets/09-terraform-alb-asg/40.png)
 
@@ -1602,11 +1503,8 @@ locals {
   EOT
   )
 }
-```
 
-#### Launch Template을 정의하여 인스턴스 시작 템플릿 설정
-
-```hcl
+# Launch Template을 정의하여 인스턴스 시작 템플릿 설정
 resource "aws_launch_template" "example" {
   name_prefix   = "example-launch-template"      # 시작 템플릿 이름 prefix
   image_id      = data.aws_ami.al2023.id            # 위에서 가져온 AMI ID 사용
@@ -1615,17 +1513,16 @@ resource "aws_launch_template" "example" {
   user_data = local.bootstrap_script                 # 부트스트랩 스크립트 사용
 
   key_name = aws_key_pair.example.key_name     # 생성된 키 페어 이름 설정
-```
 
-  - 네트워크 인터페이스 설정 (보안 그룹 포함)
-```
+  # 네트워크 인터페이스 설정 (보안 그룹 포함)
   network_interfaces {
     security_groups = [aws_security_group.example.id]# EC2에 적용할 보안 그룹
   }
 }
-```
 
 코드 설명
+```
+
 - 이 코드에서 먼저 locals 블록은 EC2가 처음 실행될 때 사용할 쉘 스크립트를 저장하는 부분이다.
 - 여기서는 nginx를 설치하고, nginx를 실행하고, 웹 브라우저에서 접속했을 때 보일 index.html 파일을 생성한다.
 - 그 다음 aws_launch_template 리소스는 ASG가 사용할 EC2 생성 템플릿이다.
@@ -1716,13 +1613,9 @@ resource "aws_autoscaling_policy" "scale_out_policy" {
   cooldown               = 300                     # 정책 쿨다운 기간 300초
   autoscaling_group_name = aws_autoscaling_group.example.name  # 대상 오토 스케일링 그룹 이름
 }
-```
 
-#### 스케일 인 정책 코드
-
-#### 오토 스케일링 정책 정의 (스케일 인)
-
-```hcl
+# 스케일 인 정책 코드
+# 오토 스케일링 정책 정의 (스케일 인)
 resource "aws_autoscaling_policy" "scale_in_policy" {
   name                   = "scale-in-policy"           # 스케일 인 정책 이름
   scaling_adjustment     = -1                          # 인스턴스 1개 감소
@@ -1730,9 +1623,9 @@ resource "aws_autoscaling_policy" "scale_in_policy" {
   cooldown               = 300                         # 정책 쿨다운 기간 300초
   autoscaling_group_name = aws_autoscaling_group.example.name  # 대상 오토 스케일링 그룹 이름
 }
+코드 설명
 ```
 
-코드 설명
 - scale_out_policy는 서버를 늘리는 정책이다.
 - scaling_adjustment = 1이므로 한 번 실행되면 EC2를 1대 늘린다.
 
@@ -1775,13 +1668,10 @@ resource "aws_cloudwatch_metric_alarm" "cpu_high" {
     AutoScalingGroupName = aws_autoscaling_group.example.name# 오토 스케일링 그룹 이름과 연결
   }
 }
-```
 
-#### CPU 사용률이 낮을 때 알람 코드
+# CPU 사용률이 낮을 때 알람 코드
 
-#### CPU 사용률이 낮을 때 알람을 설정하여 스케일 인 트리거
-
-```hcl
+# CPU 사용률이 낮을 때 알람을 설정하여 스케일 인 트리거
 resource "aws_cloudwatch_metric_alarm" "cpu_low" {
   alarm_name        = "cpu_low"                      # 알람 이름
   comparison_operator= "LessThanOrEqualToThreshold" # 임계값 이하일 때 트리거
@@ -1797,9 +1687,10 @@ resource "aws_cloudwatch_metric_alarm" "cpu_low" {
     AutoScalingGroupName = aws_autoscaling_group.example.name# 오토 스케일링 그룹 이름과 연결
   }
 }
-```
 
 코드 설명
+```
+
 - metric_name = "CPUUtilization"은 CPU 사용률을 감시하겠다는 뜻이다.
 - threshold = "60"이면 CPU 평균 사용률이 60% 이상일 때 알람이 울린다.
 그리고 alarm_actions에 연결된 scale_out_policy가 실행된다. (즉 서버가 늘어난다.)
@@ -1857,9 +1748,9 @@ resource "aws_security_group" "example" {
     Name = "example-sg"                               # 보안 그룹 이름 태그 추가
   }
 }
-```
 
 코드 설명
+```
 
 - 이 보안 그룹은 ALB 또는 예시 리소스가 외부에서 HTTP 요청을 받을 수 있게 해준다.
 - ingress는 들어오는 규칙이고, egress는 나가는 규칙이다.
@@ -1930,17 +1821,13 @@ resource "aws_lb_target_group" "example" {
 - ALB는 EC2 인스턴스가 살아있는지 확인하기 위해 지정한 경로로 주기적으로 health_check 요청을 보낸다.
 - 여기서는 /index.html을 검사하므로, 앞에서 user_data에서 만든 index.html이 제대로 응답해야 정상 서버로 인정된다.
 - 즉 앞의 Launch Template에서 만든
-```bash
-echo "Hello, Nginx! $(hostname)" > /usr/share/nginx/html/index.html
-```
-
-이 코드와 지금 Target Group의 health check가 서로 연결되는 구조다.
-
-#### 리스너 생성
-
-#### 로드 밸런서 리스너 설정
 
 ```hcl
+echo "Hello, Nginx! $(hostname)" > /usr/share/nginx/html/index.html
+이 코드와 지금 Target Group의 health check가 서로 연결되는 구조다.
+
+# 리스너 생성
+# 로드 밸런서 리스너 설정
 resource "aws_lb_listener" "example" {
   load_balancer_arn = aws_lb.example.arn     # 연결할 로드 밸런서 ARN
   port              = "80"                      # 리스너 포트 번호 (HTTP)
@@ -1968,9 +1855,10 @@ resource "aws_autoscaling_attachment" "example" {
   autoscaling_group_name = aws_autoscaling_group.example.name# 연결할 오토 스케일링 그룹
   lb_target_group_arn    = aws_lb_target_group.example.arn     # 연결할 타겟 그룹 ARN
 }
-```
 
 코드 설명
+```
+
 - 이 리소스는 ASG와 Target Group을 연결해 주는 역할을 한다.
 - 이 연결이 있어야 ASG가 만든 EC2 인스턴스들이 자동으로 Target Group에 등록된다.
 - 즉 서버가 늘어나면 새로 생성된 EC2도 자동으로 로드밸런서 뒤에 붙고,
@@ -1978,28 +1866,20 @@ resource "aws_autoscaling_attachment" "example" {
 
 - ASG만 있고 Target Group 연결이 없으면, EC2는 늘어나도 ALB가 그 서버들을 모를 수 있기 때문이다.
 
-```bash
+```powershell
 PS C:\terraform-aws\terraform-aws\03_elb-asg-terraform\03_asg-elb-infra> terraform init
-```
 
-```bash
 PS C:\terraform-aws\terraform-aws\03_elb-asg-terraform\03_asg-elb-infra> terraform plan
-```
 
-```bash
 PS C:\terraform-aws\terraform-aws\03_elb-asg-terraform\03_asg-elb-infra> terraform apply -auto-approve
-```
 
-```bash
 PS C:\terraform-aws\terraform-aws\03_elb-asg-terraform\03_asg-elb-infra> terraform destroy -auto-approve
-```
 
-#### Launch Template +　ASG +　ELB , Taget-Group 실습
+# Launch Template +　ASG +　ELB , Taget-Group 실습
 
-#### STEP 1) 기존 EC2 Security Group의 HTTP 규칙 수정
+# STEP 1) 기존 EC2 Security Group의 HTTP 규칙 수정
 
-  - main.tf
-```hcl
+   # main.tf
 resource "aws_security_group" "my_ec2_sg" {
   name = "my-ec2-sg"
   vpc_id = data.aws_vpc.default.id
@@ -2036,15 +1916,10 @@ resource "aws_security_group" "my_ec2_sg" {
     Name = "My-ASG-EC2-SG"
   }
 }
-```
+# STEP 2) ALB Security Group 생성
 
-#### STEP 2) ALB Security Group 생성
-
-  - main.tf
-
-#### Application Load Balancer가 사용할 전용 Security Group을 만든다.
-
-```hcl
+   # main.tf
+# Application Load Balancer가 사용할 전용 Security Group을 만든다.
 resource "aws_security_group" "my_alb_sg" {
   name = "my-alb-sg"
   vpc_id = data.aws_vpc.default.id
@@ -2072,8 +1947,8 @@ resource "aws_security_group" "my_alb_sg" {
 - ALB와 Auto Scaling Group에서 사용할
 - Subnet ID를 직접 입력할 필요가 없다.
 
-  - main.tf
 ```hcl
+   # main.tf
 data "aws_subnets" "default" {
   # Subnet 검색 조건
   filter {
@@ -2088,18 +1963,16 @@ data "aws_subnets" "default" {
 - ALB가 실제 요청을 전달할 대상 그룹을 만든다.
 - Target Group은 EC2의 HTTP 80번 Port로 요청을 전달하고, "/" 경로를 이용하여 Web Server 상태를 검사한다.
 
-  - main.tf
 ```hcl
+   # main.tf
 resource "aws_lb_target_group" "my_tg" {
   name = "my-target-group"# Target Group 이름
   port = 80# Target Group 이름
   protocol = "HTTP"# HTTP Protocol 사용
   vpc_id = data.aws_vpc.default.id# Target Group을 생성할 VPC
   target_type = "instance"# Target을 EC2 Instance 단위로 등록
-```
 
-  - Target EC2 상태 확인
-```
+  # Target EC2 상태 확인
   health_check {
     path = "/"# Target을 EC2 Instance 단위로 등록
     protocol = "HTTP"# HTTP로 Health Check
@@ -2110,9 +1983,7 @@ resource "aws_lb_target_group" "my_tg" {
     interval = 30# 30초마다 Health Check
     matcher = "200"# HTTP Status Code 200이면 정상
   }
-```
 
-```
   tags = {
     Name = "My-Target-Group"
   }
@@ -2124,8 +1995,8 @@ resource "aws_lb_target_group" "my_tg" {
 - 외부 사용자의 HTTP 요청을 받을 Application Load Balancer를 생성한다.
 - ALB는 Default VPC의 여러 Subnet에 배치된다.
 
-  - main.tf
 ```hcl
+   # main.tf
 resource "aws_lb" "my_alb" {
   name = "my-asg-alb"
   internal = false# 인터넷에서 접근 가능한 Internet-facing ALB
@@ -2146,16 +2017,14 @@ resource "aws_lb" "my_alb" {
 
 - Listener는 ALB의 특정 Port에서 요청을 기다린다.
 
-  - main.tf
 ```hcl
+   # main.tf
 resource "aws_lb_listener" "my_listener" {
   load_balancer_arn = aws_lb.my_alb.arn# Listener를 연결할 ALB
   port = 80# ALB의 80번 Port에서 요청 대기
   protocol = "HTTP"# Listener를 연결할 ALB
-```
 
-  - 요청이 들어왔을 때 수행할 기본 동작
-```
+  # 요청이 들어왔을 때 수행할 기본 동작
   default_action {
     type = "forward"# 요청을 다른 Target으로 전달
     target_group_arn = aws_lb_target_group.my_tg.arn# 요청을 다른 Target으로 전달
@@ -2167,44 +2036,32 @@ resource "aws_lb_listener" "my_listener" {
 
 - 앞에서 이미 만든 Launch Template을 이용해서 EC2를 자동으로 생성하는 Auto Scaling Group을 만든다.
 
-  - main.tf
 ```hcl
+   # main.tf
 resource "aws_autoscaling_group" "my_asg" {
   name = "my-asg"# Auto Scaling Group 이름
-```
 
-  - 기존에 생성한 Launch Template 사용
-```
+  # 기존에 생성한 Launch Template 사용
   launch_template {
     id = aws_launch_template.my_launch_template.id# Launch Template ID
     version = "$Latest"# 가장 최신 Version 사용
   }
-```
 
-  - EC2가 생성될 Subnet
-  - Default VPC의 Subnet 목록을 자동으로 사용
-```
+  # EC2가 생성될 Subnet
+  # Default VPC의 Subnet 목록을 자동으로 사용
   vpc_zone_identifier = data.aws_subnets.default.ids
-```
 
-  - ASG와 Target Group 연결, ASG가 EC2를 생성하면 자동으로 Target Group에 등록
-```
+  # ASG와 Target Group 연결, ASG가 EC2를 생성하면 자동으로 Target Group에 등록
   target_group_arns = [ aws_lb_target_group.my_tg.arn ]
-```
 
-```
   min_size    = 1# 최소 EC2 개수
   desired_capacity = 2# 처음 생성할 EC2 개수
   max_size    = 3# 최대 EC2 개수
-```
 
-```
   health_check_type = "ELB"# ALB Target Group의 Health Check 결과 사용
   health_check_grace_period = 300# 새 EC2가 부팅되고 Apache가 준비될 시간을 기다림
-```
 
-  - ASG가 생성하는 EC2에 Tag 적용
-```
+  # ASG가 생성하는 EC2에 Tag 적용
   tag {
     key = "Name"# Tag Key
     value = "My-ASG-EC2"# Tag Value
@@ -2219,9 +2076,7 @@ resource "aws_autoscaling_group" "my_asg" {
 
 ![이미지](assets/09-terraform-alb-asg/43.png)
 
-```
 http://my-asg-alb-1101140626.ap-northeast-2.elb.amazonaws.com/
-```
 
 ![이미지](assets/09-terraform-alb-asg/44.png)
 
@@ -2234,8 +2089,8 @@ http://my-asg-alb-1101140626.ap-northeast-2.elb.amazonaws.com/
 - CloudWatch CPU High Alarm이 발생했을 때
 - EC2를 1대 증가시키는 정책이다.
 
-  - main.tf
 ```hcl
+   # main.tf
 resource "aws_autoscaling_policy" "scale_out" {
   name = "my-scale-out"# Scaling Policy 이름
   autoscaling_group_name = aws_autoscaling_group.my_asg.name# 이 Policy가 적용될 Auto Scaling Group
@@ -2267,8 +2122,8 @@ resource "aws_autoscaling_policy" "scale_in" {
 - ASG에 속한 EC2들의 평균 CPU 사용률이
 - 60% 이상인 상태가 2번 연속 발생하면 Scale Out Policy를 실행
 
-  - main.tf
 ```hcl
+   # main.tf
 resource "aws_cloudwatch_metric_alarm" "cpu_high" {
   alarm_name = "my-asg-cpu-high"# CloudWatch Alarm 이름
   comparison_operator= "GreaterThanOrEqualToThreshold"# CPU 값이 Threshold보다 크거나 같은지 검사
@@ -2280,10 +2135,8 @@ resource "aws_cloudwatch_metric_alarm" "cpu_high" {
   statistic = "Average"# 평균 CPU 사용률 사용
   threshold = 60# CPU 60% 이상이면 조건 충족
   alarm_actions = [ aws_autoscaling_policy.scale_out.arn ]# Alarm 발생시 실행할 Action(Scale Out Policy 실행)
-```
 
-  - 특정 EC2 한 대가 아니라 Auto Scaling Group 전체의 CPU 평균을 감시
-```
+  # 특정 EC2 한 대가 아니라 Auto Scaling Group 전체의 CPU 평균을 감시
   dimensions = {
     AutoScalingGroupName = aws_autoscaling_group.my_asg.name
   }
@@ -2294,8 +2147,9 @@ resource "aws_cloudwatch_metric_alarm" "cpu_high" {
 
 - ASG 평균 CPU가 30% 이하인 상태가
 - 2번 연속 발생하면 Scale In Policy를 실행한다.
-  - main.tf
+
 ```hcl
+   # main.tf
 resource "aws_cloudwatch_metric_alarm" "cpu_low" {
   alarm_name = "my-asg-cpu-low"# Alarm 이름
   comparison_operator = "LessThanOrEqualToThreshold"# Threshold 이하인지 검사
@@ -2305,72 +2159,46 @@ resource "aws_cloudwatch_metric_alarm" "cpu_low" {
   period = 60# 60초 단위 측정
   statistic = "Average"# 평균값 사용
   threshold = 30# CPU 30% 이하
-```
 
-  - Alarm 발생 시 Scale In 실행
-```
+  # Alarm 발생 시 Scale In 실행
   alarm_actions = [ aws_autoscaling_policy.scale_in.arn ]
-```
 
-  - ASG 전체 EC2 CPU 평균 감시
-```
+  # ASG 전체 EC2 CPU 평균 감시
   dimensions = {
     AutoScalingGroupName = aws_autoscaling_group.my_asg.name
   }
 }
-```
 
-  - outputs.tf
-```hcl
+   # outputs.tf
 output "alb_url" {
   description = "Application Load Balancer URL"
   value = "http://${aws_lb.my_alb.dns_name}"
 }
-```
 
-#### ASG 이름 출력
-
-```hcl
+# ASG 이름 출력
 output "autoscaling_group_name" {
   description = "Auto Scaling Group Name"
   value = aws_autoscaling_group.my_asg.name
 }
-```
 
-#### Target Group ARN 출력
-
-```hcl
+# Target Group ARN 출력
 output "target_group_arn" {
   description = "Target Group ARN"
   value = aws_lb_target_group.my_tg.arn
 }
-```
 
-```bash
 PS C:\trf2\4) ELB,ASG\4_1_ELB-ALB> terraform  plan
-```
 
-```bash
 PS C:\trf2\4) ELB,ASG\4_1_ELB-ALB> terraform  apply
-```
 
-#### 첫 번째 EC2 접속
-
-```
+# 첫 번째 EC2 접속
 [root@ip-172-31-28-13 ~]# dnf install  -y  stress
-```
 
-```
 [root@ip-172-31-28-13 ~]# stress --cpu 1 &
-```
 
-#### 두 번째 EC2 접속
-
-```
+# 두 번째 EC2 접속
 [root@ip-172-31-46-82 ~]# dnf install  -y  stress
-```
 
-```
 [root@ip-172-31-46-82 ~]# stress --cpu 1 &
 ```
 
@@ -2382,11 +2210,8 @@ PS C:\trf2\4) ELB,ASG\4_1_ELB-ALB> terraform  apply
 
 ```
 [root@ip-172-31-28-13 ~]# stress --cpu 2
-```
 
-#### 두 번째 EC2 접속
-
-```
+# 두 번째 EC2 접속
 [root@ip-172-31-46-82 ~]# stress --cpu 2
 ```
 
@@ -2403,31 +2228,22 @@ PS C:\trf2\4) ELB,ASG\4_1_ELB-ALB> terraform  apply
 - Auto Scaling에서 Scale Out 또는 Scale In이 발생했을 때 관리자에게 알림을 전송하기 위해 SNS를 사용한다.
 - SNS Topic을 생성하고 이메일 구독을 연결하여 CloudWatch Alarm 발생 시 이메일 알림을 전송한다.
 
-  - variables.tf
-
-#### SNS 알림을 받을 이메일 주소
-
 ```hcl
+   # variables.tf
+# SNS 알림을 받을 이메일 주소
 variable "notification_email" {
   type    = string
   default = "konan7979@gmail.com"
 }
-```
 
-#### SNS 알림을 받을 전화번호
-
-```hcl
+# SNS 알림을 받을 전화번호
 variable "notification_phone" {
   type    = string
-  default = "+821012345678"
+  default = "+123456789012"
 }
-```
 
-  - main.tf
-
-#### Auto Scaling 알림을 전달하기 위한 SNS Topic 생성
-
-```hcl
+   # main.tf
+# Auto Scaling 알림을 전달하기 위한 SNS Topic 생성
 resource "aws_sns_topic" "asg_alert" {
   name = "asg-scaling-alert"
 }
@@ -2437,25 +2253,21 @@ resource "aws_sns_topic" "asg_alert" {
 
 - SNS Topic에서 발생한 메시지를 이메일로 전달하기 위해 Email Subscription을 생성한다.
 
-  - main.tf
 ```hcl
+   # main.tf
 resource "aws_sns_topic_subscription" "asg_email" {
   topic_arn = aws_sns_topic.asg_alert.arn# 구독할 SNS Topic 지정
   protocol  = "email"                       # 이메일 방식으로 메시지 전송
   endpoint  = var.notification_email        # 알림을 받을 이메일 주소
 }
-```
 
-```hcl
 resource "aws_sns_topic_subscription" "asg_sms" {
   topic_arn = aws_sns_topic.asg_alert.arn# 기존 SNS Topic 사용
   protocol  = "sms"                       # SMS 방식으로 메시지 전송
   endpoint  = var.notification_phone        # Sandbox에 인증된 전화번호
 }
 PS C:\trf2\4) ELB,ASG\4_1_ELB-ALB> terraform  plan
-```
 
-```bash
 PS C:\trf2\4) ELB,ASG\4_1_ELB-ALB> terraform  apply -auto-approve
 ```
 
@@ -2469,8 +2281,8 @@ PS C:\trf2\4) ELB,ASG\4_1_ELB-ALB> terraform  apply -auto-approve
 - CPU 평균 사용률이 60% 이상이면 Scale Out Policy를 실행한다.
 - 동시에 SNS Topic으로 알림을 전송하여 관리자에게 이메일로 알린다.
 
-  - main.tf
 ```hcl
+   # main.tf
 resource "aws_cloudwatch_metric_alarm" "cpu_high" {
   alarm_name = "cpu_high"
 
@@ -2491,10 +2303,8 @@ resource "aws_cloudwatch_metric_alarm" "cpu_high" {
     AutoScalingGroupName = aws_autoscaling_group.example.name
   }
 }
-```
 
-  - main.tf
-```hcl
+    # main.tf
 resource "aws_cloudwatch_metric_alarm" "cpu_low" {
   alarm_name = "cpu_low"
 
@@ -2523,30 +2333,20 @@ resource "aws_cloudwatch_metric_alarm" "cpu_low" {
 
 - Terraform Apply 완료 후 생성된 SNS Topic의 ARN을 확인하기 위해 Output을 설정한다.
 
-  - outputs.tf
 ```hcl
+   # outputs.tf
 output "sns_topic_arn" {
   value       = aws_sns_topic.asg_alert.arn
 }
-```
 
-```bash
 PS C:\trf2\4) ELB,ASG\4_1_ELB-ALB> terraform  plan
-```
 
-```bash
 PS C:\trf2\4) ELB,ASG\4_1_ELB-ALB> terraform  apply -auto-approve
-```
 
-#### 첫 번째 EC2 접속
-
-```
+# 첫 번째 EC2 접속
 [root@ip-172-31-28-13 ~]# stress --cpu 2
-```
 
-#### 두 번째 EC2 접속
-
-```
+# 두 번째 EC2 접속
 [root@ip-172-31-46-82 ~]# stress --cpu 2
 ```
 
@@ -2616,41 +2416,36 @@ terraform-asg-alb-module/
 - 작성 위치: terraform-asg-alb-module/modules/network/
 
 - 생성 파일:
-  - main.tf
-  - variables.tf
-  - outputs.tf
 
-#### STEP 1-1. VPC 기본 변수 작성
-
-  - modules/network/variables.tf
 ```hcl
+ # main.tf
+ # variables.tf
+ # outputs.tf
+
+# STEP 1-1. VPC 기본 변수 작성
+
+  # modules/network/variables.tf
 variable "aws_region" {
   description = "AWS Region"
   type        = string
   default     = "ap-northeast-2"
 }
-```
 
-```hcl
 variable "vpc_name" {
   description = "VPC 이름"
   type        = string
   default     = "my-vpc"
 }
-```
 
-```hcl
 variable "vpc_cidr" {
   description = "VPC CIDR"
   type        = string
   default     = "10.0.0.0/16"
 }
-```
 
-#### STEP 1-2. VPC 기본 코드 작성
+# STEP 1-2. VPC 기본 코드 작성
 
-  - modules/network/main.tf
-```hcl
+   # modules/network/main.tf
 terraform {
   required_version = ">= 1.16.0"
 
@@ -2661,28 +2456,25 @@ terraform {
     }
   }
 }
-```
 
-#### STEP 1-3. VPC 첫 번째 Plan 확인
+# STEP 1-3. VPC 첫 번째 Plan 확인
 
 ## VPC Module 디렉터리로 이동 (powershell)
-```bash
 PS :\terraform-asg-alb> PS :\terraform-asg-alb\modules\vpc>
-```
 
 ## Terraform 초기화 (powershell)
-```bash
 PS :\terraform-asg-alb\modules\vpc> terraform init
 ```
 
 - 다음 파일이 생성된다.
   - .terraform/
-  - .terraform.lock.hcl
 
-#### STEP 1-4. Subnet 변수 추가
-
-  - modules/network/variables.tf
 ```hcl
+ # .terraform.lock.hcl
+
+# STEP 1-4. Subnet 변수 추가
+
+   # modules/network/variables.tf
 variable "public_subnets" {
   description = "Public Subnet CIDR 목록"
   type        = list(string)
@@ -2692,9 +2484,7 @@ variable "public_subnets" {
     "10.0.2.0/24"
   ]
 }
-```
 
-```hcl
 variable "private_subnets" {
   description = "Private Subnet CIDR 목록"
   type        = list(string)
@@ -2704,15 +2494,11 @@ variable "private_subnets" {
     "10.0.4.0/24"
   ]
 }
-```
 
-#### STEP 1-5. VPC 설정 추가
+# STEP 1-5. VPC 설정 추가
 
-  - modules/network/main.tf의
-
-#### module "vpc" 내부에 추가
-
-```hcl
+   # modules/network/main.tf의
+# module "vpc" 내부에 추가
 module "network" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "5.15.0"
@@ -2747,9 +2533,9 @@ module "network" {
     Name = var.vpc_name # VPC Name Tag
   }
 }
-```
 
 ## Terraform VPC Module
+```
 
 - terraform-aws-modules/vpc/aws는 Terraform Registry에 공개되어 있는 AWS VPC용 Module이다.
 
@@ -2757,6 +2543,7 @@ module "network" {
 Subnet, Internet Gateway, NAT Gateway, Route Table까지 필요한 Network 구성을 한 번에 만들 수 있다.
 
 - 예를 들어 다음과 같이 설정한다.
+
 ```hcl
 module "network" {
   source  = "terraform-aws-modules/vpc/aws"
@@ -2817,28 +2604,21 @@ VPC Module에 필요한 값을 전달하면 Module 내부의 Terraform 코드가
 #### STEP 1-6. VPC vpc 중간 Plan
 
 실행 위치 :
+
+```hcl
 C:\terraform-asg-alb-module\modules\network
 
-#### 새로 추가한 VPC vpc 코드를 Terraform 표준 형식으로 정렬
-
+# 새로 추가한 VPC vpc 코드를 Terraform 표준 형식으로 정렬
 powershell
-```hcl
 terraform fmt
-```
 
-#### Subnet, Availability Zone, Internet Gateway, NAT Gateway 관련 설정을 검사한다.
-
+# Subnet, Availability Zone, Internet Gateway, NAT Gateway 관련 설정을 검사한다.
 powershell
-```hcl
 terraform validate
-```
 
-#### 현재 VPC vpc 전체 구성이 정상적으로 생성 가능한지 확인한다.
-
+# 현재 VPC vpc 전체 구성이 정상적으로 생성 가능한지 확인한다.
 powershell
-```hcl
 terraform plan
-```
 
 ## [확인]
 VPC
@@ -2850,24 +2630,19 @@ Route Table
 Route
 Route Table Association
 
-#### STEP 1-7. VPC Output 작성
+# STEP 1-7. VPC Output 작성
 
-  - modules/network/outputs.tf
-```hcl
+   # modules/network/outputs.tf
 output "vpc_id" {
   description = "생성된 VPC ID"
   value       = module.network.vpc_id
 }
-```
 
-```hcl
 output "public_subnets" {
   description = "Public Subnet ID 목록"
   value = module.network.public_subnets # Public Subnet ID 목록
 }
-```
 
-```hcl
 output "private_subnets" {
   description = "Private Subnet ID 목록"
   value = module.network.private_subnets # Private Subnet ID 목록
@@ -2881,14 +2656,15 @@ output "private_subnets" {
   - Private Subnet ID: ASG Module에서 사용
 
 - 그래서 outputs.tf를 이용해 VPC Module의 값을 Root로 전달한다.
+
 ```hcl
 output "vpc_id" {
   value = module.network.vpc_id
 }
-```
 
 Root에서는 다음처럼 사용할 수 있다.
-  - module.vpc.vpc_id
+ # module.vpc.vpc_id
+```
 
 - 즉, VPC Module에서 생성한 값
   - output
@@ -2897,10 +2673,10 @@ Root에서는 다음처럼 사용할 수 있다.
 
 #### STEP 1-8. VPC Module 최종 Plan
 
+```hcl
 실행 위치 : C:\terraform-asg-alb-module\modules\network
 
 powershell
-```hcl
 terraform fmt
 ```
 
@@ -2911,8 +2687,8 @@ terraform fmt
 
 #### STEP 2-1. Provider 요구사항 작성
 
-  - modules/alb/main.tf
 ```hcl
+   # modules/alb/main.tf
 terraform {
   required_version = ">= 1.16.0" # Terraform 최소 버전
 
@@ -2923,39 +2699,30 @@ terraform {
     }
   }
 }
-```
 
-#### STEP 2-2. Security Group 변수 작성
+# STEP 2-2. Security Group 변수 작성
 
-  - modules/alb/variables.tf
-```hcl
+   # modules/alb/variables.tf
 variable "vpc_id" {
   description = "Security Group과 Target Group을 생성할 VPC ID"
   type        = string
   default     = "vpc-0123456789abcdef0"
 }
-```
 
-```hcl
 variable "security_group_name" {
   description = "ALB Security Group 이름"
   type        = string
   default     = "my-alb-sg"
 }
-```
 
-```hcl
 variable "http_port" {
   description = "HTTP Port"
   type        = number
   default     = 80
 }
-```
+# STEP 2-3. Security Group 생성
 
-#### STEP 2-3. Security Group 생성
-
-  - modules/alb/main.tf
-```hcl
+   # modules/alb/main.tf
 resource "aws_security_group" "alb_sg" {
   name_prefix = "${var.security_group_name}-" # Security Group 이름 Prefix
 
@@ -2979,45 +2746,37 @@ resource "aws_security_group" "alb_sg" {
     Name = var.security_group_name # my-alb-sg
   }
 }
-```
 
 - 외부 사용자가 ALB의 HTTP 80 Port에 접근할 수 있도록 Security Group을 생성한다.
 
-#### STEP 2-4. Security Group Plan 확인
+# STEP 2-4. Security Group Plan 확인
 
 실행 위치 : C:\terraform-asg-alb-module\modules\alb
 
 powershell
-```bash
 cd C:\terraform-asg-alb-module\modules\alb
-```
 
-#### STEP 2-5. Target Group 변수 추가
+# STEP 2-5. Target Group 변수 추가
 
-  - modules/alb/variables.tf
-```hcl
+   # modules/alb/variables.tf
 variable "target_group_name" {
   description = "Target Group 이름"
   type        = string
   default     = "my-target-group"
 }
-```
 
-```hcl
 variable "health_check_path" {
   description = "Target Group Health Check 경로"
   type        = string
   default     = "/index.html"
 }
-```
 
 - Target Group 이름은 "my-target-group"을 사용한다.
 - Health Check는 "/index.html" 경로를 검사한다.
 
-#### STEP 2-6. Target Group 생성
+# STEP 2-6. Target Group 생성
 
-  - modules/alb/main.tf
-```hcl
+   # modules/alb/main.tf
 resource "aws_lb_target_group" "web_tg" {
   name = var.target_group_name # Target Group 이름
 
@@ -3030,24 +2789,20 @@ resource "aws_lb_target_group" "web_tg" {
     protocol = "HTTP"                # HTTP Health Check
   }
 }
-```
 
-#### STEP 2-7. Target Group 중간 Plan
+# STEP 2-7. Target Group 중간 Plan
 
 실행 위치 : C:\terraform-asg-alb-module\modules\alb
 
-#### STEP 2-8. ALB 변수 추가
+# STEP 2-8. ALB 변수 추가
 
-  - modules/alb/variables.tf
-```hcl
+   # modules/alb/variables.tf
 variable "alb_name" {
   description = "Application Load Balancer 이름"
   type        = string
   default     = "my-alb"
 }
-```
 
-```hcl
 variable "public_subnets" {
   description = "ALB가 배치될 Public Subnet ID 목록"
   type        = list(string)
@@ -3057,12 +2812,10 @@ variable "public_subnets" {
     "subnet-0fedcba9876543210"
   ]
 }
-```
 
-#### STEP 2-9. ALB 생성
+# STEP 2-9. ALB 생성
 
-  - modules/alb/main.tf
-```hcl
+   # modules/alb/main.tf
 resource "aws_lb" "alb" {
   name = var.alb_name # ALB 이름
 
@@ -3076,14 +2829,12 @@ resource "aws_lb" "alb" {
 
   enable_deletion_protection = false # 삭제 방지 기능 비활성화
 }
-```
 
 - ALB는 외부 사용자의 요청을 받아야 하므로 Public Subnet에 배치한다.
 
-#### STEP 2-10. Listener 생성
+# STEP 2-10. Listener 생성
 
-  - modules/alb/main.tf
-```hcl
+   # modules/alb/main.tf
 resource "aws_lb_listener" "http_listener" {
   load_balancer_arn = aws_lb.alb.arn # my-alb 연결
 
@@ -3095,77 +2846,55 @@ resource "aws_lb_listener" "http_listener" {
     target_group_arn = aws_lb_target_group.web_tg.arn # my-target-group으로 전달
   }
 }
-```
 
-#### STEP 2-11. ALB 전체 Plan
+# STEP 2-11. ALB 전체 Plan
 
 실행 위치 : C:\terraform-asg-alb-module\modules\alb
 
-#### ALB Module 전체 코드를 표준 형식으로 정렬한다.
-
+# ALB Module 전체 코드를 표준 형식으로 정렬한다.
 powershell
-```hcl
 terraform fmt
-```
 
 #Security Group, Target Group, ALB, Listener의 연결을 검사한다.
 powershell
-```hcl
 terraform validate
-```
 
 #ALB Module 전체 구성이 정상적으로 생성 가능한지 확인한다.
 powershell
-```hcl
 terraform plan
-```
 
-#### STEP 2-12. ALB Output 작성
+# STEP 2-12. ALB Output 작성
 
-  - modules/alb/outputs.tf
-```hcl
+   # modules/alb/outputs.tf
 output "security_group_id" {
   description = "ALB Security Group ID"
   value       = aws_security_group.alb_sg.id
 }
-```
 
-```hcl
 output "target_group_arn" {
   description = "Target Group ARN"
   value       = aws_lb_target_group.web_tg.arn # Target Group ARN
 }
-```
 
-```hcl
 output "alb_dns_name" {
   description = "ALB DNS Name"
   value       = aws_lb.alb.dns_name # ALB DNS Name
 }
-```
 
-#### STEP 2-13. ALB 최종 Plan
+# STEP 2-13. ALB 최종 Plan
 
 실행 위치 : C:\terraform-asg-alb-module\modules\alb
 
-#### ALB Module 전체 코드를 최종 정렬한다.
-
+# ALB Module 전체 코드를 최종 정렬한다.
 powershell
-```hcl
 terraform fmt
-```
 
-#### ALB Module Resource와 Output 참조를 최종 검사한다.
-
+# ALB Module Resource와 Output 참조를 최종 검사한다.
 powershell
-```hcl
 terraform validate
-```
 
-#### Root에 연결하기 전 ALB Module 전체 구성을 확인한다.
-
+# Root에 연결하기 전 ALB Module 전체 구성을 확인한다.
 powershell
-```hcl
 terraform plan
 ```
 
@@ -3174,14 +2903,15 @@ terraform plan
 - 작성 위치 : terraform-asg-alb-module/modules/asg/
 
 - 생성 파일:
-  - main.tf
-  - variables.tf
-  - outputs.tf
 
-#### STEP 3-1. Provider 요구사항 작성
-
-  - modules/asg/main.tf
 ```hcl
+ # main.tf
+ # variables.tf
+ # outputs.tf
+
+# STEP 3-1. Provider 요구사항 작성
+
+   # modules/asg/main.tf
 terraform {
   required_version = ">= 1.16.0"
 
@@ -3197,40 +2927,33 @@ terraform {
     }
   }
 }
-```
 
-#### STEP 3-2. Public Key 변수 작성
+# STEP 3-2. Public Key 변수 작성
 
-  - modules/asg/variables.tf
-```hcl
+   # modules/asg/variables.tf
 variable "pub_key_file_path" {
   description = "SSH Public Key 파일 경로"
   type        = string
   default     = "C:/Users/soldesk/.ssh/my-key.pub"
 }
-```
 
-#### STEP 3-3. Public Key 확인
+# STEP 3-3. Public Key 확인
 
-#### Public Key 파일이 실제로 존재하는지 확인
-
+# Public Key 파일이 실제로 존재하는지 확인
 powershell
 Test-Path C:\Users\soldesk\.ssh\my-key.pub
 
-#### STEP 3-4. Random Integer 생성
+# STEP 3-4. Random Integer 생성
 
-  - modules/asg/main.tf
-```hcl
+   # modules/asg/main.tf
 resource "random_integer" "key_suffix" {
   min = 1000 # 최소 랜덤 숫자
   max = 9999 # 최대 랜덤 숫자
 }
-```
 
-#### STEP 3-5. AWS Key Pair 생성
+# STEP 3-5. AWS Key Pair 생성
 
-  - modules/asg/main.tf
-```hcl
+   # modules/asg/main.tf
 resource "aws_key_pair" "asg_key" {
   key_name = "my-keypair-${random_integer.key_suffix.result}" # 랜덤 숫자를 포함한 Key Pair 이름
 
@@ -3238,23 +2961,18 @@ resource "aws_key_pair" "asg_key" {
     pathexpand(var.pub_key_file_path) # Public Key 파일 읽기
   )
 }
-```
 
-#### STEP 3-6. ASG 첫 번째 Plan
+# STEP 3-6. ASG 첫 번째 Plan
 
 실행 위치 : C:\terraform-asg-alb-module\modules\asg
 
-#### AWS Provider와 Random Provider를 준비
-
+# AWS Provider와 Random Provider를 준비
 powershell
-```hcl
 terraform init
-```
 
-#### STEP 3-7. Amazon Linux 2023 AMI 조회
+# STEP 3-7. Amazon Linux 2023 AMI 조회
 
-  - modules/asg/main.tf
-```hcl
+   # modules/asg/main.tf
 data "aws_ami" "al2023" {
   most_recent = true # 조건에 맞는 가장 최신 AMI 선택
 
@@ -3276,76 +2994,60 @@ data "aws_ami" "al2023" {
     ]
   }
 }
-```
 
 - AMI ID를 직접 고정하지 않고 최신 Amazon Linux 2023 AMI를 조회한다.
+```
 
 #### STEP 3-8. EC2 Security Group 생성
 
 - Launch Template을 만들기 전에 EC2에 적용할 Security Group을 먼저 생성한다.
 
-  - modules/asg/variables.tf
-
 ```hcl
+   # modules/asg/variables.tf
+
 variable "vpc_id" {
   description = "Security Group을 생성할 VPC ID"
   type        = string
   default     = "vpc-0123456789abcdef0"
 }
-```
 
-```hcl
 variable "security_group_name" {
   description = "EC2 Security Group 이름"
   type        = string
   default     = "my-ec2-sg"
 }
-```
 
-```hcl
 variable "http_port" {
   description = "HTTP Port"
   type        = number
   default     = 80
 }
-```
 
-  - modules/asg/main.tf
-```hcl
+   # modules/asg/main.tf
 resource "aws_security_group" "ec2_sg" {
-```
 
-  - Security Group 이름
-```
+  # Security Group 이름
   name = var.security_group_name
-```
 
-  - Security Group을 생성할 VPC
-```
+  # Security Group을 생성할 VPC
   vpc_id = var.vpc_id
-```
 
-  - HTTP 80 Port 허용
-```
+  # HTTP 80 Port 허용
   ingress {
     from_port   = var.http_port
     to_port     = var.http_port
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
-```
 
-  - 모든 Outbound 허용
-```
+  # 모든 Outbound 허용
   egress {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
-```
 
-```
   tags = {
     Name = var.security_group_name
   }
@@ -3358,30 +3060,26 @@ resource "aws_security_group" "ec2_sg" {
 
 #### STEP 3-9 Launch Template 변수 추가
 
-  - modules/asg/variables.tf
 ```hcl
+   # modules/asg/variables.tf
 variable "instance_type" {
   description = "EC2 Instance Type"
   type        = string
   default     = "t3.micro"
 }
-```
 
-```hcl
 variable "launch_template_name" {
   description = "Launch Template 이름"
   type        = string
   default     = "my-launch-template"
 }
-```
 
 - "security_group_id"는 Child Module 단독 테스트용 값이다.
 - 마지막 Root에서는 ALB Module의 실제 Security Group ID를 전달한다.
 
-#### STEP 3-10. User Data 작성
+# STEP 3-10. User Data 작성
 
-  - modules/asg/main.tf
-```hcl
+   # modules/asg/main.tf
 locals {
   bootstrap_script = base64encode(<<-EOT
     #!/bin/bash
@@ -3391,17 +3089,22 @@ locals {
 
     TOKEN=$(curl -X PUT \
       "http://169.254.169.254/latest/api/token" \
-      -H "X-aws-ec2-metadata-token-ttl-seconds: 21600")
+```
 
+- H "X-aws-ec2-metadata-token-ttl-seconds: 21600")
+
+```
     INSTANCE_ID=$(curl -s \
-      -H "X-aws-ec2-metadata-token: $TOKEN" \
+```
+
+- H "X-aws-ec2-metadata-token: $TOKEN" \
+
+```
       http://169.254.169.254/latest/meta-data/instance-id)
 
     echo "<h1>$INSTANCE_ID</h1>" > /usr/share/nginx/html/index.html
-```
 
-EOT
-```
+  EOT
   )
 }
 ```
@@ -3416,8 +3119,8 @@ EOT
 
 #### STEP 3-11. Launch Template 생성
 
-  - modules/asg/main.tf
 ```hcl
+   # modules/asg/main.tf
 resource "aws_launch_template" "web_lt" {
   name_prefix = "${var.launch_template_name}-" # Launch Template 이름 Prefix
 
@@ -3434,12 +3137,10 @@ resource "aws_launch_template" "web_lt" {
   security_groups = [aws_security_group.ec2_sg.id] # EC2 Security Group 적용
   }
 }
-```
 
-#### STEP 3-12 ASG 변수 추가
+# STEP 3-12 ASG 변수 추가
 
-  - modules/asg/variables.tf
-```hcl
+   # modules/asg/variables.tf
 variable "private_subnets" {
   description = "EC2를 생성할 Private Subnet ID 목록"
   type        = list(string)
@@ -3449,33 +3150,25 @@ variable "private_subnets" {
     "subnet-0fedcba9876543210"
   ]
 }
-```
 
-```hcl
 variable "desired_capacity" {
   description = "기본 EC2 개수"
   type        = number
   default     = 2
 }
-```
 
-```hcl
 variable "min_size" {
   description = "최소 EC2 개수"
   type        = number
   default     = 1
 }
-```
 
-```hcl
 variable "max_size" {
   description = "최대 EC2 개수"
   type        = number
   default     = 3
 }
-```
 
-```hcl
 variable "health_check_grace_period" {
   description = "EC2 생성 후 Health Check 대기 시간"
   type        = number
@@ -3490,8 +3183,8 @@ variable "health_check_grace_period" {
 
 #### STEP 3-13 Auto Scaling Group 생성
 
-  - modules/asg/main.tf
 ```hcl
+   # modules/asg/main.tf
 resource "aws_autoscaling_group" "web_asg" {
   launch_template {
     id      = aws_launch_template.web_lt.id # Launch Template 연결
@@ -3506,31 +3199,25 @@ resource "aws_autoscaling_group" "web_asg" {
   max_size = var.max_size # 최대 EC2 3대
   min_size = var.min_size # 최소 EC2 1대
 }
-```
 
 Launch Template과 Auto Scaling Group의 연결을 검사
-```hcl
 terraform validate
-```
 
-#### STEP 3-14 Target Group ARN 변수 추가
+# STEP 3-14 Target Group ARN 변수 추가
 
-  - modules/asg/variables.tf
-```hcl
+   # modules/asg/variables.tf
 variable "target_group_arn" {
   description = "ASG와 연결할 Target Group ARN"
   type        = string
   default = "arn:aws:elasticloadbalancing:ap-northeast-2:123456789012:targetgroup/my-target-group/0123456789abcdef"
 }
-```
 
 - ASG에서 생성한 EC2를 ALB Target Group에 자동 등록하기 위해 필요하다.
 - 최종 Root에서는 ALB Module의 실제 Target Group ARN을 전달한다.
 
-#### STEP 3-15. ASG와 Target Group 연결
+# STEP 3-15. ASG와 Target Group 연결
 
-  - modules/asg/main.tf
-```hcl
+   # modules/asg/main.tf
 resource "aws_autoscaling_attachment" "tg_attachment" {
   autoscaling_group_name = aws_autoscaling_group.web_asg.name # ASG 지정
   lb_target_group_arn = var.target_group_arn # Target Group 연결
@@ -3541,30 +3228,26 @@ resource "aws_autoscaling_attachment" "tg_attachment" {
 
 #### STEP 3-16. Scale Out 변수 추가
 
-  - modules/asg/variables.tf
 ```hcl
+   # modules/asg/variables.tf
 variable "scale_out_adjustment" {
   description = "Scale Out 시 증가할 EC2 개수"
   type        = number
   default     = 1
 }
-```
 
-```hcl
 variable "scaling_cooldown" {
   description = "Scaling 후 추가 Scaling 대기 시간"
   type        = number
   default     = 300
 }
-```
 
 - Scale Out 시 EC2를 1대 증가시킨다.
 - Scaling 실행 후 300초 동안 추가 Scaling을 기다린다.
 
-#### STEP 3-17. Scale Out Policy 생성
+# STEP 3-17. Scale Out Policy 생성
 
-  - modules/asg/main.tf
-```hcl
+   # modules/asg/main.tf
 resource "aws_autoscaling_policy" "scale_out_policy" {
   name = "my-scale-out-policy" # Scale Out Policy 이름
   scaling_adjustment = var.scale_out_adjustment # EC2 +1
@@ -3574,25 +3257,20 @@ resource "aws_autoscaling_policy" "scale_out_policy" {
 
   autoscaling_group_name = aws_autoscaling_group.web_asg.name # 적용할 ASG
 }
-```
 
-#### STEP 3-18. Scale In 변수 추가
+# STEP 3-18. Scale In 변수 추가
 
-  - modules/asg/variables.tf
-```hcl
+   # modules/asg/variables.tf
 variable "scale_in_adjustment" {
   description = "Scale In 시 감소할 EC2 개수"
   type        = number
   default     = -1
 }
-```
-
 - Scale In 발생 시 EC2를 1대 감소시킨다.
 
-#### STEP 3-19 Scale In Policy 생성
+# STEP 3-19 Scale In Policy 생성
 
-  - modules/asg/main.tf
-```hcl
+   # modules/asg/main.tf
 resource "aws_autoscaling_policy" "scale_in_policy" {
   name  = "my-scale-in-policy"
 
@@ -3612,104 +3290,84 @@ resource "aws_autoscaling_policy" "scale_in_policy" {
 
 ```hcl
 terraform plan
-```
 
-#### STEP 3-21 SNS 변수 추가
+# STEP 3-21 SNS 변수 추가
 
-  - modules/asg/variables.tf
-```hcl
+   # modules/asg/variables.tf
 variable "notification_email" {
   description = "SNS Email 주소"
   type        = string
   default     = "본인이메일@example.com"
 }
-```
 
-```hcl
 variable "notification_phone" {
   description = "SNS SMS 전화번호"
   type        = string
   default     = "+123456789012"
 }
-```
 
 - CloudWatch Alarm 발생 시 Email과 SMS로 알림을 받을 값을 설정한다.
 
-#### STEP 3-24. SNS Topic 생성
+# STEP 3-24. SNS Topic 생성
 
-  - modules/asg/main.tf
-```hcl
+   # modules/asg/main.tf
 resource "aws_sns_topic" "asg_alert" {
   name = "my-asg-scaling-alert" # ASG Scaling Alarm SNS Topic
 }
-```
 
-#### STEP 3-22 Email Subscription 생성
+# STEP 3-22 Email Subscription 생성
 
-  - modules/asg/main.tf
-```hcl
+   # modules/asg/main.tf
 resource "aws_sns_topic_subscription" "asg_email" {
   topic_arn = aws_sns_topic.asg_alert.arn # SNS Topic 연결
   protocol = "email" # Email Protocol
   endpoint = var.notification_email # Email 주소
 }
-```
 
 - SNS 메시지를 Email로 전달한다.
 - 최종 "terraform apply" 후 Email Subscription 승인 메일을 확인해야 한다.
 
-#### STEP 3-26. SMS Subscription 생성
+# STEP 3-26. SMS Subscription 생성
 
-  - modules/asg/main.tf
-```hcl
+   # modules/asg/main.tf
 resource "aws_sns_topic_subscription" "asg_sms" {
   topic_arn = aws_sns_topic.asg_alert.arn # SNS Topic 연결
   protocol = "sms" # SMS Protocol
   endpoint = var.notification_phone # SMS 전화번호
 }
-```
 
 - SNS Alarm 메시지를 SMS로 전달한다.
 
-#### STEP 3-27. CloudWatch 변수 추가
+# STEP 3-27. CloudWatch 변수 추가
 
-  - modules/asg/variables.tf
-```hcl
+   # modules/asg/variables.tf
 variable "cpu_high_threshold" {
   description = "Scale Out CPU 임계값"
   type        = number
   default     = 60
 }
-```
 
-```hcl
 variable "cpu_low_threshold" {
   description = "Scale In CPU 임계값"
   type        = number
   default     = 30
 }
-```
 
-```hcl
 variable "alarm_period" {
   description = "CloudWatch 평가 주기"
   type        = number
   default     = 120
 }
-```
 
-```hcl
 variable "evaluation_periods" {
   description = "CloudWatch 연속 평가 횟수"
   type        = number
   default     = 2
 }
-```
 
-#### STEP 3-28. CPU High Alarm 생성
+# STEP 3-28. CPU High Alarm 생성
 
-  - modules/asg/main.tf
-```hcl
+   # modules/asg/main.tf
 resource "aws_cloudwatch_metric_alarm" "cpu_high" {
   alarm_name = "my-asg-cpu-high" # CPU High Alarm 이름
 
@@ -3744,8 +3402,8 @@ resource "aws_cloudwatch_metric_alarm" "cpu_high" {
 
 #### STEP 3-29. CPU Low Alarm 생성
 
-  - modules/asg/main.tf
 ```hcl
+   # modules/asg/main.tf
 resource "aws_cloudwatch_metric_alarm" "cpu_low" {
   alarm_name = "my-asg-cpu-low" # CPU Low Alarm 이름
 
@@ -3767,9 +3425,7 @@ resource "aws_cloudwatch_metric_alarm" "cpu_low" {
     AutoScalingGroupName = aws_autoscaling_group.web_asg.name # 감시할 ASG
   }
 }
-```
 
-```
 [설명]
 ```
 
@@ -3780,15 +3436,13 @@ resource "aws_cloudwatch_metric_alarm" "cpu_low" {
 
 #### STEP 3-30. ASG Output 작성
 
-  - modules/asg/outputs.tf
 ```hcl
+   # modules/asg/outputs.tf
 output "autoscaling_group_name" {
   description = "Auto Scaling Group 이름"
   value       = aws_autoscaling_group.web_asg.name # ASG 이름
 }
-```
 
-```hcl
 output "sns_topic_arn" {
   description = "SNS Topic ARN"
   value       = aws_sns_topic.asg_alert.arn # SNS Topic ARN
@@ -3796,40 +3450,31 @@ output "sns_topic_arn" {
 ```
 
 - Root에서는 다음과 같이 사용할 수 있다.
+
 ```hcl
 module.asg.autoscaling_group_name
 module.asg.sns_topic_arn
-```
 
-#### STEP 3-31. ASG Module 최종 Plan
+# STEP 3-31. ASG Module 최종 Plan
 
 C:\terraform-asg-alb-module\modules\asg
 
-```hcl
 terraform plan
-```
 
 - ASG Child Module 전체가 정상적으로 실행 가능한지 최종 확인한다.
 
-#### STEP 4) Child Module 테스트 파일 정리
+# STEP 4) Child Module 테스트 파일 정리
 
-```
 [설명]
-```
 
 각 Child Module에서 "terraform init"을 실행했기 때문에 다음 테스트 파일이 만들어져 있다.
 
-```
 modules/network/.terraform/
 modules/network/.terraform.lock.hcl
-```
 
-```
 modules/alb/.terraform/
 modules/alb/.terraform.lock.hcl
-```
 
-```
 modules/asg/.terraform/
 modules/asg/.terraform.lock.hcl
 ```
@@ -3842,100 +3487,88 @@ modules/asg/.terraform.lock.hcl
 
 ```bash
 cd C:\terraform-asg-alb-module\modules\network
-```
 
-#### VPC Module 테스트 과정에서 생성된 ".terraform" 디렉터리를 삭제
-
+# VPC Module 테스트 과정에서 생성된 ".terraform" 디렉터리를 삭제
 Remove-Item -Recurse -Force .terraform
 
-#### VPC Module 테스트용 Provider Lock 파일을 삭제한다.
-
+# VPC Module 테스트용 Provider Lock 파일을 삭제한다.
 Remove-Item -Force .terraform.lock.hcl
 
 [명령어 설명]
 
 - VPC Module 테스트용 Provider Lock 파일을 삭제한다.
 
-#### STEP 4-2. ALB 테스트 파일 삭제
+# STEP 4-2. ALB 테스트 파일 삭제
 
-#### ALB Module 디렉터리로 이동
-
-```bash
+# ALB Module 디렉터리로 이동
 cd C:\terraform-asg-alb-module\modules\alb
-```
 
-#### ALB Module 테스트용 ".terraform" 디렉터리를 삭제
-
+# ALB Module 테스트용 ".terraform" 디렉터리를 삭제
 Remove-Item -Recurse -Force .terraform
 
-#### ALB Module 테스트용 Provider Lock 파일을 삭제한다.
-
+# ALB Module 테스트용 Provider Lock 파일을 삭제한다.
 Remove-Item -Force .terraform.lock.hcl
 
-#### STEP 4-3. ASG 테스트 파일 삭제
+# STEP 4-3. ASG 테스트 파일 삭제
 
-#### ASG Module 디렉터리로 이동
-
-```bash
+# ASG Module 디렉터리로 이동
 cd C:\terraform-asg-alb-module\modules\asg
-```
 
-#### ASG Module 테스트용 ".terraform" 디렉터리를 삭제
-
+# ASG Module 테스트용 ".terraform" 디렉터리를 삭제
 Remove-Item -Recurse -Force .terraform
 
-#### ASG Module 테스트용 Provider Lock 파일을 삭제
-
+# ASG Module 테스트용 Provider Lock 파일을 삭제
 Remove-Item -Force .terraform.lock.hcl
+```
 
 #### STEP 4-4. 불필요한 테스트 파일 확인
 
 - Child Module에 다음 테스트 파일을 따로 만들었다면 삭제한다.
-  - terraform.tfvars
-  - test.tf
-  - test-provider.tf
-  - terraform.tfstate
-  - terraform.tfstate.backup
+
+```
+ # terraform.tfvars
+ # test.tf
+ # test-provider.tf
+ # terraform.tfstate
+ # terraform.tfstate.backup
 
 - "terraform plan"만 실행했다면 일반적으로 State 파일은 생성되지 않는다.
 - Child Module에서 실제 "terraform apply"를 실행했다면 State 파일을 임의로 삭제하면 안 된다.
+```
 
 #### STEP 5) Root Module 작성
 
 - Root 위치: C:\terraform-asg-alb-module
 
 - Root 파일:
-  - provider.tf
-  - variables.tf
-  - terraform.tfvars
-  - main.tf
-  - outputs.tf
 
-#### STEP 5-1. Root AWS 변수 작성
-
-  - variables.tf
 ```hcl
+ # provider.tf
+ # variables.tf
+ # terraform.tfvars
+ # main.tf
+ # outputs.tf
+
+# STEP 5-1. Root AWS 변수 작성
+
+   # variables.tf
 variable "aws_region" {
   description = "AWS Region"
   type        = string
   default     = "ap-northeast-2"
 }
-```
 
-```hcl
 variable "aws_profile" {
   description = "AWS CLI Profile"
   type        = string
   default     = "my-profile"
 }
-```
 
 - Root Provider에서 사용할 Region과 AWS CLI Profile이다.
 
-#### STEP 5-2. Root Provider 설정
+# STEP 5-2. Root Provider 설정
 
-  - provider.tf
-```hcl
+   # provider.tf
 terraform {
   required_version = ">= 1.16.0"
 
@@ -3951,38 +3584,30 @@ terraform {
     }
   }
 }
-```
 
-```hcl
 provider "aws" {
   region  = var.aws_region
   profile = var.aws_profile
 }
-```
 
 - 실제 AWS Provider 설정은 Root에서만 관리한다.
 - Child Module은 Root Provider를 상속해서 사용한다.
 
-#### STEP 5-3. Root VPC 변수 추가
+# STEP 5-3. Root VPC 변수 추가
 
-  - variables.tf에
-```hcl
+   # variables.tf에
 variable "vpc_name" {
   description = "VPC 이름"
   type        = string
   default     = "my-vpc"
 }
-```
 
-```hcl
 variable "vpc_cidr" {
   description = "VPC CIDR"
   type        = string
   default     = "10.0.0.0/16"
 }
-```
 
-```hcl
 variable "public_subnets" {
   description = "Public Subnet CIDR"
   type        = list(string)
@@ -3992,9 +3617,7 @@ variable "public_subnets" {
     "10.0.2.0/24"
   ]
 }
-```
 
-```hcl
 variable "private_subnets" {
   description = "Private Subnet CIDR"
   type        = list(string)
@@ -4004,14 +3627,12 @@ variable "private_subnets" {
     "10.0.4.0/24"
   ]
 }
-```
 
 - VPC Child Module에 전달할 Root 변수이다.
 
-#### STEP 5-4. Root에서 Network Module 호출
+# STEP 5-4. Root에서 Network Module 호출
 
-  - main.tf
-```hcl
+   # main.tf
 module "network" {
   source = "./modules/network" # Local Network Module 호출
 
@@ -4025,63 +3646,49 @@ module "network" {
 
   private_subnets = var.private_subnets # Private Subnet CIDR 전달
 }
-```
 
 Root에서 다음 Child Module을 호출한다.
 
-```
 ./modules/network
-```
 
-#### STEP 5-5. Root ALB 변수 추가
+# STEP 5-5. Root ALB 변수 추가
 
-  - variables.tf
-```hcl
+  # variables.tf
 variable "security_group_name" {
   description = "Security Group 이름"
   type        = string
   default     = "my-alb-sg"
 }
-```
 
-```hcl
 variable "http_port" {
   description = "HTTP Port"
   type        = number
   default     = 80
 }
-```
 
-```hcl
 variable "target_group_name" {
   description = "Target Group 이름"
   type        = string
   default     = "my-target-group"
 }
-```
 
-```hcl
 variable "health_check_path" {
   description = "Health Check Path"
   type        = string
   default     = "/index.html"
 }
-```
 
-```hcl
 variable "alb_name" {
   description = "ALB 이름"
   type        = string
   default     = "my-alb"
 }
-```
 
 - ALB Child Module에 전달할 Root 변수이다.
 
-#### STEP 5-6. Root에서 ALB Module 호출
+# STEP 5-6. Root에서 ALB Module 호출
 
-  - main.tf
-```hcl
+   # main.tf
 module "alb" {
   source = "./modules/alb" # Local ALB Module 호출
 
@@ -4093,67 +3700,53 @@ module "alb" {
   health_check_path = var.health_check_path # Health Check 경로
   alb_name = var.alb_name # ALB 이름
 }
-```
 
-#### STEP 5-7. Root ASG 기본 변수 추가
+# STEP 5-7. Root ASG 기본 변수 추가
 
-  - variables.tf
-```hcl
+   # variables.tf
 variable "pub_key_file_path" {
   description = "SSH Public Key"
   type        = string
   default     = "C:/Users/soldesk/.ssh/my-key.pub"
 }
-```
 
-```hcl
 variable "instance_type" {
   description = "EC2 Instance Type"
   type        = string
   default     = "t3.micro"
 }
-```
 
-```hcl
 variable "launch_template_name" {
   description = "Launch Template 이름"
   type        = string
   default     = "my-launch-template"
 }
-```
 
 - "pub_key_file_path"는 AWS Key Pair 생성에 사용할 Public Key 경로이다.
 - "instance_type"은 ASG EC2 Instance Type이다.
 - "launch_template_name"은 Launch Template 이름 Prefix이다.
 
-#### STEP 5-8. Root ASG Capacity 변수 추가
+# STEP 5-8. Root ASG Capacity 변수 추가
 
-  - variables.tf
-```hcl
+  # variables.tf
 variable "desired_capacity" {
   description = "기본 EC2 개수"
   type        = number
   default     = 2
 }
-```
 
-```hcl
 variable "min_size" {
   description = "최소 EC2 개수"
   type        = number
   default     = 1
 }
-```
 
-```hcl
 variable "max_size" {
   description = "최대 EC2 개수"
   type        = number
   default     = 3
 }
-```
 
-```hcl
 variable "health_check_grace_period" {
   description = "Health Check Grace Period"
   type        = number
@@ -4169,24 +3762,20 @@ variable "health_check_grace_period" {
 
 #### STEP 5-9. Root Scaling 변수 추가
 
-  - variables.tf
 ```hcl
+   # variables.tf
 variable "scale_out_adjustment" {
   description = "Scale Out 증가 개수"
   type        = number
   default     = 1
 }
-```
 
-```hcl
 variable "scale_in_adjustment" {
   description = "Scale In 감소 개수"
   type        = number
   default     = -1
 }
-```
 
-```hcl
 variable "scaling_cooldown" {
   description = "Scaling Cooldown"
   type        = number
@@ -4200,61 +3789,47 @@ variable "scaling_cooldown" {
 
 #### STEP 5-10. Root SNS 변수 추가
 
-  - variables.tf
 ```hcl
+   # variables.tf
 variable "notification_email" {
   description = "SNS Email"
   type        = string
   default     = "본인이메일@example.com"
 }
-```
 
-```hcl
 variable "notification_phone" {
   description = "SNS SMS 전화번호"
   type        = string
   default     = "+123456789012"
 }
-```
-
 - CloudWatch Alarm 발생 시 SNS로 Email과 SMS를 전송하기 위한 값이다.
+# STEP 5-11. Root CloudWatch 변수 추가
 
-#### STEP 5-11. Root CloudWatch 변수 추가
-
-  - variables.tf
-```hcl
+  # variables.tf
 variable "cpu_high_threshold" {
   description = "CPU High Threshold"
   type        = number
   default     = 60
 }
-```
 
-```hcl
 variable "cpu_low_threshold" {
   description = "CPU Low Threshold"
   type        = number
   default     = 30
 }
-```
 
-```hcl
 variable "alarm_period" {
   description = "CloudWatch 평가 주기"
   type        = number
   default     = 120
 }
-```
 
-```hcl
 variable "evaluation_periods" {
   description = "CloudWatch 평가 횟수"
   type        = number
   default     = 2
 }
-```
 
-```
 [설명]
 ```
 
@@ -4269,8 +3844,8 @@ variable "evaluation_periods" {
 
 #### STEP 5-12. Root에서 ASG Module 호출
 
-  - main.tf
 ```hcl
+   # main.tf
 module "asg" {
   source = "./modules/asg" # Local ASG Module 호출
 
@@ -4294,119 +3869,68 @@ module "asg" {
   alarm_period = var.alarm_period # CloudWatch 평가 주기
   evaluation_periods = var.evaluation_periods # 연속 평가 횟수
 }
-```
 
-#### STEP 5-13. terraform.tfvars 작성
+# STEP 5-13. terraform.tfvars 작성
 
-  - terraform.tfvars
+   # terraform.tfvars
 
-```bash
 aws_region  = "ap-northeast-2"
 aws_profile = "my-profile"
-```
 
-```
 vpc_name = "my-vpc"
 vpc_cidr = "10.0.0.0/16"
-```
 
-```
 public_subnets = [
   "10.0.1.0/24",
   "10.0.2.0/24"
 ]
-```
 
-```
 private_subnets = [
   "10.0.3.0/24",
   "10.0.4.0/24"
 ]
-```
 
-```
 security_group_name = "my-alb-sg"
-```
 
-```
 http_port = 80
-```
 
-```
 target_group_name = "my-target-group"
-```
 
-```
 health_check_path = "/index.html"
-```
 
-```
 alb_name = "my-alb"
-```
 
-```
 pub_key_file_path = "C:/Users/soldesk/.ssh/my-key.pub"
-```
 
-```
 instance_type = "t3.micro"
-```
 
-```
 launch_template_name = "my-launch-template"
-```
 
-```
 desired_capacity = 2
-```
 
-```
 min_size = 1
-```
 
-```
 max_size = 3
-```
 
-```
 health_check_grace_period = 300
-```
 
-```
 scale_out_adjustment = 1
-```
 
-```
 scale_in_adjustment = -1
-```
 
-```
 scaling_cooldown = 300
-```
 
-```
 notification_email = "본인이메일@example.com"
-```
 
-```
 notification_phone = "+123456789012"
-```
 
-```
 cpu_high_threshold = 60
-```
 
-```
 cpu_low_threshold = 30
-```
 
-```
 alarm_period = 120
-```
 
-```
 evaluation_periods = 2
-```
 
 - "variables.tf"에는 변수 정의와 기본값을 작성한다.
 
@@ -4414,53 +3938,40 @@ evaluation_periods = 2
 
 - 같은 변수에 값이 존재하면 "terraform.tfvars"의 값이 "default"보다 우선한다.
 
-#### STEP 5-14. Root Output 작성
+# STEP 5-14. Root Output 작성
 
-  - outputs.tf
+   # outputs.tf
 
-```hcl
 output "vpc_id" {
   description = "VPC ID"
   value       = module.network.vpc_id # VPC ID
 }
-```
 
-```hcl
 output "public_subnets" {
   description = "Public Subnet ID"
   value       = module.network.public_subnets # Public Subnet ID
 }
-```
 
-```hcl
 output "private_subnets" {
   description = "Private Subnet ID"
   value       = module.network.private_subnets # Private Subnet ID
 }
-```
 
-```hcl
 output "security_group_id" {
   description = "Security Group ID"
   value       = module.alb.security_group_id # ALB Security Group ID
 }
-```
 
-```hcl
 output "alb_dns_name" {
   description = "ALB DNS Name"
   value       = module.alb.alb_dns_name # ALB DNS
 }
-```
 
-```hcl
 output "autoscaling_group_name" {
   description = "Auto Scaling Group 이름"
   value       = module.asg.autoscaling_group_name # ASG 이름
 }
-```
 
-```hcl
 output "sns_topic_arn" {
   description = "SNS Topic ARN"
   value       = module.asg.sns_topic_arn # SNS Topic ARN
@@ -4475,9 +3986,9 @@ output "sns_topic_arn" {
 
 ```bash
 cd C:\terraform-asg-alb-module
-```
 
 - 최종 Terraform 실행을 위해 Root 디렉터리로 이동한다.
+```
 
 #### STEP 6-1. Root 초기화
 
@@ -4489,42 +4000,32 @@ cd C:\terraform-asg-alb-module
 
 ```hcl
 terraform init
-```
 
 - AWS Provider와 Random Provider를 준비한다.
 - Root에 다음 파일이 생성된다.
-  - .terraform/
-  - .terraform.lock.hcl
+ # .terraform/
+ # .terraform.lock.hcl
 
-#### STEP 6-2 Root 최종 Plan
+# STEP 6-2 Root 최종 Plan
 
-#### 지금까지 Child Module별로 확인한 Terraform 구성을 Root 기준으로 통합해서 확인
-
-#### 아직 AWS Resource는 생성하지 않는다.
-
+# 지금까지 Child Module별로 확인한 Terraform 구성을 Root 기준으로 통합해서 확인
+# 아직 AWS Resource는 생성하지 않는다.
 C:\terraform-asg-alb-module
-```hcl
 terraform plan
 .
-```
 
-#### STEP 6-5. AWS Resource 생성
+# STEP 6-5. AWS Resource 생성
 
-#### Root에서 VPC, ALB, ASG Child Module을 모두 호출하여 실제 AWS Resource를 생성
-
-```hcl
+# Root에서 VPC, ALB, ASG Child Module을 모두 호출하여 실제 AWS Resource를 생성
 terraform apply
-```
 
-#### STEP 7) 생성 결과 확인
+# STEP 7) 생성 결과 확인
 
-#### Root "outputs.tf"에 정의한 모든 Output 값을 확인한다.
-
-```hcl
+# Root "outputs.tf"에 정의한 모든 Output 값을 확인한다.
 terraform output
-```
 
 - Root "outputs.tf"에 정의한 모든 Output 값을 확인한다.
+```
 
 - 확인 가능한 값:
   - vpc_id

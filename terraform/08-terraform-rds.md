@@ -319,6 +319,7 @@ resource "aws_security_group" "rds_sg" {
   - 그 위에 RDS 생성
 
 VPC 모듈
+
 ```hcl
 module "vpc" {
   source             = "./modules/vpc"     # VPC 모듈 경로
@@ -407,11 +408,8 @@ resource "aws_security_group" "rds_sg" {
     cidr_blocks = ["0.0.0.0/0"] # 모든 IP에 출력 허용
   }
 }
-```
 
-#### DB 서브넷 그룹 생성
-
-```hcl
+# DB 서브넷 그룹 생성
 resource "aws_db_subnet_group" "this" {
   name       = "${var.vpc_name}-db-subnet-group" # DB 서브넷 그룹 이름
   subnet_ids = module.vpc.private_subnets        # 프라이빗 서브넷 ID 목록
@@ -450,25 +448,17 @@ resource "aws_db_instance" "my_rds_instance" {
   multi_az              = var.db_multi_az              # 다중 가용 영역 배포 여부
   vpc_security_group_ids = [aws_security_group.rds_sg.id] # 사용할 보안 그룹 ID
   db_subnet_group_name  = aws_db_subnet_group.my_db_subnet_group.name # DB 서브넷 그룹 이름
-```
 
-  - 백업 관련 설정
-```
+  # 백업 관련 설정
   backup_retention_period = 7                   # 백업 보존 기간 (일 단위)
   backup_window           = "02:00-03:00"        # 백업 시작 시간 (UTC 기준)
-```
 
-  - 모니터링 및 유지관리
-```
+  # 모니터링 및 유지관리
   maintenance_window      = "sun:05:00-sun:06:00" # 유지보수 시간 (UTC 기준)
-```
 
-  - 스토리지 및 암호화 설정
-```
+  # 스토리지 및 암호화 설정
   storage_type            = "gp2"                      # 스토리지 유형 (gp2: 범용 SSD)
-```
 
-```
   tags = {
     Name        = "My-RDS-MySQL"                       # RDS 인스턴스 이름 태그
     Environment = var.environment                      # 환경 태그
@@ -902,6 +892,7 @@ resource "aws_security_group" "rds_sg" {
   - 그 위에 RDS 생성
 
 VPC 모듈
+
 ```hcl
 module "vpc" {
   source             = "./modules/vpc"     # VPC 모듈 경로
@@ -990,11 +981,8 @@ resource "aws_security_group" "rds_sg" {
     cidr_blocks = ["0.0.0.0/0"] # 모든 IP에 출력 허용
   }
 }
-```
 
-#### DB 서브넷 그룹 생성
-
-```hcl
+# DB 서브넷 그룹 생성
 resource "aws_db_subnet_group" "this" {
   name       = "${var.vpc_name}-db-subnet-group" # DB 서브넷 그룹 이름
   subnet_ids = module.vpc.private_subnets        # 프라이빗 서브넷 ID 목록
@@ -1033,25 +1021,17 @@ resource "aws_db_instance" "my_rds_instance" {
   multi_az              = var.db_multi_az              # 다중 가용 영역 배포 여부
   vpc_security_group_ids = [aws_security_group.rds_sg.id] # 사용할 보안 그룹 ID
   db_subnet_group_name  = aws_db_subnet_group.my_db_subnet_group.name # DB 서브넷 그룹 이름
-```
 
-  - 백업 관련 설정
-```
+  # 백업 관련 설정
   backup_retention_period = 7                   # 백업 보존 기간 (일 단위)
   backup_window           = "02:00-03:00"        # 백업 시작 시간 (UTC 기준)
-```
 
-  - 모니터링 및 유지관리
-```
+  # 모니터링 및 유지관리
   maintenance_window      = "sun:05:00-sun:06:00" # 유지보수 시간 (UTC 기준)
-```
 
-  - 스토리지 및 암호화 설정
-```
+  # 스토리지 및 암호화 설정
   storage_type            = "gp2"                      # 스토리지 유형 (gp2: 범용 SSD)
-```
 
-```
   tags = {
     Name        = "My-RDS-MySQL"                       # RDS 인스턴스 이름 태그
     Environment = var.environment                      # 환경 태그
@@ -1170,7 +1150,6 @@ resource "aws_db_instance" "read_replica" {
 
   - 최종 프로젝트 구조
 
-```
 rds-mysql-service/
 │
 ├── provider.tf
@@ -1180,22 +1159,21 @@ rds-mysql-service/
 ├── terraform.tfvars
 │
 └── modules/
-    │
-    ├── network/
-    │   ├── variables.tf
-    │   ├── main.tf
-    │   └── outputs.tf
-    │
-    └── ec2/
-    │   ├── variables.tf
-    │   ├── main.tf
-    │   └── outputs.tf
-    │
-    └── rds/
-        ├── variables.tf
-        ├── main.tf
-        └── outputs.tf
-```
+│
+├── network/
+│   ├── variables.tf
+│   ├── main.tf
+│   └── outputs.tf
+│
+└── ec2/
+│   ├── variables.tf
+│   ├── main.tf
+│   └── outputs.tf
+│
+└── rds/
+├── variables.tf
+├── main.tf
+└── outputs.tf
 
 #### STEP 1. Network Child Module 변수 작성
 
@@ -1203,35 +1181,28 @@ rds-mysql-service/
 - Network Child Module의 입력 변수를 작성
 
   - rds-mysql-service\modules\network\variables.tf
+
 ```hcl
 variable "vpc_name" {
   type        = string
   default     = "my-vpc"
 }
-```
 
-```hcl
 variable "vpc_cidr" {
   type        = string
   default     = "10.0.0.0/16"
 }
-```
 
-```hcl
 variable "public_subnets" {
   type        = list(string)
   default = [ "10.0.1.0/24", "10.0.2.0/24" ]
 }
-```
 
-```hcl
 variable "private_subnets" {
   type        = list(string)
   default = [ "10.0.3.0/24", "10.0.4.0/24" ]
 }
-```
 
-```hcl
 variable "availability_zones" {
   type        = list(string)
   default = [ "ap-northeast-2a", "ap-northeast-2b" ]
@@ -1267,19 +1238,13 @@ variable "availability_zones" {
 resource "aws_vpc" "my_vpc" {
   # VPC Network 범위
   cidr_block = var.vpc_cidr
-```
 
-  - AWS 내부 DNS Resolver 사용
-```
+  # AWS 내부 DNS Resolver 사용
   enable_dns_support = true
-```
 
-  - DNS Hostname 사용
-```
+  # DNS Hostname 사용
   enable_dns_hostnames = true
-```
 
-```
   tags = {
     Name = var.vpc_name
   }
@@ -1299,6 +1264,7 @@ resource "aws_vpc" "my_vpc" {
   - EC2 등에 DNS Hostname 사용
 
   - rds-mysql-service\modules\network\outputs.tf
+
 ```hcl
 output "vpc_id" {
   description = "생성된 VPC ID"
@@ -1322,30 +1288,22 @@ resource "aws_subnet" "public" {
   count = length(var.public_subnets)# Public Subnet CIDR 개수만큼 생성
   vpc_id = aws_vpc.my_vpc.id # STEP 2에서 생성한 VPC
   cidr_block = var.public_subnets[count.index]# 각 Public Subnet CIDR
-```
 
-  - 서로 다른 Availability Zone에 배치
-```
+  # 서로 다른 Availability Zone에 배치
   availability_zone = element(
     var.availability_zones,
     count.index
   )
-```
 
-  - EC2 생성 시 Public IP 자동 할당
-```
+  # EC2 생성 시 Public IP 자동 할당
   map_public_ip_on_launch = true
-```
 
-```
   tags = {
     Name = "${var.vpc_name}-public-${count.index + 1}"
   }
 }
-```
 
-  - rds-mysql-service\modules\network\outputs.tf
-```hcl
+   # rds-mysql-service\modules\network\outputs.tf
 output "public_subnets" {
   description = "생성된 Public Subnet ID 목록"
   value = aws_subnet.public[*].id
@@ -1369,17 +1327,13 @@ resource "aws_subnet" "private" {
   count = length(var.private_subnets)# Private Subnet CIDR 개수만큼 생성
   vpc_id = aws_vpc.my_vpc.id# 기존 VPC
   cidr_block = var.private_subnets[count.index]# 각 Private Subnet CIDR
-```
 
-  - 서로 다른 Availability Zone에 생성
-```
+  # 서로 다른 Availability Zone에 생성
   availability_zone = element(
     var.availability_zones,
     count.index
   )
-```
 
-```
   tags = {
     Name = "${var.vpc_name}-private-${count.index + 1}"
   }
@@ -1390,6 +1344,7 @@ resource "aws_subnet" "private" {
 - map_public_ip_on_launch = true 설정을 사용하지 않는다.
 
   - rds-mysql-service\modules\network\outputs.tf
+
 ```hcl
 output "private_subnets" {
   description = "생성된 Private Subnet ID 목록"
@@ -1439,88 +1394,65 @@ resource "aws_internet_gateway" "my_igw" {
 resource "aws_route_table" "public" {
   # Route Table이 속할 VPC
   vpc_id = aws_vpc.my_vpc.id
-```
 
-  - 모든 외부 IPv4 Traffic을 Internet Gateway로 전달
-```
+  # 모든 외부 IPv4 Traffic을 Internet Gateway로 전달
   route {
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.my_igw.id
   }
-```
 
-```
   tags = {
     Name = "${var.vpc_name}-public-rt"
   }
 }
-```
 
-#### Public Subnet과 Route Table 연결
-
-```hcl
+# Public Subnet과 Route Table 연결
 resource "aws_route_table_association" "public" {
   # Public Subnet 개수만큼 연결
   count = length(aws_subnet.public)
-```
 
-  - 각 Public Subnet
-```
+  # 각 Public Subnet
   subnet_id = aws_subnet.public[count.index].id
-```
 
-  - Public Route Table
-```
+  # Public Route Table
   route_table_id = aws_route_table.public.id
 }
-```
 
-#### STEP 7. EC2 Child Module 변수 작성
+# STEP 7. EC2 Child Module 변수 작성
 
 RDS MySQL에 접속할 Client EC2용 Child Module을 작성
 
-  - rds-mysql-service\modules\ec2\variables.tf
-```hcl
+   # rds-mysql-service\modules\ec2\variables.tf
 variable "ami_id" {
   description = "EC2에서 사용할 AMI ID"
   type        = string
   default     = "ami-0123456789abcdef0"
 }
-```
 
-```hcl
 variable "instance_type" {
   description = "EC2 Instance Type"
   type        = string
   default     = "t3.micro"
 }
-```
 
-```hcl
 variable "subnet_id" {
   description = "EC2를 생성할 Public Subnet ID"
   type        = string
   default     = "subnet-0123456789abcdef0"
 }
-```
 
-```hcl
 variable "public_key_path" {
   description = "SSH Public Key 경로"
   type        = string
   default     = "~/.ssh/my-key.pub"
 }
-```
 
-```hcl
 variable "instance_name" {
   description = "EC2 Name Tag"
   type        = string
   default     = "db_client"
 }
-```
 
-```hcl
 variable "vpc_id" {
   description = "Security Group을 생성할 VPC ID"
   type        = string
@@ -1542,18 +1474,13 @@ resource "random_integer" "random_number" {
   min = 1000
   max = 9999
 }
-```
 
-#### EC2 Key Pair 생성
-
-```hcl
+# EC2 Key Pair 생성
 resource "aws_key_pair" "ec2_key_pair" {
   # 예 : ec2-key-pair-5382
   key_name = "ec2-key-pair-${random_integer.random_number.result}"
-```
 
-  - 로컬 Public Key 파일 내용 등록
-```
+  # 로컬 Public Key 파일 내용 등록
   public_key = file(
     pathexpand(var.public_key_path)
   )
@@ -1578,30 +1505,24 @@ resource "aws_key_pair" "ec2_key_pair" {
 resource "aws_security_group" "ec2_sg" {
   vpc_id = var.vpc_id# Network Module에서 생성된 VPC
   name_prefix = "ec2-public-sg-"
-```
 
-  - SSH
-```
+  # SSH
   ingress {
     from_port = 22
     to_port = 22
     protocol = "tcp"
     cidr_blocks= [ "0.0.0.0/0" ]
   }
-```
 
-  - HTTP
-```
+  # HTTP
   ingress {
     from_port = 80
     to_port = 80
     protocol = "tcp"
     cidr_blocks= [ "0.0.0.0/0" ]
   }
-```
 
-  - 모든 Outbound 허용
-```
+  # 모든 Outbound 허용
   egress {
     from_port = 0
     to_port = 0
@@ -1634,24 +1555,18 @@ resource "aws_instance" "ec2_instance" {
     Name = var.instance_name
   }
 }
-```
 
-  - rds-mysql-service\modules\ec2\outputs.tf
-```hcl
+   # rds-mysql-service\modules\ec2\outputs.tf
 output "instance_id" {
   description = "EC2 Instance ID"
   value = aws_instance.ec2_instance.id
 }
-```
 
-```hcl
 output "public_ip" {
   description = "EC2 Public IP"
   value = aws_instance.ec2_instance.public_ip
 }
-```
 
-```hcl
 output "public_dns" {
   description = "EC2 Public DNS"
   value = aws_instance.ec2_instance.public_dns
@@ -1663,91 +1578,70 @@ output "public_dns" {
 - Root Module에서 실제 Network와 EC2 값을 정의
 
   - rds-mysql-service\variables.tf
+
 ```hcl
 variable "aws_region" {
   description = "AWS Region"
   type        = string
   default     = "ap-northeast-2"
 }
-```
 
-```hcl
 variable "aws_profile" {
   description = "AWS CLI Profile"
   type        = string
   default     = "my-profile"
 }
-```
 
-```hcl
 variable "environment" {
   description = "환경 이름"
   type        = string
   default     = "Production"
 }
-```
 
-#### Network
-
-```hcl
+# Network
 variable "vpc_name" {
   description = "VPC 이름"
   type        = string
   default     = "my-vpc"
 }
-```
 
-```hcl
 variable "vpc_cidr" {
   description = "VPC CIDR"
   type        = string
   default     = "10.0.0.0/16"
 }
-```
 
-```hcl
 variable "public_subnets" {
   description = "Public Subnet CIDR"
   type        = list(string)
   default = [ "10.0.1.0/24", "10.0.2.0/24" ]
 }
-```
 
-```hcl
 variable "private_subnets" {
   description = "Private Subnet CIDR"
   type        = list(string)
   default = [ "10.0.3.0/24", "10.0.4.0/24" ]
 }
-```
 
-```hcl
 variable "availability_zones" {
   description = "Availability Zone 목록"
   type        = list(string)
   default = [ "ap-northeast-2a", "ap-northeast-2b" ]
 }
-```
 
-#### EC2
-
-```hcl
+# EC2
 variable "instance_type" {
   description = "EC2 Instance Type"
   type        = string
   default     = "t3.micro"
 }
-```
 
-```hcl
 variable "instance_name" {
   description = "EC2 Name Tag"
   type        = string
   default     = "db_client"
 }
-```
 
-```hcl
 variable "public_key_path" {
   description = "SSH Public Key 경로"
   type        = string
@@ -1760,6 +1654,7 @@ variable "public_key_path" {
 - Root Module에서 AWS Provider와 Random Provider를 설정
 
   - rds-mysql-service\provider.tf
+
 ```hcl
 terraform {
   required_version = ">= 1.16.0"
@@ -1769,19 +1664,15 @@ terraform {
       source = "hashicorp/aws"
       version = ">= 5.73.0"
     }
-```
 
-  - EC2 Child Module의 random_integer에서 사용
-```
+    # EC2 Child Module의 random_integer에서 사용
     random = {
       source = "hashicorp/random"
       version = "~> 3.0"
     }
   }
 }
-```
 
-```hcl
 provider "aws" {
   region = var.aws_region
   profile = var.aws_profile
@@ -1807,28 +1698,21 @@ module "network" {
   private_subnets  = var.private_subnets# Network 설정 전달
   availability_zones = var.availability_zones# Network 설정 전달
 }
-```
 
-#### source = "./modules/network"
-
+# source = "./modules/network"
 #직접 작성한 Network Child Module 호출
 
-  - rds-mysql-service\outputs.tf
-```hcl
+   # rds-mysql-service\outputs.tf
 output "vpc_id" {
   description = "생성된 VPC ID"
   value = module.network.vpc_id
 }
-```
 
-```hcl
 output "public_subnets" {
   description = "생성된 Public Subnet ID 목록"
   value = module.network.public_subnets
 }
-```
 
-```hcl
 output "private_subnets" {
   description = "생성된 Private Subnet ID 목록"
   value = module.network.private_subnets
@@ -1883,17 +1767,13 @@ module "ec2" {
 
   public_key_path = var.public_key_path# SSH Public Key
 }
-```
 
-  - rds-mysql-service\outputs.tf
-```hcl
+   # rds-mysql-service\outputs.tf
 output "public_dns" {
   description = "DB Client EC2 Public DNS"
   value = module.ec2.public_dns
 }
-```
 
-```hcl
 terraform  plan
 ```
 
@@ -1902,28 +1782,23 @@ terraform  plan
 - MySQL RDS에 사용할 변수를 Root Module에 추가
 
   - rds-mysql-service\variables.tf
+
 ```hcl
 variable "vpc_id" {
   description = "RDS Security Group을 생성할 VPC ID"
   type        = string
 }
-```
 
-```hcl
 variable "private_subnets" {
   description = "RDS가 사용할 Private Subnet ID 목록"
   type        = list(string)
 }
-```
 
-```hcl
 variable "vpc_name" {
   description = "VPC 이름"
   type        = string
 }
-```
 
-```hcl
 variable "allowed_cidr" {
   description = "RDS MySQL 접근을 허용할 CIDR"
   type        = string
@@ -1944,10 +1819,8 @@ variable "allowed_cidr" {
 resource "aws_security_group" "rds_sg" {
   name = "rds-security-group"
   vpc_id = module.network.vpc_id# Network Module에서 생성한 VPC
-```
 
-  - MySQL
-```
+  # MySQL
   ingress {
     from_port = 3306
     to_port = 3306
@@ -1955,10 +1828,8 @@ resource "aws_security_group" "rds_sg" {
 
     cidr_blocks = [ var.allowed_cidr ]# 같은 VPC Network에서 접근 허용
   }
-```
 
-  - 모든 Outbound 허용
-```
+  # 모든 Outbound 허용
   egress {
     from_port = 0
     to_port = 0
@@ -1966,10 +1837,8 @@ resource "aws_security_group" "rds_sg" {
     cidr_blocks = [ "0.0.0.0/0" ]
   }
 }
-```
 
-  - rds-mysql-service\modules\rds\outputs.tf
-```hcl
+   # rds-mysql-service\modules\rds\outputs.tf
 output "rds_security_group_id" {
   description = "RDS Security Group ID"
   value = aws_security_group.rds_sg.id
@@ -1995,10 +1864,8 @@ resource "aws_db_subnet_group" "my_db_subnet_group" {
     Name = "${var.vpc_name}-db-subnet-group"
   }
 }
-```
 
-  - rds-mysql-service\modules\rds\outputs.tf
-```hcl
+   # rds-mysql-service\modules\rds\outputs.tf
 output "db_subnet_group_name" {
   description = "RDS DB Subnet Group 이름"
   value       = aws_db_subnet_group.my_db_subnet_group.name
@@ -2010,15 +1877,14 @@ output "db_subnet_group_name" {
 - Private Subnet 환경에 MySQL Primary RDS를 생성
 
   - rds-mysql-service\variables.tf
+
 ```hcl
 variable "db_allocated_storage" {
   description = "RDS Storage 크기"
   type        = number
   default     = 20
 }
-```
 
-```hcl
 variable "db_engine_version" {
   description = "MySQL Engine Version"
   type        = string
@@ -2029,53 +1895,39 @@ variable "db_instance_class" {
   type        = string
   default     = "db.t3.micro"
 }
-```
 
-```hcl
 variable "db_name" {
   description = "Database 이름"
   type        = string
   default     = "mydatabase"
 }
-```
 
-```hcl
 variable "db_username" {
   description = "RDS Master Username"
   type        = string
   default     = "admin"
 }
-```
 
-```hcl
 variable "db_password" {
   description = "RDS Master Password"
   type        = string
   sensitive   = true
   default     = "admin1234"
 }
-```
 
-```hcl
 variable "db_parameter_group_name" {
   description = "DB Parameter Group"
   type        = string
   default     = "default.mysql8.0"
 }
-```
 
-```hcl
 variable "db_multi_az" {
   description = "RDS Multi-AZ 활성화 여부"
   type        = bool
   default     = false
 }
    # rds-mysql-service\main.tf
-```
-
-#### Primary RDS MySQL
-
-```hcl
+# Primary RDS MySQL
 resource "aws_db_instance" "my_rds_instance" {
   allocated_storage = var.db_allocated_storage # RDS Storage 크기
   engine = "mysql"# MySQL
@@ -2093,142 +1945,96 @@ resource "aws_db_instance" "my_rds_instance" {
   multi_az = var.db_multi_az# Multi-AZ 사용 여부
 
   vpc_security_group_ids = [ aws_security_group.rds_sg.id ]# RDS Security Group
-```
 
-  - Private Subnet으로 구성된 DB Subnet Group
-```
+  # Private Subnet으로 구성된 DB Subnet Group
   db_subnet_group_name = aws_db_subnet_group.my_db_subnet_group.name
-```
 
-```
   backup_retention_period = 7# 자동 Backup 7일 보존
   backup_window = "02:00-03:00"# Backup 시간 UTC 기준
   maintenance_window = "sun:05:00-sun:06:00"# 유지보수 시간 UTC 기준
-```
 
-```
   storage_type = "gp3"# General Purpose SSD
-```
 
-```
   tags = {
     Name = "My-RDS-MySQL"
   }
 }
-```
 
-#### Primary RDS MySQL 생성
+# Primary RDS MySQL 생성
 
-```hcl
 resource "aws_db_instance" "my_rds_instance" {
-```
 
-  - RDS가 사용할 저장 공간 크기 (단위는 GB)
-  - 예: 20이면 20GB Storage 생성
-```
+  # RDS가 사용할 저장 공간 크기 (단위는 GB)
+  # 예: 20이면 20GB Storage 생성
   allocated_storage = var.db_allocated_storage
-```
 
-  - 사용할 Database Engine
-  - 여기서는 MySQL 사용
-```
+  # 사용할 Database Engine
+  # 여기서는 MySQL 사용
   engine = "mysql"
-```
 
-  - 사용할 MySQL Version 지정, 예: "8.0"
-```
+  # 사용할 MySQL Version 지정, 예: "8.0"
   engine_version = var.db_engine_version
-```
 
-  - RDS Instance의 성능 사양 지정
-```
+  # RDS Instance의 성능 사양 지정
   instance_class = var.db_instance_class
-```
 
-  - RDS 생성 시 MySQL 내부에 같이 생성할 Database 이름 (예: mydatabase)
-```
+  # RDS 생성 시 MySQL 내부에 같이 생성할 Database 이름 (예: mydatabase)
   db_name = var.db_name
-```
 
-  - RDS MySQL에 접속할 Master 관리자 계정 이름 (예: admin)
-```
+  # RDS MySQL에 접속할 Master 관리자 계정 이름 (예: admin)
   username = var.db_username
-```
 
-  - RDS MySQL Master 관리자 계정의 Password
-```
+  # RDS MySQL Master 관리자 계정의 Password
   password = var.db_password
-```
 
-  - MySQL의 세부 동작 설정을 관리하는 Parameter Group 지정
-  - 예: 문자셋, 최대 연결 수, 로그 설정 등의 DB 설정에 사용
-```
+  # MySQL의 세부 동작 설정을 관리하는 Parameter Group 지정
+  # 예: 문자셋, 최대 연결 수, 로그 설정 등의 DB 설정에 사용
   parameter_group_name = var.db_parameter_group_name
-```
 
-  - RDS 삭제 시 마지막 Backup Snapshot 생성 여부
-  - true  : Final Snapshot을 생성하지 않고 RDS 삭제
-  - false : Final Snapshot을 생성한 후 RDS 삭제
-```
+  # RDS 삭제 시 마지막 Backup Snapshot 생성 여부
+  # true  : Final Snapshot을 생성하지 않고 RDS 삭제
+  # false : Final Snapshot을 생성한 후 RDS 삭제
   skip_final_snapshot = true
-```
 
-  - RDS를 Internet에서 직접 접속할 수 있도록 공개할지 설정
-  - false : Internet에서 직접 접근 불가
-  - 현재 실습에서는 VPC 내부의 EC2를 통해 RDS에 접속
-```
+  # RDS를 Internet에서 직접 접속할 수 있도록 공개할지 설정
+  # false : Internet에서 직접 접근 불가
+  # 현재 실습에서는 VPC 내부의 EC2를 통해 RDS에 접속
   publicly_accessible = false
-```
 
-  - Multi-AZ 사용 여부
-  - true  : 다른 Availability Zone에 Standby DB를 추가로 생성 Primary DB에 장애가 발생하면 Standby DB로 자동 전환
-  - false : 하나의 Availability Zone에만 RDS 생성
-```
+  # Multi-AZ 사용 여부
+  # true  : 다른 Availability Zone에 Standby DB를 추가로 생성 Primary DB에 장애가 발생하면 Standby DB로 자동 전환
+  # false : 하나의 Availability Zone에만 RDS 생성
   multi_az = var.db_multi_az
-```
 
-  - RDS에 적용할 Security Group 지정
-  - 이 Security Group의 Inbound Rule을 통해 어떤 Server가 MySQL 3306 Port로 접근할 수 있는지 제어
-```
+  # RDS에 적용할 Security Group 지정
+  # 이 Security Group의 Inbound Rule을 통해 어떤 Server가 MySQL 3306 Port로 접근할 수 있는지 제어
   vpc_security_group_ids = [ aws_security_group.rds_sg.id ]
-```
 
-  - RDS가 배치될 DB Subnet Group 지정
-  - DB Subnet Group에 등록된 Private Subnet 중 하나에 Primary RDS가 배치됨
-  - Multi-AZ를 사용하면 다른 AZ의 Private Subnet에 Standby DB도 배치될 수 있음
-```
+  # RDS가 배치될 DB Subnet Group 지정
+  # DB Subnet Group에 등록된 Private Subnet 중 하나에 Primary RDS가 배치됨
+  # Multi-AZ를 사용하면 다른 AZ의 Private Subnet에 Standby DB도 배치될 수 있음
   db_subnet_group_name = aws_db_subnet_group.my_db_subnet_group.name
-```
 
-  - 자동 Backup 보관 기간
-  - 7이면 RDS 자동 Backup을 7일 동안 보관된다. 이 기간 내의 특정 시점으로 복구할 수 있다.
-```
+  # 자동 Backup 보관 기간
+  # 7이면 RDS 자동 Backup을 7일 동안 보관된다. 이 기간 내의 특정 시점으로 복구할 수 있다.
   backup_retention_period = 7
-```
 
-  - 자동 Backup을 수행할 시간대 지정
-  - 매일 UTC 02:00 ~ 03:00 사이에 AWS가 자동 Backup 작업을 수행
-  - Backup이 진행되는 동안에도 일반적으로 DB는 계속 사용 가능
-```
+  # 자동 Backup을 수행할 시간대 지정
+  # 매일 UTC 02:00 ~ 03:00 사이에 AWS가 자동 Backup 작업을 수행
+  # Backup이 진행되는 동안에도 일반적으로 DB는 계속 사용 가능
   backup_window = "02:00-03:00"
-```
 
-  - RDS 유지보수 작업을 적용할 시간대 지정
-  - AWS에서 DB Engine Patch, 운영체제 Update, RDS 내부 System Update 등의 유지보수가 필요한 경우
-  - 일요일 UTC 05:00 ~ 06:00 사이에 해당 작업을 적용
-  - 유지보수 작업이 실제로 있으면 RDS에 Patch / Update 적용
-  - 유지보수 작업이 없으면 이 시간에도 DB는 평소처럼 계속 정상 동작
-```
+  # RDS 유지보수 작업을 적용할 시간대 지정
+  # AWS에서 DB Engine Patch, 운영체제 Update, RDS 내부 System Update 등의 유지보수가 필요한 경우
+  # 일요일 UTC 05:00 ~ 06:00 사이에 해당 작업을 적용
+  # 유지보수 작업이 실제로 있으면 RDS에 Patch / Update 적용
+  # 유지보수 작업이 없으면 이 시간에도 DB는 평소처럼 계속 정상 동작
   maintenance_window = "sun:05:00-sun:06:00"
-```
 
-  - RDS에서 사용할 Storage 종류
-  - gp3 = General Purpose SSD (일반적인 Database 용도로 사용하는 범용 SSD Storage)
-```
+  # RDS에서 사용할 Storage 종류
+  # gp3 = General Purpose SSD (일반적인 Database 용도로 사용하는 범용 SSD Storage)
   storage_type = "gp3"
-```
 
-```
   tags = {
     Name = "My-RDS-MySQL"
     Environment = var.environment
@@ -2239,6 +2045,7 @@ resource "aws_db_instance" "my_rds_instance" {
 - RDS 접속에 사용할 Endpoint를 Root Module에서도 사용할 수 있도록 Output으로 전달
 
   - rds-mysql-service\outputs.tf
+
 ```hcl
 output "rds_endpoint" {
   description = "Primary RDS MySQL Endpoint"
@@ -2264,15 +2071,15 @@ SELECT
 - 이때 Read Replica를 생성하면 일부 조회 요청을 Read Replica로 분산할 수 있다.
 
 Primary RDS
--쓰기 작업 처리
--INSERT
--UPDATE
--DELETE
--SELECT
+- 쓰기 작업 처리
+- INSERT
+- UPDATE
+- DELETE
+- SELECT
 
 Read Replica
--주로 조회 작업 처리
--SELECT
+- 주로 조회 작업 처리
+- SELECT
 
 - 즉, Read Replica의 가장 큰 목적은 읽기 Traffic 분산이다.
 
@@ -2302,6 +2109,7 @@ resource "aws_db_instance" "read_replica" {
   - 주로 Read Traffic 분산에 사용
 
   - rds-mysql-service\outputs.tf
+
 ```hcl
 output "rds_endpoint_read_replica" {
   description = "Read Replica Endpoint"
@@ -2314,220 +2122,148 @@ output "rds_endpoint_read_replica" {
 - 최종 실습에서 사용할 실제 값을 입력
 
   - rds-mysql-service\variables.tf
+
 ```hcl
 variable "allowed_cidr" {
   description = "RDS MySQL 접근을 허용할 CIDR"
   type        = string
   default     = "10.0.0.0/16"
 }
-```
 
-```hcl
 variable "db_allocated_storage" {
   description = "RDS Storage 크기"
   type        = number
   default     = 20
 }
-```
 
-```hcl
 variable "db_engine_version" {
   description = "MySQL Engine Version"
   type        = string
   default     = "8.0"
 }
-```
 
-```hcl
 variable "db_instance_class" {
   description = "RDS Instance Class"
   type        = string
   default     = "db.t3.micro"
 }
-```
 
-```hcl
 variable "db_name" {
   description = "Database 이름"
   type        = string
   default     = "mydatabase"
 }
-```
 
-```hcl
 variable "db_username" {
   description = "RDS Master Username"
   type        = string
   default     = "admin"
 }
-```
 
-```hcl
 variable "db_password" {
   description = "RDS Master Password"
   type        = string
   sensitive   = true
   default     = "securepassword123!"
 }
-```
 
-```hcl
 variable "db_parameter_group_name" {
   description = "DB Parameter Group"
   type        = string
   default     = "default.mysql8.0"
 }
-```
 
-```hcl
 variable "db_multi_az" {
   description = "RDS Multi-AZ 활성화 여부"
   type        = bool
   default     = false
 }
-```
 
-  - rds-mysql-service\terraform.tfvars
-
-#### AWS
-
-```bash
+   # rds-mysql-service\terraform.tfvars
+# AWS
 aws_region = "ap-northeast-2"
 aws_profile = "my-profile"
 environment = "Production"
-```
 
-#### Network
-
-```
+# Network
 vpc_name = "my-vpc"
 vpc_cidr = "10.0.0.0/16"
 public_subnets = [ "10.0.1.0/24", "10.0.2.0/24" ]
 private_subnets = [ "10.0.3.0/24",  "10.0.4.0/24" ]
 availability_zones = [  "ap-northeast-2a", "ap-northeast-2b" ]
-```
 
-#### RDS
-
-#### 같은 VPC 내부에서 MySQL 접근 허용
-
-```
+# RDS
+# 같은 VPC 내부에서 MySQL 접근 허용
 allowed_cidr = "10.0.0.0/16"
 db_allocated_storage = 20
 db_engine_version = "8.0"
 db_instance_class = "db.t3.micro"
 db_name = "mydatabase"
-```
 
-#### RDS Master 계정
-
-```
+# RDS Master 계정
 db_username = "admin"
-```
 
-#### 교육 실습용 Password
-
-```
+# 교육 실습용 Password
 db_password = "admin1234"
 db_parameter_group_name = "default.mysql8.0"
-```
 
-#### Multi-AZ 사용
-
-```
+# Multi-AZ 사용
 db_multi_az = true
-```
 
-#### EC2 DB Client
-
-```
+# EC2 DB Client
 instance_type = "t2.micro"
 instance_name = "db_client"
 public_key_path = "~/.ssh/my-key.pub"
-```
 
-  - rds-mysql-service\terraform.tfvars
-
-#### AWS
-
-```bash
+   # rds-mysql-service\terraform.tfvars
+# AWS
 aws_region  = "ap-northeast-2"
 aws_profile = "my-profile"
 environment = "Production"
-```
 
-#### Network
-
-```
+# Network
 vpc_name = "my-vpc"
 vpc_cidr = "10.0.0.0/16"
-```
 
-```
 public_subnets = [ "10.0.1.0/24",  "10.0.2.0/24" ]
 private_subnets = [ "10.0.3.0/24",  "10.0.4.0/24" ]
-```
 
-```
 availability_zones = [ "ap-northeast-2a", "ap-northeast-2b" ]
-```
 
-#### RDS
+# RDS
 
-#### 같은 VPC 내부에서 MySQL 접근 허용
-
-```
+# 같은 VPC 내부에서 MySQL 접근 허용
 allowed_cidr = "10.0.0.0/16"
-```
 
-```
 db_allocated_storage = 20
 db_engine_version    = "8.0"
 db_instance_class    = "db.t3.micro"
 db_name              = "mydatabase"
-```
 
-#### RDS Master 계정
-
-```
+# RDS Master 계정
 db_username = "admin"
-```
 
-#### 교육 실습용 Password
-
-```
+# 교육 실습용 Password
 db_password = "admin1234"
-```
 
-```
 db_parameter_group_name = "default.mysql8.0"
-```
 
-#### Multi-AZ 사용
-
-```
+# Multi-AZ 사용
 db_multi_az = true
-```
 
-#### EC2 DB Client
-
-```
+# EC2 DB Client
 instance_type   = "t2.micro"
 instance_name   = "db_client"
 public_key_path = "~/.ssh/my-key.pub"
-```
 
-#### STEP 22. 전체 실행
+# STEP 22. 전체 실행
 
-```bash
 PS C:\my-terraform> terraform init
 PS C:\my-terraform> terraform plan
 PS C:\my-terraform> terraform apply
-```
 
-#### STEP 23. Output 확인
+# STEP 23. Output 확인
 
-```bash
 PS C:\my-terraform> terraform output
 vpc_id
 public_subnets
@@ -2562,7 +2298,7 @@ rds_endpoint_read_replica
 
 나타난 정보를 사용해 ec2로 접속
 
-```bash
+```powershell
 PS C:\Users\soldesk>
 ssh -i $home\.ssh\my-key ec2-user@ec2-43-201-97-196.ap-northeast-2.compute.amazonaws.com
    ,     #_
@@ -2575,36 +2311,22 @@ ssh -i $home\.ssh\my-key ec2-user@ec2-43-201-97-196.ap-northeast-2.compute.amazo
       ~~._.   _/
          _/ _/
        _/m/'
-```
 
-```
 For documentation, visit http://aws.amazon.com/documentation/ecs
 [ec2-user@ip-10-0-1-19 ~]$
-```
 
-#### mysql client를 구성
+# mysql client를 구성
 
-#### 1. MySQL 클라이언트 설치
-
-```
+# 1. MySQL 클라이언트 설치
 [ec2-user@ip-10-0-1-19 ~]# dnf install -y mariadb105
-```
 
-#### 2. 설치 확인
-
-```
+# 2. 설치 확인
 [ec2-user@ip-10-0-1-19 ~]# mysql --version
-```
 
-#### mysql을 사용해 rds로 접속
-
-#### 3. MySQL 클라이언트 설치
-
-```
+# mysql을 사용해 rds로 접속
+# 3. MySQL 클라이언트 설치
 [ec2-user@ip-10-0-1-19 ~]$ mysql -h <RDS-ENDPOINT> -P 3306 -u admin -p
-```
 
-```
 [ec2-user@ip-10-0-1-19 ~]#
 mysql -h <rds-endpoint> -u admin -p
 Enter password: admin1234
@@ -2615,9 +2337,7 @@ Copyright (c) 2000, 2026, Oracle and/or its affiliates.
 Oracle is a registered trademark of Oracle Corporation and/or its
 affiliates. Other names may be trademarks of their respective
 owners.
-```
 
-```
 Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 mysql> show databases;
 +--------------------+
@@ -2634,18 +2354,16 @@ mysql> show databases;
 
 - 워크밴치
 Connection Name: Terraform-db
-```
 Connection Method: Standard TCP/IP over SSH
-```
 
 SSH Hostname: 43.201.97.196# EC2 퍼블릭 IP
 SSH Username: ec2-user# EC2 접속 계정
 SSH Password: 생략
-SSH Key File : C:\Users\soldesk\.ssh\my-key# 키파일 위치
-
-#### RDS 엔드포인트 주소
 
 ```
+SSH Key File : C:\Users\soldesk\.ssh\my-key# 키파일 위치
+
+# RDS 엔드포인트 주소
 MySQL Hostname: <rds-endpoint>
 MySQL Server Port: 3306
 Username: admin
@@ -2662,7 +2380,6 @@ Password: admin1234
 
 #### 프로젝트 구조
 
-```
 aurora-mysql-service/
 │
 ├── provider.tf
@@ -2672,21 +2389,20 @@ aurora-mysql-service/
 ├── terraform.tfvars
 │
 └── modules/
-    │
-    ├── network/
-    │   ├── variables.tf
-    │   ├── main.tf
-    │   └── outputs.tf
-    │
-    └── ec2/
-    │├── variables.tf
-    │├── main.tf
-    │└── outputs.tf
-    └── rds/
-        ├── variables.tf
-        ├── main.tf
-        └── outputs.tf
-```
+│
+├── network/
+│   ├── variables.tf
+│   ├── main.tf
+│   └── outputs.tf
+│
+└── ec2/
+│├── variables.tf
+│├── main.tf
+│└── outputs.tf
+└── rds/
+├── variables.tf
+├── main.tf
+└── outputs.tf
 
 #### STEP 1. Network Child Module 변수 작성
 
@@ -2697,50 +2413,41 @@ Network Child Module에서 사용할 입력 변수를 작성
 - Private Subnet에는 Aurora MySQL Cluster를 배치
 
   - aurora\modules\network\variables.tf
+
 ```hcl
 variable "vpc_name" {
   description = "VPC 이름"
   type        = string
   default     = "my-vpc"
 }
-```
 
-```hcl
 variable "vpc_cidr" {
   description = "VPC CIDR"
   type        = string
   default     = "10.0.0.0/16"
 }
-```
 
-```hcl
 variable "public_subnets" {
   description = "Public Subnet CIDR 목록"
   type        = list(string)
   default = [ "10.0.1.0/24", "10.0.2.0/24" ]
 }
-```
 
-```hcl
 variable "private_subnets" {
   description = "Private Subnet CIDR 목록"
   type        = list(string)
   default = [ "10.0.3.0/24", "10.0.4.0/24" ]
 }
-```
 
-```hcl
 variable "availability_zones" {
   description = "Subnet을 생성할 Availability Zone 목록"
   type        = list(string)
   default = [ "ap-northeast-2a",  "ap-northeast-2b"
   ]
 }
-```
 
-#### STEP 2. VPC 생성
+# STEP 2. VPC 생성
 
-```
 [설명]
 ```
 
@@ -2761,10 +2468,8 @@ resource "aws_vpc" "my_vpc" {
     Name = var.vpc_name
   }
 }
-```
 
-  - aurora\modules\network\outputs.tf
-```hcl
+   # aurora\modules\network\outputs.tf
 output "vpc_id" {
   description = "생성된 VPC ID"
   value = aws_vpc.my_vpc.id
@@ -2803,19 +2508,15 @@ resource "aws_subnet" "public" {
     var.availability_zones,
     count.index
   )
-```
 
-  - EC2 생성 시 Public IP 자동 할당
-```
+  # EC2 생성 시 Public IP 자동 할당
   map_public_ip_on_launch = true
   tags = {
     Name = "${var.vpc_name}-public-${count.index + 1}"
   }
 }
-```
 
-  - aurora\modules\network\outputs.tf
-```hcl
+   # aurora\modules\network\outputs.tf
 output "public_subnets" {
   description = "생성된 Public Subnet ID 목록"
   value = aws_subnet.public[*].id
@@ -2856,10 +2557,8 @@ resource "aws_subnet" "private" {
     Name = "${var.vpc_name}-private-${count.index + 1}"
   }
 }
-```
 
-  - aurora\modules\network\outputs.tf
-```hcl
+   # aurora\modules\network\outputs.tf
 output "private_subnets" {
   description = "생성된 Private Subnet ID 목록"
   value = aws_subnet.private[*].id
@@ -2914,11 +2613,8 @@ resource "aws_route_table" "public" {
     Name = "${var.vpc_name}-public-rt"
   }
 }
-```
 
-#### Public Subnet과 Route Table 연결
-
-```hcl
+# Public Subnet과 Route Table 연결
 resource "aws_route_table_association" "public" {
   count = length(aws_subnet.public)
   subnet_id = aws_subnet.public[count.index].id
@@ -2942,46 +2638,37 @@ resource "aws_route_table_association" "public" {
 - Aurora MySQL에 접속할 DB Client EC2를 생성하기 위한 입력 변수를 작성
 
   - aurora\modules\ec2\variables.tf
+
 ```hcl
 variable "ami_id" {
   description = "EC2에서 사용할 AMI ID"
   type        = string
 }
-```
 
-```hcl
 variable "instance_type" {
   description = "EC2 Instance Type"
   type        = string
   default     = "t3.micro"
 }
-```
 
-```hcl
 variable "subnet_id" {
   description = "EC2를 생성할 Public Subnet ID"
   type        = string
   default     = "subnet-0123456789abcdef0"
 }
-```
 
-```hcl
 variable "public_key_path" {
   description = "SSH Public Key 경로"
   type        = string
   default     = "~/.ssh/my-key.pub"
 }
-```
 
-```hcl
 variable "instance_name" {
   description = "EC2 Name Tag"
   type        = string
   default     = "aurora-db-client"
 }
-```
 
-```hcl
 variable "vpc_id" {
   description = "Security Group을 생성할 VPC ID"
   type        = string
@@ -3020,11 +2707,8 @@ resource "random_integer" "random_number" {
   min = 1000
   max = 9999
 }
-```
 
-#### EC2 Key Pair 생성
-
-```hcl
+# EC2 Key Pair 생성
 resource "aws_key_pair" "ec2_key_pair" {
   key_name = "aurora-key-pair-${random_integer.random_number.result}"
   public_key = file(
@@ -3064,19 +2748,15 @@ resource "aws_security_group" "ec2_sg" {
     protocol = "tcp"
     cidr_blocks = [  "0.0.0.0/0" ]
   }
-```
 
-  - 모든 Outbound 허용
-```
+  # 모든 Outbound 허용
   egress {
     from_port = 0
     to_port = 0
     protocol = "-1"
     cidr_blocks = [  "0.0.0.0/0"  ]
   }
-```
 
-```
   tags = {
     Name = "aurora-client-sg"
   }
@@ -3115,24 +2795,18 @@ resource "aws_instance" "ec2_instance" {
     Name = var.instance_name
   }
 }
-```
 
-  - aurora\modules\ec2\outputs.tf
-```hcl
+   # aurora\modules\ec2\outputs.tf
 output "instance_id" {
   description = "EC2 Instance ID"
   value = aws_instance.ec2_instance.id
 }
-```
 
-```hcl
 output "public_ip" {
   description = "EC2 Public IP"
   value = aws_instance.ec2_instance.public_ip
 }
-```
 
-```hcl
 output "public_dns" {
   description = "EC2 Public DNS"
   value = aws_instance.ec2_instance.public_dns
@@ -3144,91 +2818,70 @@ output "public_dns" {
 - Root Module에서 Network와 EC2 Child Module에 전달할 실제 기본값을 정의
 
   - aurora\variables.tf
+
 ```hcl
 variable "aws_region" {
   description = "AWS Region"
   type        = string
   default     = "ap-northeast-2"
 }
-```
 
-```hcl
 variable "aws_profile" {
   description = "AWS CLI Profile"
   type        = string
   default     = "my-profile"
 }
-```
 
-```hcl
 variable "environment" {
   description = "환경 이름"
   type        = string
   default     = "Production"
 }
-```
 
-#### Network
-
-```hcl
+# Network
 variable "vpc_name" {
   description = "VPC 이름"
   type        = string
   default     = "my-vpc"
 }
-```
 
-```hcl
 variable "vpc_cidr" {
   description = "VPC CIDR"
   type        = string
   default     = "10.0.0.0/16"
 }
-```
 
-```hcl
 variable "public_subnets" {
   description = "Public Subnet CIDR"
   type        = list(string)
   default = [  "10.0.1.0/24",  "10.0.2.0/24" ]
 }
-```
 
-```hcl
 variable "private_subnets" {
   description = "Private Subnet CIDR"
   type        = list(string)
   default = [ 10.0.3.0/24",  "10.0.4.0/24" ]
 }
-```
 
-```hcl
 variable "availability_zones" {
   description = "Availability Zone 목록"
   type        = list(string)
   default = [ "ap-northeast-2a", "ap-northeast-2b" ]
 }
-```
 
-#### EC2
-
-```hcl
+# EC2
 variable "instance_type" {
   description = "EC2 Instance Type"
   type        = string
   default     = "t3.micro"
 }
-```
 
-```hcl
 variable "instance_name" {
   description = "EC2 Name Tag"
   type        = string
   default     = "aurora-db-client"
 }
-```
 
-```hcl
 variable "public_key_path" {
   description = "SSH Public Key 경로"
   type        = string
@@ -3245,6 +2898,7 @@ variable "public_key_path" {
 - Terraform에서 AWS Provider와 Random Provider를 사용하도록 설정
 
   - aurora\provider.tf
+
 ```hcl
 terraform {
   required_version = ">= 1.16.0"
@@ -3259,9 +2913,7 @@ terraform {
     }
   }
 }
-```
 
-```hcl
 provider "aws" {
   region = var.aws_region
   profile = var.aws_profile
@@ -3299,24 +2951,18 @@ module "network" {
   private_subnets = var.private_subnets
   availability_zones = var.availability_zones
 }
-```
 
-  - aurora\outputs.tf
-```hcl
+   # aurora\outputs.tf
 output "vpc_id" {
   description = "생성된 VPC ID"
   value = module.network.vpc_id
 }
-```
 
-```hcl
 output "public_subnets" {
   description = "생성된 Public Subnet ID 목록"
   value = module.network.public_subnets
 }
-```
 
-```hcl
 output "private_subnets" {
   description = "생성된 Private Subnet ID 목록"
   value = module.network.private_subnets
@@ -3388,14 +3034,13 @@ module "ec2" {
   - Network Module에서 생성한 VPC 사용
 
   - aurora\outputs.tf
+
 ```hcl
 output "public_dns" {
   description = "DB Client EC2 Public DNS"
   value = module.ec2.public_dns
 }
-```
 
-```hcl
 output "public_ip" {
   description = "DB Client EC2 Public IP"
   value = module.ec2.public_ip
@@ -3411,67 +3056,48 @@ output "public_ip" {
 - Aurora Cluster를 먼저 생성하고 Cluster 내부에 Writer와 Reader Instance를 생성
 
   - aurora\modules\rds\variables.tf
+
 ```hcl
 variable "vpc_id" {
   type = string
 }
-```
 
-```hcl
 variable "private_subnets" {
   type = list(string)
 }
-```
 
-```hcl
 variable "vpc_name" {
   type = string
 }
-```
 
-```hcl
 variable "environment" {
   type = string
 }
-```
 
-```hcl
 variable "allowed_cidr" {
   type = string
 }
-```
 
-```hcl
 variable "aurora_cluster_identifier" {
   type = string
 }
-```
 
-```hcl
 variable "aurora_engine_version" {
   type = string
 }
-```
 
-```hcl
 variable "aurora_instance_class" {
   type = string
 }
-```
 
-```hcl
 variable "db_name" {
   type = string
 }
-```
 
-```hcl
 variable "db_username" {
   type = string
 }
-```
 
-```hcl
 variable "db_password" {
   type      = string
   sensitive = true
@@ -3492,37 +3118,29 @@ variable "db_password" {
 resource "aws_security_group" "aurora_sg" {
   name = "aurora-mysql-security-group"
   vpc_id = var.vpc_id
-```
 
-  - MySQL
-```
+  # MySQL
   ingress {
     from_port = 3306
     to_port = 3306
     protocol = "tcp"
     cidr_blocks = [ var.allowed_cidr ]
   }
-```
 
-  - 모든 Outbound 허용
-```
+  # 모든 Outbound 허용
   egress {
     from_port = 0
     to_port = 0
     protocol = "-1"
     cidr_blocks = [ "0.0.0.0/0" ]
   }
-```
 
-```
   tags = {
     Name = "aurora-mysql-security-group"
   }
 }
-```
 
-  - aurora\modules\rds\outputs.tf
-```hcl
+   # aurora\modules\rds\outputs.tf
 output "aurora_security_group_id" {
   description = "Aurora Security Group ID"
   value = aws_security_group.aurora_sg.id
@@ -3590,24 +3208,17 @@ resource "aws_rds_cluster" "aurora_mysql" {
   database_name = var.db_name# 최초 생성할 Database
   master_username = var.db_username# 관리자 계정
   master_password = var.db_password# 관리자 Password
-```
 
-  - Private Subnet으로 구성된 DB Subnet Group
-```
+  # Private Subnet으로 구성된 DB Subnet Group
   db_subnet_group_name = aws_db_subnet_group.aurora_subnet_group.name
   vpc_security_group_ids = [ aws_security_group.aurora_sg.id ]# Aurora Security Group
   backup_retention_period = 7# 자동 Backup 7일 보관
   preferred_backup_window = "02:00-03:00"# Backup 시간
   preferred_maintenance_window = "sun:05:00-sun:06:00"# 유지보수 시간
   storage_encrypted = true# Storage 암호화
-```
-
-deletion_protection = false# 실습에서는 삭제 보호 사용 안 함
-```
+  deletion_protection = false# 실습에서는 삭제 보호 사용 안 함
   skip_final_snapshot = true# destroy 시 Final Snapshot 생성 안 함
-```
 
-```
   tags = {
     Name = "My-Aurora-MySQL"
     Environment = var.environment
@@ -3783,21 +3394,18 @@ resource "aws_rds_cluster_instance" "reader" {
 - Reader Endpoint는 Aurora Reader Instance로 읽기 요청을 분산
 
   - aurora\modules\rds\outputs.tf
+
 ```hcl
 output "aurora_writer_endpoint" {
   description = "Aurora Writer Endpoint"
   value       = aws_rds_cluster.aurora_mysql.endpoint
 }
-```
 
-```hcl
 output "aurora_reader_endpoint" {
   description = "Aurora Reader Endpoint"
   value       = aws_rds_cluster.aurora_mysql.reader_endpoint
 }
-```
 
-```hcl
 output "aurora_port" {
   description = "Aurora MySQL Port"
   value       = aws_rds_cluster.aurora_mysql.port
@@ -3818,64 +3426,53 @@ STEP 22-1. Root Module에 Aurora 변수 추가
 - Child rds Module에 전달할 Aurora 관련 변수를 Root Module에 작성
 
   - aurora\variables.tf
+
 ```hcl
 variable "allowed_cidr" {
   description = "Aurora MySQL 접근을 허용할 CIDR"
   type        = string
   default     = "10.0.0.0/16"
 }
-```
 
-```hcl
 variable "aurora_cluster_identifier" {
   description = "Aurora Cluster Identifier"
   type        = string
   default     = "my-aurora-cluster"
 }
-```
 
-```hcl
 variable "aurora_engine_version" {
   description = "Aurora MySQL Engine Version"
   type        = string
   default     = "8.0.mysql_aurora.3.10.5"
 }
-```
 
-```hcl
 variable "aurora_instance_class" {
   description = "Aurora DB Instance Class"
   type        = string
   default     = "db.t3.medium"
 }
-```
 
-```hcl
 variable "db_name" {
   description = "최초 생성할 Database 이름"
   type        = string
   default     = "mydatabase"
 }
-```
 
-```hcl
 variable "db_username" {
   description = "Aurora Master Username"
   type        = string
   default     = "admin"
 }
-```
 
-```hcl
 variable "db_password" {
   description = "Aurora Master Password"
   type        = string
   sensitive   = true
   default     = "admin1234"
 }
-```
 
 STEP 22-2. Root에서 RDS Child Module 호출
+```
 
 - Network Module에서 생성한 VPC와 Private Subnet을 RDS Module에 전달
 - Aurora Cluster는 Private Subnet에 생성
@@ -3904,84 +3501,61 @@ module "rds" {
   db_username = var.db_username
   db_password = var.db_password
 }
-```
 
 STEP 22-3. Root에서 Aurora Output 출력
+```
 
 - Child rds Module의 Output을 Root Module에서도 확인할 수 있도록 출력
 
   - aurora\outputs.tf
+
 ```hcl
 output "aurora_security_group_id" {
   description = "Aurora Security Group ID"
   value       = module.rds.aurora_security_group_id
 }
-```
 
-```hcl
 output "aurora_writer_endpoint" {
   description = "Aurora Writer Endpoint"
   value       = module.rds.aurora_writer_endpoint
 }
-```
 
-```hcl
 output "aurora_reader_endpoint" {
   description = "Aurora Reader Endpoint"
   value       = module.rds.aurora_reader_endpoint
 }
-```
 
-```hcl
 output "aurora_port" {
   description = "Aurora MySQL Port"
   value       = module.rds.aurora_port
 }
-```
 
-  - aurora\terraform.tfvars
-
-#### AWS
-
-```bash
+   # aurora\terraform.tfvars
+# AWS
 aws_region  = "ap-northeast-2"
 aws_profile = "my-profile"
 environment = "Production"
-```
 
-#### Network
-
-```
+# Network
 vpc_name = "my-vpc"
 vpc_cidr = "10.0.0.0/16"
-```
 
-```
 public_subnets = [  "10.0.1.0/24", "10.0.2.0/24" ]
 private_subnets = [ "10.0.3.0/24", "10.0.4.0/24" ]
 availability_zones = [  "ap-northeast-2a",  "ap-northeast-2b" ]
-```
 
-#### EC2
-
-```
+# EC2
 instance_type   = "t3.micro"
 instance_name   = "aurora-db-client"
 public_key_path = "~/.ssh/my-key.pub"
-```
 
-#### Aurora
-
-```
+# Aurora
 allowed_cidr              = "10.0.0.0/16"
 aurora_cluster_identifier = "my-aurora-cluster"
 aurora_engine_version     = "8.0.mysql_aurora.3.10.5"
 aurora_instance_class     = "db.t3.medium"
-```
 
-#### Database
-
-```
+# Database
 db_name     = "mydatabase"
 db_username = "admin"
 db_password = "admin1234"
@@ -3991,7 +3565,7 @@ db_password = "admin1234"
 
 - 작성한 Terraform 코드를 초기화하고 실행 계획을 확인한 뒤 실제 AWS Resource를 생성
 
-```bash
+```
 [PowerShell]
 PS C:\my-terraform\aurora-mysql-service> terraform init
 PS C:\my-terraform\aurora-mysql-service> terraform plan
@@ -4002,7 +3576,7 @@ PS C:\my-terraform\aurora-mysql-service> terraform apply
 
 - Terraform으로 생성된 VPC, Subnet, EC2, Aurora Writer Endpoint와 Reader Endpoint를 확인
 
-```bash
+```
 [PowerShell]
 PS C:\my-terraform\aurora-mysql-service> terraform output
 vpc_id
@@ -4014,11 +3588,9 @@ aurora_security_group_id
 aurora_writer_endpoint
 aurora_reader_endpoint
 aurora_port
-```
 
-#### DB 접속
+# DB 접속
 
-```bash
 PS C:\Users\soldesk>
 ssh -i $home\.ssh\my-key ec2-user@ec2-43-201-97-196.ap-northeast-2.compute.amazonaws.com
    ,     #_
@@ -4031,36 +3603,22 @@ ssh -i $home\.ssh\my-key ec2-user@ec2-43-201-97-196.ap-northeast-2.compute.amazo
       ~~._.   _/
          _/ _/
        _/m/'
-```
 
-```
 For documentation, visit http://aws.amazon.com/documentation/ecs
 [ec2-user@ip-10-0-1-19 ~]$
-```
 
-#### mysql client를 구성
+# mysql client를 구성
 
-#### 1. MySQL 클라이언트 설치
-
-```
+# 1. MySQL 클라이언트 설치
 [ec2-user@ip-10-0-1-19 ~]# dnf install -y mariadb105
-```
 
-#### 2. 설치 확인
-
-```
+# 2. 설치 확인
 [ec2-user@ip-10-0-1-19 ~]# mysql --version
-```
 
-#### mysql을 사용해 rds로 접속
-
-#### 3. MySQL 클라이언트 설치
-
-```
+# mysql을 사용해 rds로 접속
+# 3. MySQL 클라이언트 설치
 [ec2-user@ip-10-0-1-19 ~]$ mysql -h <RDS-ENDPOINT> -P 3306 -u admin -p
-```
 
-```
 [ec2-user@ip-10-0-1-19 ~]#
 mysql -h <rds-endpoint> -u admin -p
 Enter password: admin1234
@@ -4071,9 +3629,7 @@ Copyright (c) 2000, 2026, Oracle and/or its affiliates.
 Oracle is a registered trademark of Oracle Corporation and/or its
 affiliates. Other names may be trademarks of their respective
 owners.
-```
 
-```
 Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 mysql> show databases;
 +--------------------+
@@ -4090,18 +3646,16 @@ mysql> show databases;
 
 - 워크밴치
 Connection Name: Terraform-db
-```
 Connection Method: Standard TCP/IP over SSH
-```
 
 SSH Hostname: 43.201.97.196# EC2 퍼블릭 IP
 SSH Username: ec2-user# EC2 접속 계정
 SSH Password: 생략
-SSH Key File : C:\Users\soldesk\.ssh\my-key# 키파일 위치
-
-#### RDS 엔드포인트 주소
 
 ```
+SSH Key File : C:\Users\soldesk\.ssh\my-key# 키파일 위치
+
+# RDS 엔드포인트 주소
 MySQL Hostname: <rds-endpoint>
 MySQL Server Port: 3306
 Username: admin
@@ -4126,31 +3680,23 @@ Password: admin1234
 ```
 [MySQL]
 USE mydatabase;
-```
 
-```
 CREATE TABLE students (
   id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(50),
   course VARCHAR(50)
 );
-```
 
-```
 INSERT INTO students (name, course)
 VALUES
 ('student1', 'AWS'),
 ('student2', 'Terraform'),
 ('student3', 'Aurora');
-```
 
-```
 SELECT * FROM students;
-```
 
 [확인 예]
 +------+-----------+-----------+
-```
 | id     | name      | course     |
 +------+-----------+-----------+
 |  1    | student1   | AWS       |
@@ -4164,12 +3710,10 @@ SELECT * FROM students;
 - Aurora Reader Endpoint를 확인
 - Reader Endpoint는 Aurora Cluster의 Reader Instance로 읽기 요청을 전달
 
-```bash
+```
 [PowerShell]
 PS C:\my-terraform\aurora-mysql-service> terraform output -raw aurora_reader_endpoint
-```
 
-```
 [예]
 my-aurora-cluster.cluster-ro-xxxxxxxx.ap-northeast-2.rds.amazonaws.com
 ```
@@ -4180,20 +3724,15 @@ my-aurora-cluster.cluster-ro-xxxxxxxx.ap-northeast-2.rds.amazonaws.com
 - Writer에서 입력한 Data가 Reader에서도 정상적으로 조회되는지 확인
 
 [EC2에서 실행]
+
 ```
 mysql -h <AURORA-READER-ENDPOINT> -P 3306 -u admin -p
-```
 
 [접속 후]
-```
 USE mydatabase;
-```
 
-```
 SELECT * FROM students;
-```
 
-```
 [확인]
 +----+-------+-------+
 | id     | name      | course     |
@@ -4210,18 +3749,16 @@ SELECT * FROM students;
 
 - 실습 완료 후 비용 발생을 방지하기 위해 Terraform으로 생성한 AWS Resource를 삭제
 
-```bash
+```
 [PowerShell]
 PS C:\my-terraform\aurora-mysql-service> terraform destroy
-```
 
-```
 [확인]
 Plan: 0 to add, 0 to change, XX to destroy.
-```
-
 [삭제 승인]
 Enter a value: yes
+```
+
 - Aurora Writer
 - Aurora Reader
 - Aurora Cluster

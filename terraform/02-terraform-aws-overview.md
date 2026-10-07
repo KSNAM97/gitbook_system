@@ -64,6 +64,7 @@
 
 - 선언형 :  이렇게 만들어줘"라고 원하는 상태를 정의하는 방식
 예시:
+
 ```hcl
 resource "aws_instance" "web" {
 ami = "ami-xxxxxx"
@@ -81,6 +82,7 @@ instance_type = "t3.micro"
   - 구조: Terraform  -->  Provider  -->  AWS API  -->  실제 리소스 생성
 
 예시:
+
 ```hcl
 provider "aws" {
 region = "ap-northeast-2"
@@ -105,9 +107,7 @@ region = "ap-northeast-2"
 provider "aws" {
   region = "ap-northeast-2"
 }
-```
 
-```hcl
 resource "aws_instance" "example" {
   ami = "ami-xxxxxxx"
   instance_type = "t3.micro"
@@ -142,14 +142,13 @@ resource "aws_instance" "example" {
 - 기본 구조
 
 블록 구조
+
 ```hcl
 resource "리소스종류" "이름" {
   key = value
 }
-```
 
 예시
-```hcl
 resource "aws_s3_bucket" "mybucket" {
   bucket = "my-unique-bucket-name"
 }
@@ -165,32 +164,25 @@ resource "aws_s3_bucket" "mybucket" {
 main.tf 작성
 
 2단계: 초기화
+
 ```hcl
 terraform init
  # provider 설치
  # .terraform 폴더 생성
-```
 
 3단계: 실행 계획 확인
-```hcl
 terraform plan
  # 어떤 리소스가 추가/변경/삭제될지 표시
-```
 
 4단계: 적용
-```hcl
 terraform apply
  # 실제 인프라 생성
-```
 
 5단계: 상태 파일 관리
-```hcl
 terraform.tfstate 생성
  # 현재 인프라 상태 저장
-```
 
 6단계: 삭제
-```hcl
 terraform destroy
  # 리소스 전체 삭제
 ```
@@ -216,13 +208,12 @@ terraform destroy
   - 즉, 코드가 곧 인프라 설계도이다.
 
 - 기본 코드 예시
+
 ```hcl
 provider "aws" {
   region = "ap-northeast-2"
 }
-```
 
-```hcl
 resource "aws_instance" "web" {
   ami           = "ami-xxxxxxx"
   instance_type = "t3.micro"
@@ -260,10 +251,7 @@ resource "aws_instance" "web" {
 
 - 내부 동작 과정
 
-```
 1) Provider 다운로드
-```
-
 - 코드에 선언된 provider를 다운로드한다.
 - 예를 들어 AWS provider가 자동 설치된다.
 - Terraform은 provider를 통해 AWS API와 통신한다.
@@ -290,21 +278,19 @@ resource "aws_instance" "web" {
 
 - 내부 동작 과정 (Terraform은 다음 순서로 작업한다.)
 1) 코드 읽기
+
 ```
 2) terraform.tfstate 읽기
-```
-
 3) AWS 실제 상태 조회
 4) 차이(Diff) 계산
+```
 
 - plan을 사용하는 이유
   - 실수로 인한 리소스 삭제 방지
   - 운영 환경 변경 전 검토 필수
   - 의도하지 않은 교체 작업 사전 확인 가능
 
-```
 4단계: 변경 적용 (terraform apply)
-```
 
 - plan에서 계산된 변경 전략을 실제 AWS에 반영하는 단계이다.
 
@@ -436,6 +422,7 @@ Prettier - Code Formatter
 
 - 선언형 :  이렇게 만들어줘"라고 원하는 상태를 정의하는 방식
 예시:
+
 ```hcl
 resource "aws_instance" "web" {
 ami = "ami-xxxxxx"
@@ -453,6 +440,7 @@ instance_type = "t3.micro"
   - 구조: Terraform  -->  Provider  -->  AWS API  -->  실제 리소스 생성
 
 예시:
+
 ```hcl
 provider "aws" {
 region = "ap-northeast-2"
@@ -477,9 +465,7 @@ region = "ap-northeast-2"
 provider "aws" {
 region = "ap-northeast-2"
 }
-```
 
-```hcl
 resource "aws_instance" "example" {
 ami = "ami-xxxxxxx"
 instance_type = "t3.micro"
@@ -514,14 +500,13 @@ instance_type = "t3.micro"
 - 기본 구조
 
 블록 구조
+
 ```hcl
 resource "리소스종류" "이름" {
 key = value
 }
-```
 
 예시
-```hcl
 resource "aws_s3_bucket" "mybucket" {
 bucket = "my-unique-bucket-name"
 }
@@ -537,32 +522,25 @@ bucket = "my-unique-bucket-name"
 main.tf 작성
 
 2단계: 초기화
+
 ```hcl
 terraform init
  # provider 설치
  # terraform 폴더 생성
-```
 
 3단계: 실행 계획 확인
-```hcl
 terraform plan
  # 어떤 리소스가 추가/변경/삭제될지 표시
-```
 
 4단계: 적용
-```hcl
 terraform apply
  # 실제 인프라 생성
-```
 
 5단계: 상태 파일 관리
-```hcl
 terraform.tfstate 생성
  # 현재 인프라 상태 저장
-```
 
 6단계: 삭제
-```hcl
 terraform destroy
  # 리소스 전체 삭제
 ```
@@ -588,13 +566,12 @@ Terraform의 출발점은 명령 실행이 아니라 원하는 인프라의 최�
   - 즉, 코드가 곧 인프라 설계도이다.
 
 - 기본 코드 예시
+
 ```hcl
 provider "aws" {
   region = "ap-northeast-2"
 }
-```
 
-```hcl
 resource "aws_instance" "web" {
   ami           = "ami-xxxxxxx"
   instance_type = "t3.micro"
@@ -632,10 +609,7 @@ resource "aws_instance" "web" {
 
 - 내부 동작 과정
 
-```
 1) Provider 다운로드
-```
-
 - 코드에 선언된 provider를 다운로드한다.
 - 예를 들어 AWS provider가 자동 설치된다.
 - Terraform은 provider를 통해 AWS API와 통신한다.
@@ -662,21 +636,19 @@ resource "aws_instance" "web" {
 
 - 내부 동작 과정 (Terraform은 다음 순서로 작업한다.)
 1) 코드 읽기
+
 ```
 2) terraform.tfstate 읽기
-```
-
 3)  AWS 실제 상태 조회
 4) 차이(Diff) 계산
+```
 
 - plan을 사용하는 이유
   - 실수로 인한 리소스 삭제 방지
   - 운영 환경 변경 전 검토 필수
   - 의도하지 않은 교체 작업 사전 확인 가능
 
-```
 4단계: 변경 적용 (terraform apply)
-```
 
 - plan에서 계산된 변경 전략을 실제 AWS에 반영하는 단계이다.
 
@@ -766,7 +738,7 @@ Prettier - Code Formatter
 
 #### 기존 설정에 붙여넣기
 
-```
+```json
 {
     "workbench.colorTheme": "Default Light Modern",
     "liveServer.settings.CustomBrowser": "firefox",
@@ -800,9 +772,7 @@ Prettier - Code Formatter
     }
 
 }
-```
 
-```
 //Terraform 코드 파일(.tf)에 적용되는 VS Code 편집기 설정 시
 ```
 
@@ -810,9 +780,7 @@ Prettier - Code Formatter
 
 ![이미지](assets/02-terraform-aws-overview/6.png)
 
-```
 https://developer.hashicorp.com/terraform/install#windows# 다운로드
-```
 
 ![이미지](assets/02-terraform-aws-overview/7.png)
 
@@ -838,9 +806,9 @@ https://developer.hashicorp.com/terraform/install#windows# 다운로드
 C:\Users\ryu> terraform -v
 Terraform v1.14.6
 on windows_amd64
-```
 
-#### AWS CLI 설치 (이미 설치 완료)
+# AWS CLI 설치 (이미 설치 완료)
+```
 
 ![이미지](assets/02-terraform-aws-overview/16.png)
 
@@ -848,38 +816,28 @@ on windows_amd64
 
 ![이미지](assets/02-terraform-aws-overview/17.png)
 
-```bash
+```powershell
 PS C:\trf\HCL_01> aws  configure
-```
 
 Tip: You can deliver temporary credentials to the AWS CLI using your AWS Console session by running the command 'aws login'.
 
-```
 AWS Access Key ID [None]: <ACCESS_KEY_ID> 설정
 AWS Secret Access Key [None]: <SECRET_ACCESS_KEY> 설정
 Default region name [None]: ap-northeast-2
 Default output format [None]:
-```
 
-```bash
 PS C:\trf\HCL_01> aws configure list-profiles
 default
-```
 
-```bash
 PS C:\trf\HCL_01> aws  configure  --profile  my-profile
-```
 
 Tip: You can deliver temporary credentials to the AWS CLI using your AWS Console session by running the command 'aws login'.
 
-```
 AWS Access Key ID [None]: <ACCESS_KEY_ID> 설정
 AWS Secret Access Key [None]: <SECRET_ACCESS_KEY> 설정
 Default region name [None]: ap-northeast-2
 Default output format [None]:
-```
 
-```bash
 PS C:\trf\HCL_01> aws configure list-profiles
 default
 my-profile
@@ -889,46 +847,31 @@ my-profile
 
 ![이미지](assets/02-terraform-aws-overview/12.png)
 
-#### main.tf
-
-#### Terraform 전체 설정 블록
-
 ```hcl
+# main.tf
+# Terraform 전체 설정 블록
 terraform {
-```
 
-  - 이 Terraform 코드를 실행할 때 필요한 Terraform CLI 최소 버전 (erraform 1.15.6 이상 버전에서 실행 가능)
-```
+  # 이 Terraform 코드를 실행할 때 필요한 Terraform CLI 최소 버전 (erraform 1.15.6 이상 버전에서 실행 가능)
   required_version = ">= 1.15.6"
-```
 
-  - Terraform이 사용할 Provider 정의
-  - Provider = 특정 클라우드 서비스(AWS, Azure, GCP 등)와 통신하기 위한 플러그인
-```
+  # Terraform이 사용할 Provider 정의
+  # Provider = 특정 클라우드 서비스(AWS, Azure, GCP 등)와 통신하기 위한 플러그인
   required_providers {
-```
 
-  - AWS Provider 설정
-```bash
+    # AWS Provider 설정
     aws = {
-```
 
-  - Provider의 위치 (hashicorp/aws --> HashiCorp에서 공식 제공하는 AWS Provider)
-```
+      # Provider의 위치 (hashicorp/aws --> HashiCorp에서 공식 제공하는 AWS Provider)
       source = "hashicorp/aws"
-```
 
-  - 사용할 AWS Provider 버전 (AWS Provider 6.62.0 이상 버전을 사용하도록 설정)
-```
+      # 사용할 AWS Provider 버전 (AWS Provider 6.62.0 이상 버전을 사용하도록 설정)
       version = ">= 6.62.0"
     }
   }
 }
-```
 
-#### AWS Provider 설정, Terraform이 AWS와 통신할 때 사용하는 기본 설정
-
-```hcl
+# AWS Provider 설정, Terraform이 AWS와 통신할 때 사용하는 기본 설정
 provider "aws" {
   # AWS 리전 설정
   # us-east-1 --> 서울리전
@@ -939,24 +882,17 @@ provider "aws" {
   # aws configure --profile my-profile
   profile = "my-profile"
 }
-```
 
-#### AWS에서 이미 존재하는 데이터를 조회하는 data 블록
-
-#### data = 리소스를 생성하는 것이 아니라 기존 정보를 가져오는 역할
-
-```hcl
+# AWS에서 이미 존재하는 데이터를 조회하는 data 블록
+# data = 리소스를 생성하는 것이 아니라 기존 정보를 가져오는 역할
 data "aws_ami" "al2023" {
   # 가장 최신 AMI를 선택
   most_recent = true
   # AMI 소유자 설정
   # amazon --> AWS 공식 AMI
   owners = ["amazon"]
-```
 
-#### AMI 필터 조건
-
-```
+# AMI 필터 조건
   filter {
     # 필터 기준 이름
     # AMI 이름으로 검색
@@ -972,50 +908,34 @@ data "aws_ami" "al2023" {
     values = ["x86_64"]
   }
 }
-```
 
-#### output.tf
-
-```hcl
+# output.tf
 output "ami_id_print" {
   value = data.aws_ami.al2023.id
 }
-```
 
-```hcl
 output "ami_name_print" {
   value = data.aws_ami.al2023.name
 }
-```
 
-```hcl
 output "ami_architecture_print" {
   value = data.aws_ami.al2023.architecture
 }
-```
 
-```hcl
 PS C:\trf\HCL_01> terraform  plan
 data.aws_ami.al2023: Reading...
 data.aws_ami.al2023: Read complete after 0s [id=ami-0c6cc074db0c3f65d]
-```
 
 Changes to Outputs:
-```
   + ami_architecture_print = "x86_64"
   + ami_id_print           = "ami-0c6cc074db0c3f65d"
   + ami_name_print         = "al2023-ami-minimal-2023.12.20260914.0-kernel-6.18-x86_64"
-```
 
 You can apply this plan to save these new output values to the Terraform state, without changing any real infrastructure.
 
-#### main.tf
-
+# main.tf
 ~~~~~~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~~~~~~
-
-#### AWS EC2 인스턴스를 생성하는 리소스 블록
-
-```hcl
+# AWS EC2 인스턴스를 생성하는 리소스 블록
 resource "aws_instance" "example" {
   # EC2에서 사용할 AMI (위에서 조회한 Amazon Linux 2023 AMI를 사용)
   # data.aws_ami.al2023.id
@@ -1023,32 +943,23 @@ resource "aws_instance" "example" {
   ami = data.aws_ami.al2023.id
   # EC2 인스턴스 타입 (t2.micro 프리티어 인스턴스)
   instance_type = "t2.micro"
-```
 
-  - EC2 Name 태그 설정
-```
+  # EC2 Name 태그 설정
   tags = {
     Name = "terraform-ec2"
   }
 }
-```
 
-#### output.tf
-
+# output.tf
 ~~~~~~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~~~~~~
-```hcl
 output "instance_id" {# EC2 인스턴스 ID 출력
   value = aws_instance.example.id
 }
-```
 
-```hcl
 output "instance_type" {# EC2 인스턴스 타입 출력
   value = aws_instance.example.instance_type
 }
-```
 
-```hcl
 output "public_ip" {# EC2 퍼블릭 IP 출력
   value = aws_instance.example.public_ip
 }
@@ -1058,50 +969,39 @@ output "public_ip" {# EC2 퍼블릭 IP 출력
 
 ![이미지](assets/02-terraform-aws-overview/13.png)
 
-```bash
+```powershell
 PS C:\trf\terraform-main\01_aws-terraform\terraform-project> terraform -v
 Terraform v1.14.6
 on windows_amd64
-```
 
-```bash
 PS C:\trf\terraform-main\01_aws-terraform\terraform-project> aws s3 ls
-```
 
-#### 해당 폴더를 Terraform 프로젝트로 준비하는 작업
-
-#### 지금 이 폴더에서 Terraform을 쓸 수 있게 세팅하는 단계 (AWS Provider 다운로드)
-
-```bash
+# 해당 폴더를 Terraform 프로젝트로 준비하는 작업
+# 지금 이 폴더에서 Terraform을 쓸 수 있게 세팅하는 단계 (AWS Provider 다운로드)
 PS C:\trf\terraform-main\01_aws-terraform\terraform-project> terraform  init
 Initializing the backend...
 Initializing provider plugins...
-```
-
 - Finding hashicorp/aws versions matching ">= 5.73.0"...
 - Installing hashicorp/aws v6.34.0...
 - Installed hashicorp/aws v6.34.0 (signed by HashiCorp)
 Terraform has created a lock file .terraform.lock.hcl to record the provider
 selections it made above. Include this file in your version control repository
 so that Terraform can guarantee to make the same selections by default when
-```
 you run "terraform init" in the future.
-```
 
 Terraform has been successfully initialized!
 
-```
 You may now begin working with Terraform. Try running "terraform plan" to see
 any changes that are required for your infrastructure. All Terraform commands
 should now work.
-```
 
 If you ever set or change modules or backend configuration for Terraform,
 rerun this command to reinitialize your working directory. If you forget, other
 commands will detect it and remind you to do so if necessary.
 
-.terraform\providers\registry.terraform.io 생성
-.terraform.lock.hcl 생성
+ .terraform\providers\registry.terraform.io 생성
+ .terraform.lock.hcl 생성
+```
 
 ![이미지](assets/02-terraform-aws-overview/14.png)
 
@@ -1110,83 +1010,73 @@ commands will detect it and remind you to do so if necessary.
 .terraform.lock.hcl 파일은 Provider 버전을 고정해서 팀원이나 학생 환경이 달라도
 동일한 버전으로 동작하게 만드는 버전 잠금 파일
 
-```hcl
+```powershell
 PS C:\trf\terraform-main\01_aws-terraform\terraform-project> terraform  plan
 data.aws_ami.al2023: Reading...
 data.aws_ami.al2023: Read complete after 0s [id=ami-0fae3369c34baac8b
-```
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Plan: 1 to add, 0 to change, 0 to destroy.
 
 Note: You didn't use the -out option to save this plan, so Terraform can't guarantee to take exactly these actions if
-```
 you run "terraform apply" now.
-```
 
-```hcl
 PS C:\trf\terraform-main\01_aws-terraform\terraform-project> terraform  apply
 data.aws_ami.al2023: Reading...
 data.aws_ami.al2023: Read complete after 1s [id=ami-0fae3369c34baac8b]
-```
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Plan: 1 to add, 0 to change, 0 to destroy.
 
 Do you want to perform these actions?
-Terraform will perform the actions described above.
-Only 'yes' will be accepted to approve.
+  Terraform will perform the actions described above.
+  Only 'yes' will be accepted to approve.
 
-Enter a value: yes
+  Enter a value: yes
 
 aws_instance.example: Creating...
-```bash
 aws_instance.example: Still creating... [00m10s elapsed]
 aws_instance.example: Creation complete after 13s [id=i-08481f634e282c90f]
-```
 
 Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
+```
 
 - AWS에 접속해서 확인하면 EC2 인스턴스가 생성되어 있다.
 
 ![이미지](assets/02-terraform-aws-overview/15.png)
 
-```hcl
+```powershell
 PS C:\trf\terraform-main\01_aws-terraform\terraform-project> terraform  destroy
 data.aws_ami.al2023: Reading...
 data.aws_ami.al2023: Read complete after 1s [id=ami-0fae3369c34baac8b]
 aws_instance.example: Refreshing state... [id=i-08481f634e282c90f]
-```
 
 Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the
 following symbols:
-- destroy
+  - destroy
 
 Terraform will perform the following actions:
 
-  - aws_instance.example will be destroyed
+  # aws_instance.example will be destroyed
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Do you really want to destroy all resources?
-Terraform will destroy all your managed infrastructure, as shown above.
-There is no undo. Only 'yes' will be accepted to confirm.
+  Terraform will destroy all your managed infrastructure, as shown above.
+  There is no undo. Only 'yes' will be accepted to confirm.
 
-Enter a value: yes
+  Enter a value: yes
 
-```bash
 aws_instance.example: Destroying... [id=i-08481f634e282c90f]
 aws_instance.example: Still destroying... [id=i-08481f634e282c90f, 00m10s elapsed]
 aws_instance.example: Still destroying... [id=i-08481f634e282c90f, 00m20s elapsed]
 aws_instance.example: Still destroying... [id=i-08481f634e282c90f, 00m30s elapsed]
 aws_instance.example: Still destroying... [id=i-08481f634e282c90f, 00m40s elapsed]
 aws_instance.example: Destruction complete after 50s
-```
 
 Destroy complete! Resources: 1 destroyed.
-```bash
 PS C:\trf\terraform-main\01_aws-terraform\terraform-project>
 ```
 

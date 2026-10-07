@@ -133,7 +133,8 @@ AWS에서 사전 구성하여 제공하는 표준 정책이다.
   - 예를 들어 특정 IP 주소에서만 접근을 허용하거나 특정 시간대에만 권한을 허용하는 등의 조건을 설정할 수 있다.
 
 정책 예시
-```
+
+```json
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -198,7 +199,7 @@ AWS에서 사전 구성하여 제공하는 표준 정책이다.
 - Trust Policy는 "누가 이 Role을 사용할 수 있는가?" 를 정의한다.
 - 예를 들어 EC2가 Role을 사용할 수 있도록 설정하려면 다음과 같다.
 
-```
+```json
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -211,9 +212,7 @@ AWS에서 사전 구성하여 제공하는 표준 정책이다.
     }
   ]
 }
-```
 
-```
 "Effect": "Allow"
 ```
 
@@ -242,7 +241,7 @@ AWS에서 사전 구성하여 제공하는 표준 정책이다.
 
 - 예를 들어 Role에 S3 읽기 권한을 부여하려면 다음과 같이 설정할 수 있다.
 
-```
+```json
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -295,7 +294,8 @@ AWS에서 사전 구성하여 제공하는 표준 정책이다.
 - EC2가 IAM Role을 사용할 수 있도록 하는 Trust Policy이다.
 
   - Trust Policy
-```
+
+```json
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -308,15 +308,11 @@ AWS에서 사전 구성하여 제공하는 표준 정책이다.
     }
   ]
 }
-```
 
-```
 "Principal": { "Service": "ec2.amazonaws.com" },
  #  이 Role을 사용할 수 있는 대상을 지정한다.
  #  "Service": "ec2.amazonaws.com" 는 EC2 서비스를 의미한다.
-```
 
-```
 "Action": "sts:AssumeRole"
  #  EC2가 이 Role을 Assume할 수 있도록 허용한다.
  #  쉽게 말하면 EC2가 이 IAM Role의 권한을 임시로 빌려서 사용할 수 있게 한다.
@@ -326,7 +322,8 @@ AWS에서 사전 구성하여 제공하는 표준 정책이다.
 - Role에 실제 S3 권한도 추가해야 한다.
 
   - Permission Policy
-```
+
+```json
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -366,7 +363,7 @@ AWS에서 사전 구성하여 제공하는 표준 정책이다.
 
 - 회사 B Role의 Trust Policy
 
-```
+```json
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -391,12 +388,12 @@ AWS에서 사전 구성하여 제공하는 표준 정책이다.
 aws sts assume-role \
 ```
 
---role-arn arn:aws:iam::123456789012:role/MyRole \
---role-session-name student-session
+- -role-arn arn:aws:iam::123456789012:role/MyRole \
+- -role-session-name student-session
 
 - 실행하면 대략 다음과 같은 임시 자격 증명이 반환된다.
 
-```
+```json
 {
   "Credentials": {
     "AccessKeyId": "ASIAXXXXXXXXXXXX",
@@ -426,7 +423,7 @@ aws sts assume-role \
 
 - AWS CLI에서는 Profile을 이용하면 편하게 사용할 수 있다.
 
-```
+```hcl
 [profile assume-user]
 role_arn = arn:aws:iam::123456789012:role/MyRole
 source_profile = default
@@ -602,7 +599,8 @@ AWS에서 사전 구성하여 제공하는 표준 정책이다.
   - 예를 들어 특정 IP 주소에서만 접근을 허용하거나 특정 시간대에만 권한을 허용하는 등의 조건을 설정할 수 있다.
 
 정책 예시
-```
+
+```json
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -726,7 +724,7 @@ IAM  -->  사용자  -->  sol-user1
 - Trust Policy는 "누가 이 Role을 사용할 수 있는가?" 를 정의한다.
 - 예를 들어 EC2가 Role을 사용할 수 있도록 설정하려면 다음과 같다.
 
-```
+```json
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -739,9 +737,7 @@ IAM  -->  사용자  -->  sol-user1
     }
   ]
 }
-```
 
-```
 "Effect": "Allow"
 ```
 
@@ -770,7 +766,7 @@ IAM  -->  사용자  -->  sol-user1
 
 - 예를 들어 Role에 S3 읽기 권한을 부여하려면 다음과 같이 설정할 수 있다.
 
-```
+```json
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -823,7 +819,8 @@ IAM  -->  사용자  -->  sol-user1
 - EC2가 IAM Role을 사용할 수 있도록 하는 Trust Policy이다.
 
   - Trust Policy
-```
+
+```json
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -836,15 +833,11 @@ IAM  -->  사용자  -->  sol-user1
     }
   ]
 }
-```
 
-```
 "Principal": { "Service": "ec2.amazonaws.com" },
  #  이 Role을 사용할 수 있는 대상을 지정한다.
  #  "Service": "ec2.amazonaws.com" 는 EC2 서비스를 의미한다.
-```
 
-```
 "Action": "sts:AssumeRole"
  #  EC2가 이 Role을 Assume할 수 있도록 허용한다.
  #  쉽게 말하면 EC2가 이 IAM Role의 권한을 임시로 빌려서 사용할 수 있게 한다.
@@ -854,7 +847,8 @@ IAM  -->  사용자  -->  sol-user1
 - Role에 실제 S3 권한도 추가해야 한다.
 
   - Permission Policy
-```
+
+```json
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -894,7 +888,7 @@ IAM  -->  사용자  -->  sol-user1
 
 - 회사 B Role의 Trust Policy
 
-```
+```json
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -919,12 +913,12 @@ IAM  -->  사용자  -->  sol-user1
 aws sts assume-role \
 ```
 
---role-arn arn:aws:iam::123456789012:role/MyRole \
---role-session-name student-session
+- -role-arn arn:aws:iam::123456789012:role/MyRole \
+- -role-session-name student-session
 
 - 실행하면 대략 다음과 같은 임시 자격 증명이 반환된다.
 
-```
+```json
 {
   "Credentials": {
     "AccessKeyId": "ASIAXXXXXXXXXXXX",
@@ -954,7 +948,7 @@ aws sts assume-role \
 
 - AWS CLI에서는 Profile을 이용하면 편하게 사용할 수 있다.
 
-```
+```hcl
 [profile assume-user]
 role_arn = arn:aws:iam::123456789012:role/MyRole
 source_profile = default
@@ -999,9 +993,7 @@ provider "aws" {
 
 #### 실습
 
-```
 EX) IAM User는 S3 접근 불가, Role Assume 후 S3 접근 가능
-```
 
 - 실습 목표 : 이번 실습의 목표는 다음 4가지를 직접 확인하는 것이다.
   - 첫째, IAM User 자체에는 S3 권한이 없으면 S3에 접근할 수 없다는 점
@@ -1065,35 +1057,26 @@ EX) IAM User는 S3 접근 불가, Role Assume 후 S3 접근 가능
 
 ![이미지](assets/10-terraform-iam/26.png)
 
-```bash
+```powershell
 PS C:\Users\ryu> aws configure --profile assume-user
 AWS Access Key ID [None]: <ACCESS_KEY_ID> key ID
 AWS Secret Access Key [None]: <SECRET_ACCESS_KEY> access key
 Default region name [None]: ap-northeast-2
 Default output format [None]: json
-```
 
-```bash
 PS C:\Users\ryu> aws configure list-profiles
 default
 assume-user
-```
 
-```bash
 PS C:\Users\ryu> aws s3 ls --profile assume-user
 An error occurred (AccessDenied) when calling the ListBuckets operation:
 User: arn:aws:iam::123456789012:user/assume-user is not authorized to perform:
 s3:ListAllMyBuckets because no identity-based policy allows the s3:ListAllMyBuckets action
-```
 
-#### my-profile은 admin 권한이므로 확인이 가능하다.
-
-```bash
+# my-profile은 admin 권한이므로 확인이 가능하다.
 PS C:\Users\soldesk> aws  s3  ls  --profile  my-profile
 2026-09-29 10:05:41 my-assume-bucket-123456789012-ap-northeast-2-an
-```
 
-```bash
 PS C:\Users\soldesk>
 aws  s3  ls  s3://my-assume-bucket-123456789012-ap-northeast-2-an  --profile  my-profile
 2026-09-29 10:06:06        242 AWS-test-file.txt
@@ -1141,7 +1124,6 @@ Amazon S3
 
 #### 최종 프로젝트 구조
 
-```
 iam-assumerole-s3/
 │
 ├── provider.tf
@@ -1151,7 +1133,6 @@ iam-assumerole-s3/
 ├── terraform.tfvars
 │
 └── s3-readonly-policy.json
-```
 
 #### STEP 1. Provider 변수 작성
 
@@ -1159,14 +1140,13 @@ iam-assumerole-s3/
 - 실제 값은 나중에 terraform.tfvars에서 입력한다.
 
   - iam-assumerole-s3\variables.tf
+
 ```hcl
 variable "aws_region" {
   description = "AWS Resource를 관리할 Region"
   type = string
 }
-```
 
-```hcl
 variable "aws_profile" {
   description = "Terraform 인증에 사용할 AWS CLI Profile"
   type = string
@@ -1189,6 +1169,7 @@ variable "aws_profile" {
 - 이 IAM User는 직접 S3 권한을 가지는 것이 아니라 나중에 S3ReadOnlyRole을 Assume하는 사용자로 사용한다.
 
   - iam-assumerole-s3\variables.tf
+
 ```hcl
 variable "user_name" {
   description = "생성할 IAM User 이름"
@@ -1208,6 +1189,7 @@ variable "user_name" {
 - AWS Provider는 terraform.tfvars에서 지정한 Region과 Profile을 사용한다.
 
   - iam-assumerole-s3\provider.tf
+
 ```hcl
 terraform {
   required_version = ">= 1.16.0"
@@ -1218,9 +1200,7 @@ terraform {
     }
   }
 }
-```
 
-```hcl
 provider "aws" {
   region = var.aws_region
   profile = var.aws_profile
@@ -1295,6 +1275,7 @@ resource "aws_iam_access_key" "example_user_key" {
   - Object 다운로드
 
   - iam-assumerole-s3\variables.tf
+
 ```hcl
 variable "s3_policy_file" {
   description = "S3 ReadOnly Policy JSON 파일 경로"
@@ -1305,7 +1286,8 @@ variable "s3_policy_file" {
 
 - Object Upload와 Delete 권한은 부여하지 않는다.
   - iam-assumerole-s3\s3-readonly-policy.json
-```
+
+```json
 {
   "Version": "2012-10-17",# IAM Policy Language의 Version이다.
   "Statement": [
@@ -1384,7 +1366,10 @@ resource "aws_iam_policy" "s3_readonly_policy" {
   - variables.tf의 s3_policy_file에 지정된
   - JSON 파일을 읽는다.
   - 즉 다음 파일의 내용이 IAM Policy가 된다.
-  - s3-readonly-policy.json
+
+```
+ # s3-readonly-policy.json
+```
 
 #### STEP 8. 현재 AWS Account ID 조회
 
@@ -1499,6 +1484,7 @@ S3ReadOnlyPolicy
 - Terraform으로 생성한 IAM User 이름을 terraform output 명령으로 확인할 수 있도록 설정한다.
 
   - iam-assumerole-s3\outputs.tf
+
 ```hcl
 output "user_name" {
   description = "생성된 IAM User 이름"
@@ -1517,6 +1503,7 @@ output "user_name" {
 - Terraform Output을 통해 생성된 Role ARN을 확인한다.
 
   - iam-assumerole-s3\outputs.tf
+
 ```hcl
 output "s3_read_role_arn" {
   description = "S3 ReadOnly Role ARN"
@@ -1538,14 +1525,13 @@ output "s3_read_role_arn" {
 - 이 값은 AWS CLI Profile을 생성할 때 사용한다.
 
   - iam-assumerole-s3\outputs.tf
+
 ```hcl
 output "user_access_key_id" {
   description = "IAM User Access Key ID"
   value = aws_iam_access_key.example_user_key.id
 }
-```
 
-```hcl
 output "user_secret_access_key" {
   description = "IAM User Secret Access Key"
   value = aws_iam_access_key.example_user_key.secret
@@ -1570,7 +1556,8 @@ output "user_secret_access_key" {
 #### STEP 14. terraform.tfvars 작성
 
   - iam-assumerole-s3\terraform.tfvars
-```bash
+
+```hcl
 aws_region = "ap-northeast-2"
 aws_profile = "my-profile"
 user_name = "s3_read_user"
@@ -1598,38 +1585,28 @@ s3_policy_file = "s3-readonly-policy.json"
 - Terraform Provider를 설치하고
 작성한 코드에 문제가 없는지 확인한다.
 
-```bash
+```
 [PowerShell]
 PS C:\terraform\iam-assumerole-s3> terraform init
-```
 
-```bash
 PS C:\terraform\iam-assumerole-s3> terraform plan
-```
 
-```bash
 PS C:\terraform\iam-assumerole-s3> terraform apply
 Enter a value: yes
-```
 
-```
 [생성 Resource]
-```
 
-#### STEP 16. Terraform Output 확인
+# STEP 16. Terraform Output 확인
 
-```
 [설명]
 ```
 
 - 생성된 IAM User와 Role 정보를 확인한다.
 
-```bash
+```
 [PowerShell]
 PS C:\terraform\iam-assumerole-s3> terraform output
-```
 
-```
 [확인]
 user_name
 s3_read_role_arn
@@ -1641,13 +1618,11 @@ user_secret_access_key
 
 - IAM User를 AWS CLI Profile에 등록하기 위해 Access Key 값을 확인한다.
 
-```bash
+```
 [Access Key ID]
 PS C:\terraform\iam-assumerole-s3> terraform output -raw user_access_key_id
 AKIAXXXXXXXXXXXXXXXX
-```
 
-```bash
 [Secret Access Key]
 PS C:\terraform\iam-assumerole-s3> terraform output -raw user_secret_access_key
 JTYWA5OMa6RtaWRhGZaqBlwgTGRCSINk6KXEVlD4
@@ -1660,20 +1635,16 @@ JTYWA5OMa6RtaWRhGZaqBlwgTGRCSINk6KXEVlD4
 - Terraform에서 생성한 IAM User의 Access Key를 사용하여 별도의 AWS CLI Profile을 만든다.
 - 이 Profile은 앞으로 IAM User 권한으로 AWS CLI 명령을 실행할 때 사용한다.
 
-```bash
+```
 [PowerShell]
 PS C:\terraform\iam-assumerole-s3> aws configure --profile s3-read-user
 Tip: You can deliver temporary credentials to the AWS CLI using your AWS Console session by running the command 'aws login'.
-```
 
-```
 AWS Access Key ID [None]: <ACCESS_KEY_ID>
 AWS Secret Access Key [None]: <SECRET_ACCESS_KEY>
 Default region name [None]: ap-northeast-2
 Default output format [None]:
-```
 
-```bash
 PS C:\trf2\5) IAM> aws  configure  list-profiles
 default
 my-profile
@@ -1685,12 +1656,10 @@ s3-read-user
 
 - 새로 생성한 AWS CLI Profile이 실제 IAM User로 인증되는지 확인한다.
 
-```bash
+```powershell
 PS C:\terraform\iam-assumerole-s3> aws  sts  get-caller-identity --profile s3-read-user
-```
 
 [확인 예]
-```
 {
     "UserId": "AIDAxxxxxxxxxxxx",
     "Account": "123456789012",
@@ -1726,10 +1695,8 @@ resource "aws_s3_bucket" "assume_test_bucket" {
     Name = "IAM AssumeRole Test Bucket"
   }
 }
-```
 
-  - iam-assumerole-s3\outputs.tf
-```hcl
+   # iam-assumerole-s3\outputs.tf
 output "s3_bucket_name" {
   description = "AssumeRole 테스트용 S3 Bucket 이름"
   value = aws_s3_bucket.assume_test_bucket.bucket
@@ -1773,17 +1740,13 @@ resource "aws_s3_object" "test_object" {
   content = "IAM AssumeRole S3 ReadOnly Test"
   content_type = "text/plain"
 }
-```
 
-  - iam-assumerole-s3\outputs.tf
-```hcl
+   # iam-assumerole-s3\outputs.tf
 output "s3_test_object" {
   description = "AssumeRole 테스트용 S3 Object 이름"
   value = aws_s3_object.test_object.key
 }
-```
 
-```bash
 PS C:\terraform\iam-assumerole-s3> terraform plan
 PS C:\terraform\iam-assumerole-s3> terraform apply
 ```
@@ -1792,7 +1755,7 @@ PS C:\terraform\iam-assumerole-s3> terraform apply
 - 따라서 Role을 Assume하기 전에는 앞에서 생성한 S3 Bucket에 접근할 수 없어야 한다.
 - 먼저 테스트용 Bucket 이름을 확인한다.
 
-```bash
+```
 [PowerShell]
 PS C:\terraform\iam-assumerole-s3> terraform output -raw s3_bucket_name
 iam-assume-bucket-123456789012
@@ -1800,7 +1763,7 @@ iam-assume-bucket-123456789012
 
 - IAM User의 s3-read-user Profile을 사용하여 S3 Bucket 목록 조회를 시도한다.
 
-```bash
+```
 [PowerShell]
 PS C:\terraform\iam-assumerole-s3> aws s3 ls --profile s3-read-user
 aws: [ERROR]: An error occurred (AccessDenied) when calling the ListBuckets operation: User: arn:aws:iam::123456789012:user/s3_read_user is not authorized to perform: s3:ListAllMyBuckets because no identity-based policy allows the s3:ListAllMyBuckets action
@@ -1808,12 +1771,10 @@ aws: [ERROR]: An error occurred (AccessDenied) when calling the ListBuckets oper
 
 - 특정 Bucket 내부 조회도 시도한다.
 
-```bash
+```
 [PowerShell]
 PS C:\terraform\iam-assumerole-s3> $BUCKET = terraform output -raw s3_bucket_name
-```
 
-```bash
 PS C:\terraform\iam-assumerole-s3> aws s3 ls s3://$BUCKET --profile s3-read-user
 aws: [ERROR]: An error occurred (AccessDenied) when calling the ListObjectsV2 operation: User: arn:aws:iam::123456789012:user/s3_read_user is not authorized to perform: s3:ListBucket on resource: "arn:aws:s3:::iam-s3-bucket-123456789012" because no identity-based policy allows the s3:ListBucket action
 ```
@@ -1827,7 +1788,7 @@ aws: [ERROR]: An error occurred (AccessDenied) when calling the ListObjectsV2 op
 
 - AssumeRole을 실행하기 위해 Terraform에서 생성한 Role ARN을 확인한다.
 
-```bash
+```
 [PowerShell]
 PS C:\terraform\iam-assumerole-s3> terraform output -raw s3_read_role_arn
 arn:aws:iam::123456789012:role/S3ReadOnlyRole
@@ -1853,27 +1814,19 @@ arn:aws:iam::123456789012:role/S3ReadOnlyRole
 
 - 즉, 실제로 Role 권한을 AWS CLI에서 사용하도록 설정하는 단계이다.
 
-```bash
+```
 [PowerShell]
 PS C:\terraform\iam-assumerole-s3> $ROLE_ARN = terraform output -raw s3_read_role_arn
-```
 
-```bash
 PS C:\terraform\iam-assumerole-s3> $creds = aws sts assume-role `
 >> --role-arn $ROLE_ARN `
 >> --role-session-name s3-read-session `
 >> --profile s3-read-user | ConvertFrom-Json
-```
 
-```bash
 PS C:\terraform\iam-assumerole-s3> $env:AWS_ACCESS_KEY_ID = $creds.Credentials.AccessKeyId
-```
 
-```bash
 PS C:\terraform\iam-assumerole-s3> $env:AWS_SECRET_ACCESS_KEY = $creds.Credentials.SecretAccessKey
-```
 
-```bash
 PS C:\terraform\iam-assumerole-s3> $env:AWS_SESSION_TOKEN = $creds.Credentials.SessionToken
 ```
 
@@ -1899,7 +1852,7 @@ PS C:\terraform\iam-assumerole-s3> $env:AWS_SESSION_TOKEN = $creds.Credentials.S
 
 - 현재 AWS CLI가 IAM User가 아니라 S3ReadOnlyRole 자격으로 실행되고 있는지 확인한다.
 
-```bash
+```
 [PowerShell]
 PS C:\terraform\iam-assumerole-s3> aws sts get-caller-identity
 {
@@ -1921,7 +1874,7 @@ PS C:\terraform\iam-assumerole-s3> aws sts get-caller-identity
 
 - S3ReadOnlyRole에 포함된 s3:ListAllMyBuckets 권한을 확인한다.
 
-```bash
+```
 [PowerShell]
 PS C:\trf2\5) IAM> aws  s3  ls
 2026-09-29 11:47:20 iam-s3-bucket-123456789012
@@ -1934,7 +1887,7 @@ PS C:\trf2\5) IAM> aws  s3  ls
 
 - S3ReadOnlyRole의 s3:ListBucket 권한을 확인한다.
 
-```bash
+```
 [PowerShell]
 PS C:\terraform\iam-assumerole-s3> aws  s3  ls  s3://$BUCKET
 2026-09-29 11:53:37         29 test.txt
@@ -1947,12 +1900,10 @@ PS C:\terraform\iam-assumerole-s3> aws  s3  ls  s3://$BUCKET
 - S3ReadOnlyRole의 s3:GetObject 권한을 확인한다.
 - S3의 Object를 사용자 PC로 다운로드한다.
 
-```bash
+```
 [PowerShell]
 PS C:\terraform\iam-assumerole-s3> aws s3 cp s3://<Bucket-이름>/<파일이름> .
-```
 
-```bash
 [예]
 PS C:\terraform\iam-assumerole-s3> aws s3 cp s3://my-test-bucket/test.txt .
 download: s3://my-test-bucket/test.txt to .\test.txt
@@ -1966,11 +1917,10 @@ download: s3://my-test-bucket/test.txt to .\test.txt
 - s3:PutObject 권한을 부여하지 않았기 때문에 S3로 새로운 파일을 Upload할 수 없어야 한다.
 
 [테스트 파일 생성]
-```bash
-PS C:\terraform\iam-assumerole-s3> "S3 Write Test" > upload-test.txt
-```
 
-```bash
+```powershell
+PS C:\terraform\iam-assumerole-s3> "S3 Write Test" > upload-test.txt
+
 [Upload 시도]
 PS C:\terraform\iam-assumerole-s3> aws  s3  cp  .\upload-test.txt  s3://$BUCKET
 upload failed: .\upload-test.txt to s3://iam-s3-bucket-123456789012/upload-test.txt An error occurred (AccessDenied) when calling the PutObject operation: User: arn:aws:sts::123456789012:assumed-role/S3ReadOnlyRole/s3-read-session is not authorized to perform: s3:PutObject on resource: "arn:aws:s3:::iam-s3-bucket-123456789012/upload-test.txt" because no identity-based policy allows the s3:PutObject action
@@ -1983,7 +1933,7 @@ upload failed: .\upload-test.txt to s3://iam-s3-bucket-123456789012/upload-test.
 - ReadOnly Role에는 s3:DeleteObject 권한도 없다.
 - 따라서 기존 Object 삭제가 차단되는지 확인한다.
 
-```bash
+```
 [PowerShell]
 PS C:\terraform\iam-assumerole-s3> aws  s3  rm  s3://$BUCKET/upload-test.txt
 delete failed: s3://iam-s3-bucket-123456789012/upload-test.txt An error occurred (AccessDenied) when calling the DeleteObject operation: User: arn:aws:sts::123456789012:assumed-role/S3ReadOnlyRole/s3-read-session is not authorized to perform: s3:DeleteObject on resource: "arn:aws:s3:::iam-s3-bucket-123456789012/upload-test.txt" because no identity-based policy allows the s3:DeleteObject action
@@ -1995,21 +1945,16 @@ delete failed: s3://iam-s3-bucket-123456789012/upload-test.txt An error occurred
 
 - 제거하지 않으면 현재 PowerShell Session에서 계속 Role Credential을 사용하게 된다.
 
-```bash
+```
 [PowerShell]
 PS C:\terraform\iam-assumerole-s3> Remove-Item Env:AWS_ACCESS_KEY_ID
 PS C:\terraform\iam-assumerole-s3> Remove-Item Env:AWS_SECRET_ACCESS_KEY
 PS C:\terraform\iam-assumerole-s3> Remove-Item Env:AWS_SESSION_TOKEN
-```
 
-#### 환경변수를 삭제하게되면 default profile이 적용되므로 upload와 delete가 적용된다.
-
-```bash
+# 환경변수를 삭제하게되면 default profile이 적용되므로 upload와 delete가 적용된다.
 PS C:\trf2\5) IAM> aws s3  cp  .\upload-test.txt  s3://$BUCKET
 upload: .\upload-test.txt to s3://iam-s3-bucket-123456789012/upload-test.txt
-```
 
-```bash
 PS C:\trf2\5) IAM> aws  s3  rm  s3://$BUCKET/upload-test.txt
 delete: s3://iam-s3-bucket-123456789012/upload-test.txt
 ```
@@ -2020,13 +1965,11 @@ delete: s3://iam-s3-bucket-123456789012/upload-test.txt
 
 - AWS CLI Profile의 Access Key는 Terraform이 삭제하는 IAM User와 함께 더 이상 사용할 수 없게 된다.
 
-```bash
+```
 [PowerShell]
 PS C:\terraform\iam-assumerole-s3> terraform destroy
-```
 
 Enter a value: yes
 
-```
 [삭제 Resource]
 ```

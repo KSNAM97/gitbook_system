@@ -44,8 +44,9 @@
 - 모든 구성은 블록 안에서 정의된다.
 
 - 기본 형태는
-```
 블록타입 "라벨1" "라벨2" {
+
+```hcl
     key = value
 }
 ```
@@ -91,7 +92,8 @@ resource "aws_instance" "web" {
 - 블록 내부는 모두 key = value 형태로 구성된다.
 
 - 예를 들어:
-```
+
+```hcl
 region = "us-west-2"
 instance_type = "t3.micro"
 ```
@@ -109,11 +111,10 @@ instance_type = "t3.micro"
 
 - 한 줄 주석은 # 또는 // 로 작성한다.
   - 이것은 한 줄 주석입니다
-```
- // 이것도 한 줄 주석입니다
-```
+// 이것도 한 줄 주석입니다
 
 - 여러 줄 주석은 /* */ 로 감싼다.
+
 ```
 /*
 이것은 여러 줄 주석입니다.
@@ -181,7 +182,6 @@ instance_type = "t3.micro"
 
 - 일반적인 프로젝트 구조
 
-```
 my-terraform-project/
 │
 ├── main.tf
@@ -192,7 +192,6 @@ my-terraform-project/
 ├── versions.tf
 ├── terraform.tfstate
 └── .terraform.lock.hcl
-```
 
 - 이 파일들이 하나의 프로젝트를 구성한다.
 
@@ -205,12 +204,10 @@ my-terraform-project/
 - 개발 환경은 비용 절감을 위해 작은 인스턴스를 사용할 수 있다.
 - 그래서 보통 다음과 같이 디렉토리를 구성한다.
 
-```
 my-terraform-project/
 ├── dev/
 ├── test/
 └── production/
-```
 
 각 환경 폴더 안에 main.tf, variables.tf, outputs.tf 등을 둔다.
 이렇게 하면 환경 간 설정이 섞이지 않는다.
@@ -262,9 +259,7 @@ terraform {
     }
   }
 }
-```
 
-```hcl
 provider "aws" {
   region = "us-east-1"
 }
@@ -338,10 +333,10 @@ provider "aws" {
 그래서 실무에서는 인증 정보를 다음과 같은 방식으로 제공한다.
 
 - 첫 번째 방법은 환경 변수 방식이다.
+
 ```
 export AWS_ACCESS_KEY_ID="your-access-key-id"
 export AWS_SECRET_ACCESS_KEY="your-secret-access-key"
-```
 
 Terraform은 실행 시 환경 변수를 자동으로 읽는다.
 
@@ -350,6 +345,7 @@ Terraform은 실행 시 환경 변수를 자동으로 읽는다.
 aws configure 명령어로 설정하면
 ~/.aws/credentials 파일에 인증 정보가 저장된다.
 Terraform은 이 파일을 자동으로 참조한다.
+```
 
 - 실무에서는 절대 코드에 키를 직접 작성하지 않는다.
 - 이건 보안 기본 원칙이다.
@@ -370,9 +366,7 @@ Terraform은 이 파일을 자동으로 참조한다.
 provider "aws" {
   region = "ap-northeast-2"
 }
-```
 
-```hcl
 provider "google" {
   project = "my-gcp-project"
   region  = "asia-northeast1"
@@ -551,6 +545,7 @@ provider "aws" {
   - 이 파일이 있어야 Terraform은 이미 존재하는 리소스인지 새로 생성해야 하는지 판단할 수 있다.
 
 예를 들어 S3를 backend로 사용하는 경우:
+
 ```hcl
 terraform {
   backend "s3" {
@@ -559,9 +554,10 @@ terraform {
     region = "us-east-1"
   }
 }
-```
 
 실무에서는 반드시 remote backend를 사용한다.
+```
+
 - 왜냐하면 팀 협업 시 로컬 tfstate는 충돌을 일으키기 때문이다.
 
 #### resource 블록 (가장 많이 사용하는 블록)
@@ -569,6 +565,7 @@ terraform {
 - resource 블록은 실제 인프라를 생성하는 블록이며 Terraform에서 가장 중요한 블록중 하나이다.
 
 예:
+
 ```hcl
 resource "aws_instance" "example" {
   ami           = "ami-0c55b159cbfafe1f0"
@@ -591,6 +588,7 @@ resource "aws_instance" "example" {
 - 즉, 생성이 아니라 조회다.
 
 예:
+
 ```hcl
 data "aws_ami" "al2023" {
   most_recent = true
@@ -619,6 +617,7 @@ data "aws_ami" "al2023" {
 - Terraform 코드를 재사용 가능하게 만드는 핵심 요소다.
 
 예:
+
 ```hcl
 variable "instance_type" {
   description = "The type of instance to create"
@@ -645,6 +644,7 @@ variable "instance_type" {
 - locals 블록은 프로젝트 내부 계산용 변수다. (외부 입력을 받지 않는다.)
 
 예:
+
 ```hcl
 locals {
   instance_name = "my-instance"
@@ -661,6 +661,7 @@ locals {
 output 블록은 Terraform 실행 후 결과를 출력하는 블록이다.
 
 예:
+
 ```hcl
 output "instance_ip" {
   description = "The public IP of the EC2 instance"
@@ -747,9 +748,9 @@ variable "public_subnet_count" {
   type    = number
   default = 2
 }
-```
 
 - public_subnet_count는 숫자 값이므로 number 타입을 사용한다.
+```
 
   - 3) bool
 
@@ -783,7 +784,8 @@ variable "public_subnet_count" {
   - 중복 값을 허용한다.
 
 - 예:
-```
+
+```hcl
 availability_zones = [
   "ap-northeast-2a",
   "ap-northeast-2c"
@@ -822,7 +824,8 @@ availability_zones = [
   - 여러 설정 값을 이름과 함께 관리할 수 있다.
 
 - 예:
-```
+
+```hcl
 instance_type = {
   dev  = "t3.micro"
   prod = "m5.large"
@@ -839,7 +842,8 @@ instance_type = {
 - map과 달리 각각의 속성에 서로 다른 데이터 타입을 지정할 수 있다.
 
 - 예:
-```
+
+```hcl
 object({
   name      = string
   instance_type = string
@@ -848,7 +852,8 @@ object({
 ```
 
 - 값:
-```
+
+```hcl
 {
   name      = "web-server"
   instance_type= "t3.micro"
@@ -906,6 +911,7 @@ object
 #### 실제 변수 선언 예제
 
 - 문자열 변수
+
 ```hcl
 variable "instance_type" {
   description= "사용할 인스턴스 타입"
@@ -917,6 +923,7 @@ variable "instance_type" {
 - 이 변수는 EC2, EKS node group, ASG에 그대로 전달 가능하다.
 
 - 숫자 변수
+
 ```hcl
 variable "file_count" {
   type    = number
@@ -927,6 +934,7 @@ variable "file_count" {
 - count와 연결 가능하다.
 
 - bool 변수
+
 ```hcl
 variable "create_files" {
   type    = bool
@@ -937,15 +945,16 @@ variable "create_files" {
 - 조건문에서 사용 가능하다.
 
 - list(string) 변수
+
 ```hcl
 variable "file_names" {
   type = list(string)
 }
+count.index와 연결 가능하다.
 ```
 
-count.index와 연결 가능하다.
-
 - map(string) 변수
+
 ```hcl
 variable "file_contents" {
   type = map(string)
@@ -955,6 +964,7 @@ variable "file_contents" {
 - 키 기반 접근 가능하다.
 
 - object 변수
+
 ```hcl
 variable "server_config" {
   type = object({
@@ -1024,7 +1034,7 @@ variable "instances" {
   - 7 .terraform.lock.hcl 파일을 생성한다.
   - 즉, init은 환경 준비 단계다.
 
-```bash
+```powershell
 PS C:\terrform> terraform init
 ```
 
@@ -1049,7 +1059,7 @@ PS C:\terrform> terraform init
   - ~ modify
   - destroy
 
-```bash
+```powershell
 PS C:\terrform> terraform plan
 ```
 
@@ -1069,7 +1079,7 @@ PS C:\terrform> terraform plan
   - 3 클라우드 API 호출
   - 4 상태 파일 업데이트
 
-```bash
+```powershell
 PS C:\terrform> terraform apply
 PS C:\terrform> terraform apply -auto-approve# 자동 승인
 ```
@@ -1082,12 +1092,11 @@ PS C:\terrform> terraform apply -auto-approve# 자동 승인
 
 - 현재 상태 파일에 정의된 모든 리소스를 삭제한다.
 
-```bash
+```powershell
 PS C:\terrform> terraform destroy
 PS C:\terrform> terraform destroy -auto-approve# 자동 승인
-```
-
 실무 관점
+```
 
 - 테스트 환경 정리
 - 비용 절감 목적
@@ -1098,7 +1107,7 @@ PS C:\terrform> terraform destroy -auto-approve# 자동 승인
 
 - 현재 상태 파일(tfstate)의 내용을 출력한다.
 
-```bash
+```powershell
 PS C:\terrform> terraform show
 ```
 
@@ -1112,7 +1121,7 @@ PS C:\terrform> terraform show
 
 - output 블록에 정의된 값만 출력한다.
 
-```bash
+```powershell
 PS C:\terrform> terraform output
 PS C:\terrform> terraform output instance_ip
 ```
@@ -1127,7 +1136,7 @@ PS C:\terrform> terraform output instance_ip
 
 - 코드 문법과 내부 구조가 올바른지 검사한다.
 
-```bash
+```powershell
 PS C:\terrform> terraform validate
 ```
 
@@ -1141,7 +1150,7 @@ PS C:\terrform> terraform validate
 
 - 코드를 자동 정렬한다.
 
-```bash
+```powershell
 PS C:\terrform> terraform fmt
 ```
 
@@ -1169,7 +1178,7 @@ PS C:\terrform> terraform fmt
 
 - 이미 존재하는 리소스를 Terraform 관리 대상으로 가져온다.
 
-```bash
+```powershell
 PS C:\terrform> terraform import aws_instance.example i-1234567890abcdef0
 ```
 
@@ -1182,7 +1191,7 @@ PS C:\terrform> terraform import aws_instance.example i-1234567890abcdef0
 
 - 실제 클라우드 상태를 읽어서 tfstate를 최신 상태로 업데이트한다.
 
-```bash
+```powershell
 PS C:\terrform> terraform refresh
 ```
 
@@ -1221,16 +1230,14 @@ PS C:\terrform> terraform refresh
   - enable_monitoring 값이 true이면 EC2 인스턴스 모니터링 활성화 false이면 비활성화
 
 변수 정의
+
 ```hcl
 variable "enable_monitoring" {
   description = "EC2 모니터링 활성화 여부"
   type        = bool
   default     = true
 }
-```
-
 리소스 정의
-```hcl
 resource "aws_instance" "example" {
   ami           = "ami-xxxxxxxx"
   instance_type = "t3.micro"
@@ -1249,23 +1256,20 @@ resource "aws_instance" "example" {
   - 개발 환경에서는 작은 인스턴스 사용
 
 변수 정의
+
 ```hcl
 variable "environment" {
   description = "환경 설정 (dev 또는 prod)"
   type        = string
   default     = "dev"
 }
-```
 
-```hcl
 locals 블록
 locals {
   instance_type = var.environment == "prod" ? "m5.large" : "t3.micro"
 }
-```
 
 리소스에서 사용
-```hcl
 resource "aws_instance" "example" {
   ami           = "ami-xxxxxxxx"
   instance_type = local.instance_type
@@ -1283,14 +1287,13 @@ resource "aws_instance" "example" {
 - 조건이 true일 때만 리소스를 생성하고 싶을 경우 count를 사용한다.
 
 예제 3. S3 버킷 조건부 생성
+
 ```hcl
 variable "create_bucket" {
   type    = bool
   default = false
 }
-```
 
-```hcl
 resource "aws_s3_bucket" "example" {
   count  = var.create_bucket ? 1 : 0
   bucket = "my-example-bucket"
@@ -1322,6 +1325,7 @@ variable "name" {
   - 값이 없음, Terraform에서 "설정 안 함"과 같은 의미
 
 예제 4. user_data 조건 적용
+
 ```hcl
 variable "custom_user_data" {
   type    = string
@@ -1397,6 +1401,7 @@ resource "aws_instance" "example" {
 - 위 설정은 동일한 리소스를 3개 생성한다.
 
 - Terraform 내부에서는 이 리소스를 다음과 같이 관리한다.
+
 ```bash
 aws_instance.example[0]
 aws_instance.example[1]
@@ -1411,7 +1416,7 @@ aws_instance.example[2]
 
 예:
 
-```
+```hcl
 tags = {
   Name = "Example-Instance-${count.index}"
 }
@@ -1443,7 +1448,7 @@ tags = {
 - count가 개수 기준이라면 for_each는 키 또는 값 기준이다.
 - for_each는 set과 map만 사용 가능하다.
 
-```
+```hcl
 toset(["dev", "test", "prod"])
 예:
 for_each = toset(["dev", "test", "prod"])
@@ -1461,7 +1466,8 @@ for_each = toset(["dev", "test", "prod"])
   - each.value: 현재 반복의 값
 
 예:
-```
+
+```hcl
 tags = {
   Name = "Example-Instance-${each.key}"
 }
@@ -1487,9 +1493,7 @@ variable "server_names" {
   type    = set(string)
   default = ["dev", "test", "prod"]
 }
-```
 
-```hcl
 resource "aws_instance" "set_example" {
   for_each = var.server_names
 
@@ -1500,11 +1504,9 @@ resource "aws_instance" "set_example" {
     Name = each.value
   }
 }
-```
 
-  - 예시 2. Map 타입으로 EC2 여러 개 생성
+   # 예시 2. Map 타입으로 EC2 여러 개 생성
 
-```hcl
 variable "instance_types" {
   type = map(string)
   default = {
@@ -1513,9 +1515,7 @@ variable "instance_types" {
     prod    = "t3.medium"
   }
 }
-```
 
-```hcl
 resource "aws_instance" "map_example" {
   for_each= var.instance_types
 
@@ -1526,11 +1526,9 @@ resource "aws_instance" "map_example" {
     Name = each.key    # Map의 Key 사용
   }
 }
-```
 
-  - 예시 3. Map + Object 타입 (실무에서 많이 사용하는 형태)
+   # 예시 3. Map + Object 타입 (실무에서 많이 사용하는 형태)
 
-```hcl
 variable "servers" {
   type = map(object({
     instance_type = string
@@ -1552,9 +1550,7 @@ variable "servers" {
     }
   }
 }
-```
 
-```hcl
 resource "aws_instance" "object_example" {
   for_each= var.servers
 
@@ -1571,21 +1567,24 @@ resource "aws_instance" "object_example" {
 ```
 
 - 1번째 EC2
-```
+
+```hcl
 Name          = dev
 instance_type= t3.micro
 monitoring    = false
 ```
 
 - 2번째 EC2
-```
+
+```hcl
 Name        = test
 instance_type = t3.small
 monitoring    = false
 ```
 
 - 3번째 EC2
-```
+
+```hcl
 Name       = prod
 instance_type= t3.medium
 monitoring = true
@@ -1600,20 +1599,20 @@ monitoring = true
 - 리스트, 맵, 셋 등의 구조를 가공할 때 사용한다.
 
 예:
+
 ```hcl
 variable "instance_names" {
   type = list(string)
   default = ["web1", "web2", "db1"]
 }
-```
 
-```hcl
 locals {
   name_tags = [for  name  in  var.instance_names : "Name-${name}"]
 }
 ```
 
 - 결과:
+
 ```
 ["Name-web1", "Name-web2", "Name-db1"]
 ```
@@ -1629,9 +1628,9 @@ locals {
 
 ```
 [for name in var.instance_names : name if name != "db1"]
-```
 
 이 경우 db1은 제외된다.
+```
 
 #### dynamic 블록을 사용한 리소스 내부 반복
 
@@ -1733,11 +1732,10 @@ resource "aws_security_group" "example" {
   - 리스트를 하나의 문자열로 결합한다.
 
 기본 예시
-```
-join(", " , ["apple", "banana", "cherry"])
-```
 
 ```
+join(", " , ["apple", "banana", "cherry"])
+
 결과 : "apple, banana, cherry"
 ```
 
@@ -1748,9 +1746,7 @@ join(", " , ["apple", "banana", "cherry"])
 locals {
   tag_string = join("-", ["dev", "web", "01"])
 }
-```
 
-```
 결과: "dev-web-01"
 ```
 
@@ -1759,9 +1755,7 @@ locals {
 
 ```
 split(",", "dev,prod,test")
-```
 
-```
 결과 : ["dev", "prod", "test"]
 ```
 
@@ -1781,17 +1775,12 @@ locals {
 
 ```
 replace("hello world", "world", "Terraform")
-```
 
-```
 결과: "hello Terraform"
-```
 
 실무 예
 
-#### 환경 이름에 따라 접두어 변경:
-
-```
+# 환경 이름에 따라 접두어 변경:
 replace(var.env, "prod", "production")
 ```
 
@@ -1800,9 +1789,7 @@ replace(var.env, "prod", "production")
 
 ```
 trimspace("   hello   ")
-```
 
-```
 결과 : "hello"
 ```
 
@@ -1820,10 +1807,8 @@ merge(
   { b = "banana" },
   { a = "avocado" }
 )
-```
 
 결과:
-```
 { a = "avocado", b = "banana" }
 ```
 
@@ -1844,12 +1829,13 @@ locals {
 
 ```
 contains(["dev", "prod"], "prod")
-```
 
 결과 : true
+```
 
 - 특정 환경일 때만 리소스 생성:
-```
+
+```hcl
 count = contains(["prod"], var.env) ? 1 : 0
 ```
 
@@ -1868,9 +1854,7 @@ length(["a", "b", "c"])
 
 ```
 flatten([["a","b"], ["c","d"], ["e"]])
-```
 
-```
 결과 : ["a","b","c","d","e"]
 ```
 
@@ -1881,9 +1865,7 @@ flatten([["a","b"], ["c","d"], ["e"]])
 
 ```
 keys({ a = 1, b = 2 })
-```
 
-```
 결과 : ["a", "b"]
 ```
 
@@ -1892,9 +1874,7 @@ keys({ a = 1, b = 2 })
 
 ```
 values({ a = 1, b = 2 })
-```
 
-```
 결과 : [1, 2]
 ```
 
@@ -1914,7 +1894,8 @@ values({ a = 1, b = 2 })
   - AWS 리소스의 tags는 항상 문자열만 허용한다.
 
 만약:
-```
+
+```hcl
 tags = {
   version = 1
 }
@@ -1926,7 +1907,8 @@ tags = {
 - 결과 : "123"
 
 사용 예
-```
+
+```hcl
 tags = {
   version = tostring(var.app_version)
 }
@@ -1939,6 +1921,7 @@ tags = {
 - 결과: ["apple", "banana"]
 
 사용 예
+
 ```hcl
 locals {
   az_list = tolist(data.aws_availability_zones.available.names)
@@ -1952,14 +1935,12 @@ locals {
   - for_each는 list를 직접 못 받는다. (set이나 map만 받는다.)
   - map 타입으로 강제 변환할 때 사용한다.
 
-```
+```hcl
 tomap({
   a = 1
   b = 2
 })
-```
 
-```hcl
 locals {
   final_tags = merge(
     tomap(var.common_tags),
@@ -2000,16 +1981,17 @@ resource "aws_instance" "example" {
 
 예제 구조 전체 흐름
 
-```bash
 1) 템플릿 파일 (config.tpl)
 #!/bin/bash
+
+```
 echo "Hello ${name}"
 ```
 
 - 이 파일은 아직 완성된 스크립트가 아니다.
   - ${name} 부분이 비어 있다.
 
-```
+```hcl
 2) Terraform 코드
 templatefile("config.tpl", {
   name = "Terraform"
@@ -2019,16 +2001,10 @@ templatefile("config.tpl", {
 - 이 코드의 의미는 config.tpl 파일을 읽는다.
   - ${name} 자리에 "Terraform"을 넣어라.
 
-```
 3-1) Terraform은 config.tpl 파일을 읽는다.
-```
-
 3-2) ${name} 변수를 찾는다.
 3-3) vars 맵에서 name 값을 찾는다.
-```
 3-4) ${name}를 "Terraform"으로 교체한다.
-```
-
 3-5) 최종 문자열을 반환한다.
 
 #### 5. 네트워크 함수
@@ -2039,10 +2015,8 @@ templatefile("config.tpl", {
 ```
 1) cidrsubnet(base_cidr_block, new_bits, net_num)
  # 상위 CIDR 블록을 더 작은 서브넷으로 분할한다.
-```
 
 예제
-```
 cidrsubnet("10.0.0.0/16", 8, 1)
 ```
 
@@ -2054,6 +2028,7 @@ cidrsubnet("10.0.0.0/16", 8, 1)
 - 결과 : 10.0.1.0/24
 
 사용 예
+
 ```hcl
 resource "aws_subnet" "example" {
   count      = 3
@@ -2066,13 +2041,15 @@ resource "aws_subnet" "example" {
 ```
 2) cidrhost(cidr_block, host_num)
  # CIDR 블록 내부에서 특정 호스트 번호에 해당하는 IP를 반환한다.
-```
 
 예제
+```
+
 - cidrhost("10.0.0.0/24", 5)
 - 결과 : 10.0.0.5
 
 사용 예
+
 ```hcl
 locals {
   db_ip = cidrhost(var.subnet_cidr, 10)
@@ -2125,8 +2102,9 @@ locals {
 - 모든 구성은 블록 안에서 정의된다.
 
 - 기본 형태는
-```
 블록타입 "라벨1" "라벨2" {
+
+```hcl
     key = value
 }
 ```
@@ -2172,7 +2150,8 @@ resource "aws_instance" "web" {
 - 블록 내부는 모두 key = value 형태로 구성된다.
 
 - 예를 들어:
-```
+
+```hcl
 region = "us-west-2"
 instance_type = "t3.micro"
 ```
@@ -2193,6 +2172,7 @@ instance_type = "t3.micro"
   - // 이것도 한 줄 주석입니다
 
 - 여러 줄 주석은 /* */ 로 감싼다.
+
 ```
 /*
 이것은 여러 줄 주석입니다.
@@ -2260,7 +2240,6 @@ instance_type = "t3.micro"
 
 - 일반적인 프로젝트 구조
 
-```
 my-terraform-project/
 │
 ├── main.tf
@@ -2271,7 +2250,6 @@ my-terraform-project/
 ├── versions.tf
 ├── terraform.tfstate
 └── .terraform.lock.hcl
-```
 
 - 이 파일들이 하나의 프로젝트를 구성한다.
 
@@ -2284,12 +2262,10 @@ my-terraform-project/
 - 개발 환경은 비용 절감을 위해 작은 인스턴스를 사용할 수 있다.
 - 그래서 보통 다음과 같이 디렉토리를 구성한다.
 
-```
 my-terraform-project/
 ├── dev/
 ├── test/
 └── production/
-```
 
 각 환경 폴더 안에 main.tf, variables.tf, outputs.tf 등을 둔다.
 이렇게 하면 환경 간 설정이 섞이지 않는다.
@@ -2341,9 +2317,7 @@ terraform {
     }
   }
 }
-```
 
-```hcl
 provider "aws" {
   region = "us-east-1"
 }
@@ -2417,10 +2391,10 @@ provider "aws" {
 그래서 실무에서는 인증 정보를 다음과 같은 방식으로 제공한다.
 
 - 첫 번째 방법은 환경 변수 방식이다.
+
 ```
 export AWS_ACCESS_KEY_ID="your-access-key-id"
 export AWS_SECRET_ACCESS_KEY="your-secret-access-key"
-```
 
 Terraform은 실행 시 환경 변수를 자동으로 읽는다.
 
@@ -2429,6 +2403,7 @@ Terraform은 실행 시 환경 변수를 자동으로 읽는다.
 aws configure 명령어로 설정하면
 ~/.aws/credentials 파일에 인증 정보가 저장된다.
 Terraform은 이 파일을 자동으로 참조한다.
+```
 
 - 실무에서는 절대 코드에 키를 직접 작성하지 않는다.
 - 이건 보안 기본 원칙이다.
@@ -2449,9 +2424,7 @@ Terraform은 이 파일을 자동으로 참조한다.
 provider "aws" {
   region = "ap-northeast-2"
 }
-```
 
-```hcl
 provider "google" {
   project = "my-gcp-project"
   region  = "asia-northeast1"
@@ -2630,6 +2603,7 @@ provider "aws" {
   - 이 파일이 있어야 Terraform은 이미 존재하는 리소스인지 새로 생성해야 하는지 판단할 수 있다.
 
 예를 들어 S3를 backend로 사용하는 경우:
+
 ```hcl
 terraform {
   backend "s3" {
@@ -2638,9 +2612,10 @@ terraform {
     region = "us-east-1"
   }
 }
-```
 
 실무에서는 반드시 remote backend를 사용한다.
+```
+
 - 왜냐하면 팀 협업 시 로컬 tfstate는 충돌을 일으키기 때문이다.
 
 #### resource 블록 (가장 많이 사용하는 블록)
@@ -2648,6 +2623,7 @@ terraform {
 - resource 블록은 실제 인프라를 생성하는 블록이며 Terraform에서 가장 중요한 블록중 하나이다.
 
 예:
+
 ```hcl
 resource "aws_instance" "example" {
   ami           = "ami-0c55b159cbfafe1f0"
@@ -2670,6 +2646,7 @@ resource "aws_instance" "example" {
 - 즉, 생성이 아니라 조회다.
 
 예:
+
 ```hcl
 data "aws_ami" "al2023" {
   most_recent = true
@@ -2698,6 +2675,7 @@ data "aws_ami" "al2023" {
 - Terraform 코드를 재사용 가능하게 만드는 핵심 요소다.
 
 예:
+
 ```hcl
 variable "instance_type" {
   description = "The type of instance to create"
@@ -2724,6 +2702,7 @@ variable "instance_type" {
 - locals 블록은 프로젝트 내부 계산용 변수다. (외부 입력을 받지 않는다.)
 
 예:
+
 ```hcl
 locals {
   instance_name = "my-instance"
@@ -2740,6 +2719,7 @@ locals {
 output 블록은 Terraform 실행 후 결과를 출력하는 블록이다.
 
 예:
+
 ```hcl
 output "instance_ip" {
   description = "The public IP of the EC2 instance"
@@ -2777,27 +2757,18 @@ variable "filename" {
   type        = string
   default     = "test.txt"
 }
-```
 
-#### main.tf
-
-#### local_file     = 로컬 PC에 파일을 생성하는 테라폼 리소스
-
-#### ${path.module} = 현재 main.tf 파일의 위치
-
-#### var.filename   = variables.tf의 filename을 사용
-
-```hcl
+# main.tf
+# local_file     = 로컬 PC에 파일을 생성하는 테라폼 리소스
+# ${path.module} = 현재 main.tf 파일의 위치
+# var.filename   = variables.tf의 filename을 사용
 resource "local_file" "examplefile" {
   # C:/trf/HCL_02_block/test.txt
   filename = "${path.module}/${var.filename}"
   content  = "이것은 첫번째 테라폼 HCL 실습입니다."
 }
-```
 
-#### outputs.tf
-
-```hcl
+# outputs.tf
 output "file_path" {
   value = local_file.example.filename
 }
@@ -2808,50 +2779,39 @@ output "file_path" {
 - main.tf에서 resource를 만드는데 resource 이름은 local_file이고 path.module는 해당 모듈을 경로를 의미한다.
 
 - var.filename은 test.txt를 의미한다. 테라폼 실행시 file_path를 출력하는데
-```
- filename = "${path.module}/${var.filename}" 이 값을 출력한다.
-```
+filename = "${path.module}/${var.filename}" 이 값을 출력한다.
 
-```bash
+```powershell
 PS C:\terrform\HCL-01-block> terraform init
 Initializing the backend...
 Initializing provider plugins...
-```
-
 - Finding latest version of hashicorp/local...
 - Installing hashicorp/local v2.7.0...
 - Installed hashicorp/local v2.7.0 (signed by HashiCorp)
 Terraform has created a lock file .terraform.lock.hcl to record the provider
 selections it made above. Include this file in your version control repository
 so that Terraform can guarantee to make the same selections by default when
-```
 you run "terraform init" in the future.
-```
 
 Terraform has been successfully initialized!
 
-```
 You may now begin working with Terraform. Try running "terraform plan" to see
 any changes that are required for your infrastructure. All Terraform commands
 should now work.
-```
 
 If you ever set or change modules or backend configuration for Terraform,
 rerun this command to reinitialize your working directory. If you forget, other
 commands will detect it and remind you to do so if necessary.
 
-```bash
 PS C:\terrform\HCL-01-block> terraform plan
-```
 
 Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the
 following symbols:
-+ create
+  + create
 
 Terraform will perform the following actions:
 
-  - local_file.example will be created
-```
+  # local_file.example will be created
   + resource "local_file" "example" {
       + content              = "Hello, Terraform world"
       + content_base64sha256 = (known after apply)
@@ -2860,25 +2820,19 @@ Terraform will perform the following actions:
       + content_sha1         = (known after apply)
 ~~~~~~~~~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~~~~~~~~~
 Plan: 1 to add, 0 to change, 0 to destroy.
-```
 
 Changes to Outputs:
-```
   + file_path = "./test.txt"
-```
 
-```bash
 PS C:\terrform\HCL-01-block> terraform plan
-```
 
 Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the
 following symbols:
-+ create
+  + create
 
 Terraform will perform the following actions:
 
-  - local_file.example will be created
-```
+  # local_file.example will be created
   + resource "local_file" "example" {
       + content              = "Hello, Terraform world"
       + content_base64sha256 = (known after apply)
@@ -2889,20 +2843,16 @@ Terraform will perform the following actions:
 Do you want to perform these actions?
   Terraform will perform the actions described above.
   Only 'yes' will be accepted to approve.
-```
 
-Enter a value: yes
+  Enter a value: yes
 
 local_file.example: Creating...
-```
 local_file.example: Creation complete after 0s [id=ed3aadfcef97002b59247a6949c4b1f47dfdc83c]
-```
 
 Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
 
 Outputs:
 
-```
 file_path = "./test.txt"
 ```
 
@@ -2918,31 +2868,28 @@ file_path = "./test.txt"
 
 #### terraform.tfvars (파일 생성)
 
-```
-filename = "terraform-text-file.txt"
-```
-
-#### varials.tf
-
 ```hcl
+filename = "terraform-text-file.txt"
+
+# varials.tf
 variable "filename" {
   description = "파일 이름 변수"
   type        = string
   default     = "test.txt"# 파일명이 있기 때문에 default가 적용되지 않는다.
 }
-```
 
-```bash
 PS C:\terrform\HCL-01-block> terraform apply
-```
 
 Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the
 following symbols:
-+ create
+  + create
 ~~~~~~~~~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~~~~~~~~~
-  - local_file.example must be replaced
-- /+ resource "local_file" "example" {
+  # local_file.example must be replaced
 ```
+
+- /+ resource "local_file" "example" {
+
+```hcl
       ~ content_base64sha256 = "Am2MpNqYX0mYpnPdcHkKyBC2Q06frKlYiEvUhUvv0Y4=" -> (known after apply)
       ~ content_base64sha512 = "bh/ZhMQaTsE7k4YOytvwjO3yCgajTOLbo34E9eD1+IN8cSXTxQNiaCt76uEfD4azmgyB7YH4XKi/jM8u4XAiLA==" -> (known after apply)
       ~ content_md5          = "c950cad8429f0a17f123456789012a6d" -> (known after apply)
@@ -2953,54 +2900,44 @@ following symbols:
       ~ id                   = "ed3aadfcef97002b59247a6949c4b1f47dfdc83c" -> (known after apply)
         # (3 unchanged attributes hidden)
     }
-```
 
 Plan: 1 to add, 0 to change, 1 to destroy.# 1개가 추가되고 1개가 삭제된다.
 
 Changes to Outputs:
-```bash
   ~ file_path = "./test.txt" -> "./terraform-text-file.txt"
 PS C:\terrform\HCL-01-block> terraform apply
-```
 
 Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the
 following symbols:
-+ create
+  + create
 
 Terraform will perform the following actions:
 ~~~~~~~~~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~~~~~~~~~
-```
       ~ filename             = "./test.txt" -> "./terraform-text-file.txt" # forces replacement
       ~ id                   = "ed3aadfcef97002b59247a6949c4b1f47dfdc83c" -> (known after apply)
         # (3 unchanged attributes hidden)
     }
-```
 
 Plan: 1 to add, 0 to change, 1 to destroy.
 
 Changes to Outputs:
-```
   ~ file_path = "./test.txt" -> "./terraform-text-file.txt"
-```
 
 Do you want to perform these actions?
-Terraform will perform the actions described above.
-Only 'yes' will be accepted to approve.
+  Terraform will perform the actions described above.
+  Only 'yes' will be accepted to approve.
 
-Enter a value: yes
+  Enter a value: yes
 
-```
 local_file.example: Destroying... [id=ed3aadfcef97002b59247a6949c4b1f47dfdc83c]
 local_file.example: Destruction complete after 0s
 local_file.example: Creating...
 local_file.example: Creation complete after 0s [id=ed3aadfcef97002b59247a6949c4b1f47dfdc83c]
-```
 
 Apply complete! Resources: 1 added, 0 changed, 1 destroyed.
 
 Outputs:
 
-```
 file_path = "./terraform-text-file.txt"
 ```
 
@@ -3008,35 +2945,31 @@ file_path = "./terraform-text-file.txt"
 
 ![이미지](assets/03-terraform-hcl/6.png)
 
-```bash
+```powershell
 PS C:\terrform\HCL-01-block> terraform destroy -auto-approve
 local_file.example: Refreshing state... [id=ed3aadfcef97002b59247a6949c4b1f47dfdc83c]
-```
 
 Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the
 following symbols:
-- destroy
+  - destroy
 
 Terraform will perform the following actions:
 ~~~~~~~~~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~~~~~~~~~
-- directory_permission = "0777" -> null
-- file_permission      = "0777" -> null
-- filename             = "./terraform-text-file.txt" -> null
-- id                   = "ed3aadfcef97002b59247a6949c4b1f47dfdc83c" -> null
-```
+      - directory_permission = "0777" -> null
+      - file_permission      = "0777" -> null
+      - filename             = "./terraform-text-file.txt" -> null
+      - id                   = "ed3aadfcef97002b59247a6949c4b1f47dfdc83c" -> null
     }
-```
 
 Plan: 0 to add, 0 to change, 1 to destroy.
 
 Changes to Outputs:
-- file_path = "./terraform-text-file.txt" -> null
-```
+  - file_path = "./terraform-text-file.txt" -> null
 local_file.example: Destroying... [id=ed3aadfcef97002b59247a6949c4b1f47dfdc83c]
 local_file.example: Destruction complete after 0s
-```
 
 Destroy complete! Resources: 1 destroyed.
+```
 
 #### Terraform 데이터 타입
 
@@ -3108,9 +3041,9 @@ variable "public_subnet_count" {
   type    = number
   default = 2
 }
-```
 
 - public_subnet_count는 숫자 값이므로 number 타입을 사용한다.
+```
 
   - 3) bool
 
@@ -3144,7 +3077,8 @@ variable "public_subnet_count" {
   - 중복 값을 허용한다.
 
 - 예:
-```
+
+```hcl
 availability_zones = [
   "ap-northeast-2a",
   "ap-northeast-2c"
@@ -3183,7 +3117,8 @@ availability_zones = [
   - 여러 설정 값을 이름과 함께 관리할 수 있다.
 
 - 예:
-```
+
+```hcl
 instance_type = {
   dev  = "t3.micro"
   prod = "m5.large"
@@ -3200,7 +3135,8 @@ instance_type = {
 - map과 달리 각각의 속성에 서로 다른 데이터 타입을 지정할 수 있다.
 
 - 예:
-```
+
+```hcl
 object({
   name      = string
   instance_type = string
@@ -3209,7 +3145,8 @@ object({
 ```
 
 - 값:
-```
+
+```hcl
 {
   name      = "web-server"
   instance_type= "t3.micro"
@@ -3267,6 +3204,7 @@ object
 #### 실제 변수 선언 예제
 
 - 문자열 변수
+
 ```hcl
 variable "instance_type" {
   description= "사용할 인스턴스 타입"
@@ -3278,6 +3216,7 @@ variable "instance_type" {
 - 이 변수는 EC2, EKS node group, ASG에 그대로 전달 가능하다.
 
 - 숫자 변수
+
 ```hcl
 variable "file_count" {
   type    = number
@@ -3288,6 +3227,7 @@ variable "file_count" {
 - count와 연결 가능하다.
 
 - bool 변수
+
 ```hcl
 variable "create_files" {
   type    = bool
@@ -3298,15 +3238,16 @@ variable "create_files" {
 - 조건문에서 사용 가능하다.
 
 - list(string) 변수
+
 ```hcl
 variable "file_names" {
   type = list(string)
 }
+count.index와 연결 가능하다.
 ```
 
-count.index와 연결 가능하다.
-
 - map(string) 변수
+
 ```hcl
 variable "file_contents" {
   type = map(string)
@@ -3316,6 +3257,7 @@ variable "file_contents" {
 - 키 기반 접근 가능하다.
 
 - object 변수
+
 ```hcl
 variable "server_config" {
   type = object({
@@ -3359,81 +3301,58 @@ variable "instances" {
 
 #### 변수 실습
 
-#### variables.tf
-
-#### 기본 데이터 변수 (문자열)
-
 ```hcl
+# variables.tf
+# 기본 데이터 변수 (문자열)
 variable "instance-type" {
   description = "use instance type"
   type        = string
   default     = "t3.micro"
 }
-```
 
-#### 기본 데이터 변수 (숫자)
-
-```hcl
+# 기본 데이터 변수 (숫자)
 variable "file_count" {
   default    = "생성할 파일 개수"
   type       = number
   deprecated = 3
 }
-```
 
-#### 기본 데이터 변수 (논리형)
-
-```hcl
+# 기본 데이터 변수 (논리형)
 variable "create_file" {
   description = "파일 생성 유/무"
   type        = bool
   default     = false
 }
-```
 
-#### 복합 데이터 변수 (list, 문자)
-
-```hcl
+# 복합 데이터 변수 (list, 문자)
 variable "file_name" {
   description = "생성할 파일 목록"
   type        = list(string)
   default     = ["web", "db", "api", "web"]
 }
-```
 
-#### 복합 데이터 변수 (list, 숫자)
-
-```hcl
+# 복합 데이터 변수 (list, 숫자)
 variable "score" {
   description = "점수"
   type        = list(number)
   default     = [10, 20, 30, 40, 50]
 }
-```
 
-#### 복합 데이터 변수 (set, 문자)
-
-```hcl
+# 복합 데이터 변수 (set, 문자)
 variable "set_list" {
   description = "set 목록"
   type        = set(string)
   default     = ["web", "db", "api", "web"]
 }
-```
 
-#### 복합 데이터 변수 (set, 숫자)
-
-```hcl
+# 복합 데이터 변수 (set, 숫자)
 variable "set_lotto" {
   description = "로또 번호"
   type        = set(number)
   default     = [1, 45, 22, 42, 19, 22, 19, 6]
 }
-```
 
-#### 복합 데이터 변수 (map)
-
-```hcl
+# 복합 데이터 변수 (map)
 variable "instance_tag" {
   description = "instance tag"
   type        = map(string)
@@ -3444,11 +3363,8 @@ variable "instance_tag" {
     "file4.txt" = "this is file 4"
   }
 }
-```
 
-#### 복합 데이터 변수 (Object)
-
-```hcl
+# 복합 데이터 변수 (Object)
 variable "server_config" {
   description = "Server Config File"
   type = object({
@@ -3466,27 +3382,22 @@ variable "server_config" {
     }
   }
 }
-```
 
-#### 값 가져오기
+# 값 가져오기
+# var.serve_config["name"]
+# var.serve_config["instance_type"]
+# var.serve_config["disk_size"]
 
-#### var.serve_config["name"]
-
-#### var.serve_config["instance_type"]
-
-#### var.serve_config["disk_size"]
-
-#### tuple 변수
-
-```hcl
+# tuple 변수
 variable "file_detail" {
   description= "파일의 이름, 크기, 생성 여부"
   type        = tuple([string, number, bool])
   default     = ["file1.txt", 20, true]
 }
+
+   # main.tf
 ```
 
-  - main.tf
 - resource "local_file" "name" {} : Terraform으로 내 로컬 컴퓨터에 파일을 생성하는 리소스
 
 ```hcl
@@ -3495,30 +3406,22 @@ resource "local_file" "example" {
   filename = "${path.module}/file${count.index + 1}.txt"
   content  = "Hello Terraform ${count.index + 1}"
 }
-```
 
-  - ouput.tf
-```hcl
+   #　ouput.tf
 output "file_path" {
   value = local_file.my_file[*].filename
 }
-```
 
-```bash
 PS C:\terrform\HCL-02-data-type> terraform init
-```
 
-```bash
 PS C:\terrform\HCL-02-data-type> terraform plan
-```
 
 Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
-+ create
+  + create
 
 Terraform will perform the following actions:
 
-  - local_file.my_file[0] will be created
-```
+  # local_file.my_file[0] will be created
   + resource "local_file" "my_file" {
       + content              = "Hello TerraForm 1"
       + content_base64sha256 = (known after apply)
@@ -3532,13 +3435,10 @@ Terraform will perform the following actions:
       + filename             = "./file1.txt"
       + id                   = (known after apply)
     }
-```
-
 ~~~~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~~~~
 Plan: 3 to add, 0 to change, 0 to destroy.
 
 Changes to Outputs:
-```
   + file_path = [
       + "./file1.txt",
       + "./file2.txt",
@@ -3546,22 +3446,18 @@ Changes to Outputs:
     ]
 ─────────────────────────────────────────────────────────
 Note: You didn't use the -out option to save this plan, so Terraform can't guarantee to take exactly these actions if you run "terraform apply" now.
-```
 
-```bash
 PS C:\terrform\HCL-02-data-type> terraform apply
 local_file.example[1]: Refreshing state... [id=4b12046facfee0eca1fa3d1910c4c5baad3e660f]
 local_file.example[0]: Refreshing state... [id=c6e077a4ccaf1a7f3a709f164f6973afa86b168b]
 local_file.example[2]: Refreshing state... [id=48e898a73eb526daf9f900462bc95a874cf3c051]
-```
 
 Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the
 following symbols:
-+ create
+  + create
 Terraform will perform the following actions:
 ~~~~~~~~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~~~~~~~~
-  - local_file.example[2] will be created
-```
+  # local_file.example[2] will be created
   + resource "local_file" "example" {
       + content              = "Hello Terraform 3"
       + content_base64sha256 = (known after apply)
@@ -3576,31 +3472,29 @@ Terraform will perform the following actions:
       + id                   = (known after apply)
     }
 Plan: 3 to add, 0 to change, 0 to destroy.
-```
 
 Do you want to perform these actions?
-Terraform will perform the actions described above.
-Only 'yes' will be accepted to approve.
+  Terraform will perform the actions described above.
+  Only 'yes' will be accepted to approve.
 
-Enter a value: yes
+  Enter a value: yes
 
-```
 local_file.example[2]: Creating...
 local_file.example[0]: Creating...
 local_file.example[1]: Creating...
 local_file.example[2]: Creation complete after 0s [id=d58ee4c45f7554bee97749269dc6e1012da9b129]
 local_file.example[0]: Creation complete after 0s [id=a08859acde39c44859eb1a04345289af8637ab46]
 local_file.example[1]: Creation complete after 0s [id=9f208f64a66e0644684e1cf62f50636715ceeca0]
-```
 
 Apply complete! Resources: 3 added, 0 changed, 0 destroyed.
+```
+
 - file1, file2, file3이 생성되고 파일안에 값이 확인된다.
 
 ![이미지](assets/03-terraform-hcl/7.png)
 
-#### main.tf
-
 ```hcl
+# main.tf
 resource "local_file" "example" {
   count = var.create_file ? var.file_count : 0
   # filename = var.file_name[0]
@@ -3609,23 +3503,23 @@ resource "local_file" "example" {
   filename = var.file_name[count.index]
   content  = var.file_contents[var.file_name[count.index]]
 }
-```
 
-```bash
 PS C:\terrform\HCL-02-data-type> terraform plan
 local_file.example[0]: Refreshing state... [id=a08859acde39c44859eb1a04345289af8637ab46]
 local_file.example[1]: Refreshing state... [id=9f208f64a66e0644684e1cf62f50636715ceeca0]
 local_file.example[2]: Refreshing state... [id=d58ee4c45f7554bee97749269dc6e1012da9b129]
-```
 
 Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the
 following symbols:
+```
+
 - /+ destroy and then create replacement
 
 Terraform will perform the following actions:
 ~~~~~~~~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~~~~~~~~
   - local_file.example[2] must be replaced
 - /+ resource "local_file" "example" {
+
 ```
       ~ content              = "Hello Terraform 3" -> "this is file 3" # forces replacement
       ~ content_base64sha256 = "bmt4FXaEd6gEEs7mIttGqgCLormYT82uISVCvMWj8vs=" -> (known after apply)
@@ -3633,26 +3527,23 @@ Terraform will perform the following actions:
       ~ content_md5          = "0bcbd0649a2cf5726aa4cafea13d9fa5" -> (known after apply)
       ~ content_sha1         = "d58ee4c45f7554bee97749269dc6e1012da9b129" -> (known after apply)
       ~ content_sha256       = "6e6b7815768477a80412cee622db46aa008ba2b9984fcdae212542bcc5a3f2fb" ->
-```
 
 Plan: 3 to add, 0 to change, 3 to destroy.# 3개 생성 , 3개 삭제
 
 ────────────────────────────────────────────────────────
 
 Note: You didn't use the -out option to save this plan, so Terraform can't guarantee to take exactly these actions if
-```
 you run "terraform apply" now.
-```
 
-```bash
 PS C:\terrform\HCL-02-data-type> terraform apply
 local_file.example[2]: Refreshing state... [id=d58ee4c45f7554bee97749269dc6e1012da9b129]
 local_file.example[0]: Refreshing state... [id=a08859acde39c44859eb1a04345289af8637ab46]
 local_file.example[1]: Refreshing state... [id=9f208f64a66e0644684e1cf62f50636715ceeca0]
-```
 
 Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the
 following symbols:
+```
+
 - /+ destroy and then create replacement
 ~~~~~~~~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~~~~~~~~
 Plan: 3 to add, 0 to change, 3 to destroy.
@@ -3676,119 +3567,98 @@ local_file.example[2]: Creating...
 local_file.example[1]: Creation complete after 0s [id=4b12046facfee0eca1fa3d1910c4c5baad3e660f]
 local_file.example[0]: Creation complete after 0s [id=c6e077a4ccaf1a7f3a709f164f6973afa86b168b]
 local_file.example[2]: Creation complete after 0s [id=48e898a73eb526daf9f900462bc95a874cf3c051]
-```
 
 Apply complete! Resources: 3 added, 0 changed, 3 destroyed.
+```
 
 - file1, file2, file3이 생성되고 파일안에 값이 확인된다.
 
 ![이미지](assets/03-terraform-hcl/7.png)
 
-#### variables.tf
-
-#### 기본 데이터 변수
-
-#### 문자열 변수
-
 ```hcl
+# variables.tf
+# 기본 데이터 변수
+# 문자열 변수
 variable "instance_type" {
   description = "use instance type"
   type        = string
   default     = "t3.micro"
 }
-```
 
-#### 숫자 변수
-
-```hcl
+# 숫자 변수
 variable "file_count" {
   description = "생성할 파일 개수"
   type        = number
   default     = 3
 }
-```
 
-#### boolean 변수
-
-```hcl
+# boolean 변수
 variable "create_file" {
   description = "파일 생성 여부"
   type        = bool
   default     = false
 }
-```
-
 ~~~~~~~~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~~~~~~~~
 
-```bash
 PS C:\terrform\HCL-02-data-type> terraform plan
-```
-
 ~~~~~~~~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~~~~~~~
-  - local_file.example[2] will be destroyed
-  - (because index [2] is out of range for count)
-- resource "local_file" "example" {
-- content              = "this is file 3" -> null
-- content_base64sha256 = "SJxtRGMBhUg5z5fu/O+peJs5cA3lgBskUJw3RDj77PM=" -> null
-- content_base64sha512 = "P+PojtfQR+dDNUASd1Dywa4ZB3Wl0x7FONF1U3Y5NSA6aM/tTgb9G/dmhciMygeXvd5O6N8D8UTnSw6uxhHWZw==" -> null
-- content_md5          = "51d56a38185b0135590662284982492c" -> null
-- content_sha1         = "48e898a73eb526daf9f900462bc95a874cf3c051" -> null
-- content_sha256       = "489c6d123456789012cf97eefcefa9789b39700de5801b24509c374438fbecf3" -> null
-- content_sha512       = "3fe3e88ed7d047e7433540127750f2c1ae190775a5d31ec538d17553763935203a68cfed4e06fd1bf76685c88cca0797bdde4ee8df03f144e74b0eaec611d667" -> null
-- directory_permission = "0777" -> null
-- file_permission      = "0777" -> null
-- filename             = "file3.txt" -> null
-- id                   = "48e898a73eb526daf9f900462bc95a874cf3c051" -> null
-```
+  # local_file.example[2] will be destroyed
+  # (because index [2] is out of range for count)
+  - resource "local_file" "example" {
+      - content              = "this is file 3" -> null
+      - content_base64sha256 = "SJxtRGMBhUg5z5fu/O+peJs5cA3lgBskUJw3RDj77PM=" -> null
+      - content_base64sha512 = "P+PojtfQR+dDNUASd1Dywa4ZB3Wl0x7FONF1U3Y5NSA6aM/tTgb9G/dmhciMygeXvd5O6N8D8UTnSw6uxhHWZw==" -> null
+      - content_md5          = "51d56a38185b0135590662284982492c" -> null
+      - content_sha1         = "48e898a73eb526daf9f900462bc95a874cf3c051" -> null
+      - content_sha256       = "489c6d123456789012cf97eefcefa9789b39700de5801b24509c374438fbecf3" -> null
+      - content_sha512       = "3fe3e88ed7d047e7433540127750f2c1ae190775a5d31ec538d17553763935203a68cfed4e06fd1bf76685c88cca0797bdde4ee8df03f144e74b0eaec611d667" -> null
+      - directory_permission = "0777" -> null
+      - file_permission      = "0777" -> null
+      - filename             = "file3.txt" -> null
+      - id                   = "48e898a73eb526daf9f900462bc95a874cf3c051" -> null
     }
-```
 
 Plan: 0 to add, 0 to change, 3 to destroy.
 
-```bash
 PS C:\terrform\HCL-02-data-type> terraform apply
 local_file.example[0]: Refreshing state... [id=c6e077a4ccaf1a7f3a709f164f6973afa86b168b]
 local_file.example[1]: Refreshing state... [id=4b12046facfee0eca1fa3d1910c4c5baad3e660f]
 local_file.example[2]: Refreshing state... [id=48e898a73eb526daf9f900462bc95a874cf3c051]
-```
 
 Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the
 following symbols:
-- destroy
+  - destroy
 
 Terraform will perform the following actions:
 
 ~~~~~~~~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~~~~~~~
-- content_md5          = "51d56a38185b0135590662284982492c" -> null
-- content_sha1         = "48e898a73eb526daf9f900462bc95a874cf3c051" -> null
-- content_sha256       = "489c6d123456789012cf97eefcefa9789b39700de5801b24509c374438fbecf3" -> null
-- content_sha512       = "3fe3e88ed7d047e7433540127750f2c1ae19077503f144e74b0eaec611d667" -> null
-- directory_permission = "0777" -> null
-- file_permission      = "0777" -> null
-- filename             = "file3.txt" -> null
-- id                   = "48e898a73eb526daf9f900462bc95a874cf3c051" -> null
-```
+      - content_md5          = "51d56a38185b0135590662284982492c" -> null
+      - content_sha1         = "48e898a73eb526daf9f900462bc95a874cf3c051" -> null
+      - content_sha256       = "489c6d123456789012cf97eefcefa9789b39700de5801b24509c374438fbecf3" -> null
+      - content_sha512       = "3fe3e88ed7d047e7433540127750f2c1ae19077503f144e74b0eaec611d667" -> null
+      - directory_permission = "0777" -> null
+      - file_permission      = "0777" -> null
+      - filename             = "file3.txt" -> null
+      - id                   = "48e898a73eb526daf9f900462bc95a874cf3c051" -> null
     }
-```
 
 Plan: 0 to add, 0 to change, 3 to destroy.
 
 Do you want to perform these actions?
-Terraform will perform the actions described above.
-Only 'yes' will be accepted to approve.
+  Terraform will perform the actions described above.
+  Only 'yes' will be accepted to approve.
 
-Enter a value: yes
+  Enter a value: yes
 
-```
 local_file.example[0]: Destroying... [id=c6e077a4ccaf1a7f3a709f164f6973afa86b168b]
 local_file.example[1]: Destroying... [id=4b12046facfee0eca1fa3d1910c4c5baad3e660f]
 local_file.example[2]: Destroying... [id=48e898a73eb526daf9f900462bc95a874cf3c051]
 local_file.example[1]: Destruction complete after 0s
 local_file.example[2]: Destruction complete after 0s
 local_file.example[0]: Destruction complete after 0s
-```
 
 Apply complete! Resources: 0 added, 0 changed, 3 destroyed.
+```
 
 - file1, file2, file3이 모두 삭제되어 확인되지 않는다.
 
@@ -3796,22 +3666,16 @@ Apply complete! Resources: 0 added, 0 changed, 3 destroyed.
 
 #### output.tf 출력
 
-#### variables.tf
-
-~~~~~~~~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~~~~~~~
-
-#### boolean 변수
-
 ```hcl
+# variables.tf
+~~~~~~~~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~~~~~~~
+# boolean 변수
 variable "create_file" {
   description = "파일 생성 여부"
   type        = bool
   default     = true
 }
-```
-
 ~~~~~~~~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~~~~~~~
-```hcl
 resource "local_file" "example" {
   count    = var.create_file ? var.file_count : 0
 # tuple 변수
@@ -3820,34 +3684,23 @@ variable "file_detail" {
   type        = tuple([string, number, bool])
   default     = ["file1.txt", 20, true]
 }
-```
 
-  - outputstf
-
-#### 출력 : 생성된 파일 경로와 튜플 변수 출력
-
-```hcl
+   # outputstf
+# 출력 : 생성된 파일 경로와 튜플 변수 출력
 output "file_path" {
   value = local_file.example[*].filename# 생성되는 파일 이름 출력
 }
-```
 
-```hcl
 output "file_detail" {
   value = var.file_detail# 튜플값이 없기 때문에 default 값이 출력된다.
 }
-```
 
-```bash
 PS C:\terrform\HCL-02-data-type> terraform plan
-```
-
 ~~~~~~~~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~~~~~~~
 
 Plan: 3 to add, 0 to change, 0 to destroy.
 
 Changes to Outputs:
-```
   + file_detail = [
       + "file1.txt",
       + 20,
@@ -3858,11 +3711,8 @@ Changes to Outputs:
       + "file2.txt",
       + "file3.txt",
     ]
-```
 
-```bash
 PS C:\terrform\HCL-02-data-type> terraform apply
-```
 
 ~~~~~~~~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~~~~~~~
 
@@ -3870,7 +3720,6 @@ Apply complete! Resources: 3 added, 0 changed, 0 destroyed.
 
 Outputs:
 
-```
 file_detail = [
   "file1.txt",
   20,
@@ -3885,29 +3734,24 @@ file_path = [
 
 - terraform destroy -auto-approve는 Terraform이 관리 중인 리소스를 삭제하면서 확인 질문을 생략하는 명령어
 
-```bash
+```powershell
 PS C:\terrform\HCL-02-data-type> terraform destroy -auto-approve
 local_file.example[0]: Refreshing state... [id=c6e077a4ccaf1a7f3a709f164f6973afa86b168b]
 local_file.example[2]: Refreshing state... [id=48e898a73eb526daf9f900462bc95a874cf3c051]
 local_file.example[1]: Refreshing state... [id=4b12046facfee0eca1fa3d1910c4c5baad3e660f]
-```
 
 ~~~~~~~~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~~~~~~~
 
 Changes to Outputs:
-- file_detail = [
-- "file1.txt",
-- 20,
-- true,
-```
+  - file_detail = [
+      - "file1.txt",
+      - 20,
+      - true,
     ] -> null
   - file_path   = [
-```
-
-- "file1.txt",
-- "file2.txt",
-- "file3.txt",
-```
+      - "file1.txt",
+      - "file2.txt",
+      - "file3.txt",
     ] -> null
 local_file.example[1]: Destroying... [id=4b12046facfee0eca1fa3d1910c4c5baad3e660f]
 local_file.example[0]: Destroying... [id=c6e077a4ccaf1a7f3a709f164f6973afa86b168b]
@@ -3915,9 +3759,9 @@ local_file.example[2]: Destroying... [id=48e898a73eb526daf9f900462bc95a874cf3c05
 local_file.example[0]: Destruction complete after 0s
 local_file.example[1]: Destruction complete after 0s
 local_file.example[2]: Destruction complete after 0s
-```
 
 Destroy complete! Resources: 3 destroyed.
+```
 
 #### Terraform 명령어
 
@@ -3947,7 +3791,7 @@ Destroy complete! Resources: 3 destroyed.
   - 7 .terraform.lock.hcl 파일을 생성한다.
   - 즉, init은 환경 준비 단계다.
 
-```bash
+```powershell
 PS C:\terrform> terraform init
 ```
 
@@ -3972,7 +3816,7 @@ PS C:\terrform> terraform init
   - ~ modify
   - destroy
 
-```bash
+```powershell
 PS C:\terrform> terraform plan
 ```
 
@@ -3992,7 +3836,7 @@ PS C:\terrform> terraform plan
   - 3 클라우드 API 호출
   - 4 상태 파일 업데이트
 
-```bash
+```powershell
 PS C:\terrform> terraform apply
 PS C:\terrform> terraform apply -auto-approve# 자동 승인
 ```
@@ -4005,12 +3849,11 @@ PS C:\terrform> terraform apply -auto-approve# 자동 승인
 
 - 현재 상태 파일에 정의된 모든 리소스를 삭제한다.
 
-```bash
+```powershell
 PS C:\terrform> terraform destroy
 PS C:\terrform> terraform destroy -auto-approve# 자동 승인
-```
-
 실무 관점
+```
 
 - 테스트 환경 정리
 - 비용 절감 목적
@@ -4021,7 +3864,7 @@ PS C:\terrform> terraform destroy -auto-approve# 자동 승인
 
 - 현재 상태 파일(tfstate)의 내용을 출력한다.
 
-```bash
+```powershell
 PS C:\terrform> terraform show
 ```
 
@@ -4035,7 +3878,7 @@ PS C:\terrform> terraform show
 
 - output 블록에 정의된 값만 출력한다.
 
-```bash
+```powershell
 PS C:\terrform> terraform output
 PS C:\terrform> terraform output instance_ip
 ```
@@ -4050,7 +3893,7 @@ PS C:\terrform> terraform output instance_ip
 
 - 코드 문법과 내부 구조가 올바른지 검사한다.
 
-```bash
+```powershell
 PS C:\terrform> terraform validate
 ```
 
@@ -4064,7 +3907,7 @@ PS C:\terrform> terraform validate
 
 - 코드를 자동 정렬한다.
 
-```bash
+```powershell
 PS C:\terrform> terraform fmt
 ```
 
@@ -4092,7 +3935,7 @@ PS C:\terrform> terraform fmt
 
 - 이미 존재하는 리소스를 Terraform 관리 대상으로 가져온다.
 
-```bash
+```powershell
 PS C:\terrform> terraform import aws_instance.example i-1234567890abcdef0
 ```
 
@@ -4105,7 +3948,7 @@ PS C:\terrform> terraform import aws_instance.example i-1234567890abcdef0
 
 - 실제 클라우드 상태를 읽어서 tfstate를 최신 상태로 업데이트한다.
 
-```bash
+```powershell
 PS C:\terrform> terraform refresh
 ```
 
@@ -4116,16 +3959,16 @@ PS C:\terrform> terraform refresh
 
 ![이미지](assets/03-terraform-hcl/9.png)
 
-```bash
+```powershell
 PS C:\terrform\HCL-02-data-type> terraform apply
-```
 
-#### HCL-02-data-type 폴더 구조 설명
+# HCL-02-data-type 폴더 구조 설명
 
-#### terraform 폴더
+# terraform 폴더
 
 - .terraform\providers\registry.terraform.io\hashicorp\local\2.7.0\windows_amd64
 - Terraform이 terraform init 할 때 다운로드한 프로바이더 파일 저장소
+```
 
 - 안에 있는 파일
   - terraform-provider-local_v2.7.0_x5.exe
@@ -4134,7 +3977,9 @@ PS C:\terrform\HCL-02-data-type> terraform apply
 
 - local_file 리소스를 쓰면 local provider가 필요하고 init 할 때 여기 다운로드된다.
 
-#### terraform.lock.hcl
+```
+# terraform.lock.hcl
+```
 
 - 프로바이더 버전 잠금 파일
 
@@ -4147,7 +3992,9 @@ PS C:\terrform\HCL-02-data-type> terraform apply
   - local = 2.7.0
   - 다음에 init해도 동일 버전 사용하게 만든다.
 
-#### main.tf
+```
+# main.tf
+```
 
 - Terraform 코드 파일
 - 여기에 리소스, 변수, 출력 등이 정의되어 있다.
@@ -4178,14 +4025,11 @@ PS C:\terrform\HCL-02-data-type> terraform apply
 
 ![이미지](assets/03-terraform-hcl/10.png)
 
-```bash
+```powershell
 PS C:\terrform\HCL-02-data-type> terraform show# terraform.tfstate와 같은 정보이다. (보여지는 방식은 다르다.)
-```
-
 ~~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~~
 Outputs:
 
-```
 file_detail = [
     "file1.txt",
     20,
@@ -4196,18 +4040,14 @@ file_path = [
     "file2.txt",
     "file3.txt",
 ]
-```
 
-#### 특정 리소스를 타겟해서 실행할 수 있다.
-
-```bash
+# 특정 리소스를 타겟해서 실행할 수 있다.
 PS C:\terrform\HCL-02-data-type> terraform destroy -target local_file.example[1]
 local_file.example[1]: Refreshing state... [id=4b12046facfee0eca1fa3d1910c4c5baad3e660f]
-```
 
 Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following
 symbols:
-- destroy
+  - destroy
 
 Terraform will perform the following actions:
 ~~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~~
@@ -4220,23 +4060,22 @@ Plan: 0 to add, 0 to change, 1 to destroy.
 ╵
 
 Destroy complete! Resources: 1 destroyed.
+```
 
 - file2.txt 파일이 삭제된다.
 
 ![이미지](assets/03-terraform-hcl/11.png)
 
-```bash
+```powershell
 PS C:\terrform\HCL-02-data-type> terraform apply -target local_file.example[1]
-```
 
 Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following
 symbols:
-+ create
+  + create
 
 Terraform will perform the following actions:
 
-  - local_file.example[1] will be created
-```
+  # local_file.example[1] will be created
   + resource "local_file" "example" {
       + content              = "this is file 2"
       + content_base64sha256 = (known after apply)
@@ -4250,7 +4089,6 @@ Terraform will perform the following actions:
       + filename             = "file2.txt"
       + id                   = (known after apply)
     }
-```
 
 Plan: 1 to add, 0 to change, 0 to destroy.
 ~~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~~
@@ -4258,7 +4096,6 @@ Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
 
 Outputs:
 
-```
 file_detail = [
   "file1.txt",
   20,
@@ -4275,48 +4112,38 @@ file_path = [
 
 ![이미지](assets/03-terraform-hcl/12.png)
 
-```bash
+```powershell
 PS C:\terrform\HCL-02-data-type> terraform  --help# 여러 가지 명령어를 사용할 수 있다.
-```
-
 ~~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~~
 Main commands:
-init          Prepare your working directory for other commands
-validate      Check whether the configuration is valid
-plan          Show changes required by the current configuration
-apply         Create or update infrastructure
-destroy       Destroy previously-created infrastructure
+  init          Prepare your working directory for other commands
+  validate      Check whether the configuration is valid
+  plan          Show changes required by the current configuration
+  apply         Create or update infrastructure
+  destroy       Destroy previously-created infrastructure
 ~~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~~
-version       Show the current Terraform version
-workspace     Workspace management
+  version       Show the current Terraform version
+  workspace     Workspace management
 
-```
 Global options (use these before the subcommand, if any):
-  -chdir=DIR    Switch to a different working directory before executing the
-                given subcommand.
 ```
 
--help         Show this help output or the help for a specified subcommand.
--version      An alias for the "version" subcommand.
-  - main.tf
-
-#### resource "local_file" "myfile" {
-
-#### count = var.create_file ? var.file_count : 0
-
-#### # ./file1.txt = Hello Terraform 1th
-
-#### # ./file2.txt = Hello Terraform 2th
-
-#### # ./file3.txt = Hello Terraform 3th
-
-#### filename = "${path.module}/file${count.index + 1}.txt"
-
-#### content  = "Hello Terraform ${count.index + 1}th"
-
-#### }
+- chdir=DIR    Switch to a different working directory before executing the
+given subcommand.
+- help         Show this help output or the help for a specified subcommand.
+- version      An alias for the "version" subcommand.
 
 ```hcl
+   # main.tf
+# resource "local_file" "myfile" {
+#   count = var.create_file ? var.file_count : 0
+#   # ./file1.txt = Hello Terraform 1th
+#   # ./file2.txt = Hello Terraform 2th
+#   # ./file3.txt = Hello Terraform 3th
+#   filename = "${path.module}/file${count.index + 1}.txt"
+#   content  = "Hello Terraform ${count.index + 1}th"
+# }
+
 terraform {
   required_providers {
     aws = {
@@ -4325,18 +4152,13 @@ terraform {
     }
   }
 }
-```
 
-```hcl
 provider "aws" {
   region  = "ap-northeast-2"
   profile = var.profile
 }
-```
 
-#### 최신 Amazon Linux 2023 AMI 조회
-
-```hcl
+# 최신 Amazon Linux 2023 AMI 조회
 data "aws_ami" "al2023" {
   most_recent = true
   owners      = ["amazon"]
@@ -4351,9 +4173,7 @@ data "aws_ami" "al2023" {
     values = ["x86_64"]
   }
 }
-```
 
-```hcl
 resource "aws_instance" "my-ec2" {
   ami           = data.aws_ami.al2023.id
   instance_type = var.instance-type
@@ -4363,19 +4183,15 @@ resource "aws_instance" "my-ec2" {
 
   tags = var.my-map-ec2-tag# 여러개 태그
 }
-```
 
-  - variables.tf
+   # variables.tf
 ~~~~~~~~~ 중간 생략(기존 변수 타입에 이서어) ~~~~~~~~~
-```hcl
 variable "my-ec2-tag" {# 단일 태그
   description = "my-ec2-tag"
   type        = string
   default     = "terraform-ec2"
 }
-```
 
-```hcl
 variable "my-map-ec2-tag" {# 여러개 태그
   description = "my-map-ec2-tag"
   type        = map(string)
@@ -4385,66 +4201,46 @@ variable "my-map-ec2-tag" {# 여러개 태그
     ManagedBy = "terraform"
   }
 }
-```
 
-  - output.tf
+   # output.tf
+# output "file_print" {
+#   value = local_file.myfile[*].filename
+# }
 
-#### output "file_print" {
-
-#### value = local_file.myfile[*].filename
-
-#### }
-
-```hcl
 output "instance_id" {
   description = "my-ec2-intance-id"
   value       = aws_instance.my-ec2.id
 }
-```
 
-```hcl
 output "instance_public_ip" {
   description = "my-ec2-intance-public-ip"
   value       = aws_instance.my-ec2.public_ip
 }
-```
 
-```hcl
 output "instance_private_ip" {
   description = "my-ec2-intance-private-ip"
   value       = aws_instance.my-ec2.private_ip
 }
-```
 
-```hcl
 output "instance_public_dns" {
   description = "my-ec2-intance-public-dns"
   value       = aws_instance.my-ec2.public_dns
 }
-```
 
-```bash
 PS C:\trf\HCL_03_variables> terraform  plan
-```
 
-```bash
 PS C:\trf\HCL_03_variables> terraform  apply
-```
-
 ~~~~~~~~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~~~~~~~~
-Enter a value: yes
+  Enter a value: yes
 
 aws_instance.my-ec2: Creating...
-```bash
 aws_instance.my-ec2: Still creating... [00m10s elapsed]
 aws_instance.my-ec2: Creation complete after 13s [id=i-0731669fef59ba169]
-```
 
 Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
 
 Outputs:
 
-```
 instance_id = "i-0731669fef59ba169"
 instance_private_ip = "172.31.35.48"
 instance_public_dns = "ec2-3-35-9-167.ap-northeast-2.compute.amazonaws.com"
@@ -4460,9 +4256,9 @@ instance_public_ip = "3.35.9.167"
 
 ![이미지](assets/03-terraform-hcl/13.png)
 
-  - main.tf
-~~~~~~~~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~~~~~~~~
 ```hcl
+   # main.tf
+~~~~~~~~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~~~~~~~~
 resource "aws_instance" "my-ec2" {
   ami           = data.aws_ami.al2023.id
   instance_type = var.instance-type
@@ -4472,9 +4268,7 @@ resource "aws_instance" "my-ec2" {
 
   tags = var.my-map-ec2-tag
 }
-```
 
-```hcl
 resource "aws_instance" "my-ec2-import" {
   ami           = "al2023-ami-2023.12.20260914.0-kernel-6.18-x86_64"
   instance_type = "t3.micro"
@@ -4483,9 +4277,7 @@ resource "aws_instance" "my-ec2-import" {
     Name = "my-ec2-import"
   }
 }
-```
 
-```hcl
 PS C:\trf\HCL_03_variables> terraform  import  aws_instance.my-ec2-import  i-04e04d0ac9e530873
 aws_instance.my-ec2-import: Importing from ID "i-04e04d0ac9e530873"...
 data.aws_ami.al2023: Reading...
@@ -4493,15 +4285,16 @@ aws_instance.my-ec2-import: Import prepared!
   Prepared aws_instance for import
 aws_instance.my-ec2-import: Refreshing state... [id=i-04e04d0ac9e530873]
 data.aws_ami.al2023: Read complete after 1s [id=ami-0c97793ee5ea0967f]
-```
 
 Import successful!
 
 The resources that were imported are shown above. These resources are now in
 your Terraform state and will henceforth be managed by Terraform.
+```
 
 - 현재 State 전체 내용을 사람이 읽기 쉬운 형태로 출력
-```hcl
+
+```powershell
 PS C:\trf\HCL_03_variables> terraform  state  list
 data.aws_ami.al2023
 aws_instance.my-ec2
@@ -4509,23 +4302,21 @@ aws_instance.my-ec2-import
 ```
 
 - 특정 리소스의 상세 정보 확인 (AMI, 인스턴스 타입, 서브넷, 보안 그룹, IP, 태그 등을 확인 가능)
-```bash
+
+```powershell
 PS C:\trf\HCL_03_variables> terraform  state  show  aws_instance.my-ec2-import
 ```
 
 - 현재 State 전체 내용을 사람이 읽기 쉬운 형태로 출력
-```bash
+
+```powershell
 PS C:\trf\HCL-01-block> terraform show
-```
 
-#### EC2 인스턴스 삭제
+# EC2 인스턴스 삭제
 
-```bash
 PS C:\trf\HCL-01-block> terraform  destroy
-```
 
 #　EC2 1개만 삭제도 가능하다.
-```bash
 PS C:\trf\HCL_03_variables> terraform destroy -target="aws_instance.my-ec2-import"
 ```
 
@@ -4561,16 +4352,14 @@ PS C:\trf\HCL_03_variables> terraform destroy -target="aws_instance.my-ec2-impor
   - enable_monitoring 값이 true이면 EC2 인스턴스 모니터링 활성화 false이면 비활성화
 
 변수 정의
+
 ```hcl
 variable "enable_monitoring" {
   description = "EC2 모니터링 활성화 여부"
   type        = bool
   default     = true
 }
-```
-
 리소스 정의
-```hcl
 resource "aws_instance" "example" {
   ami           = "ami-xxxxxxxx"
   instance_type = "t3.micro"
@@ -4589,23 +4378,20 @@ resource "aws_instance" "example" {
   - 개발 환경에서는 작은 인스턴스 사용
 
 변수 정의
+
 ```hcl
 variable "environment" {
   description = "환경 설정 (dev 또는 prod)"
   type        = string
   default     = "dev"
 }
-```
 
-```hcl
 locals 블록
 locals {
   instance_type = var.environment == "prod" ? "m5.large" : "t3.micro"
 }
-```
 
 리소스에서 사용
-```hcl
 resource "aws_instance" "example" {
   ami           = "ami-xxxxxxxx"
   instance_type = local.instance_type
@@ -4623,14 +4409,13 @@ resource "aws_instance" "example" {
 - 조건이 true일 때만 리소스를 생성하고 싶을 경우 count를 사용한다.
 
 예제 3. S3 버킷 조건부 생성
+
 ```hcl
 variable "create_bucket" {
   type    = bool
   default = false
 }
-```
 
-```hcl
 resource "aws_s3_bucket" "example" {
   count  = var.create_bucket ? 1 : 0
   bucket = "my-example-bucket"
@@ -4662,6 +4447,7 @@ variable "name" {
   - 값이 없음, Terraform에서 "설정 안 함"과 같은 의미
 
 예제 4. user_data 조건 적용
+
 ```hcl
 variable "custom_user_data" {
   type    = string
@@ -4708,7 +4494,7 @@ resource "aws_instance" "example" {
 
 ![이미지](assets/03-terraform-hcl/14.png)
 
-```bash
+```powershell
 PS C:\terrform\HCL-03-flow-controll> terraform -version
 Terraform v1.14.6
 on windows_amd64
@@ -4732,9 +4518,8 @@ on windows_amd64
 
 ![이미지](assets/03-terraform-hcl/17.png)
 
-#### main.tf
-
 ```hcl
+# main.tf
 terraform {
   required_version = "1.14.6"# 사용할 Terraform 프로그램의 버전 (Terraform CLI 버전이 1.14.6이어야 실행 가능)
 
@@ -4745,53 +4530,35 @@ terraform {
     }
   }
 }
-```
 
-```hcl
 provider "aws" {
   region = "ap-northeast-2"  # Terraform으로 AWS 리소스를 생성할 리전
   profile = "my-profile"  # AWS CLI에 미리 등록된 인증 프로파일 사용
 }
-```
-
-#### variables.tf
-
-#### EC2 Instance-Type 설정 변수 (prod, dev)
-
-```hcl
+# variables.tf
+# EC2 Instance-Type 설정 변수 (prod, dev)
 variable "environment" {
   type    = string
   default = "dev"
 }
-```
 
-#### EC2 region 설정 변수
-
-```hcl
+# EC2 region 설정 변수
 variable "region" {
   type    = string
   default = "ap-northeast-2"
 }
-```
 
-#### 회사가 서울
-
-```hcl
+# 회사가 서울
 variable "company" {
   type    = string
   default = "seoul"
 }
-```
 
-#### main.tf
-
+# main.tf
 locals {# 동적인 값 할당
-```
   instance_type = var.environment == "prod" ? "t3.small" : "t3.micro"
 }
-```
 
-```hcl
 locals {# map 타입
   ami_map = {
     "ap-northeast-1" : "ami-0c3ffc371dc7c0c4c"
@@ -4800,113 +4567,84 @@ locals {# map 타입
   selected_resion = var.company == "seoul" ? "ap-northeast-2" : "ap-northeast-1"
   selected_ami    = local.ami_map[local.selected_resion]
 }
-```
 
-#### variables.tf
-
-#### EC2 Instance-Type 설정 변수 (prod, dev)
-
-```hcl
+# variables.tf
+# EC2 Instance-Type 설정 변수 (prod, dev)
 variable "environment" {
   type    = string
   default = "dev"
 }
-```
 
-#### EC2 Resion 설정 변수
-
-```hcl
+# EC2 Resion 설정 변수
 variable "region" {
   type    = string
   default = "ap-northeast-2"
 }
-```
 
-#### EC2 모니터링 활성화 여부
-
-```hcl
+# EC2 모니터링 활성화 여부
 variable "enable_monitoring" {
   type    = bool
   default = false
 }
-```
 
-#### EC2 인스턴스로 전달할 지정 데이터
-
-```hcl
+# EC2 인스턴스로 전달할 지정 데이터
 variable "custom_user_data" {
   type    = string
   default = ""
 }
-```
 
-#### main.tf
-
-#### EC2 인스턴스 생성
-
-```hcl
+# main.tf
+# EC2 인스턴스 생성
 resource "aws_instance" "my-flow-ec2" {
   ami         = local.selected_ami
   instance_type= local.instance-type
   monitoring = var.enable_monitoring
   user_data  = var.custom_user_data == "" ? null : var.custom_user_data
 }
-```
 
-```bash
 PS C:\trf\HCL-03-flow controll> terraform  init
-```
 
-```bash
 PS C:\trf\HCL-03-flow controll> terraform plan
-```
 
 Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
-+ create
+  + create
 
 Terraform will perform the following actions:
-  - aws_instance.example will be created
-```
+  # aws_instance.example will be created
   + resource "aws_instance" "example" {
 ~~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~~
       + secondary_network_interface (known after apply)
     }
-```
 
 Plan: 1 to add, 0 to change, 0 to destroy.
 
-```bash
 PS C:\trf\HCL-03-flow controll> terraform apply
-```
 
 Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
-+ create
+  + create
 
 Terraform will perform the following actions:
 
-  - aws_instance.example will be created
-```
+  # aws_instance.example will be created
   + resource "aws_instance" "example" {
 ~~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~~
       + secondary_network_interface (known after apply)
     }
-```
 
 Plan: 1 to add, 0 to change, 0 to destroy.
 
 Do you want to perform these actions?
-Terraform will perform the actions described above.
-Only 'yes' will be accepted to approve.
+  Terraform will perform the actions described above.
+  Only 'yes' will be accepted to approve.
 
-Enter a value: yes
+  Enter a value: yes
 
 aws_instance.example: Creating...
-```bash
 aws_instance.example: Still creating... [00m10s elapsed]
 aws_instance.example: Creation complete after 13s [id=i-0cef7c72d8d593aea]
-```
 
 Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
+```
 
 - AWS EC2 인스턴스가 생성된다.
 
@@ -4916,30 +4654,25 @@ Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
 
 ![이미지](assets/03-terraform-hcl/19.png)
 
-#### terraform.tfvars
-
-```
+```hcl
+# terraform.tfvars
 region            = "ap-northeast-2"
 profile           = "default"
 environment       = "dev"
 company           = "seoul"
 enable_monitoring = true
 custom_user_data= ""
-```
 
-```bash
 PS C:\terrform\HCL-03-flow-controll> terraform plan
 aws_s3_bucket.example[0]: Refreshing state... [id=my-example-123456789012]
 aws_instance.example: Refreshing state... [id=i-0e4732f3298231c14]
-```
 
 Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
-~ update in-place
+  ~ update in-place
 
 Terraform will perform the following actions:
 
-  - aws_instance.example will be updated in-place
-```
+  # aws_instance.example will be updated in-place
   ~ resource "aws_instance" "example" {
         id                                   = "i-0e4732f3298231c14"
       ~ monitoring                           = false -> true
@@ -4954,85 +4687,70 @@ Terraform will perform the following actions:
         tags                                 = {}
       - user_data                            = "<h1>environment = prod</h1>  <h1>region = ap-northeast-2</h1>  <h1>enable_monitoring = true</h1>  <h1>create_bucket = true</h1>" -> null
         # (36 unchanged attributes hidden)
-```
 
-  - (9 unchanged blocks hidden)
-```
+        # (9 unchanged blocks hidden)
     }
-```
 
 Plan: 0 to add, 0 to change, 1 to destroy.
 
-```bash
 PS C:\terrform\HCL-03-flow-controll> terraform apply
 aws_s3_bucket.example[0]: Refreshing state... [id=my-example-123456789012]
 aws_instance.example: Refreshing state... [id=i-0e4732f3298231c14]
-```
 
 Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
-~ update in-place
+  ~ update in-place
 
 Terraform will perform the following actions:
 
-  - aws_instance.example will be updated in-place
-```
+  # aws_instance.example will be updated in-place
   ~ resource "aws_instance" "example" {
         id                                   = "i-0e4732f3298231c14"
       ~ monitoring                           = false -> true
       ~ public_dns                           = "ec2-3-36-125-67.ap-northeast-2.compute.amazonaws.com" ->
       ~ public_ip                            = "3.36.125.67" -> (known after apply)
         tags                                 = {}
-```
 
 ~~~~~~~~~~~~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~~~~~~~~~~~~
 
 Plan: 0 to add, 1 to change, 0 to destroy.
 
 Do you want to perform these actions?
-Terraform will perform the actions described above.
-Only 'yes' will be accepted to approve.
+  Terraform will perform the actions described above.
+  Only 'yes' will be accepted to approve.
 
-Enter a value: yes
+  Enter a value: yes
 
-```bash
 aws_instance.example: Modifying... [id=i-0e4732f3298231c14]
 aws_instance.example: Still modifying... [id=i-0e4732f3298231c14, 00m10s elapsed]
 aws_instance.example: Still modifying... [id=i-0e4732f3298231c14, 00m20s elapsed]
 aws_instance.example: Still modifying... [id=i-0e4732f3298231c14, 00m30s elapsed]
 aws_instance.example: Still modifying... [id=i-0e4732f3298231c14, 00m40s elapsed]
 aws_instance.example: Modifications complete after 43s [id=i-0e4732f3298231c14]
-```
 
 Apply complete! Resources: 0 added, 1 changed, 0 destroyed.
+```
 
 - 모니터링 기능이 enabled로 변경 확인
 
 ![이미지](assets/03-terraform-hcl/20.png)
 
-#### terraform.tfvars
-
-```
+```hcl
+# terraform.tfvars
 region            = "ap-northeast-2"
 profile           = "default"
 environment       = "prod"
 company           = "seoul"
 enable_monitoring = true
 custom_user_data = ""
-```
 
-```bash
 PS C:\trf\HCL_04_flow_ctr> terraform  plan
-```
 
-```bash
 PS C:\trf\HCL_04_flow_ctr> terraform  apply
 aws_instance.my-flow-ec2: Refreshing state... [id=i-07570cd78012b4060]
-```
 
 Terraform will perform the following actions:
 
-  - aws_instance.my-flow-ec2 will be updated in-place
-```
+  # aws_instance.my-flow-ec2 will be updated in-place
   ~ resource "aws_instance" "my-flow-ec2" {
         id                                   = "i-07570cd78012b4060"
       ~ instance_type= "t3.micro" -> "t3.small"
@@ -5040,36 +4758,31 @@ Terraform will perform the following actions:
       ~ public_ip      = "13.125.227.34" -> (known after apply)
         tags          = {}
         # (37 unchanged attributes hidden)
-```
 
-  - (9 unchanged blocks hidden)
-```
+        # (9 unchanged blocks hidden)
     }
-```
 
 Plan: 0 to add, 1 to change, 0 to destroy.
 
 Do you want to perform these actions?
-Terraform will perform the actions described above.
-Only 'yes' will be accepted to approve.
+  Terraform will perform the actions described above.
+  Only 'yes' will be accepted to approve.
 
-```bash
 aws_instance.my-flow-ec2: Modifying... [id=i-07570cd78012b4060]
 aws_instance.my-flow-ec2: Still modifying... [id=i-07570cd78012b4060, 00m10s elapsed]
 aws_instance.my-flow-ec2: Still modifying... [id=i-07570cd78012b4060, 00m20s elapsed]
 aws_instance.my-flow-ec2: Still modifying... [id=i-07570cd78012b4060, 00m30s elapsed]
 aws_instance.my-flow-ec2: Modifications complete after 32s [id=i-07570cd78012b4060]
-```
 
 Apply complete! Resources: 0 added, 1 changed, 0 destroyed.
+```
 
 - 인스턴스 타입이 t3.small로 변경
 
 ![이미지](assets/03-terraform-hcl/21.png)
 
-#### terraform.tfvars
-
-```
+```hcl
+# terraform.tfvars
 region            = "ap-northeast-2"
 profile           = "default"
 environment       = "prod"
@@ -5077,39 +4790,33 @@ company           = "tokyo"
 enable_monitoring = true
 custom_user_data  = <<EOF
 #!/bin/bash
-```
 
-```bash
 dnf install httpd -y
 systemctl start httpd
 systemctl enable httpd
+
+TOKEN=$(curl -s -X PUT "http://169.254.169.254/latest/api/token" \
 ```
 
-```
-TOKEN=$(curl -s -X PUT "http://169.254.169.254/latest/api/token" \
-  -H "X-aws-ec2-metadata-token-ttl-seconds: 21600")
-```
+- H "X-aws-ec2-metadata-token-ttl-seconds: 21600")
 
 ```
 INSTANCE_ID=$(curl -s \
-  -H "X-aws-ec2-metadata-token: $TOKEN" \
-  http://169.254.169.254/latest/meta-data/instance-id)
 ```
 
-```bash
+- H "X-aws-ec2-metadata-token: $TOKEN" \
+
+```
+  http://169.254.169.254/latest/meta-data/instance-id)
+
 echo "<h1>$INSTANCE_ID</h1>" > /var/www/html/index.html
 echo "<h1>hello Soldesk IT Academy</h1>" >> /var/www/html/index.html
 EOF
-```
 
-```bash
 PS C:\trf\HCL_04_flow_ctr> terraform  apply  -auto-approve
 aws_instance.my-flow-ec2: Refreshing state... [id=i-07570cd78012b4060]
-```
-
 ~~~~~~~~~ 중간 생략 ~~~~~~~~~
 Plan: 1 to add, 0 to change, 1 to destroy.
-```bash
 aws_instance.my-flow-ec2: Destroying... [id=i-07570cd78012b4060]
 aws_instance.my-flow-ec2: Still destroying... [id=i-07570cd78012b4060, 00m10s elapsed]
 aws_instance.my-flow-ec2: Still destroying... [id=i-07570cd78012b4060, 00m20s elapsed]
@@ -5125,22 +4832,18 @@ aws_instance.my-flow-ec2: Creating...
 
 - AMI는 변경되지만 리전은 그대로 ap-northeast-2이므로 서울 리전에 해당 AMI가 없다는 에러가 발생한다.
 
-  - main.tf
-~~~~~~~~~ 중간 생략 ~~~~~~~~~
 ```hcl
+   # main.tf
+~~~~~~~~~ 중간 생략 ~~~~~~~~~
 provider "aws" {
   region  = local.selected_region# AMI를 선택시 리전도 변경되도록 수정
   profile = var.profile
 }
-```
 
-```hcl
 locals {
   instance-type = var.environment == "prod" ? "t3.small" : "t3.micro"
 }
-```
 
-```hcl
 locals {
   ami_map = {          "ami-0c3ffc371dc7c0c4c"
     "ap-northeast-1" : "ami-0c3ffc371dc7c0c4c"
@@ -5149,11 +4852,8 @@ locals {
   selected_region = var.company == "seoul" ? "ap-northeast-2" : "ap-northeast-1"
   selected_ami    = local.ami_map[local.selected_region]
 }
-```
-
 ~~~~~~~~~ 중간 생략 ~~~~~~~~~
 
-```bash
 PS C:\trf\HCL_04_flow_ctr> terraform  apply  -auto-approve
 ```
 
@@ -5165,27 +4865,21 @@ PS C:\trf\HCL_04_flow_ctr> terraform  apply  -auto-approve
 
 ![이미지](assets/03-terraform-hcl/23.png)
 
-```
 http://ec2-13-196-206-60.ap-northeast-1.compute.amazonaws.com/
-```
 
 ![이미지](assets/03-terraform-hcl/24.png)
 
 - 도쿄리전의 EC2로 접속하게되면 유저 데이터로 설정한 정보가 확인된다.
 
-  - variables.tf
-
-#### EC2 생성 유/무
-
 ```hcl
+   # variables.tf
+# EC2 생성 유/무
 variable "create_ec2" {
   type    = bool
   default = false
 }
-```
 
-  - main.tf
-```hcl
+   # main.tf
 resource "aws_instance" "my-flow-ec2" {
   count         = var.create_ec2 ? 1 : 0# false이므로 EC2를 생성하지 않는다.
   ami           = local.selected_ami
@@ -5193,11 +4887,8 @@ resource "aws_instance" "my-flow-ec2" {
   monitoring    = var.enable_monitoring
   user_data     = var.custom_user_data == "" ? null : var.custom_user_data
 }
-```
 
-#### terraform.tfvars
-
-```
+# terraform.tfvars
 region            = "ap-northeast-2"
 profile           = "default"
 environment       = "prod"
@@ -5205,54 +4896,43 @@ company           = "tokyo"
 enable_monitoring= true
 custom_user_data= ...# 기존 값 유지
 create_ec2     = false
-```
 
-```bash
 PS C:\trf\HCL_04_flow_ctr> terraform  plan
 aws_instance.my-flow-ec2[0]: Refreshing state... [id=i-0935fa0a37797fb8d]
-```
 
 Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following
 symbols:
-- destroy
+  - destroy
 
 Terraform will perform the following actions:
 
-  - aws_instance.my-flow-ec2[0] will be destroyed
+  # aws_instance.my-flow-ec2[0] will be destroyed
 
 ~~~~~~~~~~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~~~~~~~~~~
 Plan: 0 to add, 0 to change, 1 to destroy.
+```
 
 - EC2를 생성하지 않는다는 의미가 아니라 "EC2가 없어야 한다." 이므로 실행하게되면 생성된 EC2가 삭제된다.
 
 #### S3 Bucket 생성
 
-#### variables.tf
-
-~~~~~ 중간 생략 ~~~~~
-
-#### S3 Bucket 생성 유/무
-
 ```hcl
+# variables.tf
+~~~~~ 중간 생략 ~~~~~
+# S3 Bucket 생성 유/무
 variable "create_bucket" {
   type    = bool
   default = false
 }
-```
 
-#### main.tf
-
+# main.tf
 ~~~~~ 중간 생략 ~~~~~
-```hcl
 resource "aws_s3_bucket" "s3-example" {
   count  = var.create_bucket ? 1 : 0
   bucket = "my-example-123456789012"
 }
-```
 
-#### terraform.tfvars
-
-```
+# terraform.tfvars
 region            = "ap-northeast-2"
 profile           = "default"
 environment       = "prod"
@@ -5277,9 +4957,8 @@ create_bucket     = false
 - prod.tfvars
   - 운영환경 값
 
-#### terraform.tfvars
-
-```
+```hcl
+# terraform.tfvars
 region            = "ap-northeast-2"
 profile           = "default"
 environment       = "prod"
@@ -5287,28 +4966,21 @@ company           = "tokyo"
 enable_monitoring= true
 custom_user_data= ...# 기존 값 유지
 create_bucket     = true
-```
 
-```bash
 PS C:\trf\HCL-03-flow controll> terraform plan
-```
-
 ~~~~~~~~~~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~~~~~~~~~~
-  - aws_s3_bucket.s3-example[0] will be created
-```bash
+  # aws_s3_bucket.s3-example[0] will be created
   + resource "aws_s3_bucket" "s3-example" {
 ~~~~~~~~~~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~~~~~~~~~~
 Plan: 1 to add, 1 to change, 0 to destroy.
 
 PS C:\trf\HCL-03-flow controll> terraform apply
 aws_instance.example: Refreshing state... [id=i-0cef7c72d8d593aea]
-```
 
 ~~~~~~~~~~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~~~~~~~~~~
 
-Enter a value: yes
+  Enter a value: yes
 
-```bash
 aws_s3_bucket.s3-example[0]: Creating...
 aws_instance.example: Modifying... [id=i-0cef7c72d8d593aea]
 aws_s3_bucket.s3-example[0]: Creation complete after 1s [id=my-example-123456789012]
@@ -5316,9 +4988,9 @@ aws_instance.example: Still modifying... [id=i-0cef7c72d8d593aea, 00m10s elapsed
 aws_instance.example: Still modifying... [id=i-0cef7c72d8d593aea, 00m20s elapsed]
 aws_instance.example: Still modifying... [id=i-0cef7c72d8d593aea, 00m30s elapsed]
 aws_instance.example: Modifications complete after 32s [id=i-0cef7c72d8d593aea]
-```
 
 Apply complete! Resources: 1 added, 1 changed, 0 destroyed.
+```
 
 - 도쿄 리전에 S3 버킷이 생성되어있다.
 
@@ -5326,46 +4998,35 @@ Apply complete! Resources: 1 added, 1 changed, 0 destroyed.
 
 #### S3 bucket만 삭제하기위한 plan
 
-```bash
+```powershell
 PS C:\trf\HCL_04_flow_ctr> terraform  plan  -destroy  -target="aws_s3_bucket.my-bucket"
-```
 
-#### S3 bucket만 삭제
-
-```bash
+# S3 bucket만 삭제
 PS C:\trf\HCL_04_flow_ctr> terraform  destroy  -target="aws_s3_bucket.my-bucket"
-```
 
-#### EC2는 도쿄 리전, S3 bucket은 서울 리전에 생성
+# EC2는 도쿄 리전, S3 bucket은 서울 리전에 생성
 
-  - main.tf
+   # main.tf
 ~~~~~~~~~~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~~~~~~~~~~
-```hcl
 provider "aws" {
   region  = local.selected_region
   profile = var.profile
 }
-```
 
-```hcl
 provider "aws" {
   alias   = "seoul"
   region  = var.region_seoul
   profile = var.profile
 }
-```
 
-```hcl
 provider "aws" {
   alias   = "tokyo"
   region  = var.region_tokyo
   profile = var.profile
 }
-```
 
 ~~~~~~~~~~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~~~~~~~~~~
 
-```hcl
 resource "aws_instance" "my-flow-ec2" {
   provider      = aws.tokyo
   count         = var.create_ec2 ? 1 : 0
@@ -5374,62 +5035,45 @@ resource "aws_instance" "my-flow-ec2" {
   monitoring    = var.enable_monitoring
   user_data     = var.custom_user_data == "" ? null : var.custom_user_data
 }
-```
 
 ########################## S3 Bucket ##########################
 
-```hcl
 resource "aws_s3_bucket" "my-bucket" {
   provider = aws.seoul
   count    = var.create_bucket ? 1 : 0
   bucket   = "my-s3-bucket-flow-123456789012"
 }
-```
 
-  - variables.tf
-
-#### 리소스를 생성할 서울 리전
-
-```hcl
+   # variables.tf
+# 리소스를 생성할 서울 리전
 variable "region" {
   type    = string
   default = "ap-northeast-2"
 }
-```
 
-#### 리소스를 생성할 서울 리전
-
-```hcl
+# 리소스를 생성할 서울 리전
 variable "region_seoul" {
   type    = string
   default = "ap-northeast-2"
 }
-```
 
-#### 리소스를 생성할 도쿄 리전
-
-```hcl
+# 리소스를 생성할 도쿄 리전
 variable "region_tokyo" {
   type    = string
   default = "ap-northeast-1"
 }
-```
-
 ~~~~~~~~~~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~~~~~~~~~~
 
-```bash
 PS C:\trf\HCL_04_flow_ctr> terraform  plan
 aws_instance.my-flow-ec2[0]: Refreshing state... [id=i-0935fa0a37797fb8d]
-```
 
 Terraform used the selected providers to generate the following execution plan. Resource actions are
 indicated with the following symbols:
-+ create
+  + create
 
 Terraform will perform the following actions:
 
-  - aws_s3_bucket.my-bucket[0] will be created
-```bash
+  # aws_s3_bucket.my-bucket[0] will be created
   + resource "aws_s3_bucket" "my-bucket" {
 ~~~~~~~~~~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~~~~~~~~~~
 Plan: 1 to add, 0 to change, 0 to destroy.
@@ -5475,6 +5119,7 @@ resource "aws_instance" "example" {
 - 위 설정은 동일한 리소스를 3개 생성한다.
 
 - Terraform 내부에서는 이 리소스를 다음과 같이 관리한다.
+
 ```bash
 aws_instance.example[0]
 aws_instance.example[1]
@@ -5489,7 +5134,7 @@ aws_instance.example[2]
 
 예:
 
-```
+```hcl
 tags = {
   Name = "Example-Instance-${count.index}"
 }
@@ -5522,7 +5167,8 @@ tags = {
 - count가 개수 기준이라면 for_each는 키 또는 값 기준이다.
 
 예:
-```
+
+```hcl
 for_each = toset(["dev", "staging", "prod"])
 ```
 
@@ -5538,7 +5184,8 @@ for_each = toset(["dev", "staging", "prod"])
   - each.value: 현재 반복의 값
 
 예:
-```
+
+```hcl
 tags = {
   Name = "Example-Instance-${each.key}"
 }
@@ -5564,9 +5211,7 @@ variable "server_names" {
   type    = set(string)
   default = ["dev", "staging", "prod"]
 }
-```
 
-```hcl
 resource "aws_instance" "set_example" {
   for_each = var.server_names
 
@@ -5577,11 +5222,9 @@ resource "aws_instance" "set_example" {
     Name = each.value
   }
 }
-```
 
-  - 예시 2. Map 타입으로 EC2 여러 개 생성
+   # 예시 2. Map 타입으로 EC2 여러 개 생성
 
-```hcl
 variable "instance_types" {
   type = map(string)
   default = {
@@ -5590,9 +5233,7 @@ variable "instance_types" {
     prod    = "t3.medium"
   }
 }
-```
 
-```hcl
 resource "aws_instance" "map_example" {
   for_each= var.instance_types
 
@@ -5603,11 +5244,9 @@ resource "aws_instance" "map_example" {
     Name = each.key    # Map의 Key 사용
   }
 }
-```
 
-  - 예시 3. Map + Object 타입 (실무에서 많이 사용하는 형태)
+   # 예시 3. Map + Object 타입 (실무에서 많이 사용하는 형태)
 
-```hcl
 variable "servers" {
 
   type = map(object({
@@ -5633,9 +5272,7 @@ variable "servers" {
     }
   }
 }
-```
 
-```hcl
 resource "aws_instance" "object_example" {
   for_each= var.servers
   ami = "ami-0389ea382ca31bd7f"
@@ -5648,21 +5285,24 @@ resource "aws_instance" "object_example" {
 ```
 
 - 1번째 EC2
-```
+
+```hcl
 Name          = dev
 instance_type= t3.micro
 monitoring    = false
 ```
 
 - 2번째 EC2
-```
+
+```hcl
 Name        = staging
 instance_type = t3.small
 monitoring    = false
 ```
 
 - 3번째 EC2
-```
+
+```hcl
 Name       = prod
 instance_type= t3.medium
 monitoring = true
@@ -5677,19 +5317,19 @@ monitoring = true
 - 리스트, 맵, 셋 등의 구조를 가공할 때 사용한다.
 
 예:
+
 ```hcl
 variable "instance_names" {
   default = ["web1", "web2", "db1"]
 }
-```
 
-```hcl
 locals {
   name_tags = [for name in var.instance_names : "Name-${name}"]
 }
 ```
 
 - 결과:
+
 ```
 ["Name-web1", "Name-web2", "Name-db1"]
 ```
@@ -5705,9 +5345,9 @@ locals {
 
 ```
 [for name in var.instance_names : name if name != "db1"]
-```
 
 이 경우 db1은 제외된다.
+```
 
 #### dynamic 블록을 사용한 리소스 내부 반복
 
@@ -5778,8 +5418,8 @@ resource "aws_security_group" "example" {
 EX1) count로 EC2 여러 개 생성
   - count 값을 이용해서 동일한 리소스를 여러 개 생성하는 가장 기본적인 형태
 
-main.tf
 ```hcl
+main.tf
 terraform {
   required_version = "1.16.2"
   required_providers {
@@ -5789,18 +5429,13 @@ terraform {
     }
   }
 }
-```
 
-```hcl
 provider "aws" {
   region  = "ap-northeast-2"
   profile = "default"
 }
-```
 
-#### 최신 AMI 조회
-
-```hcl
+# 최신 AMI 조회
 data "aws_ami" "al2023" {
   most_recent = true
 
@@ -5814,11 +5449,8 @@ data "aws_ami" "al2023" {
     values = ["x86_64"]
   }
 }
-```
 
-#### EC2 인스턴스 생성
-
-```hcl
+# EC2 인스턴스 생성
 resource "aws_instance" "my-ec2" {
 
   count = 3   # EC2를 3개 생성
@@ -5830,10 +5462,8 @@ resource "aws_instance" "my-ec2" {
     Name = "count-ec2-${count.index}"
   }
 }
-```
 
 동작
-```
 count = 3
 ```
 
@@ -5847,18 +5477,14 @@ count = 3
 EX2) 변수로 count 제어
   - count 값을 변수로 제어하는 방식
 
-#### variables.tf
-
 ```hcl
+# variables.tf
 variable "instance_count" {
   description = "EC2 개수"
   default     = 2
 }
-```
 
-#### main.tf
-
-```hcl
+# main.tf
 resource "aws_instance" "example" {
 
   count = var.instance_count
@@ -5870,42 +5496,32 @@ resource "aws_instance" "example" {
     Name = "variable-ec2-${count.index}"
   }
 }
-```
 
-```bash
 PS C:\trf\HCL_05_for_loop> terraform  apply 실행 시
 PS C:\trf\HCL_05_for_loop> terraform  apply  -var="instance_count=4"
 PS C:\trf\HCL_05_for_loop> terraform  plan   -var="instance_count=4", -var="instance_type=t3.mall"
-```
 
 결과
 
 EC2 4개 생성
 
 EX3) 조건문과 count 사용
-  - 조건에 따라 리소스를 만들거나 안 만들기
+ # 조건에 따라 리소스를 만들거나 안 만들기
 
-#### variables.tf
-
-```hcl
+# variables.tf
 variable "instance_create1" {
   description = "EC2 생성 여부 boolean"
   type    = bool
   default = false
 }
-```
 
-```hcl
 variable "instance_create2" {
   description = "EC2 생성 여부 string"
   type    = string
   default = "create"
 }
-```
 
-#### main.tf
-
-```hcl
+# main.tf
 resource "aws_instance" "example" {
   #count  = var.instance_count
   #count  = var.cinstance_create1 ? 1 : 0
@@ -5918,42 +5534,31 @@ resource "aws_instance" "example" {
     Name = "conditional-ec2"
   }
 }
-```
 
 동작
 
-```
 create_instance = true  -> EC2 생성
 create_instance = false -> EC2 생성 안함
-```
 
 EX4) AWS에 Name 태그가 "my-ec2"인 EC2 인스턴스가 존재하는지 확인하고, 존재하지 않으면 EC2 인스턴스 1개를 생성
 
-  - main.tf
-
-#### 특정 태그를 갖은 EC2 인스턴스가 있으면 EC2 인스턴스를 생성하지 않고
-
-#### 특정 태그가 없는 경우에만 EC2 인스턴스를 생성
-
-```hcl
+   # main.tf
+# 특정 태그를 갖은 EC2 인스턴스가 있으면 EC2 인스턴스를 생성하지 않고
+# 특정 태그가 없는 경우에만 EC2 인스턴스를 생성
 data "aws_instances" "ec2_existing" {
   # EC2의 Name을 기준으로 조회
   filter {
     name   = "tag:Name"
     values = ["my-ec2"]
   }
-```
 
-  - 실행중이거나 중지된 EC2 인스턴스만 조회
-```
+  # 실행중이거나 중지된 EC2 인스턴스만 조회
   filter {
     name   = "instance-state-name"
     values = ["pending", "running", "stopping", "stopped"]
   }
 }
-```
 
-```hcl
 resource "aws_instance" "my-data-ec2" {
   # data.aws_instance.ec2_existing.ids = my-ec2 태그로 검색된 id들을 반환
   # length() : list, set, tuple, map등의 개수를 반환한다.
@@ -5964,20 +5569,17 @@ resource "aws_instance" "my-data-ec2" {
     Name = "my-ec2"
   }
 }
-```
 
-```bash
 PS C:\trf\HCL_05_for_loop> terraform plan
-```
-
 ~~~~~~~~~~ 중간 생략 ~~~~~~~~~~
 Plan: 1 to add, 0 to change, 0 to destroy.
+```
 
 - 검색으로 EC2를 생성하는 리소스 블록을 주석 처리 후 my-ec2의 인스턴스를 미리 생성
 - 그 후 다시 검색으로 EC2를 생성하는 리소스 블록의 주석을 삭제하게 되면 리소스를 생성하지 않게된다.
 
-  - main.tf
 ```hcl
+   # main.tf
 resource "aws_instance" "existing_my_ec2" {
   ami           = data.aws_ami.al2023.id
   instance_type = var.instance_type
@@ -5985,61 +5587,43 @@ resource "aws_instance" "existing_my_ec2" {
     Name = "my-ec2"
   }
 }
-```
 
-#### resource "aws_instance" "my-data-ec2" {
+# resource "aws_instance" "my-data-ec2" {
+#   # data.aws_instance.ec2_existing.ids = my-ec2 태그로 검색된 id들을 반환
+#   # length() : list, set, tuple, map등의 개수를 반환한다.
+#   count         = length(data.aws_instances.ec2_existing.ids) == 0 ? 1 : 0
+#   ami           = data.aws_ami.al2023.id
+#   instance_type = var.instance_type
+#   tags = {
+#     Name = "my-ec2"
+#   }
+# }
 
-#### # data.aws_instance.ec2_existing.ids = my-ec2 태그로 검색된 id들을 반환
-
-#### # length() : list, set, tuple, map등의 개수를 반환한다.
-
-#### count         = length(data.aws_instances.ec2_existing.ids) == 0 ? 1 : 0
-
-#### ami           = data.aws_ami.al2023.id
-
-#### instance_type = var.instance_type
-
-#### tags = {
-
-#### Name = "my-ec2"
-
-#### }
-
-#### }
-
-```bash
 PS C:\trf\HCL_05_for_loop> terraform apply
 ```
 
 - my-ec2 이름의 EC2 인스턴스가 생성된다.
 - 다시 EC2 인스턴스를 생성하는 리소스 블록을 삭제하고 검색으로 EC2를 생성하는 리소스 블록의 주석을 해제
 
-```bash
+```powershell
 PS C:\trf\HCL_05_for_loop> terraform plan
-```
-
 ~~~~~~~~~~ 중간 생략 ~~~~~~~~~~
 Plan: 0 to add, 0 to change, 1 to destroy.
 
-#### EC2 리소스 삭제
+# EC2 리소스 삭제
 
 EX5) 리스트 길이를 이용한 count
-  - 리스트 길이만큼 리소스를 생성하는 방식
+ # 리스트 길이만큼 리소스를 생성하는 방식
 
-#### variables.tf
-
-```hcl
+# variables.tf
 variable "instance_types" {
   type = list(string)
   default = [
     "t3.micro",  "t3.small", "t3.medium"
   ]
 }
-```
 
-#### main.tf
-
-```hcl
+# main.tf
 resource "aws_instance" "example" {
 
   count = length(var.instance_types)
@@ -6052,35 +5636,26 @@ resource "aws_instance" "example" {
     Name = "ec2-list-${var.ec2_instance_type[count.index]}"
   }
 }
-```
 
-  - outputs.tf
-```hcl
+   # outputs.tf
 output "instance_type" {
   value = aws_instance.ec2-list[*].instance_type
 }
-```
 
-```bash
 PS C:\trf\HCL_05_for_loop> terraform plan
-```
-
 ~~~~~~~~~~ 중간 생략 ~~~~~~~~~~
 Changes to Outputs:
-```
   + instance_type   = [
       + "t3.micro",
       + "t3.small",
       + "t3.medium",
     ]
-```
 
 EX6) map 길이를 이용한 count
-  - 각 EC2의 Name 태그에는 map의 key를 사용하고
-  - Instance Type에는 map의 value를 사용
+ # 각 EC2의 Name 태그에는 map의 key를 사용하고
+ # Instance Type에는 map의 value를 사용
 
-  - variables.tf
-```hcl
+   # variables.tf
 variable "instance_types" {
   type = map(string)
   default = {
@@ -6089,49 +5664,34 @@ variable "instance_types" {
     db  = "t3.medium"
   }
 }
-```
 
-  - main.tf
-```hcl
+   # main.tf
 resource "aws_instance" "my-map-ec2" {
   # map의 항목 개수만큼 EC2 생성
   count = length(var.instance_types)
   ami           = data.aws_ami.al2023.id
-```
 
-  - map의 value를 인덱스로 하나씩 가져옴
-```
+  # map의 value를 인덱스로 하나씩 가져옴
   instance_type= values(var.instance_types)[count.index]
-```
 
-```
   tags = {
     # map의 key를 인덱스로 하나씩 가져옴
     Name = keys(var.instance_types)[count.index]
   }
 }
-```
 
-  - outputs.tf
-```hcl
+   # outputs.tf
 output "instance_types" {
   value = aws_instance.my-map-ec2[*].instance_type
 }
-```
 
-```hcl
 output "instance_names" {
   value = aws_instance.my-map-ec2[*].tags["Name"]
 }
-```
 
-```bash
 PS C:\trf\HCL_05_for_loop> terraform plan
-```
-
 ~~~~~~~~~~ 중간 생략 ~~~~~~~~~~
 Changes to Outputs:
-```
   + instance_names  = [
       + "app",
       + "db",
@@ -6162,41 +5722,32 @@ Changes to Outputs:
 EX1) 리스트 값 계산 (기본 for 표현식)
   - 리스트 값을 반복하면서 새로운 리스트 생성
 
-main.tf
 ```hcl
+main.tf
 variable "numbers" {
   type = list(number)
   default = [1, 2, 3, 4]
 }
-```
 
-```hcl
 output "result" {
   value = [for n in var.numbers : n * 5]
 }
-```
 
-```
 입력 [1,2,3,4]
-```
 
-```
 결과 [5,10,15,20]
-```
 
 설명
 
 for n in var.numbers
-  - 리스트 값을 하나씩 꺼낸다.
-  - n * 5
-  - 각 값을 계산하여 새로운 리스트 생성
+ # 리스트 값을 하나씩 꺼낸다.
+ # n * 5
+ # 각 값을 계산하여 새로운 리스트 생성
 
 EX2) 문자열 가공
-  - 문자열 리스트를 가공하여 새로운 값 생성
+ # 문자열 리스트를 가공하여 새로운 값 생성
 
-#### main.tf
-
-```hcl
+# main.tf
 locals {
   numbers = [1, 2, 3, 4, 5]
 
@@ -6204,21 +5755,14 @@ locals {
     for num in local.numbers : "server-${num}"
   ]
 }
-```
 
-#### output.tf
-
-```hcl
+# output.tf
 output "server-name" {
   value = local.server_names
 }
-```
 
-```bash
 PS C:\trs\terraform-aws\02_HCL\HCL-04-for-loop> terraform  plan
-```
 
-```
   + server-name = [
       + "server-1",
       + "server-2",
@@ -6226,133 +5770,96 @@ PS C:\trs\terraform-aws\02_HCL\HCL-04-for-loop> terraform  plan
       + "server-4",
       + "server-5",
     ]
-```
 
-```
 EX3) 리스트  --> map 변환
  # 리스트 데이터를 map 구조로 변환
 ```
 
 - Map/Object 형태
-```
+
+```hcl
 {
   for 변수 in 컬렉션 : key => value
 }
-```
 
-#### =>는 왼쪽을 key로, 오른쪽을 value로 만들어라라는 의미
+# =>는 왼쪽을 key로, 오른쪽을 value로 만들어라라는 의미
 
-#### variables.tf
-
-```hcl
+# variables.tf
 variable "users" {
 
   type = list(string)
   default = [ "kim",   "lee",   "park",  "ryu" ]
 }
-```
 
-#### main.tf
-
-```hcl
+# main.tf
 locals {
   user_map = {
     for user in var.users : user => "${user}@naver.com"
   }
 }
-```
 
-#### outputs.tf
-
-```hcl
+# outputs.tf
 output "user_map" {
   value = local.user_map
 }
-```
 
-```bash
 PS C:\trs\terraform-aws\02_HCL\HCL-04-for-loop> terraform  plan
-```
 
-```
   + user_map    = {
       + kim  = "kim@naver.com"
       + lee  = "lee@naver.com"
       + park = "park@naver.com"
       + ryu  = "ryu@naver.com"
     }
-```
 
 실습 3-2 리스트  --> map 변환
 
 다음 서버 리스트가 있다.
-```
 ["web","db","cache"]
-```
 
 for 표현식을 사용하여 다음 map을 생성하시오
 
-```
 {
   web   = "web:8080"
   db    = "db:8080"
   cache = "cache:8080"
 }
-```
 
-#### variables.tf
-
-```hcl
+# variables.tf
 variable "servers" {
   default = ["web","db","cache"]
 }
-```
 
-#### main.tf
-
-```hcl
+# main.tf
 locals {
   server_port_map = {
     for s in var.servers :
     s => "${s}:8080"
   }
 }
-```
 
-#### outputs.tf
-
-```hcl
+# outputs.tf
 output "server_port_map" {
   value = local.server_port_map
 }
-```
 
-```bash
 PS C:\trs\terraform-aws\02_HCL\HCL-04-for-loop> terraform  plan
-```
 
-```
   + server_port_map = {
       + cache = "cache:8080"
       + db    = "db:8080"
       + web   = "web:8080"
     }
-```
 
-  - EC2 생성으로 응용
+   # EC2 생성으로 응용
 
-#### variables.tf
-
-```hcl
+# variables.tf
 variable "servers" {
   type    = list(string)
   default = ["web", "db", "cache"]
 }
-```
 
-#### main.tf
-
-```hcl
+# main.tf
 terraform {
   required_version = "1.14.6"
 
@@ -6363,9 +5870,7 @@ terraform {
     }
   }
 }
-```
 
-```hcl
 provider "aws" {
   region  = "ap-northeast-2"
   profile = "my-profile"
@@ -6385,11 +5890,8 @@ resource "aws_instance" "example" {
     Port = each.value
   }
 }
-```
 
-#### outputs.tf
-
-```hcl
+# outputs.tf
 output "server_info" {
   value = {
     for key, instance in aws_instance.example :
@@ -6411,22 +5913,22 @@ output "server_info" {
 - for key, instance in aws_instance.my-ec2-for :
 
 - map 형태
-```
+
+```json
 {
   "web"   = web EC2 객체
   "db"    = db EC2 객체
   "cache" = cache EC2 객체
 }
-```
 
-  - 1회차
-```
+   # 1회차
 key  -->  "web"
 instance-->  aws_instance.example["web"]의 전체 인스턴스 정보
 ```
 
 - 1번째 인스턴스
 instance
+
 ```
  ├─ id            = "i-xxxxxxxx"
  ├─ instance_type= "t3.micro"
@@ -6440,19 +5942,17 @@ instance
 - name = instance.tags["Name"] 은 현재 EC2의 Name 태그를 가져온다.
 - port = instance.tags["Port"] 는 현재 EC2의 Port 태그를 가져온다.
 
-```bash
+```powershell
 PS C:\trs\terraform-aws\02_HCL\HCL-04-for-loop> terraform plan
-```
 
 Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
-+ create
+  + create
 
 Terraform will perform the following actions:
 ~~~~~~~~~ 중간 생략 ~~~~~~~~~
 
 Plan: 3 to add, 0 to change, 0 to destroy.
 
-```bash
 PS C:\trs\terraform-aws\02_HCL\HCL-04-for-loop> terraform apply
 ```
 
@@ -6460,46 +5960,33 @@ PS C:\trs\terraform-aws\02_HCL\HCL-04-for-loop> terraform apply
 
 ![이미지](assets/03-terraform-hcl/27.jpg)
 
-```bash
+```powershell
 PS C:\trs\terraform-aws\02_HCL\HCL-04-for-loop> terraform destory
-```
 
 실습 4-1 조건 필터 사용
-  - 특정 조건을 만족하는 값만 선택
+ # 특정 조건을 만족하는 값만 선택
 
-#### variables.tf
-
-```hcl
+# variables.tf
 variable "numbers" {
   description = "숫자 리스트"
   type        = list(number)
   default = [1, 2, 3, 4, 5, 6]
 }
-```
 
-#### main.tf
-
-```hcl
+# main.tf
 locals {
   even_numbers = [
     for n in var.numbers : n if n % 2 == 0
   ]
 }
-```
 
-#### outputs.tf
-
-```hcl
+# outputs.tf
 output "even_numbers" {
   value = local.even_numbers
 }
-```
 
-```bash
 PS C:\trs\terraform-aws\02_HCL\HCL-04-for-loop> terraform  plan
-```
 
-```
   + even_numbers    = [
       + 2,
       + 4,
@@ -6507,43 +5994,30 @@ PS C:\trs\terraform-aws\02_HCL\HCL-04-for-loop> terraform  plan
       + 8,
       + 10,
     ]
-```
 
 실습 4-2 조건 필터 사용
-  - 특정 조건을 만족하는 값만 선택
+ # 특정 조건을 만족하는 값만 선택
 
-#### variables.tf
-
-```hcl
+# variables.tf
 variable "numbers" {
   default = [2,4,6,8,10]
 }
-```
 
-#### main.tf
-
-```hcl
+# main.tf
 locals {
   greater_than_five = [
     for n in var.numbers :
     n if n > 5
   ]
 }
-```
 
-#### outputs.tf
-
-```hcl
+# outputs.tf
 output "greater_than_five" {
   value = local.greater_than_five
 }
-```
 
-```bash
 PS C:\trs\terraform-aws\02_HCL\HCL-04-for-loop> terraform  plan
-```
 
-```
   + greater_then_five = [
       + 6,
       + 7,
@@ -6551,45 +6025,30 @@ PS C:\trs\terraform-aws\02_HCL\HCL-04-for-loop> terraform  plan
       + 9,
       + 10,
     ]
-```
 
 실습 4-３ 조건 필터 사용)　다음 사용자 리스트에서 "admin"을 제외
-```
 ["admin","kim","lee","park"]
-```
 
-#### variables.tf
-
-```hcl
+# variables.tf
 variable "users" {
   type    = list(string)
   default = ["kim", "lee", "admin", "park", "choi", "ryu"]
 }
-```
 
-#### main.tf
-
-```hcl
+# main.tf
 locals {
   # normals = [# 실습 1
   #   for user in var.users : user if user != "admin"
   # ]
-```
 
-#### outputs.tf
-
-```hcl
+# outputs.tf
 output "normal_users" {
   value = local.normal_users
 }
-```
 
-```bash
 PS C:\trs\terraform-aws\02_HCL\HCL-04-for-loop> terraform  plan
-```
 
 Changes to Outputs:
-```
   + normal = [
       + "kim",
       + "lee",
@@ -6597,42 +6056,29 @@ Changes to Outputs:
       + "choi",
       + "ryu",
     ]
-```
 
-#### 실습 2 (이전 실습은 주석 처리)
-
-#### main.tf
-
-```hcl
+# 실습 2 (이전 실습은 주석 처리)
+# main.tf
 locals {
   # normal_users = [
   #   for user in var.users : user if user != "admin"
   # ]
-```
 
-  - contains() : 특정값이 있는지를 검색해서 있으면 true 없으면 false
-```
+  # contains() : 특정값이 있는지를 검색해서 있으면 true 없으면 false
   normal_users = [
     for user in var.users : user if contains(["admin", "kim", "ryu"], user)
   ]
 }
-```
 
-```bash
 PS C:\trs\terraform-aws\02_HCL\HCL-04-for-loop> terraform  plan
-```
 
-```
   + normal = [
       + "kim",
       + "admin",
       + "ryu",
     ]
-```
 
-#### main.tf
-
-```hcl
+# main.tf
 locals {
 ~~~~~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~~~~~
   # admin", "kim", "ryu" 유저만 제외
@@ -6640,9 +6086,7 @@ locals {
     for user in var.users : user if contains(["admin", "kim", "ryu"], user)
   ]
 }
-```
 
-```bash
 PS C:\trs\terraform-aws\02_HCL\HCL-04-for-loop> terraform  plan
 Changes to Outputs:
   + normal = [
@@ -6650,13 +6094,9 @@ Changes to Outputs:
       + "park",
       + "choi",
     ]
-```
-
 실습 5. 가용영역 생성 실습 (서울 리전의 가용영역 이름을 직접 만들고 출력)
 
-#### main.tf
-
-```hcl
+# main.tf
 terraform {
   required_version = "1.14.6"
 
@@ -6667,22 +6107,16 @@ terraform {
     }
   }
 }
-```
 
-```hcl
 provider "aws" {
   region  = "ap-northeast-2"
   profile = "my-profile"
 }
-```
 
-```hcl
 locals {
   az_letters = ["a", "b", "c", "d"]
 }
-```
 
-```hcl
 locals {
   azs = [
     for letter in local.az_letters :
@@ -6702,25 +6136,18 @@ locals {
 - 외부에서 직접 값을 변경할 수 없음
 - 계산값, 가공값, 중간값을 저장할 때 적합
 
-#### outputs.tf
-
 ```hcl
+# outputs.tf
 output "az_letters" {
   value = local.az_letters
 }
-```
 
-```hcl
 output "azs" {
   value = local.azs
 }
-```
 
-```bash
 PS C:\trs\terraform-aws\02_HCL\HCL-04-for-loop> terraform  plan
-```
 
-```
   + azs               = [
       + "ap-northeast-2a",
       + "ap-northeast-2b",
@@ -6737,9 +6164,8 @@ PS C:\trs\terraform-aws\02_HCL\HCL-04-for-loop> terraform  plan
   - subnet CIDR은 아래와 같이 설정 (10.20.1.0/24, 10.20.2.0/24, 10.20.3.0/24 10.20.4.0/24)
   - subnet 이름은 다음과 같이 태그 설정 (app-subnet-1, app-subnet-2, app-subnet-3, app-subnet-4)
 
-#### main.tf
-
 ```hcl
+# main.tf
 terraform {
   required_version = ">=1.9.0"
 
@@ -6750,16 +6176,12 @@ terraform {
     }
   }
 }
-```
 
-```hcl
 provider "aws" {
   region  = "ap-northeast-2"
   profile = "default"
 }
-```
 
-```hcl
 resource "aws_vpc" "main" {
   cidr_block = "10.20.0.0/16"
 
@@ -6767,9 +6189,7 @@ resource "aws_vpc" "main" {
     Name = "app-vpc"
   }
 }
-```
 
-```hcl
 locals {
   letters = ["a", "b", "c" "d"]
 
@@ -6778,9 +6198,7 @@ locals {
     "ap-northeast-2${x}"
   ]
 }
-```
 
-```hcl
 resource "aws_subnet" "app_subnet" {
   count = length(local.azs)
 
@@ -6792,39 +6210,28 @@ resource "aws_subnet" "app_subnet" {
     Name = "app-subnet-${count.index + 1}"
   }
 }
-```
 
-#### output.tf
-
-```hcl
+# output.tf
 output "vpc_id" {
   description = "생성된 VPC ID"
   value       = aws_vpc.main.id
 }
-```
 
-```hcl
 output "vpc_cidr" {
   description = "VPC CIDR"
   value       = aws_vpc.main.cidr_block
 }
-```
 
-```hcl
 output "subnet_ids" {
   description = "생성된 Subnet ID 목록"
   value       = aws_subnet.app_subnet[*].id
 }
-```
 
-```hcl
 output "subnet_cidrs" {
   description = "Subnet CIDR 목록"
   value       = aws_subnet.app_subnet[*].cidr_block
 }
-```
 
-```hcl
 output "subnet_azs" {
   description = "Subnet AZ 목록"
   value       = aws_subnet.app_subnet[*].availability_zone
@@ -6844,15 +6251,14 @@ output "subnet_azs" {
 resource "리소스" "이름" {
   for_each = 반복데이터
 }
-```
 
 실습 1 : 문자열 리스트로 EC2 여러 개 생성
+```
 
 - 다음 instance_type 리스트를 사용해서 EC2를 여러 개 생성
 
-#### variables.tf
-
 ```hcl
+# variables.tf
 variable "instance_types" {
   type = list(string)
 
@@ -6862,11 +6268,8 @@ variable "instance_types" {
     "t3.medium"
   ]
 }
-```
 
-#### main.tf
-
-```hcl
+# main.tf
 resource "aws_instance" "example" {
   for_each = toset(var.instance_types)
 
@@ -6877,10 +6280,10 @@ resource "aws_instance" "example" {
     Name = "ec2-${each.value}"
   }
 }
-```
 
 실습 2 : map 사용해서 EC2 생성
-  - for_each에서 key / value 개념 이해
+ # for_each에서 key / value 개념 이해
+```
 
 - 다음 map을 사용하여 EC2를 생성
 
@@ -6888,9 +6291,8 @@ resource "aws_instance" "example" {
   - key는 태그 이름
   - value는 instance_type
 
-#### variables.tf
-
 ```hcl
+# variables.tf
 variable "ec2_instances" {
   type = map(string)
 
@@ -6900,11 +6302,8 @@ variable "ec2_instances" {
     web3 = "t3.medium"
   }
 }
-```
 
-#### main.tf
-
-```hcl
+# main.tf
 resource "aws_instance" "example" {
   for_each = var.ec2_instances
 
@@ -6915,15 +6314,12 @@ resource "aws_instance" "example" {
     Name = each.key
   }
 }
-```
 
 실습 3-1) for_each로 리스트를 사용하여 보안 그룹을 생성
-  - 보안그룹 이름
-  - ingress 80 허용
+ # 보안그룹 이름
+ # ingress 80 허용
 
-#### varialbles.tf
-
-```hcl
+# varialbles.tf
 variable "security_groups" {
   type = list(string)
   default = [
@@ -6932,11 +6328,8 @@ variable "security_groups" {
     "monitoring-sg"
   ]
 }
-```
 
-#### main.tf
-
-```hcl
+# main.tf
 resource "aws_security_group" "example" {
 
   for_each = toset(var.security_groups)
@@ -6953,28 +6346,21 @@ resource "aws_security_group" "example" {
     Name = each.key
   }
 }
-```
 
-```bash
 PS C:\trs\terraform-aws\02_HCL\HCL-04-for-loop\for_each> terraform paln
-```
 
-```bash
 PS C:\trs\terraform-aws\02_HCL\HCL-04-for-loop\for_each> terraform apply -auto-approve
-```
 
-```bash
 PS C:\trs\terraform-aws\02_HCL\HCL-04-for-loop\for_each> terraform destroy -auto-approve
-```
 
 실습 3-2) for_each로 보안그룹 여러 개 생성
-  - 리소스 반복 생성 + 포트 반복 이해
+ # 리소스 반복 생성 + 포트 반복 이해
+```
 
 - 다음 리스트를 사용하여 보안 그룹을 생성
 
-#### variables.tf
-
 ```hcl
+# variables.tf
 variable "security_groups" {
   type = map(list(number))
   default = {
@@ -6983,11 +6369,8 @@ variable "security_groups" {
     monitoring-sg = [3000, 9090]
   }
 }
-```
 
-#### main.tf
-
-```hcl
+# main.tf
 resource "aws_security_group" "example" {
   for_each = var.security_groups
 
@@ -7006,15 +6389,14 @@ resource "aws_security_group" "example" {
     Name = each.key
   }
 }
-```
 
-```bash
 PS C:\trs\terraform-aws\02_HCL\HCL-04-for-loop\for_each> terraform paln
 PS C:\trs\terraform-aws\02_HCL\HCL-04-for-loop\for_each> terraform apply -auto-approve
 PS C:\trs\terraform-aws\02_HCL\HCL-04-for-loop\for_each> terraform destroy -auto-approve
-```
 
 실습 4 : EC2 + 보안그룹 연결
+```
+
 - EC2를 생성하고 각 EC2에 보안그룹을 연결
 
 - 조건
@@ -7022,9 +6404,8 @@ PS C:\trs\terraform-aws\02_HCL\HCL-04-for-loop\for_each> terraform destroy -auto
   - db
   - monitor
 
-#### variables.tf
-
 ```hcl
+# variables.tf
 variable "servers" {
   default = {
     web     = "t3.micro"
@@ -7032,11 +6413,8 @@ variable "servers" {
     monitor = "t3.micro"
   }
 }
-```
 
-#### main.tf
-
-```hcl
+# main.tf
 resource "aws_security_group" "sg" {
 
   for_each = var.servers
@@ -7044,9 +6422,7 @@ resource "aws_security_group" "sg" {
   name = "${each.key}-sg"
 
 }
-```
 
-```hcl
 resource "aws_instance" "example" {
   for_each = var.servers
 
@@ -7058,14 +6434,12 @@ resource "aws_instance" "example" {
     Name = each.key
   }
 }
-```
 
 실습 5) 다음 서버 목록 중에서 environment가 "prod"인 서버만 EC2를 생성
-  - prod 서버만 생성
-  - 태그 Name은 key 사용
-  - instance_type은 value.instance_type 사용
+ # prod 서버만 생성
+ # 태그 Name은 key 사용
+ # instance_type은 value.instance_type 사용
 
-```hcl
 variables.tf
 variable "servers" {
   default = {
@@ -7083,19 +6457,15 @@ variable "servers" {
     }
   }
 }
-```
 
 main.tf
-```hcl
 locals {
   prod_servers = {
     for name, info in var.servers :
     name => info if info.environment == "prod"
   }
 }
-```
 
-```hcl
 resource "aws_instance" "example" {
   for_each = local.prod_servers
   ami           = "ami-0389ea382ca31bd7f"
@@ -7105,13 +6475,11 @@ resource "aws_instance" "example" {
     environment = each.value.environment
   }
 }
-```
 
 실습6) 서버별로 다른 포트를 가진 보안그룹 생성
-  - key를 보안그룹 이름으로 사용
-  - ports 리스트에 있는 포트를 모두 ingress로 허용
+ # key를 보안그룹 이름으로 사용
+ # ports 리스트에 있는 포트를 모두 ingress로 허용
 
-```hcl
 variables.tf
 variable "security_groups" {
   default = {
@@ -7121,10 +6489,8 @@ variable "security_groups" {
     monitor = [3000, 9090]
   }
 }
-```
 
 main.tf
-```hcl
 resource "aws_security_group" "example" {
   for_each = var.security_groups
 
@@ -7161,30 +6527,23 @@ resource "aws_security_group" "example" {
   - subnet 이름은 다음과 같이 태그 설정 (app-subnet-1, app-subnet-2, app-subnet-3, app-subnet-4)
   - EC2생성 , 보안그룹 생성 , EC2에 보안그룹 적용
 
-#### variables.tf
-
 ```hcl
+# variables.tf
 variable "aws_region" {
   type    = string
   default = "ap-northeast-2"
 }
-```
 
-```hcl
 variable "aws_profile" {
   type    = string
   default = "my-profile"
 }
-```
 
-```hcl
 variable "vpc_cidr_block" {
   type    = string
   default = "10.20.0.0/16"
 }
-```
 
-```hcl
 variable "servers" {
   type = map(object({
     instance_type = string
@@ -7212,17 +6571,13 @@ variable "servers" {
     }
   }
 }
-```
 
-```hcl
 variable "ingress_ports" {
   type = list(number)
   default = [22, 80, 443]
 }
-```
 
-  - main.tf
-```hcl
+   # main.tf
 terraform {
   required_version = "1.14.6"
 
@@ -7233,18 +6588,13 @@ terraform {
     }
   }
 }
-```
 
-```hcl
 provider "aws" {
   region  = var.aws_region
   profile = var.aws_profile
 }
-```
 
-#### AMI 조회
-
-```hcl
+# AMI 조회
 data "aws_ami" "al2023" {
   most_recent = true
   owners      = ["amazon"]
@@ -7259,11 +6609,8 @@ data "aws_ami" "al2023" {
     values = ["x86_64"]
   }
 }
-```
 
-#### VPC 생성
-
-```hcl
+# VPC 생성
 resource "aws_vpc" "main" {
   cidr_block = var.vpc_cidr_block
 
@@ -7271,11 +6618,8 @@ resource "aws_vpc" "main" {
     Name = "my-vpc"
   }
 }
-```
 
-#### 가용영역 리스트 생성
-
-```hcl
+# 가용영역 리스트 생성
 locals {
   az_letters = ["a", "b", "c", "d"]
 
@@ -7284,11 +6628,8 @@ locals {
     "${var.aws_region}${letter}"
   ]
 }
-```
 
-#### Subnet 생성 (위에서 생성한 가용 영역 개수만큼 Subnet 생성)
-
-```hcl
+# Subnet 생성 (위에서 생성한 가용 영역 개수만큼 Subnet 생성)
 resource "aws_subnet" "main_subnet" {
   count = length(local.azs)
 
@@ -7301,11 +6642,8 @@ resource "aws_subnet" "main_subnet" {
     Name = "app-subnet-${count.index + 1}"
   }
 }
-```
 
-#### Security Group 생성
-
-```hcl
+# Security Group 생성
 resource "aws_security_group" "main_sg" {
   name   = "main-sg"
   vpc_id = aws_vpc.main.id
@@ -7370,40 +6708,28 @@ resource "aws_instance" "my_ec2" {
     Environment = each.value.environment
   }
 }
-```
 
-  - outputs.tf
-```hcl
+   # outputs.tf
 output "aws_vpc_id" {
   value = aws_vpc.main.id
 }
-```
 
-```hcl
 output "aws_azs" {
   value = local.azs
 }
-```
 
-```hcl
 output "main_subnet_ids" {
   value = aws_subnet.main_subnet[*].id
 }
-```
 
-```hcl
 output "main_subnet_names" {
   value = aws_subnet.main_subnet[*].tags["Name"]
 }
-```
 
-```hcl
 output "main_security_group_id" {
   value = aws_security_group.main_sg.id
 }
-```
 
-```hcl
 output "ec2_instance_ids" {
   value = {
     for key, instance in aws_instance.my_ec2 : key => instance.id
@@ -7454,11 +6780,10 @@ output "ec2_instance_ids" {
   - 리스트를 하나의 문자열로 결합한다.
 
 기본 예시
-```
-join(", " , ["apple", "banana", "cherry"])
-```
 
 ```
+join(", " , ["apple", "banana", "cherry"])
+
 결과 : "apple, banana, cherry"
 ```
 
@@ -7469,9 +6794,7 @@ join(", " , ["apple", "banana", "cherry"])
 locals {
   tag_string = join("-", ["dev", "web", "01"])
 }
-```
 
-```
 결과: "dev-web-01"
 ```
 
@@ -7480,9 +6803,7 @@ locals {
 
 ```
 split(",", "dev,prod,test")
-```
 
-```
 결과 : ["dev", "prod", "test"]
 ```
 
@@ -7502,17 +6823,12 @@ locals {
 
 ```
 replace("hello world", "world", "Terraform")
-```
 
-```
 결과: "hello Terraform"
-```
 
 실무 예
 
-#### 환경 이름에 따라 접두어 변경:
-
-```
+# 환경 이름에 따라 접두어 변경:
 replace(var.env, "prod", "production")
 ```
 
@@ -7521,9 +6837,7 @@ replace(var.env, "prod", "production")
 
 ```
 trimspace("   hello   ")
-```
 
-```
 결과 : "hello"
 ```
 
@@ -7541,10 +6855,8 @@ merge(
   { b = "banana" },
   { a = "avocado" }
 )
-```
 
 결과:
-```
 { a = "avocado", b = "banana" }
 ```
 
@@ -7565,12 +6877,13 @@ locals {
 
 ```
 contains(["dev", "prod"], "prod")
-```
 
 결과 : true
+```
 
 - 특정 환경일 때만 리소스 생성:
-```
+
+```hcl
 count = contains(["prod"], var.env) ? 1 : 0
 ```
 
@@ -7589,9 +6902,7 @@ length(["a", "b", "c"])
 
 ```
 flatten([["a","b"], ["c","d"], ["e"]])
-```
 
-```
 결과 : ["a","b","c","d","e"]
 ```
 
@@ -7602,9 +6913,7 @@ flatten([["a","b"], ["c","d"], ["e"]])
 
 ```
 keys({ a = 1, b = 2 })
-```
 
-```
 결과 : ["a", "b"]
 ```
 
@@ -7613,9 +6922,7 @@ keys({ a = 1, b = 2 })
 
 ```
 values({ a = 1, b = 2 })
-```
 
-```
 결과 : [1, 2]
 ```
 
@@ -7635,7 +6942,8 @@ values({ a = 1, b = 2 })
   - AWS 리소스의 tags는 항상 문자열만 허용한다.
 
 만약:
-```
+
+```hcl
 tags = {
   version = 1
 }
@@ -7647,7 +6955,8 @@ tags = {
 - 결과 : "123"
 
 사용 예
-```
+
+```hcl
 tags = {
   version = tostring(var.app_version)
 }
@@ -7660,6 +6969,7 @@ tags = {
 - 결과: ["apple", "banana"]
 
 사용 예
+
 ```hcl
 locals {
   az_list = tolist(data.aws_availability_zones.available.names)
@@ -7673,14 +6983,12 @@ locals {
   - for_each는 list를 직접 못 받는다. (set이나 map만 받는다.)
   - map 타입으로 강제 변환할 때 사용한다.
 
-```
+```hcl
 tomap({
   a = 1
   b = 2
 })
-```
 
-```hcl
 locals {
   final_tags = merge(
     tomap(var.common_tags),
@@ -7721,16 +7029,17 @@ resource "aws_instance" "example" {
 
 예제 구조 전체 흐름
 
-```bash
 1) 템플릿 파일 (config.tpl)
 #!/bin/bash
+
+```
 echo "Hello ${name}"
 ```
 
 - 이 파일은 아직 완성된 스크립트가 아니다.
   - ${name} 부분이 비어 있다.
 
-```
+```hcl
 2) Terraform 코드
 templatefile("config.tpl", {
   name = "Terraform"
@@ -7740,16 +7049,10 @@ templatefile("config.tpl", {
 - 이 코드의 의미는 config.tpl 파일을 읽는다.
   - ${name} 자리에 "Terraform"을 넣어라.
 
-```
 3-1) Terraform은 config.tpl 파일을 읽는다.
-```
-
 3-2) ${name} 변수를 찾는다.
 3-3) vars 맵에서 name 값을 찾는다.
-```
 3-4) ${name}를 "Terraform"으로 교체한다.
-```
-
 3-5) 최종 문자열을 반환한다.
 
 #### 5. 네트워크 함수
@@ -7760,10 +7063,8 @@ templatefile("config.tpl", {
 ```
 1) cidrsubnet(base_cidr_block, new_bits, net_num)
  # 상위 CIDR 블록을 더 작은 서브넷으로 분할한다.
-```
 
 예제
-```
 cidrsubnet("10.0.0.0/16", 8, 1)
 ```
 
@@ -7775,6 +7076,7 @@ cidrsubnet("10.0.0.0/16", 8, 1)
 - 결과 : 10.0.1.0/24
 
 사용 예
+
 ```hcl
 resource "aws_subnet" "example" {
   count      = 3
@@ -7787,13 +7089,15 @@ resource "aws_subnet" "example" {
 ```
 2) cidrhost(cidr_block, host_num)
  # CIDR 블록 내부에서 특정 호스트 번호에 해당하는 IP를 반환한다.
-```
 
 예제
+```
+
 - cidrhost("10.0.0.0/24", 5)
 - 결과 : 10.0.0.5
 
 사용 예
+
 ```hcl
 locals {
   db_ip = cidrhost(var.subnet_cidr, 10)
@@ -7802,9 +7106,8 @@ locals {
 
 - 고정 IP를 계산할 때 사용한다.
 
-#### main.tf
-
 ```hcl
+# main.tf
 terraform {
   required_providers {
     random = {
@@ -7813,281 +7116,188 @@ terraform {
     }
   }
 }
-```
 
-#### varialbles.tf
-
-```hcl
+# varialbles.tf
 variable "num1" {
   default = 10
 }
-```
 
-```hcl
 variable "num2" {
   default = 20
 }
-```
 
-#### 숫자 함수 예제: 두 숫자 중 최대값 구하기
-
-#### main.tf
-
-```hcl
+# 숫자 함수 예제: 두 숫자 중 최대값 구하기
+# main.tf
 locals {
   max_value = max(var.num1, var.num2)
 }
-```
 
-#### outputs.tf
-
-```hcl
+# outputs.tf
 output "max_value" {
   value = local.max_value
 }
-```
 
-#### 결과 : 20
+# 결과 : 20
 
-```bash
 PS C:\terrform\HCL-05-functions> terraform  init
-```
 
-```bash
 PS C:\terrform\HCL-05-functions> terraform  plan
-```
 
 Changes to Outputs:
-```
   + max_value = 20
-```
 
-#### max() : 매개변수중 작은 값을 리턴
+# max() : 매개변수중 작은 값을 리턴
 
-#### 최소 값
-
-#### main.tf
-
-```hcl
+# 최소 값
+# main.tf
 locals {
   max_value = max(var.num1, var.num2)
   min_value = min(var.num1, var.num2)
 }
-```
 
-#### outputs.tf
-
-```hcl
+# outputs.tf
 output "minx_value" {
   value = local.min_value
 }
-```
 
-```bash
 PS C:\terrform\HCL-05-functions> terraform  plan
 Changes to Outputs:
   + max_value = 20
   + min_value = 10
-```
 
-#### 합계
+# 합계
 
-#### varialbles.tf
-
-```hcl
+# varialbles.tf
 variable "sum" {
   type    = list(number)
   default = [10, 20, 30]
 }
-```
 
-#### main.tf
-
-```hcl
+# main.tf
 locals {
   max_value = max(var.num1, var.num2)
   min_value = min(var.num1, var.num2)
   sum_value = sum(var.sum)
 }
-```
 
-#### outputs.tf
-
-```hcl
+# outputs.tf
 output "sum_value" {
   value = local.sum_value
 }
-```
 
-```bash
 PS C:\terrform\HCL-05-functions> terraform  plan
 Changes to Outputs:
   + max_value = 20
   + min_value = 10
   + sum_value = 60
-```
 
-#### 평균
-
-#### main.tf
-
-```hcl
+# 평균
+# main.tf
 locals {
   max_value = max(var.num1, var.num2)
   min_value = min(var.num1, var.num2)
   sum_value = sum(var.sum)
   avg_value = sum(var.sum) / length(var.sum)
 }
-```
 
-#### outputs.tf
-
-```hcl
+# outputs.tf
 output "avg_value" {
   value = local.avg_value
 }
-```
 
-```bash
 PS C:\terrform\HCL-05-functions> terraform  plan
 Changes to Outputs:
   + avg_value = 20
   + max_value = 20
   + min_value = 10
   + sum_value = 60
-```
 
-#### 소문자를 대문자로 변환
+# 소문자를 대문자로 변환
 
-#### varialbles.tf
-
-```hcl
+# varialbles.tf
 variable "upper_greeting" {
   type    = string
   default = "hello, terraform"
 }
-```
 
-#### main.tf
-
-#### 문자열 함수 예제
-
-```hcl
+# main.tf
+# 문자열 함수 예제
 locals {
   upper_value = upper(var.greeting) # 문자열을 대문자로 변환
 }
-```
 
-#### outputs.tf
-
-#### 문자열 함수 예제
-
-```hcl
+# outputs.tf
+# 문자열 함수 예제
 output "upper_value" {
   value = local.upper_value # 문자열을 대문자로 변환
 }
-```
 
-```bash
 PS C:\terrform\HCL-05-functions> terraform  plan
 Changes to Outputs:
   + upper_greeting = "HELLO, TERRAFORM"
-```
 
-```hcl
 variables.tf
 variable "lower_greeting" {
   type    = string
   default = "HELLO, TERRAFORM"
 }
-```
 
-#### main.tf
-
-```hcl
+# main.tf
 locals {
   lower_value = lower(var.greeting)   # 문자열을 소문자로 변환
 }
-```
 
-#### outputs.tf
-
-```hcl
+# outputs.tf
 output "lower_greeting" {
   value = local.lower_value   # 문자열을 소문자로 변환
 }
-```
 
-```bash
 PS C:\terrform\HCL-05-functions> terraform  plan
 Changes to Outputs:
   + max_value      = 20
   + upper_greeting = "HELLO, TERRAFORM"
   + lower_greeting = "hello, terraform"
-```
 
-#### join()
+# join()
 
-```hcl
 variables.tf
 variable "fruits" {
   type    = list(string)
   default = ["apple", "banana", "cherry", "mango"]
 }
-```
 
-#### main.tf
-
-#### join(separator string, …lists list of string) string
-
-```hcl
+# main.tf
+# join(separator string, …lists list of string) string
 locals {
   result = join(" ", var.fruits)
 }
-```
 
-#### outputs.tf
-
-```hcl
+# outputs.tf
 output "join_result" {
   value = local.result
 }
-```
 
-```bash
 PS C:\trs\terraform-aws\02_HCL\HCL-06-function> terraform plan
   + join_result    = "apple, banana, cherry, mango"
-```
 
-```
     ＃ split()
-```
 
-```hcl
 variables.tf
 variable "split_string" {
   type    = string
   default = "hello, soldesk, aws, terraform"
 }
-```
 
-#### main.tf
-
-```hcl
+# main.tf
 locals {
   split_result = split(", ", var.split_string)
 }
-```
 
-#### outputs.tf
-
-```hcl
+# outputs.tf
 output "split_result" {
   value = local.split_result
 }
-```
 
-```bash
 PS C:\terrform\HCL-05-functions> terraform  plan
 Changes to Outputs:
   + split-list-output = [
@@ -8096,11 +7306,8 @@ Changes to Outputs:
       + "aws",
       + "terraform",
     ]
-```
 
-#### main.tf
-
-```hcl
+# main.tf
 locals {
   result = join(" ", var.fruits)
   split_result = split(", ", var.split_string)
@@ -8108,101 +7315,68 @@ locals {
   az_string       = "ap-northeast-2a|ap-northeast-2b|ap-northeast-2c"
   split_result_az = split("|", local.az_string)
 }
-```
 
-#### outputs.tf
-
-```hcl
+# outputs.tf
 output "split_result_az" {
   value = local.split_result_az
 }
-```
 
-```bash
 PS C:\terrform\HCL-05-functions> terraform  plan
   + split_result_az = [
       + "ap-northeast-2a",
       + "ap-northeast-2b",
       + "ap-northeast-2c",
     ]
-```
 
-#### 변환 함수 예제
+# 변환 함수 예제
 
-#### varialbles.tf
-
-```hcl
+# varialbles.tf
 variable "bool_value" {
   default = true
 }
-```
 
-#### main.tf
-
-```hcl
+# main.tf
 locals {
   tring_value = tostring(var.bool_value) # 불리언 값을 문자열로 변환
 }
-```
 
-#### main.tf
-
-```hcl
+# main.tf
 output "string_value" {
   value = local.tring_value # 불리언 값을 문자열로 변환
 }
-```
 
-```bash
 PS C:\terrform\HCL-05-functions> terraform  plan
-```
 
 Changes to Outputs:
-```
   + string_value      = "true"
-```
 
-#### varialbles.tf
-
-```hcl
+# varialbles.tf
 variable "config_path" {
   default = "config.txt"
 }
-```
 
-#### main.tf
-
-#### 파일 함수 예제
-
-#### 결과 : config.txt 경로 지정
-
+# main.tf
+# 파일 함수 예제
+# 결과 : config.txt 경로 지정
 check "config_file_exists" {# check 블록은 어떤 조건이 정상인지 검사하는 블록
-assert {# assert 는 반드시 만족해야 하는 조건을 정의
+  assert {# assert 는 반드시 만족해야 하는 조건을 정의
 
-  - condition은 true / false 결과가 나오는 조건식
-  - var.config_path에 지정된 파일이 존재하면 true 파일이 존재하지 않으면 false
-  - # fileexists()는 Terraform 함수, 지정한 파일이 존재하는지 검사
-```
+    # condition은 true / false 결과가 나오는 조건식
+    # var.config_path에 지정된 파일이 존재하면 true 파일이 존재하지 않으면 false
+    # # fileexists()는 Terraform 함수, 지정한 파일이 존재하는지 검사
     condition     = fileexists(var.config_path)
-```
 
-  - condition의 결과가 false일 때 출력할 메시지
-```
+    # condition의 결과가 false일 때 출력할 메시지
     error_message = "Configuration file does not exist at the specified path."
   }
 }
-```
 
-#### config.txt 파일이 없기 때문에 경고가 발생한다. (에러 아님)
-
-```bash
+# config.txt 파일이 없기 때문에 경고가 발생한다. (에러 아님)
 PS C:\terrform\HCL-05-functions> terraform  plan
 Changes to Outputs:
-```
 
 │ Warning: Check block assertion failed
 │
-```
 │   on main.tf line 38, in check "config_file_exists":
 │   38:     condition     = fileexists(var.config_path)
 │     ├────────────────
@@ -8221,12 +7395,10 @@ this is config.txt file
 
 #### cnfig.txt 파일이 있기 때문에 에러가 발생하지 않는다.
 
-```bash
+```powershell
 PS C:\terrform\HCL-05-functions> terraform  plan
-```
 
 Changes to Outputs:
-```
   + joined_fruit      = "apple, banana, cherry"
   + max_value         = 20
   + split-list-output = [
@@ -8237,39 +7409,28 @@ Changes to Outputs:
     ]
   + string_value      = "true"
   + upper_greeting    = "HELLO, TERRAFORM"
-```
 
-#### main.tf
-
-```
+# main.tf
 check "config_file_exists" {
   assert {
     condition     = fileexists(var.config_path)
     error_message = "Configuration file does not exist at the specified path."
   }
 }
-```
 
-```hcl
 locals {
   # fileexists는 파일이 있으면 true 없으면 flase
   # var.config_path 에 파일이 있으면 true 없으면 flase
   file_exists = fileexists(var.config_path)
 }
-```
 
-```hcl
 output "file_exists" {
   value = local.file_exists
 }
-```
 
-```bash
 PS C:\terrform\HCL-05-functions> terraform  plan
-```
 
 Changes to Outputs:
-```
   + file_exists       = true
   + joined_fruit      = "apple, banana, cherry"
   + max_value         = 20
@@ -8281,35 +7442,24 @@ Changes to Outputs:
     ]
   + string_value      = "true"
   + upper_greeting    = "HELLO, TERRAFORM"
-```
 
-#### replace()
+# replace()
 
-#### main.tf
-
-```hcl
+# main.tf
 locals {
   env                = "prod"
   replace_env_result = replace(local.env, "prod", "production")
 }
-```
 
-#### outputs.tf
-
-```hcl
+# outputs.tf
 output "replace_env_result" {
   value = local.replace_env_result
 }
-```
 
-```bash
 PS C:\terrform\HCL-05-functions> terraform  plan
   + replace_env_result  = "production"
-```
 
-#### main.tf
-
-```hcl
+# main.tf
 locals {
   env                = "prod"
   replace_env_result = replace(local.env, "prod", "production")
@@ -8317,103 +7467,68 @@ locals {
   cidr                = "172.16.1.0/24"
   replace_cidr_result = replace(local.cidr, "172.16", "192.168")
 }
-```
 
-#### outputs.tf
-
-```hcl
+# outputs.tf
 output "replace_cidr_result" {
   value = local.replace_cidr_result
 }
-```
 
-```bash
 PS C:\terrform\HCL-05-functions> terraform  plan
   + replace_cidr_result = "192.168.1.0/24"
   + replace_env_result  = "production"
-```
 
-#### trimspace()
+# trimspace()
 
-#### main.tf
-
-```hcl
+# main.tf
 locals {
   text_space       = "   hello terraform ~~!!   "
   trimspace_result = trimspace(local.text_space)
 }
-```
 
-#### outputs.tf
-
-```hcl
+# outputs.tf
 output "trimspace_result" {
   value = local.trimspace_result
 }
-```
 
-```bash
 PS C:\terrform\HCL-05-functions> terraform  plan
   + trimspace_result    = "hello terraform ~~!!"
-```
 
-#### contains()
+# contains()
 
-#### main.tf
-
-```hcl
+# main.tf
 locals {
   envs            = ["dev", "prod", "test"]
   contains_result = contains(local.envs, "prod")
 }
-```
 
-#### outputs.tf
-
-```hcl
+# outputs.tf
 output "contains_result" {
   value = local.contains_result
 }
-```
 
-```bash
 PS C:\terrform\HCL-05-functions> terraform  plan
   + contains_result     = true
-```
 
-#### length()
+# length()
 
-#### main.tf
-
-#### length() : list 또는 문자열의 개수를 리턴
-
-#### list = 해당 리스트에 저장된 요소(element)의 개수
-
-#### string = 해당 문자열의 개수
-
-```hcl
+# main.tf
+# length() : list 또는 문자열의 개수를 리턴
+# list = 해당 리스트에 저장된 요소(element)의 개수
+# string = 해당 문자열의 개수
 locals {
   list_value  = ["10.10.1.0/24", "10.10.2.0/24", "10.10.3.0/24"]
   list_length = length(local.list_value)
 }
-```
 
-#### outputs.tf
-
-```hcl
+# outputs.tf
 output "list_length" {
   value = local.list_length
 }
-```
 
-```bash
 PS C:\terrform\HCL-05-functions> terraform  plan
   + list_length         = 3
-```
 
-#### main.tf
-
-```hcl
+# main.tf
 locals {
   list_value  = ["10.10.1.0/24", "10.10.2.0/24", "10.10.3.0/24"]
   list_length = length(local.list_value)
@@ -8421,29 +7536,20 @@ locals {
   string_value  = "hello terraform"
   string_length = length(local.string_value)
 }
-```
 
-#### outputs.tf
-
-```hcl
+# outputs.tf
 output "string_length" {
   value = local.string_length
 }
-```
 
-```bash
 PS C:\terrform\HCL-05-functions> terraform  plan
   + list_length          = 3
   + string_length       = 15
-```
 
-#### keys(map), values(map)
+# keys(map), values(map)
 
-#### main.tf
-
-#### keys(map), values(map)
-
-```hcl
+# main.tf
+# keys(map), values(map)
 locals {
   servers = {
     web1 = "t3.micro"
@@ -8454,23 +7560,16 @@ locals {
   result_key   = keys(local.servers)
   result_value = values(local.servers)
 }
-```
 
-#### outputs.tf
-
-```hcl
+# outputs.tf
 output "result_key" {
   value = local.result_key
 }
-```
 
-```hcl
 output "result_value" {
   value = local.result_value
 }
-```
 
-```bash
 PS C:\terrform\HCL-05-functions> terraform  plan
   + result_key          = [
       + "web1",
@@ -8482,58 +7581,40 @@ PS C:\terrform\HCL-05-functions> terraform  plan
       + "t3.small",
       + "t3.medium",
     ]
-```
 
-#### 네트워크 함수 cidrsubnet(), cidrhost()
+# 네트워크 함수 cidrsubnet(), cidrhost()
 
-#### varialbles.tf
-
-```hcl
+# varialbles.tf
 variable "vpc_cidr_block" {
   default = "172.16.0.0/16"
 }
-```
 
-#### main.tf
-
-```hcl
+# main.tf
 locals {
   cidr_value1 = cidrsubnet(var.vpc_cidr_block, 8, 1)
   cidr_value2 = cidrsubnet(var.vpc_cidr_block, 8, 2)
   cidr_value3 = cidrsubnet(var.vpc_cidr_block, 8, 3)
 }
-```
 
-#### outputs.tf
-
-```hcl
+# outputs.tf
 output "cidr_value1" {
   value = local.cidr_value1
 }
-```
 
-```hcl
 output "cidr_value2" {
   value = local.cidr_value2
 }
-```
 
-```hcl
 output "cidr_value3" {
   value = local.cidr_value3
 }
-```
 
-```bash
 PS C:\terrform\HCL-05-functions> terraform  plan
   + cidr_value1         = "172.16.1.0/24"
   + cidr_value2         = "172.16.2.0/24"
   + cidr_value3         = "172.16.3.0/24"
-```
 
-#### main.tf
-
-```hcl
+# main.tf
 locals {
   cidr_value1 = cidrsubnet(var.vpc_cidr_block, 8, 1)
   cidr_value2 = cidrsubnet(var.vpc_cidr_block, 8, 2)
@@ -8543,29 +7624,20 @@ locals {
   cidrhost_ip2 = cidrhost(local.cidr_value2, 7)
   cidrhost_ip3 = cidrhost(local.cidr_value3, 9)
 }
-```
 
-#### outputs.tf
-
-```hcl
+# outputs.tf
 output "cidrhost_ip1" {
   value = local.cidrhost_ip1
 }
-```
 
-```hcl
 output "cidrhost_ip2" {
   value = local.cidrhost_ip2
 }
-```
 
-```hcl
 output "cidrhost_ip3" {
   value = local.cidrhost_ip3
 }
-```
 
-```bash
 PS C:\terrform\HCL-05-functions> terraform  plan
   + cidr_value1         = "172.16.1.0/24"
   + cidr_value2         = "172.16.2.0/24"
@@ -8573,62 +7645,41 @@ PS C:\terrform\HCL-05-functions> terraform  plan
   + cidrhost_ip1        = "172.16.1.5"
   + cidrhost_ip2        = "172.16.2.7"
   + cidrhost_ip3        = "172.16.3.9"
-```
 
-#### main.tf
+# main.tf
 
-#### 랜덤 정수 생성
-
-```hcl
+# 랜덤 정수 생성
 resource "random_integer" "example_int" {
   min = 1   # 생성할 최소 정수값
   max = 100# 생성할 최대 정수값
 }
-```
 
-#### outputs.tf
-
-```hcl
+# outputs.tf
 output "random_int" {
   value = random_integer.random_int.result
 }
-```
 
-```bash
 PS C:\terrform\HCL-05-functions> terraform  plan
-```
-
 ~~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~~
 Plan: 1 to add, 0 to change, 0 to destroy.
 
 Changes to Outputs:
-```
   + host_ip              = "10.0.0.5"
   + random_integer_value = (known after apply)# 아직 값이 결정되지 않아 출력되지 않는다.
   + subnet_cidr          = "10.0.1.0/24"
-```
 
-```bash
 PS C:\terrform\HCL-05-functions> terraform  apply
-```
-
 ~~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~~
-Enter a value: yes
+  Enter a value: yes
 random_integer.example: Creating...
-```
 random_integer.example: Creation complete after 0s [id=98]
-```
 
 Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
 Outputs:
 
-```
 random_int = 98
-```
 
-#### 랜덤 문자열 생성
-
-```hcl
+# 랜덤 문자열 생성
 resource "random_string" "example_string" {
   length = 8      # 생성할 문자열 길이
   upper   = true   # 대문자 포함 여부
@@ -8636,14 +7687,10 @@ resource "random_string" "example_string" {
   numeric= true   # 숫자 포함 여부
   special = false  # 특수문자 포함 여부
 }
-```
 
-```bash
 PS C:\terrform\HCL-05-functions> terraform  apply
 Outputs:
-```
 
-```
 random_int = 59
 random_str = "2L7jopj!ZJAn?w2N"
 ```
@@ -8689,9 +7736,7 @@ random_str = "2L7jopj!ZJAn?w2N"
 variable "file_path" {
   default = "./app/config.txt"
 }
-```
 
-```
 check "valid_file_path" {
   condition = fileexists(var.file_path)
   error_message = "설정 파일 경로가 존재하지 않거나 접근할 수 없습니다."
@@ -8727,9 +7772,7 @@ check "valid_file_path" {
 resource "aws_s3_bucket" "example" {
  bucket = "my-existing-bucket-20241027"
 }
-```
 
-```
 import {
   to = aws_s3_bucket.example
   id = "my-existing-bucket-20241027"
@@ -8766,9 +7809,8 @@ import {
 
 #### 실습
 
-#### main.tf
-
 ```hcl
+# main.tf
 terraform {
   required_version = ">= 1.9.6" # Terraform의 최소 요구 버전을 1.9.6 이상으로 설정
   required_providers {
@@ -8778,82 +7820,59 @@ terraform {
     }
   }
 }
-```
 
-```hcl
 provider "aws" {# AWS 프로바이더 설정
   region  = "ap-northeast-2"  # AWS 리전을 ap-northeast-2로 설정
   profile = "default" # AWS CLI의 프로파일 이름을 'my-profile'로 사용
 }
-```
 
-#### resource "aws_s3_bucket" "example" {
+# resource "aws_s3_bucket" "example" {
+#   bucket        = "my-existing-bucket-123456789012"
+#   bucket_prefix = null
+#   tags          = {}
+#   tags_all      = {}
+# }
 
-#### bucket        = "my-existing-bucket-123456789012"
-
-#### bucket_prefix = null
-
-#### tags          = {}
-
-#### tags_all      = {}
-
-#### }
-
-```hcl
 resource "aws_s3_bucket" "example" {# S3 버킷 리소스 생성
   bucket = "my-existing-bucket-123456789012"# 생성할 S3 버킷 이름을 'my-existing-bucket-20241027'로 지정
 }
-```
 
 import {# 기존 S3 버킷을 Terraform 상태와 연결
-```
   to = aws_s3_bucket.example             # Terraform 리소스 'aws_s3_bucket.example'와 연결
   id = "my-existing-bucket-123456789012" # 연결할 기존 버킷 ID (이름)
 }
-```
 
-```bash
 PS C:\terrform\HCL-06-import> terraform init
 Initializing the backend...
 Initializing provider plugins...
-```
-
 - Finding hashicorp/aws versions matching ">= 5.73.0"...
 - Installing hashicorp/aws v6.34.0...
 - Installed hashicorp/aws v6.34.0 (signed by HashiCorp)
 Terraform has created a lock file .terraform.lock.hcl to record the provider
 selections it made above. Include this file in your version control repository
 so that Terraform can guarantee to make the same selections by default when
-```
 you run "terraform init" in the future.
-```
 
 Terraform has been successfully initialized!
 
-```
 You may now begin working with Terraform. Try running "terraform plan" to see
 any changes that are required for your infrastructure. All Terraform commands
 should now work.
-```
 
 If you ever set or change modules or backend configuration for Terraform,
 rerun this command to reinitialize your working directory. If you forget, other
 commands will detect it and remind you to do so if necessary.
 
-#### 아직 my-existing-bucket-123456789012 이름의 S3 Bucket이 없기 때문에 에러 발생
-
-```bash
+# 아직 my-existing-bucket-123456789012 이름의 S3 Bucket이 없기 때문에 에러 발생
 PS C:\terrform\HCL-06-import> terraform plan
 aws_s3_bucket.example: Preparing import... [id=my-existing-bucket-123456789012]
 aws_s3_bucket.example: Refreshing state... [id=my-existing-bucket-123456789012]
-```
 
 Planning failed. Terraform encountered an error while generating this plan.
 
 ╷
 │ Error: Cannot import non-existent remote object
 │
-```
 │ While attempting to import an existing object to "aws_s3_bucket.example", the provider detected that no object exists with the given id. Only
 │ pre-existing objects can be imported; check that the id is correct and that it is associated with the provider's configured region or endpoint, or use
 │ "terraform apply" to create a new remote object for this resource.
@@ -8867,16 +7886,14 @@ Planning failed. Terraform encountered an error while generating this plan.
 
 ![이미지](assets/03-terraform-hcl/32.png)
 
-```bash
+```powershell
 PS C:\terrform\HCL-06-import> terraform plan
 aws_s3_bucket.example: Preparing import... [id=my-existing-bucket-123456789012]
 aws_s3_bucket.example: Refreshing state... [id=my-existing-bucket-123456789012]
-```
 
 Terraform will perform the following actions:
 
-  - aws_s3_bucket.example will be imported
-```hcl
+  # aws_s3_bucket.example will be imported
     resource "aws_s3_bucket" "example" {
         acceleration_status       = null
         arn                         = "arn:aws:s3:::my-existing-bucket-123456789012"
@@ -8894,79 +7911,66 @@ Terraform will perform the following actions:
         request_payer               = "BucketOwner"
         tags                        = {}
         tags_all                    = {}
-```
 
 ~~~~~~~~~~~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~~~~~~~~~~~
 
-```
         versioning {
             enabled    = false
             mfa_delete = false
         }
     }
-```
 
 Plan: 1 to import, 0 to add, 0 to change, 0 to destroy.
 
-```bash
 PS C:\terrform\HCL-06-import> terraform apply
 aws_s3_bucket.example: Preparing import... [id=my-existing-bucket-123456789012]
 aws_s3_bucket.example: Refreshing state... [id=my-existing-bucket-123456789012]
-```
 
 Terraform will perform the following actions:
 
-  - aws_s3_bucket.example will be imported
-```hcl
+  # aws_s3_bucket.example will be imported
     resource "aws_s3_bucket" "example" {
-```
 
 ~~~~~~~~~~~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~~~~~~~~~~~
 
 Plan: 1 to import, 0 to add, 0 to change, 0 to destroy.
 
 Do you want to perform these actions?
-Terraform will perform the actions described above.
-Only 'yes' will be accepted to approve.
+  Terraform will perform the actions described above.
+  Only 'yes' will be accepted to approve.
 
-Enter a value: yes
+  Enter a value: yes
 
-```bash
 aws_s3_bucket.example: Importing... [id=my-existing-bucket-123456789012]
 aws_s3_bucket.example: Import complete [id=my-existing-bucket-123456789012]
-```
 
 Apply complete! Resources: 1 imported, 0 added, 0 changed, 0 destroyed.
+```
 
 - terraform.tfstate 파일을 확인해보면 S3 버킷이 Terraform에 의해 관리되고 있다.
 
 ![이미지](assets/03-terraform-hcl/33.png)
 
-```bash
+```powershell
 PS C:\terrform\HCL-06-import> terraform  state  show  AWS_s3_bucket.example
-```
 
-#### terraform에 의해 관리되기 때문에 S3 버킷이 삭제된다.
-
-```bash
+# terraform에 의해 관리되기 때문에 S3 버킷이 삭제된다.
 PS C:\terrform\HCL-06-import> terraform destroy  -auto-approve
 aws_s3_bucket.example: Refreshing state... [id=my-existing-bucket-123456789012]
-```
 
 Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
-- destroy
+  - destroy
 
 Terraform will perform the following actions:
 
-  - aws_s3_bucket.example will be destroyed
+  # aws_s3_bucket.example will be destroyed
 ~~~~~~~~~~~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~~~~~~~~~~~
 Plan: 0 to add, 0 to change, 1 to destroy.
-```bash
 aws_s3_bucket.example: Destroying... [id=my-existing-bucket-123456789012]
 aws_s3_bucket.example: Destruction complete after 0s
-```
 
 Destroy complete! Resources: 1 destroyed
+```
 
 - AWS S3 버킷을 확인하게되면 버킷이 확인되지 않는다.
 
@@ -9056,7 +8060,6 @@ Destroy complete! Resources: 1 destroyed
 
 예를 들어 프로젝트 구조가 이렇게 있다고 하자:
 
-```
 project-name/
 ├── dev/
 │      ├── main.tf
@@ -9071,11 +8074,10 @@ project-name/
 │      ├── variables.tf
 │      └── outputs.tf
 └── modules/
-          └── vpc/
-                  ├── main.tf
-                  ├── variables.tf
-                  └── outputs.tf
-```
+└── vpc/
+├── main.tf
+├── variables.tf
+└── outputs.tf
 
 - 루트 모듈에서 이렇게 호출한다.
 
@@ -9140,47 +8142,35 @@ module "vpc" {
 
 ![이미지](assets/03-terraform-hcl/35.png)
 
-#### ./module/vpc/main.tf
-
 ```hcl
+# ./module/vpc/main.tf
 resource "aws_vpc" "sol_vpc" {
   cidr_block = var.cidr_block
   tags = {
     name = var.vpc_name
   }
 }
-```
 
-#### ./module/vpc/outputs.tf
-
-```hcl
+# ./module/vpc/outputs.tf
 output "vpc_id" {
   description = "vpc_id_print"
   value       = aws_vpc.sol_vpc.id
 }
-```
 
-#### ./module/vpc/varialbles.tf
-
-```hcl
+# ./module/vpc/varialbles.tf
 variable "cidr_block" {
   description = "VPC CIDR-Block"
   type        = string
   default     = "172.16.0.0/16"
 }
-```
 
-```hcl
 variable "vpc_name" {
   description = "VPC Name"
   type        = string
   default     = "my-vpc"
 }
-```
 
-#### main.tf
-
-```hcl
+# main.tf
 terraform {
   required_version = "> 1.9.8"
   required_providers {
@@ -9190,46 +8180,33 @@ terraform {
     }
   }
 }
-```
 
-```hcl
 provider "aws" {
   region  = "ap-northeast-2"
   profile = "default"
 }
-```
 
-```hcl
 module "my_vpc" {
   source = "./modules/vpc"
-```
 
-  - variables.tf 정보
-```
+  # variables.tf 정보
   vpc_name   = "my_vpc"
   cidr_block = "10.0.0.0/16"
 }
-```
 
-#### ./module/vpc/outputs.tf
-
-```hcl
+# ./module/vpc/outputs.tf
 output "vpc_id" {
   value = module.my_vpc.vpc_id
 }
-```
 
-```bash
 PS C:\terrform\HCL-07-module> terraform  plan
-```
 
 Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
-+ create
+  + create
 
 Terraform will perform the following actions:
 
-  - module.my_vpc.aws_vpc.sol_vpc will be created
-```
+  # module.my_vpc.aws_vpc.sol_vpc will be created
   + resource "aws_vpc" "sol_vpc" {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       + tags                                 = {
@@ -9238,46 +8215,34 @@ Terraform will perform the following actions:
       + tags_all                             = {
           + "name" = "my_vpc"
 Plan: 1 to add, 0 to change, 0 to destroy.
-```
 
 Changes to Outputs:
-```
   ~ vpc_id = "vpc-04e32c99daa08436f" -> (known after apply)
-```
 
-```
 Note: You didn't use the -out option to save this plan, so Terraform can't guarantee to take exactly these actions if you run "terraform apply"
 now.
-```
 
-```bash
 PS C:\terrform\HCL-07-module> terraform  apply  -auto-approve
-```
 
 Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
-+ create
+  + create
 
 Terraform will perform the following actions:
 
-  - module.my_vpc.aws_vpc.sol_vpc will be created
-```
+  # module.my_vpc.aws_vpc.sol_vpc will be created
   + resource "aws_vpc" "sol_vpc" {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Plan: 1 to add, 0 to change, 0 to destroy.
-```
 
 Changes to Outputs:
-```hcl
   ~ vpc_id = "vpc-04e32c99daa08436f" -> (known after apply)
 module.my_vpc.aws_vpc.sol_vpc: Creating...
 module.my_vpc.aws_vpc.sol_vpc: Creation complete after 2s [id=vpc-0d66e697d12ea0ed2]
-```
 
 Apply complete! Resources: 1 added, 0 changed, 0 destroyed.
 
 Outputs:
 
-```
 vpc_id = "vpc-0d66e697d12ea0ed2"
 ```
 
@@ -9293,9 +8258,8 @@ vpc_id = "vpc-0d66e697d12ea0ed2"
 
 ![이미지](assets/03-terraform-hcl/38.png)
 
-#### main.tf
-
 ```hcl
+# main.tf
 terraform {
   required_version = "> 1.9.8"
   required_providers {
@@ -9305,22 +8269,16 @@ terraform {
     }
   }
 }
-```
 
-```hcl
 provider "aws" {
   region  = "ap-northeast-2"
   profile = "default"
 }
-```
 
-```hcl
 module "my_vpc" {
   source = "./modules/vpc"
-```
 
-  - variables.tf 정보
-```
+  # variables.tf 정보
   vpc_name   = "your_vpc"
   cidr_block = "10.10.0.0/16"
 }
@@ -9329,50 +8287,39 @@ module "my_vpc" {
 - CIDR은 한번 할당하게되면 변경이 불가능하다.
 - 만약 이상태에서 terraform  apply를 실행하게되면 기존 vpc는 삭제되고 새로운 vpc를 생성한다.
 
-```hcl
+```powershell
 PS C:\terrform\HCL-07-module> terraform  apply  -auto-approve
 module.my_vpc.aws_vpc.sol_vpc: Refreshing state... [id=vpc-04e32c99daa08436f]
-```
 
 Note: Objects have changed outside of Terraform
 
-```
 Terraform detected the following changes made outside of Terraform since the last "terraform apply" which may have affected this plan:
-```
 
-  - module.my_vpc.aws_vpc.sol_vpc has been deleted
-- resource "aws_vpc" "sol_vpc" {
-- id                                   = "vpc-04e32c99daa08436f" -> null
-```
+  # module.my_vpc.aws_vpc.sol_vpc has been deleted
+  - resource "aws_vpc" "sol_vpc" {
+      - id                                   = "vpc-04e32c99daa08436f" -> null
         tags                                 = {
             "name" = "my_vpc"
         }
         # (19 unchanged attributes hidden)
     }
-```
-
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Plan: 1 to add, 0 to change, 1 to destroy.
 
 Changes to Outputs:
-```hcl
   ~ vpc_id = "vpc-0d66e697d12ea0ed2" -> (known after apply)
 module.my_vpc.aws_vpc.sol_vpc: Destroying... [id=vpc-0d66e697d12ea0ed2]
 module.my_vpc.aws_vpc.sol_vpc: Destruction complete after 1s
 module.my_vpc.aws_vpc.sol_vpc: Creating...
 module.my_vpc.aws_vpc.sol_vpc: Creation complete after 1s [id=vpc-0f69376c7bf1f07cf]
-```
 
 Apply complete! Resources: 1 added, 0 changed, 1 destroyed.
 
 Outputs:
 
-```
 vpc_id = "vpc-0f69376c7bf1f07cf
-```
 
-#### AWS 접속 후 CIDR , tag 정보 확인
+# AWS 접속 후 CIDR , tag 정보 확인
 
-```bash
 PS C:\terrform\HCL-07-module> terraform  destroy  -auto-approve
 ```

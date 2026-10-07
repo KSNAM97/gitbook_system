@@ -37,10 +37,7 @@ S3는 저장되는 데이터 양에 따라 자동으로 확장된다.
 
 구분EBSS3
 저장 방식Block StorageObject Storage
-```
 주 용도EC2 DiskFile / Object 저장
-```
-
 EC2 연결필요필요 없음
 File System사용사용하지 않음
 확장Volume 크기 관리자동 확장
@@ -52,16 +49,14 @@ File System사용사용하지 않음
 
 S3 Bucket
 │
-```
-     ├── images/
-     │      ├── cat.jpg
-     │      └── dog.jpg
-     │
-     ├── documents/
-     │      └── report.pdf
-     │
-     └── index.html
-```
+├── images/
+│      ├── cat.jpg
+│      └── dog.jpg
+│
+├── documents/
+│      └── report.pdf
+│
+└── index.html
 
 - S3의 핵심 구성 요소는 다음과 같다.
   - Bucket
@@ -163,8 +158,8 @@ images/linux.png
 
 - Terraform에서는 aws_s3_bucket Resource를 사용하여 Bucket을 생성할 수 있다.
 
-  - main.tf
 ```hcl
+   # main.tf
 resource "aws_s3_bucket" "my_bucket" {
   bucket = "soldesk-s3-example-123456789"
   tags = {
@@ -200,26 +195,18 @@ resource "aws_s3_bucket" "my_bucket" {
 
 #### AWS Account ID를 이용한 Bucket 이름 생성
 
-  - main.tf
-
-#### 현재 AWS Account 정보 조회
-
 ```hcl
+   # main.tf
+# 현재 AWS Account 정보 조회
 data "aws_caller_identity" "current" {
 }
-```
 
-#### Bucket 이름 생성
-
-```hcl
+# Bucket 이름 생성
 locals {
   bucket_name = "soldesk-s3-${data.aws_caller_identity.current.account_id}"
 }
-```
 
-#### S3 Bucket 생성
-
-```hcl
+# S3 Bucket 생성
 resource "aws_s3_bucket" "my_bucket" {
   bucket = local.bucket_name
   tags = {
@@ -248,10 +235,11 @@ resource "aws_s3_bucket" "my_bucket" {
 - Terraform으로 S3 Bucket에 파일을 업로드할 수도 있다.
 
 - 예를 들어 현재 Terraform Directory에 다음 파일이 있다고 가정
-  - index.html
 
-  - main.tf
 ```hcl
+ # index.html
+
+   # main.tf
 resource "aws_s3_object" "index" {
   bucket= aws_s3_bucket.my_bucket.id
   key    = "index.html"
@@ -279,7 +267,8 @@ resource "aws_s3_object" "index" {
 - 위 Terraform으로 생성되는 구조
 
 - 다음처럼 Key를 설정하면
-```
+
+```hcl
 key = "images/aws.png"
 ```
 
@@ -296,26 +285,33 @@ images
 - 예를 들어"index.html"File을 업로드했다고 가정
 
 - 처음 내용
+
 ```
 <h1>Hello AWS</h1>
 ```
 
 - 이후 File을 수정
+
 ```
 <h1>Hello Soldesk</h1>
 ```
 
 - Versioning을 사용하지 않는 경우 기존 Object가 덮어써진다.
+
+```
 index.html
 
 Hello Soldesk
+```
 
 - Versioning을 사용하면
 
+```
 index.html
-├ Version 3
-├ Version 2
-└ Version 1
+ ├ Version 3
+ ├ Version 2
+ └ Version 1
+```
 
 - 처럼 이전 Version을 보관할 수 있다.
 
@@ -327,8 +323,8 @@ index.html
 
 #### Terraform으로 Versioning 활성화
 
-  - main.tf
 ```hcl
+   # main.tf
 resource "aws_s3_bucket_versioning" "my_bucket_versioning" {
   bucket = aws_s3_bucket.my_bucket.id
   versioning_configuration {
@@ -350,10 +346,13 @@ resource "aws_s3_bucket_versioning" "my_bucket_versioning" {
 
 - 구조
 S3 Bucket
+
+```
 index.html
-├ Version 3
-├ Version 2
-└ Version 1
+ ├ Version 3
+ ├ Version 2
+ └ Version 1
+```
 
 #### Versioning에서 Object 삭제
 
@@ -410,10 +409,7 @@ S3는 저장되는 데이터 양에 따라 자동으로 확장된다.
 
 구분EBSS3
 저장 방식Block StorageObject Storage
-```
 주 용도EC2 DiskFile / Object 저장
-```
-
 EC2 연결필요필요 없음
 File System사용사용하지 않음
 확장Volume 크기 관리자동 확장
@@ -425,16 +421,14 @@ File System사용사용하지 않음
 
 S3 Bucket
 │
-```
-     ├── images/
-     │      ├── cat.jpg
-     │      └── dog.jpg
-     │
-     ├── documents/
-     │      └── report.pdf
-     │
-     └── index.html
-```
+├── images/
+│      ├── cat.jpg
+│      └── dog.jpg
+│
+├── documents/
+│      └── report.pdf
+│
+└── index.html
 
 - S3의 핵심 구성 요소는 다음과 같다.
   - Bucket
@@ -482,10 +476,8 @@ my-soldesk-bucket
 예)
 Bucket 이름
 my-soldesk-bucket
-```
 
-│
-```
+        │
         └── images/aws.png
 ```
 
@@ -539,8 +531,8 @@ images/linux.png
 
 - Terraform에서는 aws_s3_bucket Resource를 사용하여 Bucket을 생성할 수 있다.
 
-  - main.tf
 ```hcl
+   # main.tf
 resource "aws_s3_bucket" "my_bucket" {
   bucket = "soldesk-s3-example-123456789"
   tags = {
@@ -576,26 +568,18 @@ resource "aws_s3_bucket" "my_bucket" {
 
 #### AWS Account ID를 이용한 Bucket 이름 생성
 
-  - main.tf
-
-#### 현재 AWS Account 정보 조회
-
 ```hcl
+   # main.tf
+# 현재 AWS Account 정보 조회
 data "aws_caller_identity" "current" {
 }
-```
 
-#### Bucket 이름 생성
-
-```hcl
+# Bucket 이름 생성
 locals {
   bucket_name = "soldesk-s3-${data.aws_caller_identity.current.account_id}"
 }
-```
 
-#### S3 Bucket 생성
-
-```hcl
+# S3 Bucket 생성
 resource "aws_s3_bucket" "my_bucket" {
   bucket = local.bucket_name
   tags = {
@@ -624,10 +608,11 @@ resource "aws_s3_bucket" "my_bucket" {
 - Terraform으로 S3 Bucket에 파일을 업로드할 수도 있다.
 
 - 예를 들어 현재 Terraform Directory에 다음 파일이 있다고 가정
-  - index.html
 
-  - main.tf
 ```hcl
+ # index.html
+
+   # main.tf
 resource "aws_s3_object" "index" {
   bucket = aws_s3_bucket.my_bucket.id
   key    = "index.html"
@@ -655,7 +640,8 @@ resource "aws_s3_object" "index" {
 - 위 Terraform으로 생성되는 구조
 
 - 다음처럼 Key를 설정하면
-```
+
+```hcl
 key = "images/aws.png"
 ```
 
@@ -672,26 +658,33 @@ images
 - 예를 들어"index.html"File을 업로드했다고 가정
 
 - 처음 내용
+
 ```
 <h1>Hello AWS</h1>
 ```
 
 - 이후 File을 수정
+
 ```
 <h1>Hello Soldesk</h1>
 ```
 
 - Versioning을 사용하지 않는 경우 기존 Object가 덮어써진다.
+
+```
 index.html
 
 Hello Soldesk
+```
 
 - Versioning을 사용하면
 
+```
 index.html
-├ Version 3
-├ Version 2
-└ Version 1
+ ├ Version 3
+ ├ Version 2
+ └ Version 1
+```
 
 - 처럼 이전 Version을 보관할 수 있다.
 
@@ -703,8 +696,8 @@ index.html
 
 #### Terraform으로 Versioning 활성화
 
-  - main.tf
 ```hcl
+   # main.tf
 resource "aws_s3_bucket_versioning" "my_bucket_versioning" {
   bucket = aws_s3_bucket.my_bucket.id
   versioning_configuration {
@@ -726,10 +719,13 @@ resource "aws_s3_bucket_versioning" "my_bucket_versioning" {
 
 - 구조
 S3 Bucket
+
+```
 index.html
-├ Version 3
-├ Version 2
-└ Version 1
+ ├ Version 3
+ ├ Version 2
+ └ Version 1
+```
 
 #### Versioning에서 Object 삭제
 
@@ -787,48 +783,39 @@ S3 Bucket 이름은 전 세계에서 유일해야
 중복 가능성을 낮춘다.
 
   - terraform-s3-lab\variables.tf
+
 ```hcl
 variable "aws_region" {
   description = "AWS 리전"
   type        = string
   default     = "ap-northeast-2"
 }
-```
 
-```hcl
 variable "aws_profile" {
   description = "AWS CLI Profile 이름"
   type        = string
   default     = "my-profile"
 }
-```
 
-```hcl
 variable "bucket_prefix" {
   description = "S3 Bucket 이름 앞부분"
   type        = string
   default     = "soldesk-s3"
 }
-```
 
-```hcl
 variable "project_name" {
   description = "프로젝트 이름"
   type        = string
   default     = "s3-lab"
 }
-```
 
-```hcl
 variable "environment" {
   description = "환경 이름"
   type        = string
   default     = "training"
 }
-```
 
-  - terraform-s3-lab\main.tf
-```hcl
+   # terraform-s3-lab\main.tf
 terraform {
   # 사용할 Terraform 최소 버전
   required_version = ">= 1.16.0"
@@ -840,54 +827,38 @@ terraform {
     }
   }
 }
-```
 
-```hcl
 provider "aws" {
   region = var.aws_region
   profile = var.aws_profile
 }
-```
 
-#### 현재 Terraform을 실행하는 AWS 계정 정보 조회
-
-#### 
-
+# 현재 Terraform을 실행하는 AWS 계정 정보 조회
+#
 account_id를 가져와 S3 Bucket 이름에 사용
-```hcl
 data "aws_caller_identity" "current" {
 }
-```
 
-  - terraform-s3-lab\output.tf
-```hcl
+   # terraform-s3-lab\output.tf
 output "account_id" {
   value = data.aws_caller_identity.current.account_id
 }
-```
 
-```hcl
 output "user_id" {
   value = data.aws_caller_identity.current.user_id
 }
-```
 
-```hcl
 output "arn" {
   value = data.aws_caller_identity.current.arn
 }
-```
 
-```bash
 PS C:\my-terraform> terraform plan
 Changes to Outputs:
   + account_id = "123456789012"
   + anr        = "arn:aws:iam::123456789012:user/admin"
   + user_id    = "AIDA5A62EVKFSAZ6N4LW2"
-```
 
-  - terraform-s3-lab\main.tf
-```hcl
+   # terraform-s3-lab\main.tf
 locals {
   # S3 Bucket 이름 생성
   # 예: soldesk-s3-basic-123456789012-ap-northeast-2
@@ -895,18 +866,13 @@ locals {
   # "soldesk-s3-basic-123456789012-ap-northeast-2"에서 "123456789012"이 값을 조회
   bucket_name = "${var.bucket_prefix}-basic-${data.aws_caller_identity.current.account_id}-${var.aws_region}"
 }
-```
 
-#### S3 Bucket 생성
-
-```hcl
+# S3 Bucket 생성
 resource "aws_s3_bucket" "my_bucket" {
   # locals에서 생성한 Bucket 이름 사용
   bucket = local.bucket_name
-```
 
-  - Resource Tag
-```hcl
+  # Resource Tag
   tags = {
     Name = "${var.project_name}-basic""
   }
@@ -916,16 +882,12 @@ output "bucket_name" {
   description = "생성된 S3 Bucket 이름"
   value = aws_s3_bucket.my_bucket.bucket
 }
-```
 
-```hcl
 output "bucket_arn" {
   description = "생성된 S3 Bucket ARN"
   value = aws_s3_bucket.my_bucket.arn
 }
-```
 
-```bash
 PS C:\my-terraform> terraform init
 PS C:\my-terraform> terraform validate
 PS C:\my-terraform> terraform plan
@@ -954,9 +916,7 @@ resource "aws_s3_object" "index" {
   source = "${path.module}/index.html"# Terraform 프로젝트 디렉터리에 있는 index.html 업로드
   content_type = "text/html"  # 브라우저가 HTML 문서로 인식하도록 Content-Type 설정
 }
-```
 
-```bash
 PS C:\my-terraform> terraform init
 PS C:\my-terraform> terraform validate
 PS C:\my-terraform> terraform plan
@@ -982,9 +942,7 @@ resource "aws_s3_bucket_public_access_block" "public_access" {
   block_public_policy = false# Public Bucket Policy 차단 해제
   restrict_public_buckets = false# Public Bucket 제한 해제
 }
-```
 
-```bash
 PS C:\my-terraform> terraform plan
 ```
 
@@ -1004,15 +962,11 @@ PS C:\my-terraform> terraform plan
 ```hcl
 resource "aws_s3_bucket_policy" "public_read" {
   bucket = aws_s3_bucket.my_bucket.id# Policy를 적용할 S3 Bucket
-```
 
-  - Public Access Block 해제가 먼저 완료된 후 Bucket Policy를 생성하도록 의존성을 설정
-```
+  # Public Access Block 해제가 먼저 완료된 후 Bucket Policy를 생성하도록 의존성을 설정
   depends_on = [ aws_s3_bucket_public_access_block.public_access  ]
-```
 
-  - Terraform Object를 JSON 형식의 IAM Policy로 변환
-```
+  # Terraform Object를 JSON 형식의 IAM Policy로 변환
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -1026,20 +980,14 @@ resource "aws_s3_bucket_policy" "public_read" {
     ]
   })
 }
-```
 
-  - terraform-s3-lab\output.tf
-
-#### index.html Object URL
-
-```hcl
+   # terraform-s3-lab\output.tf
+# index.html Object URL
 output "index_url" {
   description = "index.html 접속 URL"
   value = "https://${aws_s3_bucket.my_bucket.bucket}.s3.${var.aws_region}.amazonaws.com/${aws_s3_object.index.key}"
 }
-```
 
-```bash
 PS C:\my-terraform> terraform plan
 PS C:\my-terraform> terraform apply
 ```
@@ -1048,9 +996,7 @@ PS C:\my-terraform> terraform apply
 
 #### output으로 출력된 경로로 브라우저를 통해서 접속
 
-```
 https://soldesk-s3-bucket-basic-123456789012-ap-northeast-2.s3.ap-northeast-2.amazonaws.com/index.html
-```
 
 ![이미지](assets/07-terraform-s3/3.png)
 
@@ -1066,52 +1012,31 @@ https://soldesk-s3-bucket-basic-123456789012-ap-northeast-2.s3.ap-northeast-2.am
 
 #### AWS Region
 
-```bash
+```hcl
 aws_region = "ap-northeast-2"
-```
 
-#### AWS CLI Profile
-
-```bash
+# AWS CLI Profile
 aws_profile = "my-profile"
-```
 
-#### S3 Bucket 이름 앞부분
-
-```
+# S3 Bucket 이름 앞부분
 bucket_prefix = "soldesk-s3"
-```
 
-#### 프로젝트 이름
-
-```
+# 프로젝트 이름
 project_name = "s3-lab"
-```
 
-#### 환경 이름
-
-```
+# 환경 이름
 environment = "training"
-```
 
-#### STEP 7. AWS CLI로 확인
+# STEP 7. AWS CLI로 확인
 
-#### 현재 AWS Account의 S3 Bucket 목록을 확인
-
-```bash
+# 현재 AWS Account의 S3 Bucket 목록을 확인
 PS C:\my-terraform> aws s3 ls --profile my-profile
-```
 
-#### Bucket 확인
-
-```bash
+# Bucket 확인
 PS C:\trf2\2) S3\2-1_S3_basic> aws s3 ls
 2026-09-22 12:04:41 soldesk-s3-bucket-basic-123456789012-ap-northeast-2
-```
 
-#### Bucket Object 확인
-
-```bash
+# Bucket Object 확인
 PS C:\trf2\2) S3\2-1_S3_basic> aws s3 ls s3://soldesk-s3-bucket-basic-123456789012-ap-northeast-2
 2026-09-22 12:04:43      20007 index.html
 ```
@@ -1120,37 +1045,26 @@ PS C:\trf2\2) S3\2-1_S3_basic> aws s3 ls s3://soldesk-s3-bucket-basic-1234567890
 
 #### 파일 업로드
 
-```
 형식 :　aws s3 cp ./index.html s3://버킷이름/index.html
-```
 
-```bash
+```powershell
 PS C:\trf2\2) S3\2-1_S3_basic>
  aws  s3  cp  ./route53.html  s3://soldesk-s3-bucket-basic-123456789012-ap-northeast-2/route53.html
 upload: .\route53.html to s3://soldesk-s3-bucket-basic-123456789012-ap-northeast-2/route53.html
-```
 
-```bash
 PS C:\trf2\2) S3\2-1_S3_basic> aws  s3  ls  s3://soldesk-s3-bucket-basic-123456789012-ap-northeast-2
 2026-09-22 12:04:43      20007 index.html
 2026-09-22 12:12:33     649736 route53.html
-```
 
-#### 파일 다운로드
-
-```
+# 파일 다운로드
 형식 :　aws s3 cp s3://버킷이름/index.html ./index.html
-```
 
-```bash
 PS C:\trf2\2) S3\2-1_S3_basic>
  aws s3 cp  s3://soldesk-s3-bucket-basic-123456789012-ap-northeast-2/index.html  ./index2.html
 download: s3://soldesk-s3-bucket-basic-123456789012-ap-northeast-2/index.html to .\index2.html
-```
 
-#### STEP 9. Terraform Resource 삭제
+# STEP 9. Terraform Resource 삭제
 
-```bash
 PS C:\my-terraform> terraform destroy
 ```
 
@@ -1168,25 +1082,21 @@ PS C:\my-terraform> terraform destroy
 - 이 단계에서는 아직 S3 Bucket을 생성하지 않는다.
 - Terraform이 AWS와 통신할 수 있도록 기본 환경만 구성
 
-  - variables.tf
 ```hcl
+   # variables.tf
 variable "aws_region" {
   description = "AWS 리전"
   type        = string
   default     = "ap-northeast-2"
 }
-```
 
-```hcl
 variable "aws_profile" {
   description = "AWS CLI Profile 이름"
   type        = string
   default     = "default"
 }
-```
 
-  - main.tf
-```hcl
+   # main.tf
 terraform {
   required_version = ">= 1.16.0"
   required_providers {
@@ -1196,22 +1106,16 @@ terraform {
     }
   }
 }
-```
 
-```hcl
 provider "aws" {
   region  = var.aws_region
   profile = var.aws_profile
 }
-```
 
-  - terraform.tf
-```bash
+   # terraform.tf
 aws_region  = "ap-northeast-2"
 aws_profile = "default"
-```
 
-```hcl
 terraform init
 ```
 
@@ -1222,14 +1126,12 @@ terraform init
 
 - data Block은 새로운 AWS Resource를 생성하는 것이 아니라 AWS에 존재하는 정보 또는 현재 Account 정보를 조회
 
-  - main.tf
 ```hcl
+   # main.tf
 data "aws_caller_identity" "current" {
 }
-```
 
-  - outputs.tf
-```hcl
+   # outputs.tf
 output "account_id" {
   description = "현재 AWS Account ID"
   value       = data.aws_caller_identity.current.account_id
@@ -1252,7 +1154,8 @@ terraform plan
   - AWS Region
 
 - 예)
-```
+
+```hcl
 bucket_prefix = "soldesk-s3"
 Account ID = 123456789012
 Region = ap-northeast-2
@@ -1260,31 +1163,25 @@ Region = ap-northeast-2
 
 - 생성 결과 : soldesk-s3-versioning-123456789012-ap-northeast-2
 
-  - variables.tf
 ```hcl
+   # variables.tf
 variable "bucket_prefix" {
   description = "S3 Bucket 이름 Prefix"
   type        = string
   default     = "soldesk-s3"
 }
-```
 
-  - main.tf
-```hcl
+   # main.tf
 locals {
   bucket_name = "${var.bucket_prefix}-versioning-${data.aws_caller_identity.current.account_id}-${var.aws_region}"
 }
-```
 
-  - outputs.tf
-```hcl
+   # outputs.tf
 output "bucket_name" {
   description = "생성할 S3 Bucket 이름"
   value       = local.bucket_name
 }
-```
 
-```bash
 PS C:\trf2\2) S3\2-２_S3_versioning>　terraform plan
 ```
 
@@ -1297,25 +1194,21 @@ PS C:\trf2\2) S3\2-２_S3_versioning>　terraform plan
 - 앞에서 이해한 Bucket 이름 생성 방식을 적용
 - S3 Bucket에는 관리 목적으로 Tag를 추가
 
-  - variables.tf
 ```hcl
+   # variables.tf
 variable "project_name" {
   description = "Project 이름"
   type        = string
   default     = "s3-lab"
 }
-```
 
-```hcl
 variable "environment" {
   description = "환경 이름"
   type        = string
   default     = "training"
 }
-```
 
-  - main.tf
-```hcl
+   # main.tf
 resource "aws_s3_bucket" "my_bucket" {
   bucket = local.bucket_name
 
@@ -1325,15 +1218,11 @@ resource "aws_s3_bucket" "my_bucket" {
     ManagedBy = "Terraform"
   }
 }
-```
 
-  - terraform.tf
-```
+   # terraform.tf
 project_name  = "s3-lab"
 environment   = "training"
-```
 
-```bash
 PS C:\trf2\2) S3\2-２_S3_versioning>　terraform plan
 PS C:\trf2\2) S3\2-２_S3_versioning>　terraform apply
 ```
@@ -1356,24 +1245,20 @@ document.txt
 
 ![이미지](assets/07-terraform-s3/4.png)
 
-  - main.tf
 ```hcl
+   # main.tf
 resource "aws_s3_bucket_versioning" "versioning" {
   bucket = aws_s3_bucket.my_bucket.id
   versioning_configuration {
     status = "Enabled"
   }
 }
-```
 
-  - outputs.tf
-```hcl
+   # outputs.tf
 output "versioning_status" {
   value = aws_s3_bucket_versioning.versioning.versioning_configuration[0].status
 }
-```
 
-```bash
 PS C:\trf2\2) S3\2-２_S3_versioning>　terraform plan
 ```
 
@@ -1381,7 +1266,7 @@ PS C:\trf2\2) S3\2-２_S3_versioning>　terraform plan
   - aws_s3_bucket.my_bucket
   - aws_s3_bucket_versioning.versioning
 
-```bash
+```powershell
 PS C:\trf2\2) S3\2-２_S3_versioning>　terraform apply
 ```
 
@@ -1403,63 +1288,45 @@ Bucket
 │
 └── S3 Version 1
 
-  - variables.tf
 ```hcl
+   # variables.tf
 variable "object_content" {
   description = "Versioning 확인용 document.txt 내용"
   type        = string
   default     = "S3 Version 1"
 }
-```
 
-  - main.tf
-
-#### Versioning 테스트용 Object 생성
-
-```hcl
+   # main.tf
+# Versioning 테스트용 Object 생성
 resource "aws_s3_object" "document" {
   # Object를 저장할 S3 Bucket 지정 앞에서 생성한 aws_s3_bucket.my_bucket을 사용
   bucket = aws_s3_bucket.my_bucket.id
-```
 
-  - S3 Bucket 안에서 사용할 Object 이름, document.txt가 Object의 Key가 된다.
-```
+  # S3 Bucket 안에서 사용할 Object 이름, document.txt가 Object의 Key가 된다.
   key = "document.txt"
-```
 
-  - document.txt 파일 안에 저장될 실제 내용, variables.tf의 object_content 변수 값을 사용
-```
+  # document.txt 파일 안에 저장될 실제 내용, variables.tf의 object_content 변수 값을 사용
   content = var.object_content
-```
 
-  - Object의 Content-Type 설정, 일반 Text File이므로 text/plain 사용
-```
+  # Object의 Content-Type 설정, 일반 Text File이므로 text/plain 사용
   content_type = "text/plain"
-```
 
-  - S3 Versioning 설정이 먼저 완료된 후 document.txt Object가 생성되도록 의존성 지정
-```
+  # S3 Versioning 설정이 먼저 완료된 후 document.txt Object가 생성되도록 의존성 지정
   depends_on = [ aws_s3_bucket_versioning.versioning ]
 }
-```
 
-  - outputs.tf
-```hcl
+   # outputs.tf
 output "object_key" {
   description = "Versioning 확인용 Object Key"
   value       = aws_s3_object.document.key
 }
-```
 
-```hcl
 output "object_content" {
   description = "Versioning 확인용 Object Content"
   value = aws_s3_object.document.content
 }
-```
 
-  - terraform.tf
-```
+   # terraform.tf
 object_content = "S3 Bucket Version 1 Test"
 ```
 
@@ -1477,20 +1344,18 @@ object_content = "S3 Bucket Version 1 Test"
 - depends_on
   - S3 Versioning이 활성화된 후 Object를 생성하도록 순서를 지정
 
-```bash
+```powershell
 PS C:\trf2\2) S3\2-２_S3_versioning>　terraform plan
 Changes to Outputs:
   + object_content    = "S3 Bucket Version 1 Test"
   + object_key        = "document.txt"
-```
 
-```bash
 PS C:\trf2\2) S3\2-２_S3_versioning>　terraform apply
 ```
 
 - document.txt 파일을 다운로드 후 파일 내용 확인
 
-```bash
+```powershell
 PS C:\trf2\2) S3\2-2_S3_versioing>
  aws s3 cp  s3://soldesk-s3-versioning-123456789012-ap-northeast-2/document.txt  ./document.txt
 download: s3://soldesk-s3-versioning-123456789012-ap-northeast-2/document.txt to .\document.txt
@@ -1511,28 +1376,20 @@ download: s3://soldesk-s3-versioning-123456789012-ap-northeast-2/document.txt to
 
 - Versioning이 활성화되어 있기 때문에  Version 1을 덮어쓰는 것이 아니라 새로운 Version이 생성된다.
 
-  - terraform.tf
-```
+```hcl
+   # terraform.tf
 object_content = "S3 Bucket Version 2 Test 2"
-```
 
-```bash
 PS C:\my-terraform> terraform plan
 Plan: 0 to add, 1 to change, 0 to destroy.
-```
 
 Changes to Outputs:
-```
   ~ object_content    = "S3 Bucket Version 1 Test" -> "S3 Bucket Version 2 Test 2"
-```
 
-```bash
 PS C:\my-terraform> terraform apply
 Plan: 0 to add, 1 to change, 0 to destroy.
-```
 
 Changes to Outputs:
-```
   ~ object_content    = "S3 Bucket Version 1 Test" -> "S3 Bucket Version 2 Test 2"
 ```
 
@@ -1550,14 +1407,14 @@ document.txt
 
 - 이번에도 Key는 document.txt 그대로 유지
 
-  - terraform.tf
-```
+```hcl
+   # terraform.tf
 object_content = "S3 Bucket Version 3 Test 3"
 ```
 
 - document.txt 내용이 Version 2에서 Version 3으로 변경되는 것을 확인
 
-```bash
+```powershell
 PS C:\my-terraform> terraform apply
 Changes to Outputs:
   ~ object_content    = "S3 Bucket Version 2 Test 2" -> "S3 Bucket Version 3 Test 3"
@@ -1591,23 +1448,17 @@ document.txt
 
 - 먼저 document.txt가 정상적으로 존재하는지 확인한다.
 
-```bash
+```powershell
 PS C:\trf2\2) S3\2-2_S3_versioning>
 aws  s3  ls  s3://soldesk-s3-versioning-123456789012-ap-northeast-2
 2026-09-22 13:18:18         26 document.txt
-```
 
-#### 현재 document.txt 내용을 다운로드해서 확인
-
-```bash
+# 현재 document.txt 내용을 다운로드해서 확인
 PS C:\trf2\2) S3\2-2_S3_versioning>
 aws s3 cp s3://soldesk-s3-versioning-123456789012-ap-northeast-2/document.txt ./document-current.txt
 download: s3://soldesk-s3-versioning-123456789012-ap-northeast-2/document.txt to .\document.txt
-```
 
-#### 파일 내용 확인
-
-```bash
+# 파일 내용 확인
 PS C:\trf2\2) S3\2-2_S3_versioning> Get-Content .\document-current.txt
 S3 Bucket Version 3 Test 3
 ```
@@ -1616,7 +1467,7 @@ S3 Bucket Version 3 Test 3
 
 - Version을 삭제하기 전에 현재 Version 정보를 확인한다.
 
-```bash
+```powershell
 PS C:\trf2\2) S3\2-2_S3_versioning> aws s3api list-object-versions \
 ```
 
@@ -1646,17 +1497,13 @@ Version 3
 "Key": "document.txt"
 "VersionId": "XXXXXXXX-Version3"
 "IsLatest": true
-```
 
 Version 2
-```
 "Key": "document.txt"
 "VersionId": "XXXXXXXX-Version2"
 "IsLatest": false
-```
 
 Version 1
-```
 "Key": "document.txt"
 "VersionId": "XXXXXXXX-Version1"
 "IsLatest": false
@@ -1668,7 +1515,7 @@ Version 1
 
 - Versioning이 활성화된 Bucket이기 때문에 Version 3 자체가 삭제되는 것이 아니라 Delete Marker가 생성된다.
 
-```bash
+```powershell
 PS C:\trf2\2) S3\2-2_S3_versioning>
 aws s3api delete-object --bucket soldesk-s3-versioning-123456789012-ap-northeast-2 --key document.txt
 {
@@ -1693,7 +1540,7 @@ document.txt
 - Delete Marker가 최신 Version이 되었기 때문에 일반 Object 목록에서는
 document.txt가 존재하지 않는 것처럼 보인다.
 
-```bash
+```powershell
 PS C:\trf2\2) S3\2-2_S3_versioning> aws s3 ls s3://soldesk-s3-versioning-123456789012-ap-northeast-2
 ```
 
@@ -1713,7 +1560,7 @@ PS C:\trf2\2) S3\2-2_S3_versioning> aws s3 ls s3://soldesk-s3-versioning-1234567
 
 - 일반적인 방법으로 document.txt 다운로드를 시도한다.
 
-```bash
+```powershell
 PS C:\trf2\2) S3\2-2_S3_versioning>
 aws s3 cp s3://soldesk-s3-versioning-123456789012-ap-northeast-2/document.txt ./document-delete-test.txt
 fatal error: An error occurred (404) when calling the HeadObject operation: Key "document.txt" does not exist
@@ -1729,14 +1576,11 @@ fatal error: An error occurred (404) when calling the HeadObject operation: Key 
 - 일반 aws s3 ls에서는 document.txt가 보이지 않지만
 list-object-versions 명령어를 사용하면 기존 Version과 Delete Marker를 확인할 수 있다.
 
-```bash
+```powershell
 PS C:\trf2\2) S3\2-2_S3_versioing>
 aws  s3api  list-object-versions  --bucket  `
 soldesk-s3-versioning-123456789012-ap-northeast-2  --prefix  document.txt
-```
-
 ~~~~~~~~~~~~~~~~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~~~~~~~~~~~~~~~~
-```
     "DeleteMarkers": [
         {
             "Owner": {
@@ -1751,12 +1595,10 @@ soldesk-s3-versioning-123456789012-ap-northeast-2  --prefix  document.txt
     "RequestCharged": null,
     "Prefix": "document.txt"
 }
-```
 
 [현재 구조]
 document.txt
 
-```
    ├── Delete Marker    ← IsLatest = true
    ├── Version 3        ← IsLatest = false
    ├── Version 2        ← IsLatest = false
@@ -1769,14 +1611,11 @@ document.txt
 
 - 따라서 반드시 Delete Marker의 VersionId를 지정해야 한다.
 
-```bash
+```powershell
 PS C:\trf2\2) S3\2-2_S3_versioing>
 aws  s3api  list-object-versions  --bucket  `
 soldesk-s3-versioning-123456789012-ap-northeast-2  --prefix  document.txt
-```
-
 ~~~~~~~~~~~~~~~~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~~~~~~~~~~~~~~~~
-```
     "DeleteMarkers": [
         {
             "Owner": {
@@ -1791,67 +1630,56 @@ soldesk-s3-versioning-123456789012-ap-northeast-2  --prefix  document.txt
     "RequestCharged": null,
     "Prefix": "document.txt"
 }
-```
 
-```bash
 형식)
 aws s3api delete-object --bucket <Bucket-Name> --key document.txt --version-id <Delete-Marker-Version-ID>
-```
 
-```bash
 PS C:\trf2\2) S3\2-2_S3_versioing>
 aws  s3api  delete-object  --bucket  soldesk-s3-versioning-123456789012-ap-northeast-2  `
 ```
 
 - -key  document.txt  --version-id  b3IX2coFcHORhThgw.99mufbsxiw6k4r
-```
+
+```json
 {
     "DeleteMarker": true,
     "VersionId": "b3IX2coFcHORhThgw.99mufbsxiw6k4r"
 }
-```
 
 Delete Marker 삭제 전
 document.txt
 
-├── Delete Marker    ← Latest
-├── Version 3
-├── Version 2
-└── Version 1
+   ├── Delete Marker    ← Latest
+   ├── Version 3
+   ├── Version 2
+   └── Version 1
 
 Delete Marker 삭제 후
 document.txt
 
-├── Version 3        ← 다시 현재 Object
-├── Version 2
-└── Version 1
+   ├── Version 3        ← 다시 현재 Object
+   ├── Version 2
+   └── Version 1
 
-#### STEP 10-9. document.txt가 다시 보이는지 확인
+# STEP 10-9. document.txt가 다시 보이는지 확인
 
-```bash
 PS C:\trf2\2) S3\2-2_S3_versioing> aws s3 ls s3://soldesk-s3-versioning-123456789012-ap-northeast-2
 2026-09-22 13:18:18         26 document.txt
-```
 
-#### STEP 10-10. document.txt 다운로드 및 내용 확인
+# STEP 10-10. document.txt 다운로드 및 내용 확인
 
-```bash
 PS C:\trf2\2) S3\2-2_S3_versioning>
 aws s3 cp s3://soldesk-s3-versioning-123456789012-ap-northeast-2/document.txt ./document-restored.txt
-```
 
-#### 모든 리소스 삭
+# 모든 리소스 삭
 
-```bash
 PS C:\trf2\2) S3\2-2_S3_versioing> terraform  destroy  -auto-approve
-```
 
-#### Terraform S3 Static Website + Route 53 실습
+# Terraform S3 Static Website + Route 53 실습
 
 Terraform을 사용하여 S3 Static Website를 구성하고
 Route 53 도메인과 연결하여 웹사이트에 접속할 수 있도록 구성한다.
 
-```
 01) s3-bucket
 ```
 
@@ -1894,9 +1722,7 @@ s3:GetObject 권한을 허용한다.
 - Route 53 Record를 S3 Static Website Endpoint에 연결한다.
 - 최종적으로 다음 주소로 접속되는지 확인한다.
 
-```
 http://www.aws-esk.com
-```
 
 #### STEP 1. S3 정적 웹사이트용 Bucket 생성
 
@@ -1905,54 +1731,43 @@ http://www.aws-esk.com
 - 따라서 Bucket 이름 : www.aws-esk.com
 
   - 01_s3-bucket\variables.tf
+
 ```hcl
 variable "aws_region" {
   type        = string
   default     = "ap-northeast-2"
 }
-```
 
-```hcl
 variable "aws_profile" {
   type        = string
   default     = "default"
 }
-```
 
-```hcl
 variable "domain_name" {
   description = "Route 53에 등록된 기본 도메인"
   type        = string
   default     = "aws-esk.com"
 }
-```
 
-```hcl
 variable "subdomain" {
   description = "S3 정적 웹사이트에서 사용할 서브도메인"
   type        = string
   default     = "www"
 }
-```
 
-```hcl
 variable "project_name" {
   description = "프로젝트 이름"
   type        = string
   default     = "s3-website"
 }
-```
 
-```hcl
 variable "environment" {
   description = "환경 이름"
   type        = string
   default     = "training"
 }
-```
 
-  - 01_s3-bucket\main.tf
-```hcl
+   # 01_s3-bucket\main.tf
 terraform {
   required_version = ">= 1.16.0"
 
@@ -1963,37 +1778,25 @@ terraform {
     }
   }
 }
-```
 
-#### AWS Provider 설정
-
-```hcl
+# AWS Provider 설정
 provider "aws" {
   region  = var.aws_region
   profile = var.aws_profile
 }
-```
 
-```hcl
 locals {
   # Route 53에서 사용할 도메인과 S3 Bucket 이름을 동일하게 생성
   # 결과 : www.aws-esk.com
   bucket_name = "${var.subdomain}.${var.domain_name}"
 }
-```
 
-#### S3 Bucket 생성
-
-```hcl
+# S3 Bucket 생성
 resource "aws_s3_bucket" "website" {
-```
 
-  - Route 53 Record 이름과 동일한 Bucket 이름 사용
-```
+  # Route 53 Record 이름과 동일한 Bucket 이름 사용
   bucket = local.bucket_name
-```
 
-```
   tags = {
     Name = var.project_name
     Environment = var.environment
@@ -2007,43 +1810,32 @@ resource "aws_s3_bucket" "website" {
 
 - 결과 : www.aws-esk.com
   - 01_s3-bucket\output.tf
+
 ```hcl
 output "bucket_name" {
   description = "생성된 S3 Bucket 이름"
   value = aws_s3_bucket.website.bucket
 }
-```
 
-```hcl
 output "bucket_arn" {
   description = "생성된 S3 Bucket ARN"
   value = aws_s3_bucket.website.arn
 }
-```
 
-```bash
 PS C:\my-terraform> terraform init
-```
 
-```bash
 PS C:\my-terraform> plan
 Plan: 1 to add, 0 to change, 0 to destroy.
-```
 
 Changes to Outputs:
-```
   + bucket_arn  = (known after apply)
   + bucket_name = "www.aws-esk.com"
   + domain_name = "www.aws-esk.com"
-```
 
-```bash
 PS C:\my-terraform> apply
 Plan: 1 to add, 0 to change, 0 to destroy.
-```
 
 Changes to Outputs:
-```
   + bucket_arn  = (known after apply)
   + bucket_name = "www.aws-esk.com"
   + domain_name = "www.aws-esk.com"
@@ -2054,28 +1846,20 @@ Changes to Outputs:
 - STEP 1에서 생성한 S3 Bucket에 정적 웹사이트 기능을 추가한다.
 - STEP 1에서 생성한 aws_s3_bucket.website Resource를 그대로 사용한다.
 
-  - main.tf
-
-#### 기존 S3 Bucket에 Static Website Hosting 설정
-
 ```hcl
+   # main.tf
+# 기존 S3 Bucket에 Static Website Hosting 설정
 resource "aws_s3_bucket_website_configuration" "website" {
-```
 
-  - STEP 1에서 생성한 기존 S3 Bucket 사용
-```
+  # STEP 1에서 생성한 기존 S3 Bucket 사용
   bucket = aws_s3_bucket.website.id
-```
 
-  - 웹사이트 기본 페이지
-```
+  # 웹사이트 기본 페이지
   index_document {
     suffix = "index.html"
   }
-```
 
-  - 오류 발생 시 출력할 페이지
-```
+  # 오류 발생 시 출력할 페이지
   error_document {
     key = "error.html"
   }
@@ -2096,8 +1880,8 @@ resource "aws_s3_bucket_website_configuration" "website" {
   - key = "error.html"
   - 존재하지 않는 페이지에 접근하면 error.html을 출력한다.
 
-  - output.tf
 ```hcl
+   # output.tf
 output "website_endpoint" {
   description = "S3 Static Website Endpoint"
   value = aws_s3_bucket_website_configuration.website.website_endpoint
@@ -2108,7 +1892,7 @@ output "website_endpoint" {
   - S3가 제공하는 정적 웹사이트 접속 주소를 출력한다.
   - 예 : www.aws-esk.com.s3-website.ap-northeast-2.amazonaws.com
 
-```bash
+```powershell
 PS C:\my-terraform> plan
 PS C:\my-terraform> apply
 ```
@@ -2125,13 +1909,10 @@ PS C:\my-terraform> apply
   - 1. Public Access Block 해제
   - 2. Bucket Policy 설정
 
-  - main.tf
-
-#### S3 Public Access Block 해제
-
-#### aws_s3_bucket_public_access_block은S3의 Public Access Block 설정을 관리한다.
-
 ```hcl
+   # main.tf
+# S3 Public Access Block 해제
+# aws_s3_bucket_public_access_block은S3의 Public Access Block 설정을 관리한다.
 resource "aws_s3_bucket_public_access_block" "public_access" {
   bucket                  = aws_s3_bucket.website.id# STEP 1에서 생성한 기존 Bucket
   block_public_acls       = false# Public ACL 차단 해제
@@ -2139,23 +1920,16 @@ resource "aws_s3_bucket_public_access_block" "public_access" {
   block_public_policy     = false# Public Bucket Policy 차단 해제
   restrict_public_buckets = false# Public Bucket 제한 해제
 }
-```
 
-#### S3 Bucket Policy
-
-```hcl
+# S3 Bucket Policy
 resource "aws_s3_bucket_policy" "public_read" {
 
   bucket = aws_s3_bucket.website.id  # STEP 1에서 생성한 기존 Bucket
-```
 
-  - Public Access Block 설정 완료 후 Bucket Policy 적용
-  - aws_s3_bucket_policy는 S3 Bucket에 접근 정책을 적용한다.
-```
+  # Public Access Block 설정 완료 후 Bucket Policy 적용
+  # aws_s3_bucket_policy는 S3 Bucket에 접근 정책을 적용한다.
   depends_on = [ aws_s3_bucket_public_access_block.public_access ]
-```
 
-```hcl
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -2174,13 +1948,14 @@ output "bucket_policy_resource" {
   description = "Public Read가 허용된 S3 Object ARN"
   value = "${aws_s3_bucket.website.arn}/*"
 }
-```
 
 [코드 설명]
+```
+
 - Bucket Policy가 어느 Resource에 적용되는지 확인한다.
   - 예: arn:aws:s3:::www.aws-esk.com/*
 
-```bash
+```powershell
 PS C:\my-terraform> plan
 PS C:\my-terraform> apply
 ```
@@ -2208,11 +1983,9 @@ terraform-s3-website
   - filemd5() : 파일의 MD5 해시값 계산
   - etag : 파일 변경 여부 확인에 사용
 
-  - main.tf
-
-#### index.html 업로드
-
 ```hcl
+   # main.tf
+# index.html 업로드
 resource "aws_s3_object" "index" {
   bucket = aws_s3_bucket.website.id# STEP 1에서 생성한 기존 S3 Bucket
   key = "index.html"# S3 내부 Object 이름
@@ -2220,11 +1993,8 @@ resource "aws_s3_object" "index" {
   content_type= "text/html; charset=utf-8"# 브라우저가 HTML 문서로 인식
   etag = filemd5("${path.module}/index.html")# index.html 내용이 변경되면 Terraform에서 변경사항 감지
 }
-```
 
-#### error.html 업로드
-
-```hcl
+# error.html 업로드
 resource "aws_s3_object" "error" {
   bucket = aws_s3_bucket.website.id# STEP 1에서 생성한 기존 S3 Bucket
   key = "error.html"# 오류 페이지 Object 이름
@@ -2232,9 +2002,10 @@ resource "aws_s3_object" "error" {
   content_type = "text/html; charset=utf-8"# 브라우저가 HTML 문서로 인식
   etag = filemd5("${path.module}/error.html")# error.html 내용 변경 감지
 }
-```
 
 [코드 설명]
+```
+
 - aws_s3_object: 기존 S3 Bucket에 파일을 Object로 업로드
 - bucket:STEP 1에서 만든 동일한 S3 Bucket을 사용
 - key: S3 내부에서 사용할 파일 이름
@@ -2243,22 +2014,18 @@ resource "aws_s3_object" "error" {
 - filemd5(): 파일 내용의 MD5 값을 계산한다.
   - HTML 파일 내용이 변경되면 Terraform이 변경사항을 감지할 수 있다.
 
-  - output.tf
 ```hcl
+   # output.tf
 output "index_object" {
   description = "업로드된 index.html Object"
   value = aws_s3_object.index.key
 }
-```
 
-```hcl
 output "error_object" {
   description = "업로드된 error.html Object"
   value = aws_s3_object.error.key
 }
-```
 
-```bash
 PS C:\my-terraform> plan
 PS C:\my-terraform> apply
 ```
@@ -2275,25 +2042,21 @@ PS C:\my-terraform> apply
 
 - Route 53을 연결하기 전에 S3 Static Website 자체가 정상 동작하는지 확인한다.
 
-  - output.tf
 ```hcl
+   # output.tf
 output "website_url" {
   description = "S3 Static Website 접속 URL"
   value = "http://${aws_s3_bucket_website_configuration.website.website_endpoint}"
 }
-```
 
-  - 브라우저에서 접속
-```
+   # 브라우저에서 접속
 http://www.aws-esk.com.s3-website.ap-northeast-2.amazonaws.com/
 ```
 
 ![이미지](assets/07-terraform-s3/13.png)
 
 - 존재하지 않는 페이지에 접속한다.
-```
 http://www.aws-esk.com.s3-website.ap-northeast-2.amazonaws.com/test.html
-```
 
 ![이미지](assets/07-terraform-s3/14.png)
 
@@ -2305,32 +2068,29 @@ http://www.aws-esk.com.s3-website.ap-northeast-2.amazonaws.com/test.html
 
 - 새로운 Hosted Zone을 생성하지 않는다.
 
-  - main.tf
-
-#### 기존 Route 53 Public Hosted Zone 조회
-
 ```hcl
+   # main.tf
+# 기존 Route 53 Public Hosted Zone 조회
 data "aws_route53_zone" "main" {
   name = var.domain_name# STEP 1에서 정의한 기본 도메인
   private_zone = false# Public Hosted Zone 조회
 }
+
+   코드 설명
 ```
 
-코드 설명
 - data "aws_route53_zone": Route 53에 이미 존재하는 Hosted Zone을 조회한다.
 - resource가 아니라 data이므로 새로운 Hosted Zone을 만들지 않는다.
 - name = var.domain_name: aws-esk.com을 조회한다.
 - private_zone = false: Private Hosted Zone이 아니라 Public Hosted Zone을 조회한다.
 
-  - output.tf
 ```hcl
+   # output.tf
 output "hosted_zone_id" {
   description = "기존 Route 53 Hosted Zone ID"
   value = data.aws_route53_zone.main.zone_id
 }
-```
 
-```bash
 PS C:\my-terraform> plan
 ```
 
@@ -2342,20 +2102,16 @@ PS C:\my-terraform> plan
 - Route 53에서 "www.aws-esk.com" A Record를 생성한다.
 그리고 이 Record를 S3 Static Website 로 연결한다.
 
-  - main.tf
-
-#### www.aws-esk.com A Alias Record 생성
-
 ```hcl
+   # main.tf
+# www.aws-esk.com A Alias Record 생성
 resource "aws_route53_record" "website" {
   zone_id = data.aws_route53_zone.main.zone_id# STEP 6에서 조회한 aws-esk.com Hosted Zone
 
   name = "${var.subdomain}.${var.domain_name}"# 최종 웹사이트 주소 : www.aws-esk.com
   type = "A"# IPv4 DNS Record
-```
 
-  - S3 Static Website로 Alias 연결
-```
+  # S3 Static Website로 Alias 연결
   alias {
     # STEP 2에서 생성된 S3 Website Domain
     name = aws_s3_bucket_website_configuration.website.website_domain
@@ -2373,35 +2129,25 @@ resource "aws_route53_record" "website" {
 - zone_id: Z3W03O7B5YMIYP (ap-northeast-2 Seoul Region의 S3 Website Hosted Zone ID)
 - evaluate_target_health = false : S3 Website Endpoint에 대해 Route 53 Target Health 평가를 사용하지 않는다.
 
-  - output.tf
 ```hcl
+   # output.tf
 output "route53_record" {
   description = "생성된 Route 53 Record"
   value = aws_route53_record.website.fqdn
 }
-```
 
-#### fqdn(Fully Qualified Domain Name)
-
-#### fqdn : Route53 Record의 전체 도메인을 의미한다.
-
-```hcl
+# fqdn(Fully Qualified Domain Name)
+# fqdn : Route53 Record의 전체 도메인을 의미한다.
 output "final_website_url" {
   description = "Route 53을 이용한 최종 웹사이트 URL"
   value = "http://${aws_route53_record.website.fqdn}"
 }
-```
 
-```bash
 PS C:\my-terraform> terraform plan
-```
 
-```bash
 PS C:\my-terraform> terraform apply
 Outputs:
-```
 
-```bash
 aws_route53_record = "www.aws-esk.com"
 bucket_arn = "arn:aws:s3:::www.aws-esk.com"
 bucket_name = "www.aws-esk.com"
@@ -2422,63 +2168,38 @@ Resolve-DnsName www.aws-esk.com
 #### STEP 9. 최종 웹사이트 확인
 
 [정상 페이지]
-```
 http://www.aws-esk.com
-```
 
 결과 : index.html 출력
 
 [오류 페이지]
-```
 http://www.aws-esk.com/test.html
-```
 
 결과 : error.html 출력
 
-  - terraform.tfvars
-
-#### AWS Region
-
-```bash
+```hcl
+   # terraform.tfvars
+# AWS Region
 aws_region = "ap-northeast-2"
-```
 
-#### AWS CLI Profile
-
-```bash
+# AWS CLI Profile
 aws_profile = "default"
-```
 
-#### Route 53에 등록된 기본 도메인
-
-```
+# Route 53에 등록된 기본 도메인
 domain_name = "aws-esk.com"
-```
 
-#### S3 Static Website에서 사용할 서브도메인
-
-```
+# S3 Static Website에서 사용할 서브도메인
 subdomain = "web"# www  -->  web
-```
 
-#### 프로젝트 이름
-
-```
+# 프로젝트 이름
 project_name = "s3-website"
-```
 
-#### 환경 이름
-
-```
+# 환경 이름
 environment = "training"
-```
 
-```bash
 PS C:\my-terraform> terraform apply
 Outputs:
-```
 
-```bash
 aws_route53_record = "web.aws-esk.com"
 bucket_arn = "arn:aws:s3:::web.aws-esk.com"
 bucket_name = "web.aws-esk.com"

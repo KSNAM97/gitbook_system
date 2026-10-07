@@ -17,25 +17,20 @@
   - Route Table
 
   - 직접 작성하는 경우:
+
 ```hcl
 resource "aws_vpc" "example" {
   ...
 }
-```
 
-```hcl
 resource "aws_subnet" "example" {
   ...
 }
-```
 
-```hcl
 resource "aws_internet_gateway" "example" {
   ...
 }
-```
 
-```hcl
 resource "aws_nat_gateway" "example" {
   ...
 }
@@ -79,19 +74,16 @@ VPC Module
 module "vpc" {
   source = "./modules/vpc"
 }
-```
 
-  - 구조
-```hcl
+   # 구조
 module "vpc"
          │
-```
-
-└─ 현재 Terraform 코드에서 사용할 Module 이름
+         └─ 현재 Terraform 코드에서 사용할 Module 이름
 
 source
-│
-└─ Module 코드가 있는 위치
+        │
+        └─ Module 코드가 있는 위치
+```
 
 - module "vpc" 는 사용할 Module의 이름이고, source = "./modules/vpc" 는 Module 코드가 어디에 있는지를 지정한다.
 
@@ -110,6 +102,7 @@ source
 - Root Module에서 다른 Module을 호출할 수 있다.
 
 예
+
 ```hcl
 module "vpc" {
   source = "./modules/vpc"
@@ -173,6 +166,7 @@ module "vpc" {
 - Terraform Registry에는 다른 사용자가 미리 만들어 공개한 Module들이 있다.
 
 예:
+
 ```hcl
 module "vpc" {
   source = "terraform-aws-modules/vpc/aws"
@@ -186,6 +180,7 @@ module "vpc" {
 사용자가 작성한 Terraform 코드
 │
 ▼
+
 ```hcl
 module "vpc"
         │
@@ -206,28 +201,28 @@ VPC Module
         └─ 기타 Resource
         │
         ▼
-```
 
 AWS에 Resource 생성
+```
 
 #### terraform-aws-modules/vpc/aws 의미
 
 - 코드 : source = "terraform-aws-modules/vpc/aws"
 
 각 부분은 다음 의미를 가진다.
+
 ```hcl
 terraform-aws-modules
            │
-```
-
-└─ Module을 제공하는 조직 또는 Namespace
+           └─ Module을 제공하는 조직 또는 Namespace
 vpc
-│
-└─ Module 이름
+ │
+ └─ Module 이름
 
 aws
-│
-└─ 대상 Provider
+ │
+ └─ 대상 Provider
+```
 
 - 즉 terraform-aws-modules에서 제공하는 AWS용 vpc Module을 사용한다.
 

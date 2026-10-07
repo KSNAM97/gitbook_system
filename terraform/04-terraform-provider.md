@@ -33,6 +33,7 @@
 - Terraform에서 AWS를 사용하려면 provider 블록을 작성해야 한다.
 
 - 예시 코드
+
 ```hcl
 provider "aws" {
   region = "ap-northeast-2"
@@ -76,12 +77,11 @@ provider "aws" {
 
 - AWS CLI를 설치하면 다음 경로에 인증 파일이 생성된다.
 
-```
 ~/.aws/credentials
-```
 
 예
-```bash
+
+```hcl
 [default]
 aws_access_key_id = AKIAxxxx
 aws_secret_access_key = xxxxxxxxx
@@ -98,36 +98,28 @@ provider "aws" {
   region  = "us-east-1"
   profile = "my-profile"
 }
-```
 
 예
-```bash
 aws configure --profile dev
 aws configure --profile prod
 ```
 
 - 이렇게 여러 계정을 분리해서 사용할 수 있다.
 
-```bash
+```powershell
 PS C:\Users\ryu> aws configure --profile my-profile
 AWS Access Key ID [None]: <ACCESS_KEY_ID>
 AWS Secret Access Key [None]: <SECRET_ACCESS_KEY>
 Default region name [None]: ap-northeast-2
 Default output format [None]: json
-```
 
-#### credentials 확인 1 (파워쉘)
-
-```bash
+# credentials 확인 1 (파워쉘)
 PS C:\Users\ryu> type $env:USERPROFILE\.aws\credentials
 [default]
 aws_access_key_id = your-access-key-id
 aws_secret_access_key = your-secret-access-key
-```
 
-#### credentials 확인 2 (파워쉘)
-
-```bash
+# credentials 확인 2 (파워쉘)
 PS C:\Users\ryu> notepad $env:USERPROFILE\.aws\credentials
 ```
 
@@ -153,19 +145,19 @@ terraform {
     }
   }
 }
-```
 
 required_version
-  - 사용 가능한 Terraform 최소 버전
+ # 사용 가능한 Terraform 최소 버전
 
 required_providers
-  - 사용할 Provider 정의
+ # 사용할 Provider 정의
 
 source
-  - Provider 다운로드 위치
+ # Provider 다운로드 위치
 
 version
-  - 사용할 Provider 버전
+ # 사용할 Provider 버전
+```
 
 #### Terraform 버전 제약 연산자
 
@@ -203,9 +195,7 @@ version
   - aws_db_instance: RDS 데이터베이스
 
 공식 문서
-```
 https://registry.terraform.io/providers/hashicorp/aws/latest/docs
-```
 
 이 문서는 Terraform으로 생성할 수 있는 모든 AWS 리소스의 목록과 사용법을 제공한다.
 
@@ -289,6 +279,7 @@ https://registry.terraform.io/providers/hashicorp/aws/latest/docs
 - Terraform에서 AWS를 사용하려면 provider 블록을 작성해야 한다.
 
 - 예시 코드
+
 ```hcl
 provider "aws" {
   region = "ap-northeast-2"
@@ -332,12 +323,11 @@ provider "aws" {
 
 - AWS CLI를 설치하면 다음 경로에 인증 파일이 생성된다.
 
-```
 ~/.aws/credentials
-```
 
 예
-```bash
+
+```hcl
 [default]
 aws_access_key_id = AKIAxxxx
 aws_secret_access_key = xxxxxxxxx
@@ -354,36 +344,28 @@ provider "aws" {
   region  = "us-east-1"
   profile = "my-profile"
 }
-```
 
 예
-```bash
 aws configure --profile dev
 aws configure --profile prod
 ```
 
 - 이렇게 여러 계정을 분리해서 사용할 수 있다.
 
-```bash
+```powershell
 PS C:\Users\ryu> aws configure --profile my-profile
 AWS Access Key ID [None]: <ACCESS_KEY_ID>
 AWS Secret Access Key [None]: <SECRET_ACCESS_KEY>
 Default region name [None]: ap-northeast-2
 Default output format [None]: json
-```
 
-#### credentials 확인 1 (파워쉘)
-
-```bash
+# credentials 확인 1 (파워쉘)
 PS C:\Users\ryu> type $env:USERPROFILE\.aws\credentials
 [default]
 aws_access_key_id = your-access-key-id
 aws_secret_access_key = your-secret-access-key
-```
 
-#### credentials 확인 2 (파워쉘)
-
-```bash
+# credentials 확인 2 (파워쉘)
 PS C:\Users\ryu> notepad $env:USERPROFILE\.aws\credentials
 ```
 
@@ -409,19 +391,19 @@ terraform {
     }
   }
 }
-```
 
 required_version
-  - 사용 가능한 Terraform 최소 버전
+ # 사용 가능한 Terraform 최소 버전
 
 required_providers
-  - 사용할 Provider 정의
+ # 사용할 Provider 정의
 
 source
-  - Provider 다운로드 위치
+ # Provider 다운로드 위치
 
 version
-  - 사용할 Provider 버전
+ # 사용할 Provider 버전
+```
 
 #### Terraform 버전 제약 연산자
 
@@ -459,9 +441,7 @@ version
   - aws_db_instance: RDS 데이터베이스
 
 공식 문서
-```
 https://registry.terraform.io/providers/hashicorp/aws/latest/docs
-```
 
 이 문서는 Terraform으로 생성할 수 있는 모든 AWS 리소스의 목록과 사용법을 제공한다.
 
@@ -514,31 +494,27 @@ https://registry.terraform.io/providers/hashicorp/aws/latest/docs
 
 #### 파워쉘 업데이트
 
-```bash
+```powershell
 PS C:\Users\soldesk> winget install --id Microsoft.PowerShell --source winget
 찾음 PowerShell [Microsoft.PowerShell] 버전 7.6.6.0
-```
-
 이 응용 프로그램의 라이선스는 그 소유자가 사용자에게 부여했습니다.
 Microsoft는 타사 패키지에 대한 책임을 지지 않고 라이선스를 부여하지도 않습니다.
 설치 관리자 해시를 확인했습니다.
 패키지 설치를 시작하는 중...
-██████████████████████████████  100%
+  ██████████████████████████████  100%
 설치 성공
 
-```bash
 PS C:\Users\soldesk> pwsh
 PowerShell 7.6.6
-```
 
-#### 명령어를 전부 검정색으로 변환
+# 명령어를 전부 검정색으로 변환
 
-```bash
 PS C:\Users\soldesk> notepad $PROFILE
 ```
 
 - 메모장에 작성 후 저장
-```
+
+```hcl
 Set-PSReadLineOption -Colors @{
     Command   = 'Black'
     Parameter = 'Black'
@@ -547,19 +523,14 @@ Set-PSReadLineOption -Colors @{
     String    = 'Black'
     Number    = 'Black'
 }
-```
 
-#### cmd 관리자 권한 실행
+# cmd 관리자 권한 실행
 
-```
 C:\WINDOWS\system32> mkdir C:\terraform-plugin-cache# 폴더 생성
-```
 
-```
 C:\WINDOWS\system32> setx TF_PLUGIN_CACHE_DIR "C:\terraform-plugin-cache"# 환경 변수 설정
-```
-
 성공: 지정한 값을 저장했습니다.
+```
 
 ![이미지](assets/04-terraform-provider/1.png)
 
@@ -617,35 +588,31 @@ You do not have sufficient privilege to perform this operation.
 
 ```
 C:\WINDOWS\system32> mklink TestLink TestTarget
-```
-
 TestLink <<===>> TestTarget에 대한 기호화된 링크를 만들었습니다.
+```
 
 - 심볼릭 링크를 생성하기위해서 terraform  init 진행
 
 ![이미지](assets/04-terraform-provider/4.png)
 
-```bash
+```powershell
 PS C:\terraform-aws\01_terraform-aws-config\ec2-practice> terraform  init
 Initializing the backend...
 Initializing modules...
 Downloading registry.terraform.io/terraform-aws-modules/vpc/aws 5.15.0 for my_vpc...
-```
-
 - my_vpc in .terraform\modules\my_vpc
 Initializing provider plugins...
 ~~~~~~~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~~~~~~~
 Terraform has been successfully initialized!
 
-```
 You may now begin working with Terraform. Try running "terraform plan" to see
 any changes that are required for your infrastructure. All Terraform commands
 should now work.
-```
 
 If you ever set or change modules or backend configuration for Terraform,
 rerun this command to reinitialize your working directory. If you forget, other
 commands will detect it and remind you to do so if necessary.
+```
 
 ![이미지](assets/04-terraform-provider/5.png)
 
@@ -657,14 +624,14 @@ commands will detect it and remind you to do so if necessary.
   - Local Provider는 로컬 컴퓨터에서 파일을 생성하거나 관리할 때 사용한다.
 
 예시
+
 ```hcl
 resource "local_file" "test" {
   filename = "test.txt"
   content  = "hello terraform"
 }
-```
-
 이 리소스를 실행하면 test.txt 파일이 생성된다.
+```
 
 - random (hashicorp/random)
   - Random Provider
@@ -672,6 +639,7 @@ resource "local_file" "test" {
   - 예 : random_id , random_password , random_string
 
 예
+
 ```hcl
 resource "random_password" "db" {
   length = 16
@@ -687,26 +655,23 @@ resource "random_password" "db" {
 
 #### 버전은 다운로드 받은 것으로 수정해야 한다.
 
-```bash
+```powershell
 PS C:\Users\ryu>
  cd C:\my-terraform\01_EC2_VPC\01-1_EC2\.terraform\providers\registry.terraform.io\hashicorp\aws\6.64.0\windows_amd64
-```
 
 PS C:\terraform-aws\01_terraform-aws-config\ec2-practice\.terraform\providers\registry.terraform.io\
-```
 hashicorp\aws\6.34.0\windows_amd64>
 Get-Item .\terraform-provider-aws_v6.34.0_x5.exe | Select-Object LinkType, Target
-```
 
 LinkType Target
+```
+
 - -------  ------
-```
+
+```json
 {C:\terraform-plugin-cache\registry.terraform.io\hashicorp\aws\6.34.0\windows_amd64\terraform-provider-aws_v6.34.0_x5.exe}
-```
 
-#### 연결 확인
-
-```bash
+# 연결 확인
 PS C:\my-terraform\01_EC2_VPC\.terraform\providers\registry.terraform.io\hashicorp\aws\6.64.0\windows_amd64>
 $env:TF_PLUGIN_CACHE_DIR
 C:\terraform-plugin-cache

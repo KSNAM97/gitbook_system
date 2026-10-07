@@ -134,13 +134,12 @@ EC2 기본 구성 요소
 
 ```
 예시)
-```
-
 인스턴스vCPUMemory
 a1.medium12GB
 a1.large24GB
 a1.xlarge48GB
 a1.2xlarge816GB
+```
 
 #### VPC 네트워크 구조
 
@@ -176,6 +175,7 @@ VPC
 - Terraform에서 "aws_vpc" 리소스를 사용한다.
 
 예시 코드
+
 ```hcl
 resource "aws_vpc" "my_vpc" {
   cidr_block = "10.0.0.0/16"
@@ -228,13 +228,9 @@ resource "aws_internet_gateway" "my_igw" {
     Name = "MyInternetGateway"
   }
 }
-```
 
-```
 역할 : VPC  <-->  Internet 연결
-```
 
-```
 4) Route Table 구성
 ```
 
@@ -259,11 +255,9 @@ resource "aws_route_table" "public_route_table" {
 
 #### Terraform을 통한 EC2 관리
 
-```
-1) EC2 생성
-```
-
 ```hcl
+1) EC2 생성
+
 resource "aws_instance" "my_ec2" {
   ami = var.ami_id
   instance_type = var.instance_type
@@ -329,7 +323,8 @@ resource "aws_security_group" "my_sg" {
 - Egress: 외부  <--  EC2
 
 - Security Group 적용
-```bash
+
+```hcl
 vpc_security_group_ids = [
   aws_security_group.my_sg.id
 ]
@@ -342,6 +337,7 @@ vpc_security_group_ids = [
 - 추가 스토리지를 EC2에 연결할 수 있다.
 
 EBS 생성
+
 ```hcl
 resource "aws_ebs_volume" "example_volume" {
   availability_zone = "ap-northeast-2"
@@ -353,10 +349,8 @@ resource "aws_ebs_volume" "example_volume" {
     Name = "ExampleVolume"
   }
 }
-```
 
 EC2에 디스크 연결
-```hcl
 resource "aws_volume_attachment" "example_attachment" {
   device_name = "/dev/xvdf"
   volume_id = aws_ebs_volume.example_volume.id
@@ -382,6 +376,7 @@ security module
 IP , instance type 등을 변수로 관리
 
 예
+
 ```hcl
 variable "instance_type"
 ```
@@ -393,7 +388,8 @@ variable "instance_type"
 - AWS 리소스 관리에 매우 중요
 
 예
-```
+
+```hcl
 tags = {
   Name = "WebServer"
   Environment = "dev"
@@ -422,15 +418,14 @@ Terraform Registry와 오픈소스 커뮤니티에서 널리 사용되고 유지
 핵심 AWS 서비스를 위한 모듈을 지속적으로 관리하고 있다.
 
 - 직접 리소스 설정 방식
+
 ```hcl
 resource "aws_vpc" ...
 resource "aws_subnet" ...
 resource "aws_route_table" ...
 resource "aws_nat_gateway" ...
-```
 
 모듈 방식:
-```hcl
 module "vpc" {
   source = "terraform-aws-modules/vpc/aws"
   ...
@@ -442,20 +437,20 @@ module "vpc" {
 
 ```
 https://registry.terraform.io/search/modules?namespace=terraform-aws-modules
-```
 
-#### module을 사용하는 이유
+# module을 사용하는 이유
 
 가장 큰 이유는 속도와 안정성이다. 이미 많은 사용자가 써본 구조를 기반으로 만들어져 있어서,
-초보자가 VPC, 서브넷, IGW, NAT, 라우팅, 태그, IAM 연동 등을 하나하나 직접 구현할 때 발생하는 실수를 줄일 수 있다.
-예를 들어 S3 모듈은 버전 관리, 수명 주기, 서버 측 암호화, 로그 전달 정책 등 S3에서 자주 요구되는 기능을
-폭넓게 지원하고, RDS 모듈은 RDS 자원 생성을 위한 루트 모듈과 세부 모듈 구조를 제공한다.
-EKS 모듈 역시 EKS 클러스터 구성에 필요한 다양한 설정과 하위 모듈을 제공한다.
+ 초보자가 VPC, 서브넷, IGW, NAT, 라우팅, 태그, IAM 연동 등을 하나하나 직접 구현할 때 발생하는 실수를 줄일 수 있다.
+ 예를 들어 S3 모듈은 버전 관리, 수명 주기, 서버 측 암호화, 로그 전달 정책 등 S3에서 자주 요구되는 기능을
+ 폭넓게 지원하고, RDS 모듈은 RDS 자원 생성을 위한 루트 모듈과 세부 모듈 구조를 제공한다.
+ EKS 모듈 역시 EKS 클러스터 구성에 필요한 다양한 설정과 하위 모듈을 제공한다.
 
 또 하나 중요한 이유는 일관성이다.
 학생마다, 팀마다, 회사마다 처음부터 전부 직접 짜면 이름 규칙, 태그 규칙, 변수 구조, 출력값 구조가 다 달라진다.
 그런데 공통 모듈을 쓰면 입력 변수와 출력 구조가 어느 정도 표준화되기 때문에 협업과 유지보수가 쉬워진다.
 특히 같은 유형의 인프라를 반복 배포해야 하는 교육 환경이나 실무 환경에서는 이 장점이 크다.
+```
 
 #### 주요 특징
 
@@ -586,7 +581,7 @@ resource "aws_instance" "example" {
 
 - 태그를 다음과 같이 변경한다.
 
-```
+```hcl
 tags = {
   Name = "MyNewInstance"
 }
@@ -840,13 +835,12 @@ EC2 기본 구성 요소
 
 ```
 예시)
-```
-
 인스턴스vCPUMemory
 a1.medium12GB
 a1.large24GB
 a1.xlarge48GB
 a1.2xlarge816GB
+```
 
 #### VPC 네트워크 구조
 
@@ -882,6 +876,7 @@ VPC
 - Terraform에서 "aws_vpc" 리소스를 사용한다.
 
 예시 코드
+
 ```hcl
 resource "aws_vpc" "my_vpc" {
   cidr_block = "10.0.0.0/16"
@@ -934,13 +929,9 @@ resource "aws_internet_gateway" "my_igw" {
     Name = "MyInternetGateway"
   }
 }
-```
 
-```
 역할 : VPC  <-->  Internet 연결
-```
 
-```
 4) Route Table 구성
 ```
 
@@ -965,11 +956,9 @@ resource "aws_route_table" "public_route_table" {
 
 #### Terraform을 통한 EC2 관리
 
-```
-1) EC2 생성
-```
-
 ```hcl
+1) EC2 생성
+
 resource "aws_instance" "my_ec2" {
   ami = var.ami_id
   instance_type = var.instance_type
@@ -1035,7 +1024,8 @@ resource "aws_security_group" "my_sg" {
 - Egress: 외부  <--  EC2
 
 - Security Group 적용
-```bash
+
+```hcl
 vpc_security_group_ids = [
   aws_security_group.my_sg.id
 ]
@@ -1048,6 +1038,7 @@ vpc_security_group_ids = [
 - 추가 스토리지를 EC2에 연결할 수 있다.
 
 EBS 생성
+
 ```hcl
 resource "aws_ebs_volume" "example_volume" {
   availability_zone = "ap-northeast-2"
@@ -1059,10 +1050,8 @@ resource "aws_ebs_volume" "example_volume" {
     Name = "ExampleVolume"
   }
 }
-```
 
 EC2에 디스크 연결
-```hcl
 resource "aws_volume_attachment" "example_attachment" {
   device_name = "/dev/xvdf"
   volume_id = aws_ebs_volume.example_volume.id
@@ -1088,6 +1077,7 @@ security module
 IP , instance type 등을 변수로 관리
 
 예
+
 ```hcl
 variable "instance_type"
 ```
@@ -1099,7 +1089,8 @@ variable "instance_type"
 - AWS 리소스 관리에 매우 중요
 
 예
-```
+
+```hcl
 tags = {
   Name = "WebServer"
   Environment = "dev"
@@ -1120,33 +1111,24 @@ data를 사용하여 조회한 후 해당 값을 사용하여 EC2생성 또는 V
 
 ![이미지](assets/05-terraform-ec2-vpc/1.jpg)
 
-#### variables.tf
-
-#### AWS Region
-
 ```hcl
+# variables.tf
+# AWS Region
 variable "aws_region" {
   description = "AWS 리전"
   type        = string
   default     = "ap-northeast-2"
 }
-```
 
-#### AWS CLI Profile
-
-```hcl
+# AWS CLI Profile
 variable "aws_profile" {
   description = "AWS CLI Profile 이름"
   type        = string
   default     = "my_profile"
 }
-```
 
-#### main.tf
-
-#### Terraform 기본 설정
-
-```hcl
+# main.tf
+# Terraform 기본 설정
 terraform {
   required_version = ">= 1.9.6"
 
@@ -1157,100 +1139,64 @@ terraform {
     }
   }
 }
-```
 
-#### AWS Provider 설정
-
-```hcl
+# AWS Provider 설정
 provider "aws" {
   region  = var.aws_region
   profile = var.aws_profile
 }
-```
 
-#### main.tf
-
-#### 기본 VPC 조회
-
-```hcl
+# main.tf
+# 기본 VPC 조회
 data "aws_vpc" "default" {
   default = true
 }
-```
 
-#### output.tf
-
-#### VPC CIDR
-
-```hcl
+# output.tf
+# VPC CIDR
 output "vpc_cidr" {
   value = data.aws_vpc.default.cidr_block
 }
-```
 
-```bash
 PS C:\my-terraform\01_EC2_VPC\01-0_EC2> terraform plan
-```
-
 ~~~~~~~~~~ 중간 생략 ~~~~~~~~~~
 Changes to Outputs:
-```
   + vpc_id      = "vpc-059036a6e1ebcaad8"
-```
 
-#### main.tf
-
-#### 기본 VPC에 속한 Subnet 조회
-
-```hcl
+# main.tf
+# 기본 VPC에 속한 Subnet 조회
 data "aws_subnets" "default_vpc_subnets" {
   filter {
     name   = "vpc-id"
     values = [data.aws_vpc.default.id]
   }
 }
-```
 
-#### output.tf
-
-#### Subnet ID 목록
-
-```hcl
+# output.tf
+# Subnet ID 목록
 output "subnet_ids" {
   value = data.aws_subnets.default_vpc_subnets.ids
 }
-```
 
-```bash
 PS C:\my-terraform\01_EC2_VPC\01-0_EC2> terraform plan
-```
-
 ~~~~~~~~~~ 중간 생략 ~~~~~~~~~~
 Changes to Outputs:
-```
   + subnet_ids  = [
       + "subnet-071eae98af600b530",
       + "subnet-0781ca8c7398818f9",
       + "subnet-0bb5dfa61a36e2fa9",
       + "subnet-02d3252ef3761c45a",
     ]
-```
 
-#### main.tf
-
-#### 각 Subnet 상세 정보 조회
-
-```hcl
+# main.tf
+# 각 Subnet 상세 정보 조회
 data "aws_subnet" "subnets" {
   for_each = toset(data.aws_subnets.default_vpc_subnets.ids)
 
   id = each.value
 }
-```
 
-#### Subnet 상세 정보
-
-```hcl
+# Subnet 상세 정보
 output "subnet_info" {
   value = {
     for id, subnet in data.aws_subnet.subnets : id => {
@@ -1260,15 +1206,10 @@ output "subnet_info" {
     }
   }
 }
-```
 
-```bash
 PS C:\my-terraform\01_EC2_VPC\01-0_EC2> terraform plan
-```
-
 ~~~~~~~~~~ 중간 생략 ~~~~~~~~~~
 Changes to Outputs:
-```
   + subnet_info = {
       + subnet-02d3252ef3761c45a = {
           + availability_zone = "ap-northeast-2d"
@@ -1291,60 +1232,40 @@ Changes to Outputs:
           + vpc_id            = "vpc-059036a6e1ebcaad8"
         }
     }
-```
 
-  - main.tf
-
-#### 기본 VPC의 Route Table 조회
-
-```hcl
+   # main.tf
+# 기본 VPC의 Route Table 조회
 data "aws_route_tables" "default_vpc_route_tables" {
   vpc_id = data.aws_vpc.default.id
 }
-```
 
-  - variables.tf
-
-#### Route Table ID 목록 출력
-
-```hcl
+   # variables.tf
+# Route Table ID 목록 출력
 output "default_vpc_route_table_ids" {
   value = data.aws_route_tables.default_vpc_route_tables.ids
 }
-```
 
-```bash
 PS C:\my-terraform\01_EC2_VPC\01-0_EC2> terraform plan
 Changes to Outputs:
   + default_vpc_route_tables = [
       + "rtb-068a433a79afadcc6",
     ]
-```
 
-  - main.tf
-
-#### 기본 VPC의 Security Group 조회
-
-```hcl
+   # main.tf
+# 기본 VPC의 Security Group 조회
 data "aws_security_groups" "default_vpc_security_groups" {
   filter {
     name   = "vpc-id"
     values = [data.aws_vpc.default.id]
   }
 }
-```
 
-  - variables.tf
-
-#### Security Group ID 목록 출력
-
-```hcl
+   # variables.tf
+# Security Group ID 목록 출력
 output "default_vpc_security_group_ids" {
   value = data.aws_security_groups.default_vpc_security_groups.ids
 }
-```
 
-```bash
 PS C:\my-terraform\01_EC2_VPC\01-0_EC2> terraform plan
 Changes to Outputs:
   + default_sg               = [
@@ -1359,77 +1280,52 @@ Changes to Outputs:
       + "sg-02d25a28aac618242",
       + "sg-0bef46c9e9f9828b6",
     ]
-```
 
-#### 최신 Amazon Linux AMI 조회
+# 최신 Amazon Linux AMI 조회
 
-#### main.tf
-
-#### 최신 Amazon Linux 2023 AMI 조회
-
-```hcl
+# main.tf
+# 최신 Amazon Linux 2023 AMI 조회
 data "aws_ami" "amazon_linux_2023" {
-```
 
-most_recent = true# 조회 조건에 맞는 AMI가 여러 개일 때, 그중 가장 최신 AMI 1개를 선택
-```
+  most_recent = true# 조회 조건에 맞는 AMI가 여러 개일 때, 그중 가장 최신 AMI 1개를 선택
   owners = ["amazon"]
-```
 
-```
   filter {
     name   = "name"
     values = ["al2023-ami-2023.*-x86_64"]
   }
-```
 
-```
   filter {
     name   = "architecture"
     values = ["x86_64"]
   }
 }
-```
 
-#### output.tf
-
-#### AMI ID
-
-```hcl
+# output.tf
+# AMI ID
 output "amazon_linux_2023_ami_id" {
   value = data.aws_ami.amazon_linux_2023.id
 }
-```
 
-#### AMI 이름
-
-```hcl
+# AMI 이름
 output "amazon_linux_2023_ami_name" {
   value = data.aws_ami.amazon_linux_2023.name
 }
-```
 
-#### AMI Architecture
-
-```hcl
+# AMI Architecture
 output "amazon_linux_2023_architecture" {
   value = data.aws_ami.amazon_linux_2023.architecture
 }
-```
 
-#### AMI Owner ID
-
-```hcl
+# AMI Owner ID
 output "amazon_linux_2023_owner_id" {
   value = data.aws_ami.amazon_linux_2023.owner_id
 }
 PS C:\my-terraform\01_EC2_VPC\01-0_EC2> terraform plan
 data.aws_ami.amazon_linux_2023: Reading...
 data.aws_ami.amazon_linux_2023: Read complete after 1s [id=ami-071eb8c676c4c4bf5]
-```
 
 Changes to Outputs:
-```
   + amazon_linux_2023_ami_id       = "ami-071eb8c676c4c4bf5"
   + amazon_linux_2023_ami_name     = "al2023-ami-2023.12.20260909.0-kernel-6.1-x86_64"
   + amazon_linux_2023_architecture = "x86_64"
@@ -1456,11 +1352,9 @@ Route Table, Security Group, Key Pair, EC2 Instance 등의 AWS 리소스를 자�
 - AWS Provider는 AWS 리소스를 생성하기 위해 사용한다.
 - Random Provider는 AWS Key Pair 이름이 중복되지 않도록 랜덤 문자열을 생성하기 위해 사용한다.
 
-  - main.tf
-
-#### Terraform 기본 설정
-
 ```hcl
+   # main.tf
+# Terraform 기본 설정
 terraform {
   required_version = ">= 1.16.6"
 
@@ -1500,56 +1394,40 @@ terraform {
   - EC2 Instance Type
   - Public IP 할당 여부
 
-  - variables.tf
-#VPC에 할당할 CIDR 블록
 ```hcl
+   # variables.tf
+#VPC에 할당할 CIDR 블록
 variable "vpc_cidr_block" {"
   type        = string
   default     = "10.0.0.0/16"
 }
-```
 
-#### 서브넷에 할당할 CIDR 블록
-
-```hcl
+# 서브넷에 할당할 CIDR 블록
 variable "subnet_cidr_block" {
   type        = string
   default     = "10.0.1.0/24"
 }
-```
 
-#### VPC에 할당할 CIDR 블록
-
-```hcl
+# VPC에 할당할 CIDR 블록
 variable "vpc_cidr_block" {
   type        = string
   default     = "10.0.0.0/16"
 }
-```
 
-#### 서브넷을 배치할 가용영역(AZ)
-
-```hcl
+# 서브넷을 배치할 가용영역(AZ)
 variable "availability_zone" {
   type        = string
   default     = "ap-northeast-2a"
 }
-```
 
-#### EC2 인스턴스에 퍼블릭 IP 할당 여부
-
-```hcl
+# EC2 인스턴스에 퍼블릭 IP 할당 여부
 variable "associate_public_ip" {
   type        = bool
   default     = true
 }
-```
 
-  - main.tf
-
-#### VPC 생성
-
-```hcl
+   # main.tf
+# VPC 생성
 resource "aws_vpc" "my_vpc" {
   cidr_block = var.vpc_cidr_block
 
@@ -1577,11 +1455,9 @@ resource "aws_vpc" "my_vpc" {
   - AZ        : ap-northeast-2a
   - Public IP : 자동 할당 활성화
 
-  - main.tf
-
-#### Subnet 생성
-
 ```hcl
+   # main.tf
+# Subnet 생성
 resource "aws_subnet" "public_subnet" {
   vpc_id = aws_vpc.my_vpc.id
 
@@ -1617,11 +1493,9 @@ resource "aws_subnet" "public_subnet" {
 - VPC 내부의 Resource가 Internet과 통신하려면 Internet Gateway가 필요하다.
 - Internet Gateway를 생성한 후 앞에서 만든 VPC에 연결한다.
 
-  - main.tf
-
-#### Internet Gateway 생성
-
 ```hcl
+   # main.tf
+# Internet Gateway 생성
 resource "aws_internet_gateway" "my_igw" {
   vpc_id = aws_vpc.my_vpc.id
 
@@ -1642,11 +1516,9 @@ resource "aws_internet_gateway" "my_igw" {
 Internet Gateway로 전달하기 위한 Route Table을 생성한다.
 - 모든 외부 목적지인 0.0.0.0/0을 Internet Gateway로 전달한다.
 
-  - main.tf
-
-#### Route Table 생성
-
 ```hcl
+   # main.tf
+# Route Table 생성
 resource "aws_route_table" "public_route_table" {
   vpc_id = aws_vpc.my_vpc.id
 
@@ -1679,11 +1551,9 @@ resource "aws_route_table" "public_route_table" {
 
 - Public Subnet이 Public Route Table을 사용하도록  Route Table Association을 구성한다.
 
-  - main.tf
-
-#### Subnet과 Route Table 연결
-
 ```hcl
+   # main.tf
+# Subnet과 Route Table 연결
 resource "aws_route_table_association" "public_subnet_association" {
   route_table_id = aws_route_table.public_route_table.id
   subnet_id      = aws_subnet.public_subnet.id
@@ -1704,11 +1574,9 @@ resource "aws_route_table_association" "public_subnet_association" {
 - 현재 실습에서는 SSH 접속을 위해 TCP 22번 Port를 허용한다.
 - Outbound Traffic은 모든 Protocol과 모든 목적지에 대해 허용한다.
 
-  - main.tf
-
-#### Security Group 생성
-
 ```hcl
+   # main.tf
+# Security Group 생성
 resource "aws_security_group" "my_sg" {
   vpc_id = aws_vpc.my_vpc.id
 
@@ -1738,11 +1606,9 @@ resource "aws_security_group" "my_sg" {
 - AMI ID를 직접 입력하면 Region이나 시점에 따라 AMI ID가 변경될 수 있다.
 - 따라서 Data Source를 사용하여 Amazon에서 제공하는 최신 Amazon Linux 2023 AMI를 자동으로 조회한다.
 
-  - main.tf
-
-#### AMI 조회
-
 ```hcl
+   # main.tf
+# AMI 조회
 data "aws_ami" "al2023" {
   most_recent = true
   owners = ["amazon"]
@@ -1776,22 +1642,17 @@ data "aws_ami" "al2023" {
   - Public IP
   - 10GB gp3 EBS
   - EBS 암호화
-  - variables.tf
-
-#### EC2 인스턴스 유형
 
 ```hcl
+   # variables.tf
+# EC2 인스턴스 유형
 variable "instance_type" {
   type        = string
   default     = "t3.micro"
 }
-```
 
-  - main.tf
-
-#### EC2 인스턴스 생성
-
-```hcl
+   # main.tf
+# EC2 인스턴스 생성
 resource "aws_instance" "my_ec2" {
   ami = data.aws_ami.al2023.id
   instance_type = var.instance_type
@@ -1862,11 +1723,9 @@ resource "aws_instance" "my_ec2" {
   - Route Table Association
   - AWS Key Pair
 
-```bash
+```powershell
 PS C:\terraform\terraform-aws2\01_aws-config\1_vpc-and-ec2> mkdir $home/.ssh
-```
 
-```bash
 PS C:\terraform\terraform-aws2\01_aws-config\1_vpc-and-ec2> ssh-keygen -t rsa -b 2048 -f $home/.ssh/my-key
 Generating public/private rsa key pair.
 Enter passphrase (empty for no passphrase): Enter
@@ -1886,24 +1745,18 @@ The key's randomart image is:
 |      o.+.o E    |
 |       o.o..      |
 +------[SHA256]------+
-```
 
-```bash
 PS C:\terraform-aws\01_ec2-vpc\1_ec2> cd $home/
-```
 
 PS C:\Users\ryu> dir# .ssh 디렉터리가 있는지 확인
 
-```bash
 PS C:\Users\ryu> cd .\.ssh\
-```
 
-```bash
 PS C:\Users\ryu\.ssh> dir
+    디렉터리: C:\Users\ryu\.ssh
+Mode                 LastWriteTime         Length Name
 ```
 
-디렉터리: C:\Users\ryu\.ssh
-Mode                 LastWriteTime         Length Name
 - ---                 -------------         ------ ----
 - a----      2026-02-01   오후 7:04           2197 known_hosts
 - a----      2026-01-20   오전 1:04           1083 known_hosts.old
@@ -1931,8 +1784,8 @@ Mode                 LastWriteTime         Length Name
 
 - 여러 번 실습할 때 Key Pair 이름이 중복되지 않도록 Random Provider를 이용하여 8자리 랜덤 문자열을 생성한다.
 
-  - main.tf
 ```hcl
+   # main.tf
 resource "random_string" "key_name_suffix" {
   length  = 8
   special = false
@@ -1947,9 +1800,8 @@ resource "random_string" "key_name_suffix" {
 - 현재 다음 파일을 사용한다.
   - ~/.ssh/my-key.pub
 
-#### main.tf
-
 ```hcl
+# main.tf
 data "local_file" "public_key" {
   filename = pathexpand("~/.ssh/my-key.pub")
 }
@@ -1971,8 +1823,8 @@ data "local_file" "public_key" {
 - 사용자 PC에서 읽은 SSH Public Key를 AWS Key Pair로 등록한다.
 - Key Pair 이름 뒤에 Random 문자열을 추가하여 이름 중복을 방지한다.
 
-  - main.tf
 ```hcl
+   # main.tf
 resource "aws_key_pair" "my_key_pair" {
   key_name = "my-key-${random_string.key_name_suffix.result}"
   public_key = data.local_file.public_key.content
@@ -1995,6 +1847,7 @@ resource "aws_key_pair" "my_key_pair" {
   - Local PC에서 읽어온 Public Key 내용을 AWS에 등록한다.
 
   - main.tf (EC2 생성 파일 수정)
+
 ```hcl
 resource "aws_instance" "my_ec2" {
   ami = data.aws_ami.al2023.id
@@ -2022,14 +1875,10 @@ resource "aws_instance" "my_ec2" {
     aws_key_pair.my_key_pair
   ]
 }
-```
 
-```bash
 PS C:\terraform\terraform-aws2\01_aws-config\1_vpc-and-ec2> terraform init
 Initializing the backend...
 Initializing provider plugins...
-```
-
 - Reusing previous version of hashicorp/aws from the dependency lock file
 - Reusing previous version of hashicorp/random from the dependency lock file
 - Installing hashicorp/aws v5.93.0...
@@ -2039,64 +1888,53 @@ Initializing provider plugins...
 
 Terraform has been successfully initialized!
 
-```
 You may now begin working with Terraform. Try running "terraform plan" to see
 any changes that are required for your infrastructure. All Terraform commands
 should now work.
-```
 
 If you ever set or change modules or backend configuration for Terraform,
 rerun this command to reinitialize your working directory. If you forget, other
 commands will detect it and remind you to do so if necessary.
 
-```hcl
 PS C:\terraform\terraform-aws2\01_aws-config\1_vpc-and-ec2> terraform plan
 data.aws_ami.ami2023: Reading...
 data.aws_ami.ami2023: Read complete after 1s [id=ami-0fae3369c34baac8b]
-```
 
 Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
-+ create
+  + create
 
 Terraform will perform the following actions:
 
-  - aws_ebs_volume.example_volume will be created
+  # aws_ebs_volume.example_volume will be created
 
 ~~~~~~~~~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~~~~~~~~~
 
 Plan: 11 to add, 0 to change, 0 to destroy.
 
 Changes to Outputs:
-```
   + ec2_domain = (known after apply)
-```
 
-```hcl
 PS C:\terraform\terraform-aws2\01_aws-config\1_vpc-and-ec2> terraform apply
 data.aws_ami.ami2023: Reading...
 data.aws_ami.ami2023: Read complete after 1s [id=ami-0fae3369c34baac8b]
-```
 
 Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
-+ create
+  + create
 
 Terraform will perform the following actions:
 ~~~~~~~~~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~~~~~~~~~
 Plan: 11 to add, 0 to change, 0 to destroy.
 
 Changes to Outputs:
-```
   + ec2_domain = (known after apply)
-```
 
 Do you want to perform these actions?
-Terraform will perform the actions described above.
-Only 'yes' will be accepted to approve.
+  Terraform will perform the actions described above.
+  Only 'yes' will be accepted to approve.
 
-Enter a value: yes
+  Enter a value: yes
 
 random_string.key_name_suffix: Creating...
-```bash
 random_string.key_name_suffix: Creation complete after 0s [id=fc5qzj2w]
 aws_key_pair.my_key_pair: Creating...
 aws_vpc.my_vpc: Creating...
@@ -2105,20 +1943,15 @@ aws_vpc.my_vpc: Still creating... [00m10s elapsed]
 aws_vpc.my_vpc: Creation complete after 12s [id=vpc-05dc50910822da1a9]
 aws_internet_gateway.my_igw: Creating...
 aws_subnet.public_subnet: Creating...
-```
-
 ~~~~~~~~~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~~~~~~~~~
-```bash
 aws_volume_attachment.example_attachment: Still creating... [00m10s elapsed]
 aws_volume_attachment.example_attachment: Still creating... [00m20s elapsed]
 aws_volume_attachment.example_attachment: Creation complete after 21s [id=vai-2802357112]
-```
 
 Apply complete! Resources: 11 added, 0 changed, 0 destroyed.
 
 Outputs:
 
-```
 ec2_domain = "ec2-43-201-150-218.ap-northeast-2.compute.amazonaws.com"
 ```
 
@@ -2146,14 +1979,13 @@ SecurityGroup도 확인
 
 ![이미지](assets/05-terraform-ec2-vpc/7.png)
 
-```hcl
+```powershell
 PS C:\terraform\terraform-aws2\01_aws-config\1_vpc-and-ec2> terraform apply
 data.aws_ami.ami2023: Reading...
 data.aws_ami.ami2023: Read complete after 1s [id=ami-0fae3369c34baac8b]
-```
 
 Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
-+ create
+  + create
 
 Terraform will perform the following actions:
 ~~~~~~~~~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~~~~~~~~~
@@ -2161,23 +1993,18 @@ Apply complete! Resources: 11 added, 0 changed, 0 destroyed.
 
 Outputs:
 
-```
 ec2_domain = "ec2-43-201-150-218.ap-northeast-2.compute.amazonaws.com"
-```
 
-```bash
 PS C:\terraform\terraform-aws2\01_aws-config\1_vpc-and-ec2>
 ssh -i $home/.ssh/my-key  ec2-user@ec2-43-201-150-218.ap-northeast-2.compute.amazonaws.com
 The authenticity of host 'ec2-43-201-150-218.ap-northeast-2.compute.amazonaws.com (43.201.150.218)' can't be established.
 ED25519 key fingerprint is SHA256:54sbVDcl6GImVGRy3jyUHObI9HUeZ737iow8j+XDb7c.
 This key is not known by any other names.
 Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
-```
 
-,     #_
-~\_  ####_
-~~  \_#####\
-```
+   ,     #_
+   ~\_  ####_
+  ~~  \_#####\
   ~~     \###|
   ~~       \#/ ___   Amazon Linux 2023 (ECS Optimized)
    ~~       V~' '->
@@ -2185,14 +2012,10 @@ Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
       ~~._.   _/
          _/ _/
        _/m/'
-```
 
-```
 For documentation, visit http://aws.amazon.com/documentation/ecs
 [ec2-user@ip-10-0-1-56 ~]$
-```
 
-```
 [ec2-user@ip-10-0-1-56 ~]$ lsblk
 NAME          MAJ:MIN RM SIZE RO TYPE MOUNTPOINTS
 nvme0n1       259:0    0  30G  0 disk
@@ -2200,22 +2023,14 @@ nvme0n1       259:0    0  30G  0 disk
 ├─nvme0n1p127 259:2    0   1M  0 part
 └─nvme0n1p128 259:3    0  10M  0 part /boot/efi
 nvme1n1       259:4    0  10G  0 disk
-```
 
-```
 [root@ip-10-0-1-56 ec2-user]# dnf install -y nginx
-```
 
-```
 [root@ip-10-0-1-56 ec2-user]# systemctl  start  nginx
-```
 
-```
 [root@ip-10-0-1-56 ec2-user]# systemctl  enable  nginx
 Created symlink /etc/systemd/system/multi-user.target.wants/nginx.service → /usr/lib/systemd/system/nginx.service.
-```
 
-```
 [root@ip-10-0-1-56 ec2-user]# systemctl  status  nginx
 ● nginx.service - The nginx HTTP and reverse proxy server
      Loaded: loaded (/usr/lib/systemd/system/nginx.service; enabled; preset: disabled)
@@ -2228,89 +2043,66 @@ Created symlink /etc/systemd/system/multi-user.target.wants/nginx.service → /u
              ├─32424 "nginx: master process /usr/sbin/nginx"
              ├─32425 "nginx: worker process"
              └─32426 "nginx: worker process"
-```
 
-#### SecurityGroup에서 SSH만 허용했기 때문에 접속할 수 없다.
-
-```
+# SecurityGroup에서 SSH만 허용했기 때문에 접속할 수 없다.
 http://ec2-43-201-150-218.ap-northeast-2.compute.amazonaws.com/
 ```
 
 ![이미지](assets/05-terraform-ec2-vpc/8.png)
 
-#### main.tf
-
-#### 보안 그룹 생성
-
 ```hcl
+# main.tf
+# 보안 그룹 생성
 resource "aws_security_group" "my_sg" {
   vpc_id = aws_vpc.my_vpc.id # 보안 그룹이 속할 VPC
-```
 
-  - 인바운드 규칙 (외부  -->  EC2 접근 허용)
-```
+  # 인바운드 규칙 (외부  -->  EC2 접근 허용)
   ingress {
     from_port   = 22        # SSH 포트
     to_port     = 22        # SSH 포트
     protocol    = "tcp"       # TCP 프로토콜
     cidr_blocks = ["0.0.0.0/0"]# 모든 IP 허용 (실습용)
   }
-```
 
-```
   ingress {
     from_port   = 80         # SSH 포트
     to_port     = 80         # SSH 포트
     protocol    = "tcp"   # TCP 프로토콜
     cidr_blocks = ["0.0.0.0/0"] # 모든 IP 허용 (실습용)
   }
-```
 
-  - 아웃바운드 규칙 (EC2  -->  외부 접근 허용)
-```
+  # 아웃바운드 규칙 (EC2  -->  외부 접근 허용)
   egress {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"       # -1 = 모든 프로토콜
     cidr_blocks = ["0.0.0.0/0"]# 모든 IP 허용
   }
-```
 
-```
   tags = {
     Name = "MySecrutiyGroup"
   }
 }
-```
 
-```hcl
 PS C:\terraform\terraform-aws2\01_aws-config\1_vpc-and-ec2> terraform plan
 random_string.key_name_suffix: Refreshing state... [id=fc5qzj2w]
 data.aws_ami.ami2023: Reading...
-```
-
 ~~~~~~~~~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~~~~~~~~~
 Plan: 0 to add, 1 to change, 0 to destroy.
 
-```hcl
 PS C:\terraform\terraform-aws2\01_aws-config\1_vpc-and-ec2> terraform apply -auto-approve
 random_string.key_name_suffix: Refreshing state... [id=fc5qzj2w]
 aws_key_pair.my_key_pair: Refreshing state... [id=my-key-fc5qzj2w]
 data.aws_ami.ami2023: Reading...
-```
-
 ~~~~~~~~~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~~~~~~~~~
 Plan: 0 to add, 1 to change, 0 to destroy.
-```bash
 aws_security_group.my_sg: Modifying... [id=sg-0a9de5aab52ed8c26]
 aws_security_group.my_sg: Modifications complete after 1s [id=sg-0a9de5aab52ed8c26]
-```
 
 Apply complete! Resources: 0 added, 1 changed, 0 destroyed.
 
 Outputs:
 
-```
 ec2_domain = "ec2-43-201-150-218.ap-northeast-2.compute.amazonaws.com"
 ```
 
@@ -2318,15 +2110,11 @@ ec2_domain = "ec2-43-201-150-218.ap-northeast-2.compute.amazonaws.com"
 
 ![이미지](assets/05-terraform-ec2-vpc/9.png)
 
-```
 http://ec2-43-201-150-218.ap-northeast-2.compute.amazonaws.com/# HTTP 접속 허용
-```
 
 ![이미지](assets/05-terraform-ec2-vpc/10.png)
 
-```
 https://graphviz.org/download/
-```
 
 ![이미지](assets/05-terraform-ec2-vpc/11.png)
 
@@ -2344,7 +2132,7 @@ Add Graphviz to the system PATH for all users
 
 ![이미지](assets/05-terraform-ec2-vpc/16.png)
 
-```hcl
+```powershell
 PS C:\terraform\terraform-aws2\01_aws-config\1_vpc-and-ec2>
 terraform graph | Out-File -Encoding ASCII graph.dot; dot -Tpng graph.dot -o graph.png
 ```
@@ -2379,7 +2167,7 @@ terraform graph  -->  Out-File graph.dot  -->  dot -Tpng graph.dot  -->  graph.p
 
 ![이미지](assets/05-terraform-ec2-vpc/17.png)
 
-```hcl
+```powershell
 PS C:\terraform\terraform-aws2\01_aws-config\1_vpc-and-ec2> terraform  destroy  -auto-approve
 random_string.key_name_suffix: Refreshing state... [id=fc5qzj2w]
 data.aws_ami.ami2023: Reading...
@@ -2388,20 +2176,17 @@ aws_vpc.my_vpc: Refreshing state... [id=vpc-05dc50910822da1a9]
 aws_internet_gateway.my_igw: Refreshing state... [id=igw-02f6031ac32a13011]
 aws_subnet.public_subnet: Refreshing state... [id=subnet-0645a2bbc98c5460d]
 aws_security_group.my_sg: Refreshing state... [id=sg-0a9de5aab52ed8c26]
-```
-
 ~~~~~~~~~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~~~~~~~~~
 random_string.key_name_suffix: Destruction complete after 0s
 aws_subnet.public_subnet: Destruction complete after 1s
 aws_security_group.my_sg: Destruction complete after 1s
-```bash
 aws_vpc.my_vpc: Destroying... [id=vpc-05dc50910822da1a9]
 aws_vpc.my_vpc: Destruction complete after 1s
-```
 
 Destroy complete! Resources: 11 destroyed.
 
-#### AWS에서 VPC, EC2 , SG 삭제 확인
+# AWS에서 VPC, EC2 , SG 삭제 확인
+```
 
 #### 공식 테라폼 AWS 모듈을 활용한 인프라 배포
 
@@ -2419,15 +2204,14 @@ Terraform Registry와 오픈소스 커뮤니티에서 널리 사용되고 유지
 핵심 AWS 서비스를 위한 모듈을 지속적으로 관리하고 있다.
 
 - 직접 리소스 설정 방식
+
 ```hcl
 resource "aws_vpc" ...
 resource "aws_subnet" ...
 resource "aws_route_table" ...
 resource "aws_nat_gateway" ...
-```
 
 모듈 방식:
-```hcl
 module "vpc" {
   source = "terraform-aws-modules/vpc/aws"
   ...
@@ -2439,20 +2223,20 @@ module "vpc" {
 
 ```
 https://registry.terraform.io/search/modules?namespace=terraform-aws-modules
-```
 
-#### module을 사용하는 이유
+# module을 사용하는 이유
 
 가장 큰 이유는 속도와 안정성이다. 이미 많은 사용자가 써본 구조를 기반으로 만들어져 있어서,
-초보자가 VPC, 서브넷, IGW, NAT, 라우팅, 태그, IAM 연동 등을 하나하나 직접 구현할 때 발생하는 실수를 줄일 수 있다.
-예를 들어 S3 모듈은 버전 관리, 수명 주기, 서버 측 암호화, 로그 전달 정책 등 S3에서 자주 요구되는 기능을
-폭넓게 지원하고, RDS 모듈은 RDS 자원 생성을 위한 루트 모듈과 세부 모듈 구조를 제공한다.
-EKS 모듈 역시 EKS 클러스터 구성에 필요한 다양한 설정과 하위 모듈을 제공한다.
+ 초보자가 VPC, 서브넷, IGW, NAT, 라우팅, 태그, IAM 연동 등을 하나하나 직접 구현할 때 발생하는 실수를 줄일 수 있다.
+ 예를 들어 S3 모듈은 버전 관리, 수명 주기, 서버 측 암호화, 로그 전달 정책 등 S3에서 자주 요구되는 기능을
+ 폭넓게 지원하고, RDS 모듈은 RDS 자원 생성을 위한 루트 모듈과 세부 모듈 구조를 제공한다.
+ EKS 모듈 역시 EKS 클러스터 구성에 필요한 다양한 설정과 하위 모듈을 제공한다.
 
 또 하나 중요한 이유는 일관성이다.
 학생마다, 팀마다, 회사마다 처음부터 전부 직접 짜면 이름 규칙, 태그 규칙, 변수 구조, 출력값 구조가 다 달라진다.
 그런데 공통 모듈을 쓰면 입력 변수와 출력 구조가 어느 정도 표준화되기 때문에 협업과 유지보수가 쉬워진다.
 특히 같은 유형의 인프라를 반복 배포해야 하는 교육 환경이나 실무 환경에서는 이 장점이 크다.
+```
 
 #### 주요 특징
 
@@ -2583,7 +2367,7 @@ resource "aws_instance" "example" {
 
 - 태그를 다음과 같이 변경한다.
 
-```
+```hcl
 tags = {
   Name = "MyNewInstance"
 }
@@ -2705,12 +2489,10 @@ plan 단계는 Terraform 운영에서 필수 단계다.
 
 ![이미지](assets/05-terraform-ec2-vpc/18.png)
 
-```bash
+```powershell
 PS C:\terraform-aws\01_ec2-vpc\4_in-place-update-and-replace> terraform  init
 Initializing the backend...
 Initializing provider plugins...
-```
-
 - Finding latest version of hashicorp/null...
 - Finding latest version of hashicorp/random...
 - Finding latest version of hashicorp/local...
@@ -2719,17 +2501,14 @@ Initializing provider plugins...
 ~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~
 Terraform has been successfully initialized!
 
-```
 You may now begin working with Terraform. Try running "terraform plan" to see
 any changes that are required for your infrastructure. All Terraform commands
 should now work.
-```
 
 If you ever set or change modules or backend configuration for Terraform,
 rerun this command to reinitialize your working directory. If you forget, other
 commands will detect it and remind you to do so if necessary.
 
-```hcl
 PS C:\terraform-aws\01_ec2-vpc\4_in-place-update-and-replace> terraform  plan
 data.local_file.public_key: Reading...
 data.local_file.public_key: Read complete after 0s [id=b6683932437a27e031634bed107a118d9e0bfa27]
@@ -2737,43 +2516,31 @@ data.aws_ami.al2023: Reading...
 data.aws_ami.ubuntu: Reading...
 data.aws_ami.ubuntu: Read complete after 0s [id=ami-04f851a80be515079]
 data.aws_ami.al2023: Read complete after 1s [id=ami-00d2265ac70838f15]
-```
 
 Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
-+ create
+  + create
 ~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~
 Plan: 4 to add, 0 to change, 0 to destroy.
 
 Changes to Outputs:
-```
   + ec_domain = (known after apply)
-```
 
-#### main.tf
-
+# main.tf
 ~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~
-
-#### EC2 인스턴스 생성
-
-```hcl
+# EC2 인스턴스 생성
 resource "aws_instance" "my_ec2" {
   # 사용할 AMI ID - AMI ID 변경 시 replace 업데이트됨
   ami           = true ? data.aws_ami.al2023.id : data.aws_ami.ubuntu.id
   instance_type = "t3.micro" # 인스턴스 유형 설정 - in-place 업데이트됨
   # instance_type = "c5.large"
-```
 
-  - 태그 이름 - in-place 업데이트됨
-```
+  # 태그 이름 - in-place 업데이트됨
   tags = {
     Name        = "MyEC2Instance" # 인스턴스의 이름 태그
     Environment = "dev"           # 배포 환경 태그 (예: dev, prod)
   }
-```
-
 ~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~
 
-```hcl
 PS C:\terraform-aws\01_ec2-vpc\4_in-place-update-and-replace> terraform  plan
 data.local_file.public_key: Reading...
 null_resource.trigger_bootstrap_change: Refreshing state... [id=2875209987308979950]
@@ -2793,26 +2560,21 @@ Terraform will perform the following actions:
 Plan: 1 to add, 0 to change, 1 to destroy.
 
 Changes to Outputs:
-```
-  ~ ec_domain = "ec2-3-38-100-182.ap-northeast-2.compute.amazonaws.com" -> (known after apply)
-```
-
-#### 확인 후 다시 true로 변경
-
-#### main.tf
-
-#### EC2 인스턴스 생성
 
 ```hcl
+  ~ ec_domain = "ec2-3-38-100-182.ap-northeast-2.compute.amazonaws.com" -> (known after apply)
+
+# 확인 후 다시 true로 변경
+
+# main.tf
+# EC2 인스턴스 생성
 resource "aws_instance" "my_ec2" {
   # 사용할 AMI ID - AMI ID 변경 시 replace 업데이트됨
   ami           = true ? data.aws_ami.al2023.id : data.aws_ami.ubuntu.id
   instance_type = "t3.micro" # 인스턴스 유형 설정 - in-place 업데이트됨
   # instance_type = "c5.large"
-```
 
-  - 태그 이름 - in-place 업데이트됨
-```hcl
+  # 태그 이름 - in-place 업데이트됨
   tags = {
     Name        = "MyEC2Instance-in-place" # 인스턴스의 이름 태그
     Environment = "dev"                    # 배포 환경 태그 (예: dev, prod)
@@ -2828,15 +2590,13 @@ aws_key_pair.my_key_pair: Refreshing state... [id=my-key-73u3pxgy]
 data.aws_ami.ubuntu: Read complete after 1s [id=ami-04f851a80be515079]
 data.aws_ami.al2023: Read complete after 1s [id=ami-00d2265ac70838f15]
 aws_instance.my_ec2: Refreshing state... [id=i-0723f649eaad1dcf4]
-```
 
 Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
-~ update in-place
+  ~ update in-place
 
 Terraform will perform the following actions:
 
-  - aws_instance.my_ec2 will be updated in-place
-```
+  # aws_instance.my_ec2 will be updated in-place
   ~ resource "aws_instance" "my_ec2" {
         id                                   = "i-0723f649eaad1dcf4"
       ~ tags                                 = {
@@ -2848,16 +2608,13 @@ Terraform will perform the following actions:
             # (1 unchanged element hidden)
         }
         # (40 unchanged attributes hidden)
-```
 
-  - (9 unchanged blocks hidden)
-```
+        # (9 unchanged blocks hidden)
     }
-```
 
 Plan: 0 to add, 1 to change, 0 to destroy.
 
-#### user_data 변경 시 강제 replace
+# user_data 변경 시 강제 replace
 
 user_data에 중요한 초기 설정 데이터가 변경되면 ec2의 재생성이 필요할 수 있다.
 그러나 기본적으로는 user_data가 변경되면 in-place 업데이트를 수행하면서 ec2가 재부팅 될 뿐
@@ -2869,7 +2626,6 @@ local 변수인 user_data는 replace_triggered_by에 배치할 수 없으므로 
 triggers를 걸고 그것을 replace_triggered_by와 연결하여 부트스트랩 스크립트 변경 시
 인스턴스가 replace 될 수 있도록 연결할 수 있다.
 
-```bash
 PS C:\terraform-aws\01_ec2-vpc\4_in-place-update-and-replace>
 ssh -i $home/.ssh/my-key  ec2-user@ec2-13-125-197-34.ap-northeast-2.compute.amazonaws.com
    ,     #_
@@ -2881,24 +2637,18 @@ ssh -i $home/.ssh/my-key  ec2-user@ec2-13-125-197-34.ap-northeast-2.compute.amaz
     ~~~         /
       ~~._.   _/
          _/ _/
-```
 
-```
 [ec2-user@ip-172-31-13-135 ~]$ curl localhost
 Hello, Httpd!
 ```
 
 - http가 동작하는거을 확인할 수 있다.
 
-#### main.tf
-
-~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~
-
-#### 부트스트랩 스크립트를 로컬 변수로 정의 (Nginx 설치)
-
-#### 주석 해제
-
 ```hcl
+# main.tf
+~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~
+# 부트스트랩 스크립트를 로컬 변수로 정의 (Nginx 설치)
+# 주석 해제
 locals {
   bootstrap_script = <<-EOT
     #!/bin/bash
@@ -2907,49 +2657,33 @@ locals {
     echo "Hello, Nginx!" > /usr/share/nginx/html/index.html
   EOT
 }
-```
 
-#### 부트스트랩 스크립트를 로컬 변수로 정의 (Httpd 설치)
-
-#### 이 값은 EC2가 "처음 생성될 때" 실행할 초기 설정 스크립트이다.
-
-#### 주석 처리
-
-#### locals {
-
-#### bootstrap_script = <<-EOT
-
-#### #!/bin/bash
-
-#### yum install -y httpd
-
-#### systemctl start httpd
-
-#### echo "Hello, Httpd!" > /var/www/html/index.html
-
-#### EOT
-
-#### }
-
+# 부트스트랩 스크립트를 로컬 변수로 정의 (Httpd 설치)
+# 이 값은 EC2가 "처음 생성될 때" 실행할 초기 설정 스크립트이다.
+# 주석 처리
+# locals {
+#   bootstrap_script = <<-EOT
+#     #!/bin/bash
+#     yum install -y httpd
+#     systemctl start httpd
+#     echo "Hello, Httpd!" > /var/www/html/index.html
+#   EOT
+# }
 ~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~
 
-```hcl
 PS C:\terraform-aws\01_ec2-vpc\4_in-place-update-and-replace> terraform  plan
 data.local_file.public_key: Reading...
 random_string.key_name_suffix: Refreshing state... [id=73u3pxgy]
 data.local_file.public_key: Read complete after 0s [id=b6683932437a27e031634bed107a118d9e0bfa27]
 null_resource.trigger_bootstrap_change: Refreshing state... [id=2875209987308979950]
-```
-
 ~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~
 Terraform will perform the following actions:
 
-  - aws_instance.my_ec2 will be replaced due to changes in replace_triggered_by
+  # aws_instance.my_ec2 will be replaced due to changes in replace_triggered_by
 ~~~~~~~~~~~ 중간 생략 ~~~~~~~~~~~
 Plan: 2 to add, 0 to change, 2 to destroy.
 
 Changes to Outputs:
-```
   ~ ec_domain = "ec2-13-125-197-34.ap-northeast-2.compute.amazonaws.com" -> (known after apply)
 ```
 
@@ -3039,9 +2773,12 @@ S3는 다음 구조로 데이터를 관리한다.
 - 대신 Object Key 기반 구조를 사용한다.
 
 - 예
-  - index.html
-  - css/style.css
-  - images/logo.png
+
+```
+ # index.html
+ # css/style.css
+ # images/logo.png
+```
 
 - 이 구조는 실제 폴더가 아니라 문자열 기반 경로이다.
 
@@ -3065,7 +2802,10 @@ S3는 다음 구조로 데이터를 관리한다.
 - 정적 웹사이트는 서버에서 프로그램을 실행하지 않는 웹사이트를 의미한다.
 
 - 사용자 요청
-  - example.com/index.html
+
+```
+ # example.com/index.html
+```
 
 - 서버 동작
   - index.html 파일 그대로 전달
@@ -3079,7 +2819,8 @@ S3는 다음 구조로 데이터를 관리한다.
   - 버킷 정책을 통해 파일 읽기 권한을 공개한다.
 
 예
-```
+
+```json
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -3165,9 +2906,7 @@ S3는 다음 구조로 데이터를 관리한다.
 
 ![이미지](assets/05-terraform-ec2-vpc/27.png)
 
-```
 http://my-terraform-bucket-123456789012.s3-website.ap-northeast-2.amazonaws.com/
-```
 
 ![이미지](assets/05-terraform-ec2-vpc/28.png)
 
@@ -3190,7 +2929,7 @@ http://my-terraform-bucket-123456789012.s3-website.ap-northeast-2.amazonaws.com/
 
 ![이미지](assets/05-terraform-ec2-vpc/26.png)
 
-```
+```json
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -3202,17 +2941,13 @@ http://my-terraform-bucket-123456789012.s3-website.ap-northeast-2.amazonaws.com/
     }
   ]
 }
-```
 
-```
 http://my-terraform-bucket-123456789012.s3-website.ap-northeast-2.amazonaws.com/
 ```
 
 ![이미지](assets/05-terraform-ec2-vpc/32.png)
 
-```
 http://my-terraform-bucket-123456789012.s3-website.ap-northeast-2.amazonaws.com/soldesk
-```
 
 ![이미지](assets/05-terraform-ec2-vpc/33.png)
 
@@ -3227,59 +2962,48 @@ Internet Gateway
 ┌───────────────┴───────────────┐
 │                               │
 Public Subnet 1                 Public Subnet 2
-```
-           10.0.1.0/24                     10.0.2.0/24
-          ap-northeast-2a                 ap-northeast-2c
-                  │
-             Public EC2
-                  │
-             NAT Gateway
-                  │
-             Elastic IP
-                  │
-           Private Route Table
-                  │
-          ┌───────┴───────┐
-          │               │
- Private Subnet 1    Private Subnet 2
-  10.0.11.0/24        10.0.12.0/24
- ap-northeast-2a     ap-northeast-2c
-          │
-     Private EC2
-```
+10.0.1.0/24                     10.0.2.0/24
+ap-northeast-2a                 ap-northeast-2c
+│
+Public EC2
+│
+NAT Gateway
+│
+Elastic IP
+│
+Private Route Table
+│
+┌───────┴───────┐
+│               │
+Private Subnet 1    Private Subnet 2
+10.0.11.0/24        10.0.12.0/24
+ap-northeast-2a     ap-northeast-2c
+│
+Private EC2
 
   - STEP 1) Terraform Provider + VPC
 
 - Terraform 기본 설정과 AWS Provider를 설정
 - VPC CIDR : 10.0.0.0/16
 
-  - variables.tf
-
-#### AWS Region
-
 ```hcl
+　　　# variables.tf
+# AWS Region
 variable "aws_region" {
   description = "AWS 리전"
   type        = string
   default     = "ap-northeast-2"
 }
-```
 
-#### AWS CLI Profile
-
-```hcl
+# AWS CLI Profile
 variable "aws_profile" {
   description = "AWS CLI Profile 이름"
   type        = string
   default     = "my-profile"
 }
-```
 
-  - main.tf
-
-#### Terraform 기본 설정
-
-```hcl
+　　　# main.tf
+# Terraform 기본 설정
 terraform {
   required_version = ">= 1.16.0"
 
@@ -3294,34 +3018,23 @@ terraform {
     }
   }
 }
-```
 
-#### AWS Provider 설정
-
-```hcl
+# AWS Provider 설정
 provider "aws" {
   region  = var.aws_region   # AWS 리전
   profile = var.aws_profile  # AWS CLI Profile
 }
-```
 
-  - variables.tf
-
-#### VPC CIDR
-
-```hcl
+　　　# variables.tf
+# VPC CIDR
 variable "vpc_cidr_block" {
   description = "VPC에서 사용할 CIDR 블록"
   type        = string
   default     = "10.0.0.0/16"
 }
-```
 
-  - main.tf
-
-#### VPC 생성
-
-```hcl
+　　　# main.tf
+# VPC 생성
 resource "aws_vpc" "my_vpc" {
   cidr_block = var.vpc_cidr_block   # VPC IP 주소 범위
 
@@ -3332,29 +3045,20 @@ resource "aws_vpc" "my_vpc" {
     Name = "my-vpc"
   }
 }
-```
 
-  - outputs.tf
-
-#### VPC ID 출력
-
-```hcl
+　　　# outputs.tf
+# VPC ID 출력
 output "vpc_id" {
   description = "생성된 VPC ID"
   value       = aws_vpc.my_vpc.id
 }
-```
 
-#### VPC CIDR 출력
-
-```hcl
+# VPC CIDR 출력
 output "vpc_cidr" {
   description = "생성된 VPC CIDR"
   value       = aws_vpc.my_vpc.cidr_block
 }
-```
 
-```bash
 PS C:\trf2\1) VPC\1-3_VPC_total> terraform plan
         # STEP 2) Public Subnet 2개 + Private Subnet 2개
 ```
@@ -3369,146 +3073,103 @@ PS C:\trf2\1) VPC\1-3_VPC_total> terraform plan
   - ap-northeast-2a
   - ap-northeast-2c
 
-  - variables.tf
 ```hcl
+　　　# variables.tf
 variable "public_subnet_1_cidr" {
   description = "Public Subnet 1 CIDR"
   type        = string
   default     = "10.0.1.0/24"
 }
-```
 
-```hcl
 variable "public_subnet_2_cidr" {
   description = "Public Subnet 2 CIDR"
   type        = string
   default     = "10.0.2.0/24"
 }
-```
 
-```hcl
 variable "private_subnet_1_cidr" {
   description = "Private Subnet 1 CIDR"
   type        = string
   default     = "10.0.11.0/24"
 }
-```
 
-```hcl
 variable "private_subnet_2_cidr" {
   description = "Private Subnet 2 CIDR"
   type        = string
   default     = "10.0.12.0/24"
 }
-```
 
-```hcl
 variable "availability_zone_1" {
   description = "첫 번째 Availability Zone"
   type        = string
   default     = "ap-northeast-2a"
 }
-```
 
-```hcl
 variable "availability_zone_2" {
   description = "두 번째 Availability Zone"
   type        = string
   default     = "ap-northeast-2c"
 }
-```
 
-  - main.tf
-
-#### Public Subnet 1 생성
-
-```hcl
+　　　# main.tf
+# Public Subnet 1 생성
 resource "aws_subnet" "public_subnet_1" {
   vpc_id           = aws_vpc.my_vpc.id
   cidr_block       = var.public_subnet_1_cidr
   availability_zone = var.availability_zone_1
-```
 
-  - EC2 생성 시 Public IP 자동 할당
-```
+  # EC2 생성 시 Public IP 자동 할당
   map_public_ip_on_launch = true
-```
 
-```
   tags = {
     Name = "public-subnet-1"
   }
 }
-```
 
-#### Public Subnet 2 생성
-
-```hcl
+# Public Subnet 2 생성
 resource "aws_subnet" "public_subnet_2" {
   vpc_id           = aws_vpc.my_vpc.id
   cidr_block       = var.public_subnet_2_cidr
   availability_zone = var.availability_zone_2
-```
 
-  - EC2 생성 시 Public IP 자동 할당
-```
+  # EC2 생성 시 Public IP 자동 할당
   map_public_ip_on_launch = true
-```
 
-```
   tags = {
     Name = "public-subnet-2"
   }
 }
-```
 
-#### Private Subnet 1 생성
-
-```hcl
+# Private Subnet 1 생성
 resource "aws_subnet" "private_subnet_1" {
   vpc_id            = aws_vpc.my_vpc.id
   cidr_block        = var.private_subnet_1_cidr
   availability_zone = var.availability_zone_1
-```
 
-  - Private Subnet은 Public IP 자동 할당 비활성화
-```
+  # Private Subnet은 Public IP 자동 할당 비활성화
   map_public_ip_on_launch = false
-```
 
-```
   tags = {
     Name = "private-subnet-1"
   }
 }
-```
 
-#### Private Subnet 2 생성
-
-```hcl
+# Private Subnet 2 생성
 resource "aws_subnet" "private_subnet_2" {
   vpc_id            = aws_vpc.my_vpc.id
   cidr_block        = var.private_subnet_2_cidr
   availability_zone = var.availability_zone_2
-```
 
-  - Private Subnet은 Public IP 자동 할당 비활성화
-```
+  # Private Subnet은 Public IP 자동 할당 비활성화
   map_public_ip_on_launch = false
-```
 
-```
   tags = {
     Name = "private-subnet-2"
   }
 }
-```
 
-  - outputs.tf
-
-#### Public Subnet ID 출력
-
-```hcl
+　　　# outputs.tf
+# Public Subnet ID 출력
 output "public_subnet_ids" {
   description = "Public Subnet ID 목록"
 
@@ -3517,11 +3178,8 @@ output "public_subnet_ids" {
     aws_subnet.public_subnet_2.id
   ]
 }
-```
 
-#### Private Subnet ID 출력
-
-```hcl
+# Private Subnet ID 출력
 output "private_subnet_ids" {
   description = "Private Subnet ID 목록"
 
@@ -3530,9 +3188,7 @@ output "private_subnet_ids" {
     aws_subnet.private_subnet_2.id
   ]
 }
-```
 
-```bash
 PS C:\trf2\1) VPC\1-3_VPC_total> terraform fmt
 PS C:\trf2\1) VPC\1-3_VPC_total> terraform validate
 PS C:\trf2\1) VPC\1-3_VPC_total> terraform plan
@@ -3546,11 +3202,9 @@ PS C:\trf2\1) VPC\1-3_VPC_total> terraform plan
 
 - Public Subnet 1과 Public Subnet 2 모두 같은 Public Route Table을 사용
 
-  - main.tf
-
-#### Internet Gateway 생성
-
 ```hcl
+　　　# main.tf
+# Internet Gateway 생성
 resource "aws_internet_gateway" "my_igw" {
   vpc_id = aws_vpc.my_vpc.id   # Internet Gateway를 연결할 VPC
 
@@ -3558,71 +3212,48 @@ resource "aws_internet_gateway" "my_igw" {
     Name = "my-internet-gateway"
   }
 }
-```
 
-#### Public Route Table 생성
-
-```hcl
+# Public Route Table 생성
 resource "aws_route_table" "public_route_table" {
   vpc_id = aws_vpc.my_vpc.id
-```
 
-  - 모든 외부 Internet Traffic을 Internet Gateway로 전달
-```
+  # 모든 외부 Internet Traffic을 Internet Gateway로 전달
   route {
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.my_igw.id
   }
-```
 
-```
   tags = {
     Name = "public-route-table"
   }
 }
-```
 
-#### Public Subnet 1과 Public Route Table 연결
-
-```hcl
+# Public Subnet 1과 Public Route Table 연결
 resource "aws_route_table_association" "public_subnet_1_association" {
   subnet_id      = aws_subnet.public_subnet_1.id
   route_table_id = aws_route_table.public_route_table.id
 }
-```
 
-#### Public Subnet 2와 Public Route Table 연결
-
-```hcl
+# Public Subnet 2와 Public Route Table 연결
 resource "aws_route_table_association" "public_subnet_2_association" {
   subnet_id      = aws_subnet.public_subnet_2.id
   route_table_id = aws_route_table.public_route_table.id
 }
-```
 
-  - outputs.tf
-
-#### Internet Gateway ID
-
-```hcl
+　　　# outputs.tf
+# Internet Gateway ID
 output "internet_gateway_id" {
   description = "Internet Gateway ID"
   value       = aws_internet_gateway.my_igw.id
 }
-```
 
-#### Public Route Table ID
-
-```hcl
+# Public Route Table ID
 output "public_route_table_id" {
   description = "Public Route Table ID"
   value       = aws_route_table.public_route_table.id
 }
-```
 
-#### 실행
-
-```bash
+# 실행
 PS C:\trf2\1) VPC\1-3_VPC_total> terraform fmt
 PS C:\trf2\1) VPC\1-3_VPC_total> terraform validate
 PS C:\trf2\1) VPC\1-3_VPC_total> terraform plan
@@ -3634,11 +3265,9 @@ PS C:\trf2\1) VPC\1-3_VPC_total> terraform plan
 - NAT Gateway는 Private Subnet이 아니라 Public Subnet에 생성
 - 이번 실습에서는 Public Subnet 1에 NAT Gateway 1개를 생성
 
-  - main.tf
-
-#### NAT Gateway에서 사용할 Elastic IP 생성
-
 ```hcl
+　　　# main.tf
+# NAT Gateway에서 사용할 Elastic IP 생성
 resource "aws_eip" "nat_eip" {
   domain = "vpc"# VPC용 Elastic IP
 
@@ -3648,104 +3277,69 @@ resource "aws_eip" "nat_eip" {
 
   depends_on = [ aws_internet_gateway.my_igw ]
 }
-```
 
-#### NAT Gateway 생성
-
-```hcl
+# NAT Gateway 생성
 resource "aws_nat_gateway" "my_nat_gateway" {
   # NAT Gateway에 Elastic IP 연결
   allocation_id = aws_eip.nat_eip.id
-```
 
-  - NAT Gateway를 Public Subnet 1에 생성
-```
+  # NAT Gateway를 Public Subnet 1에 생성
   subnet_id = aws_subnet.public_subnet_1.id
-```
 
-```
   tags = {
     Name = "my-nat-gateway"
   }
-```
 
-```
   depends_on = [ aws_internet_gateway.my_igw ]
 }
-```
 
-#### Private Route Table 생성
-
-```hcl
+# Private Route Table 생성
 resource "aws_route_table" "private_route_table" {
   vpc_id = aws_vpc.my_vpc.id
-```
 
-  - 모든 외부 Traffic을 NAT Gateway로 전달
-```
+  # 모든 외부 Traffic을 NAT Gateway로 전달
   route {
     cidr_block     = "0.0.0.0/0"
     nat_gateway_id = aws_nat_gateway.my_nat_gateway.id
   }
-```
 
-```
   tags = {
     Name = "private-route-table"
   }
 }
-```
 
-#### Private Subnet 1과 Private Route Table 연결
-
-```hcl
+# Private Subnet 1과 Private Route Table 연결
 resource "aws_route_table_association" "private_subnet_1_association" {
   subnet_id      = aws_subnet.private_subnet_1.id
   route_table_id = aws_route_table.private_route_table.id
 }
-```
 
-#### Private Subnet 2와 Private Route Table 연결
-
-```hcl
+# Private Subnet 2와 Private Route Table 연결
 resource "aws_route_table_association" "private_subnet_2_association" {
   subnet_id      = aws_subnet.private_subnet_2.id
   route_table_id = aws_route_table.private_route_table.id
 }
-```
 
-  - outputs.tf
-
-#### NAT Gateway ID
-
-```hcl
+　　　# outputs.tf
+# NAT Gateway ID
 output "nat_gateway_id" {
   description = "NAT Gateway ID"
   value       = aws_nat_gateway.my_nat_gateway.id
 }
-```
 
-#### NAT Gateway Public IP
-
-```hcl
+# NAT Gateway Public IP
 output "nat_gateway_public_ip" {
   description = "NAT Gateway에서 사용하는 Elastic IP"
   value       = aws_eip.nat_eip.public_ip
 }
-```
 
-#### Private Route Table ID
-
-```hcl
+# Private Route Table ID
 output "private_route_table_id" {
   description = "Private Route Table ID"
   value       = aws_route_table.private_route_table.id
 }
-```
 
-#### 실행
-
-```bash
+# 실행
 PS C:\trf2\1) VPC\1-3_VPC_total> terraform fmt
 PS C:\trf2\1) VPC\1-3_VPC_total> terraform validate
 PS C:\trf2\1) VPC\1-3_VPC_total> terraform plan
@@ -3759,109 +3353,77 @@ PS C:\trf2\1) VPC\1-3_VPC_total> terraform plan
 
 #### C:/Users/soldesk/.ssh/my-key.pub
 
-  - variables.tf
-
-#### EC2 Instance Type
-
 ```hcl
+　　　# variables.tf
+# EC2 Instance Type
 variable "instance_type" {
   description = "EC2 Instance Type"
   type        = string
   default     = "t3.micro"
 }
-```
 
-#### SSH Public Key 파일 경로
-
-```hcl
+# SSH Public Key 파일 경로
 variable "pub_key_file_path" {
   description = "SSH Public Key 파일 경로"
   type        = string
   default     = "~/.ssh/my-key.pub"
 }
-```
 
-  - main.tf
-
-#### 최신 Amazon Linux 2023 AMI 조회
-
-```hcl
+　　　# main.tf
+# 최신 Amazon Linux 2023 AMI 조회
 data "aws_ami" "al2023" {
   most_recent = true       # 조건에 맞는 AMI 중 가장 최신 AMI 선택
   owners      = ["amazon"] # Amazon 공식 AMI만 조회
-```
 
-  - Amazon Linux 2023 x86_64
-```
+  # Amazon Linux 2023 x86_64
   filter {
     name   = "name"
     values = ["al2023-ami-2023*-x86_64"]
   }
-```
 
-  - CPU Architecture
-```
+  # CPU Architecture
   filter {
     name   = "architecture"
     values = ["x86_64"]
   }
 }
-```
 
-#### Key Pair 이름 중복 방지를 위한 Random 문자열 생성
-
-```hcl
+# Key Pair 이름 중복 방지를 위한 Random 문자열 생성
 resource "random_string" "key_name_suffix" {
   length  = 8      # 8자리
   special = false  # 특수문자 제외
   upper   = false# 대문자 제외
 }
-```
 
-#### 사용자 PC의 Public Key 파일 읽기
-
-```hcl
+# 사용자 PC의 Public Key 파일 읽기
 data "local_file" "public_key" {
   filename = pathexpand(var.pub_key_file_path)
 }
-```
 
-#### AWS Key Pair 생성
-
-```hcl
+# AWS Key Pair 생성
 resource "aws_key_pair" "my_key_pair" {
   # 예: my-key-a1b2c3d4
   key_name = "my-key-${random_string.key_name_suffix.result}"
-```
 
-  - Local Public Key 등록
-```
+  # Local Public Key 등록
   public_key = data.local_file.public_key.content
-```
 
-```
   tags = {
     Name = "my-key-pair"
   }
 }
-```
 
-  - outputs.tf
-```hcl
+　　　# outputs.tf
 output "amazon_linux_2023_ami_id" {
   description = "Amazon Linux 2023 AMI ID"
   value       = data.aws_ami.al2023.id
 }
-```
 
-```hcl
 output "key_pair_name" {
   description = "생성된 AWS Key Pair 이름"
   value       = aws_key_pair.my_key_pair.key_name
 }
-```
 
-```bash
 PS C:\trf2\1) VPC\1-3_VPC_total> terraform fmt
 PS C:\trf2\1) VPC\1-3_VPC_total> terraform validate
 PS C:\trf2\1) VPC\1-3_VPC_total> terraform plan
@@ -3870,65 +3432,50 @@ PS C:\trf2\1) VPC\1-3_VPC_total> terraform plan
 
 - Public EC2용 Security Group과 Private EC2용 Security Group을 분리
 
-  - main.tf
-
-#### Public EC2 Security Group
-
 ```hcl
+　　　# main.tf
+# Public EC2 Security Group
 resource "aws_security_group" "public_ec2_sg" {
   name        = "public-ec2-sg"
   description = "Security Group for Public EC2"
   vpc_id      = aws_vpc.my_vpc.id
-```
 
-  - SSH 접속 허용
-```
+  # SSH 접속 허용
   ingress {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
-```
 
-  - HTTP 접속 허용
-```
+  # HTTP 접속 허용
   ingress {
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
-```
 
-  - 모든 Outbound Traffic 허용
-```
+  # 모든 Outbound Traffic 허용
   egress {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
-```
 
-```
   tags = {
     Name = "public-ec2-sg"
   }
 }
-```
 
-#### Private EC2 Security Group
-
-```hcl
+# Private EC2 Security Group
 resource "aws_security_group" "private_ec2_sg" {
   name        = "private-ec2-sg"
   description = "Security Group for Private EC2"
   vpc_id      = aws_vpc.my_vpc.id
-```
 
-  - Public EC2 Security Group이 적용된 Instance에서 SSH 접속 허용
-```
+  # Public EC2 Security Group이 적용된 Instance에서 SSH 접속 허용
   ingress {
     from_port = 22
     to_port   = 22
@@ -3936,20 +3483,16 @@ resource "aws_security_group" "private_ec2_sg" {
 
     security_groups = [ aws_security_group.public_ec2_sg.id ]
   }
-```
 
-  - Private EC2의 모든 Outbound Traffic 허용
-  - NAT Gateway를 통한 Internet 통신에 사용
-```
+  # Private EC2의 모든 Outbound Traffic 허용
+  # NAT Gateway를 통한 Internet 통신에 사용
   egress {
     from_port = 0
     to_port   = 0
     protocol  = "-1"
     cidr_blocks= ["0.0.0.0/0"]
   }
-```
 
-```
   tags = {
     Name = "private-ec2-sg"
   }
@@ -3959,7 +3502,7 @@ resource "aws_security_group" "private_ec2_sg" {
 - Security Group의 security_groups은 AWS Security Group의 인바운드 규칙에서는
 특정 IP 주소뿐만 아니라 다른 Security Group을 접근 허용 대상으로 지정할 수 있다.
 
-```bash
+```hcl
 security_groups = [
   aws_security_group.alb_sg.id
 ]
@@ -3968,29 +3511,21 @@ security_groups = [
 - 이 설정은 alb_sg라는 Security Group이 연결된 리소스에서 들어오는 트래픽을 허용한다는 의미
 - 예를 들어 ALB의 Security-group을 허용할수 있다.
 
-  - outputs.tf
-
-#### Public EC2 Security Group ID
-
 ```hcl
+　　　# outputs.tf
+# Public EC2 Security Group ID
 output "public_ec2_security_group_id" {
   description = "Public EC2 Security Group ID"
   value       = aws_security_group.public_ec2_sg.id
 }
-```
 
-#### Private EC2 Security Group ID
-
-```hcl
+# Private EC2 Security Group ID
 output "private_ec2_security_group_id" {
   description = "Private EC2 Security Group ID"
   value       = aws_security_group.private_ec2_sg.id
 }
-```
 
-#### 실행
-
-```bash
+# 실행
 PS C:\trf2\1) VPC\1-3_VPC_total> terraform fmt
 PS C:\trf2\1) VPC\1-3_VPC_total> terraform validate
 PS C:\trf2\1) VPC\1-3_VPC_total> terraform plan
@@ -4004,157 +3539,114 @@ PS C:\trf2\1) VPC\1-3_VPC_total> terraform plan
 
 - nginx를 자동 설치하여 HTTP 접속을 확인
 
-  - main.tf
-
-#### Public EC2 생성
-
 ```hcl
+　　　# main.tf
+# Public EC2 생성
 resource "aws_instance" "public_ec2" {
   # 최신 Amazon Linux 2023 AMI
   ami = data.aws_ami.al2023.id
-```
 
-  - EC2 Instance Type
-```
+  # EC2 Instance Type
   instance_type = var.instance_type
-```
 
-  - Public Subnet 1에 배치
-```
+  # Public Subnet 1에 배치
   subnet_id = aws_subnet.public_subnet_1.id
-```
 
-  - Public EC2 Security Group 연결
-```
+  # Public EC2 Security Group 연결
   vpc_security_group_ids = [ aws_security_group.public_ec2_sg.id ]
-```
 
-  - Public IP 할당
-```
+  # Public IP 할당
   associate_public_ip_address = true
-```
 
-  - SSH Key Pair 연결
-```
+  # SSH Key Pair 연결
   key_name = aws_key_pair.my_key_pair.key_name
-```
 
-  - Root EBS 설정
-```
+  # Root EBS 설정
   root_block_device {
     volume_size           = 10     # EBS 크기 10GB
     volume_type           = "gp3"  # gp3 SSD
     delete_on_termination = true   # EC2 삭제 시 EBS 같이 삭제
     encrypted             = true   # EBS 암호화
   }
-```
 
-  - EC2 최초 실행 시 nginx 설치
-```
+  # EC2 최초 실행 시 nginx 설치
   user_data = <<-EOF
               #!/bin/bash
-```
 
-```bash
               dnf install -y nginx
-```
 
-```
               systemctl start nginx
               systemctl enable nginx
-```
 
-  - IMDSv2 토큰 발급
-```
+              # IMDSv2 토큰 발급
               TOKEN=$(curl -s -X PUT \
-                -H "X-aws-ec2-metadata-token-ttl-seconds: 21600" \
+```
+
+- H "X-aws-ec2-metadata-token-ttl-seconds: 21600" \
+
+```
                 http://169.254.169.254/latest/api/token)
-```
 
-  - 현재 EC2 Instance ID 조회
-```
+              # 현재 EC2 Instance ID 조회
               INSTANCE_ID=$(curl -s \
-                -H "X-aws-ec2-metadata-token: $TOKEN" \
+```
+
+- H "X-aws-ec2-metadata-token: $TOKEN" \
+
+```hcl
                 http://169.254.169.254/latest/meta-data/instance-id)
-```
 
-  - 현재 Hostname 조회
-```
+              # 현재 Hostname 조회
               HOSTNAME=$(hostname)
-```
 
-  - Instance ID와 Hostname을 웹 페이지에 출력
-```bash
+              # Instance ID와 Hostname을 웹 페이지에 출력
               echo "<h1>Instance ID : $INSTANCE_ID</h1>" > /usr/share/nginx/html/index.html
               echo "<h1>Hostname : $HOSTNAME</h1>" >> /usr/share/nginx/html/index.html
               EOF
-```
 
-```
   tags = {
     Name = "public-ec2"
   }
-```
 
-  - Internet 연결 구성이 완료된 후 EC2 생성
-```bash
+  # Internet 연결 구성이 완료된 후 EC2 생성
   depends_on = [
     aws_internet_gateway.my_igw,
     aws_route_table_association.public_subnet_1_association
   ]
 }
-```
 
-  - outputs.tf
-
-#### Public EC2 Instance ID
-
-```hcl
+　　　# outputs.tf
+# Public EC2 Instance ID
 output "public_ec2_instance_id" {
   description = "Public EC2 Instance ID"
   value       = aws_instance.public_ec2.id
 }
-```
 
-#### Public EC2 Public IP
-
-```hcl
+# Public EC2 Public IP
 output "public_ec2_public_ip" {
   description = "Public EC2 Public IP"
   value       = aws_instance.public_ec2.public_ip
 }
-```
 
-#### Public EC2 Private IP
-
-```hcl
+# Public EC2 Private IP
 output "public_ec2_private_ip" {
   description = "Public EC2 Private IP"
   value       = aws_instance.public_ec2.private_ip
 }
-```
 
-#### Public EC2 Public DNS
-
-```hcl
+# Public EC2 Public DNS
 output "public_ec2_public_dns" {
   description = "Public EC2 Public DNS"
   value       = aws_instance.public_ec2.public_dns
 }
-```
 
-#### Public EC2 HTTP 주소
-
-```hcl
+# Public EC2 HTTP 주소
 output "public_ec2_http" {
   description = "Public EC2 HTTP 접속 주소"
   value       = "http://${aws_instance.public_ec2.public_dns}"
 }
-```
 
-#### 실행
-
-```bash
+# 실행
 PS C:\trf2\1) VPC\1-3_VPC_total> terraform fmt
 PS C:\trf2\1) VPC\1-3_VPC_total> terraform validate
 PS C:\trf2\1) VPC\1-3_VPC_total> terraform plan
@@ -4168,152 +3660,113 @@ PS C:\trf2\1) VPC\1-3_VPC_total> terraform plan
 
 - NAT Gateway를 통해 Internet에 접근
 
-  - main.tf
-
-#### Private EC2 생성
-
 ```hcl
+　　　# main.tf
+# Private EC2 생성
 resource "aws_instance" "private_ec2" {
   # 최신 Amazon Linux 2023 AMI
   ami = data.aws_ami.al2023.id
-```
 
-  - EC2 Instance Type
-```
+  # EC2 Instance Type
   instance_type = var.instance_type
-```
 
-  - Private Subnet 1에 배치
-```
+  # Private Subnet 1에 배치
   subnet_id = aws_subnet.private_subnet_1.id
-```
 
-  - Private EC2 Security Group 연결
-```
+  # Private EC2 Security Group 연결
   vpc_security_group_ids = [ aws_security_group.private_ec2_sg.id ]
-```
 
-  - Private EC2는 Public IP 할당하지 않음
-```
+  # Private EC2는 Public IP 할당하지 않음
   associate_public_ip_address = false
-```
 
-  - SSH Key Pair 연결
-```
+  # SSH Key Pair 연결
   key_name = aws_key_pair.my_key_pair.key_name
-```
 
-  - Root EBS 설정
-```
+  # Root EBS 설정
   root_block_device {
     volume_size           = 10
     volume_type           = "gp3"
     delete_on_termination = true
     encrypted             = true
   }
-```
 
-  - NAT Gateway를 통해 nginx 설치
-```
+  # NAT Gateway를 통해 nginx 설치
   user_data = <<-EOF
               #!/bin/bash
-```
 
-```bash
               dnf install -y nginx
-```
 
-```
               systemctl start nginx
               systemctl enable nginx
-```
 
-  - IMDSv2 토큰 발급
-```
+              # IMDSv2 토큰 발급
               TOKEN=$(curl -s -X PUT \
-                -H "X-aws-ec2-metadata-token-ttl-seconds: 21600" \
+```
+
+- H "X-aws-ec2-metadata-token-ttl-seconds: 21600" \
+
+```
                 http://169.254.169.254/latest/api/token)
-```
 
-  - 현재 EC2 Instance ID 조회
-```
+              # 현재 EC2 Instance ID 조회
               INSTANCE_ID=$(curl -s \
-                -H "X-aws-ec2-metadata-token: $TOKEN" \
+```
+
+- H "X-aws-ec2-metadata-token: $TOKEN" \
+
+```hcl
                 http://169.254.169.254/latest/meta-data/instance-id)
-```
 
-  - 현재 Hostname 조회
-```
+              # 현재 Hostname 조회
               HOSTNAME=$(hostname)
-```
 
-  - Instance ID와 Hostname을 웹 페이지에 출력
-```bash
+              # Instance ID와 Hostname을 웹 페이지에 출력
               echo "<h1>Instance ID : $INSTANCE_ID</h1>" > /usr/share/nginx/html/index.html
               echo "<h1>Hostname : $HOSTNAME</h1>" >> /usr/share/nginx/html/index.html
               EOF
-```
 
-```
   tags = {
     Name = "private-ec2"
   }
-```
 
-  - NAT Gateway와 Private Route 설정이 완료된 후 생성
-```bash
+  # NAT Gateway와 Private Route 설정이 완료된 후 생성
   depends_on = [
     aws_nat_gateway.my_nat_gateway,
     aws_route_table_association.private_subnet_1_association
   ]
 }
-```
 
-  - outputs.tf
-
-#### Private EC2 Instance ID
-
-```hcl
+　　　# outputs.tf
+# Private EC2 Instance ID
 output "private_ec2_instance_id" {
   description = "Private EC2 Instance ID"
   value       = aws_instance.private_ec2.id
 }
-```
 
-#### Private EC2 Private IP
-
-```hcl
+# Private EC2 Private IP
 output "private_ec2_private_ip" {
   description = "Private EC2 Private IP"
   value       = aws_instance.private_ec2.private_ip
 }
-```
 
-#### 실행
-
-```bash
+# 실행
 PS C:\trf2\1) VPC\1-3_VPC_total> terraform fmt
 PS C:\trf2\1) VPC\1-3_VPC_total> terraform validate
 PS C:\trf2\1) VPC\1-3_VPC_total> terraform plan
-```
 
-  - STEP 10. Public EC2 접속 확인
+        # STEP 10. Public EC2 접속 확인
 
-#### public EC2 접속
-
-```bash
+# public EC2 접속
 PS C:\terraform\terraform-aws2\01_aws-config\1_vpc-and-ec2>
 ssh -i $home/.ssh/my-key  ec2-user@ec2-43-201-150-218.ap-northeast-2.compute.amazonaws.com
 The authenticity of host 'ec2-43-201-150-218.ap-northeast-2.compute.amazonaws.com (43.201.150.218)' can't be established.
 ED25519 key fingerprint is SHA256:54sbVDcl6GImVGRy3jyUHObI9HUeZ737iow8j+XDb7c.
 This key is not known by any other names.
 Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
-```
 
-,     #_
-~\_  ####_
-~~  \_#####\
-```
+   ,     #_
+   ~\_  ####_
+  ~~  \_#####\
   ~~     \###|
   ~~       \#/ ___   Amazon Linux 2023 (ECS Optimized)
    ~~       V~' '->
@@ -4321,25 +3774,19 @@ Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
       ~~._.   _/
          _/ _/
        _/m/'
-```
 
-```
 For documentation, visit http://aws.amazon.com/documentation/ecs
 [ec2-user@ip-10-0-1-56 ~]$
-```
 
-#### private EC2는 바로 접속할 수 없다.
+# private EC2는 바로 접속할 수 없다.
 
-```
 [ec2-user@ip-10-0-1-56 ~]$
 ssh  -i  $home/.ssh/my-key ec2-user@<Public EC2 Public DNS>
-```
 
-#### Terraform Registry Module 방식 (VPC + EC2)
+# Terraform Registry Module 방식 (VPC + EC2)
 
-  - 구조
+   # 구조
 
-```hcl
 terraform-vpc-module/
 │
 ├── main.tf
@@ -4390,11 +3837,8 @@ terraform-vpc-module/
 ```bash
 mkdir terraform-vpc-module
 cd terraform-vpc-module
-```
 
-#### PowerShell
-
-```bash
+# PowerShell
 mkdir modules
 mkdir modules\network
 mkdir modules\ec2
@@ -4412,37 +3856,29 @@ mkdir modules\ec2
   - STEP 2. Network Child Module variables.tf 작성
 
   - terraform-vpc-module\modules\network\variables.tf
+
 ```hcl
 variable "aws_region" {
   description = "AWS Region"
   type        = string
   default     = "ap-northeast-2"
 }
-```
 
-#### VPC 이름
-
-```hcl
+# VPC 이름
 variable "vpc_name" {
   description = "VPC 이름"
   type        = string
   default     = "my-vpc"
 }
-```
 
-#### VPC CIDR
-
-```hcl
+# VPC CIDR
 variable "vpc_cidr" {
   description = "VPC CIDR"
   type        = string
   default     = "10.0.0.0/16"
 }
-```
 
-#### Availability Zone
-
-```hcl
+# Availability Zone
 variable "availability_zones" {
   description = "Availability Zone 목록"
   type        = list(string)
@@ -4452,22 +3888,16 @@ variable "availability_zones" {
     "ap-northeast-2c"
   ]
 }
-```
 
-#### Public Subnet CIDR
-
-```hcl
+# Public Subnet CIDR
 variable "public_subnets" {
   description = "Public Subnet CIDR 목록"
   type        = list(string)
 
   default = [  "10.0.1.0/24", "10.0.2.0/24" ]
 }
-```
 
-#### Private Subnet CIDR
-
-```hcl
+# Private Subnet CIDR
 variable "private_subnets" {
   description = "Private Subnet CIDR 목록"
   type        = list(string)
@@ -4477,21 +3907,15 @@ variable "private_subnets" {
     "10.0.12.0/24"
   ]
 }
-```
 
-#### NAT Gateway 생성 여부
-
-```hcl
+# NAT Gateway 생성 여부
 variable "enable_nat_gateway" {
   description = "NAT Gateway 생성 여부"
   type        = bool
   default     = true
 }
-```
 
-#### NAT Gateway를 1개만 사용할지 여부
-
-```hcl
+# NAT Gateway를 1개만 사용할지 여부
 variable "single_nat_gateway" {
   description = "Single NAT Gateway 사용 여부"
   type        = bool
@@ -4502,13 +3926,12 @@ variable "single_nat_gateway" {
 - 모든 변수에 default 값을 넣는다.
 - 따라서 Root Module을 아직 작성하지 않아도 Network Child Module 자체를 먼저 테스트할 수 있다.
 
-```
 https://registry.terraform.io/search/modules
-```
 
   - STEP 3. Network Child Module에서 Terraform Registry VPC Module 호출
 
   - terraform-vpc-module\modules\network\main.tf
+
 ```hcl
 terraform {
   required_version = ">= 1.16.0"
@@ -4520,151 +3943,103 @@ terraform {
     }
   }
 }
-```
 
-#### Terraform Registry VPC Module
-
-```hcl
+# Terraform Registry VPC Module
 module "network" {
   # Terraform Registry에 공개된 VPC Module
   source = "terraform-aws-modules/vpc/aws"
-```
 
-  - Module Version
-```
+  # Module Version
   version = "6.7.2"
-```
 
-  - VPC
-```
+  # VPC
   name = var.vpc_name
   cidr = var.vpc_cidr
-```
 
-  - VPC DNS
-```
+  # VPC DNS
   enable_dns_support = true
   enable_dns_hostnames = true
-```
 
-  - Availability Zone
-```
+  # Availability Zone
   azs = var.availability_zones
-```
 
-  - Public Subnet
-```
+  # Public Subnet
   public_subnets = var.public_subnets
   public_subnet_names = [ "public-subnet-1", "public-subnet-2"  ]
-```
 
-  - Public Subnet에 생성되는 EC2의 Public IP 자동 할당
-```
+  # Public Subnet에 생성되는 EC2의 Public IP 자동 할당
   map_public_ip_on_launch = true
-```
 
-  - Private Subnet
-```
+  # Private Subnet
   private_subnets = var.private_subnets
   private_subnet_names = [ "private-subnet-1", "private-subnet-2" ]
-```
 
-  - Internet Gateway
-```
+  # Internet Gateway
   create_igw = true
-```
 
-  - NAT Gateway
-```
+  # NAT Gateway
   enable_nat_gateway = var.enable_nat_gateway
-```
 
-  - NAT Gateway를 1개만 생성
-```
+  # NAT Gateway를 1개만 생성
   single_nat_gateway = var.single_nat_gateway
-```
 
-  - Tag
-```
+  # Tag
   tags = {
     Project   = "terraform-module-lab"
     ManagedBy = "Terraform"
   }
 }
-```
 
-  - STEP 4. Network Child Module outputs.tf 작성
+        # STEP 4. Network Child Module outputs.tf 작성
 
-  - terraform-vpc-module\modules\network\outputs.tf
+   # terraform-vpc-module\modules\network\outputs.tf
 
-#### VPC ID
-
-```hcl
+# VPC ID
 output "vpc_id" {
   description = "VPC ID"
   value       = module.network.vpc_id
 }
-```
 
-#### Public Subnet ID 목록
-
-```hcl
+# Public Subnet ID 목록
 output "public_subnets" {
   description = "Public Subnet ID 목록"
   value       = module.network.public_subnets
 }
-```
 
-#### Private Subnet ID 목록
-
-```hcl
+# Private Subnet ID 목록
 output "private_subnets" {
   description = "Private Subnet ID 목록"
   value       = module.network.private_subnets
 }
-```
 
-#### Public Route Table ID 목록
-
-```hcl
+# Public Route Table ID 목록
 output "public_route_table_ids" {
   description = "Public Route Table ID 목록"
   value       = module.network.public_route_table_ids
 }
-```
 
-#### Private Route Table ID 목록
-
-```hcl
+# Private Route Table ID 목록
 output "private_route_table_ids" {
   description = "Private Route Table ID 목록"
   value       = module.network.private_route_table_ids
 }
-```
 
-#### NAT Gateway ID 목록
-
-```hcl
+# NAT Gateway ID 목록
 output "nat_gateway_ids" {
   description = "NAT Gateway ID 목록"
   value       = module.network.natgw_ids
 }
-```
 
-#### NAT Gateway Public IP 목록
-
-```hcl
+# NAT Gateway Public IP 목록
 output "nat_gateway_public_ips" {
   description = "NAT Gateway Public IP 목록"
   value       = module.network.nat_public_ips
 }
-```
 
-  - STEP 5. Network Child Module 단독 테스트용 Provider 작성
+        # STEP 5. Network Child Module 단독 테스트용 Provider 작성
 
-  - terraform-vpc-module\modules\network\test-provider.tf
+   # terraform-vpc-module\modules\network\test-provider.tf
 
-```hcl
 provider "aws" {
   region = "ap-northeast-2"
   profile = "my-profile"
@@ -4680,123 +4055,86 @@ provider "aws" {
 
 #### 실행 위치 : C:\   # terraform-vpc-module\modules\network
 
-```bash
+```powershell
 PS C:\trf2\1) VPC\1-4_vpc_modue> terraform init
-```
 
-```bash
 PS C:\trf2\1) VPC\1-4_vpc_modue> terraform plan
-```
 
-```
 https://huneylife.tistory.com/13?utm_source=chatgpt.com
-```
 
-  - STEP 7. EC2 Child Module variables.tf 작성
+        # STEP 7. EC2 Child Module variables.tf 작성
 
-  - terraform-vpc-module\modules\ec2\variables.tf
-
-#### VPC ID
-
-```hcl
+   # terraform-vpc-module\modules\ec2\variables.tf
+# VPC ID
 variable "vpc_id" {
   description = "Security Group을 생성할 VPC ID"
   type        = string
 }
-```
 
-#### Public Subnet ID
-
-```hcl
+# Public Subnet ID
 variable "public_subnet_id" {
   description = "Public EC2를 생성할 Public Subnet ID"
   type        = string
 }
-```
 
-#### Private Subnet ID
-
-```hcl
+# Private Subnet ID
 variable "private_subnet_id" {
   description = "Private EC2를 생성할 Private Subnet ID"
   type        = string
 }
-```
 
-#### EC2 Instance Type
-
-```hcl
+# EC2 Instance Type
 variable "instance_type" {
   description = "EC2 Instance Type"
   type        = string
   default     = "t3.micro"
 }
-```
 
-#### SSH Public Key 파일
-
-```hcl
+# SSH Public Key 파일
 variable "pub_key_file_path" {
   description = "SSH Public Key 파일 경로"
   type        = string
   default     = "~/.ssh/my-key.pub"
 }
-```
 
-#### AWS Key Pair 이름
-
-```hcl
+# AWS Key Pair 이름
 variable "key_pair_name" {
   description = "AWS Key Pair 이름"
   type        = string
   default     = "my-key-module"
 }
-```
 
-#### Public EC2 이름
-
-```hcl
+# Public EC2 이름
 variable "public_ec2_name" {
   description = "Public EC2 이름"
   type        = string
   default     = "public-ec2"
 }
-```
 
-#### Private EC2 이름
-
-```hcl
+# Private EC2 이름
 variable "private_ec2_name" {
   description = "Private EC2 이름"
   type        = string
   default     = "private-ec2"
 }
-```
 
-#### Public EC2 Public IP 할당
-
-```hcl
+# Public EC2 Public IP 할당
 variable "public_ec2_public_ip" {
   description = "Public EC2 Public IP 할당 여부"
   type        = bool
   default     = true
 }
-```
 
-#### Private EC2 Public IP 할당
-
-```hcl
+# Private EC2 Public IP 할당
 variable "private_ec2_public_ip" {
   description = "Private EC2 Public IP 할당 여부"
   type        = bool
   default     = false
 }
-```
 
-  - STEP 8. EC2 Child Module Terraform 요구사항 작성
+        # STEP 8. EC2 Child Module Terraform 요구사항 작성
 
-  - terraform-vpc-module\modules\ec2\main.tf
-```hcl
+   # terraform-vpc-module\modules\ec2\main.tf
 terraform {
   required_version = ">= 1.16.0"
 
@@ -4808,113 +4146,73 @@ terraform {
     }
   }
 }
-```
 
-  - STEP 9. EC2 Child Module에서 Registry Key Pair Module 호출
+        # STEP 9. EC2 Child Module에서 Registry Key Pair Module 호출
 
-  - terraform-vpc-module\modules\ec2\main.tf
-
-#### Terraform Registry Key Pair Module
-
-```hcl
+   # terraform-vpc-module\modules\ec2\main.tf
+# Terraform Registry Key Pair Module
 module "key_pair" {
-```
 
-  - Terraform Registry Module
-```
+  # Terraform Registry Module
   source = "terraform-aws-modules/key-pair/aws"
   version = "3.0.1"
-```
 
-  - AWS Key Pair 이름
-```
+  # AWS Key Pair 이름
   key_name = var.key_pair_name
-```
 
-  - Terraform이 새로운 Private Key를 생성하지 않음
-```
+  # Terraform이 새로운 Private Key를 생성하지 않음
   create_private_key = false
-```
 
-  - 기존 Local Public Key를 AWS에 등록
-```
+  # 기존 Local Public Key를 AWS에 등록
   public_key = file(
     pathexpand(var.pub_key_file_path)
   )
-```
 
-```
   tags = {
     Name = var.key_pair_name
   }
 }
         # STEP 10. Public EC2 Registry Module 호출
-```
 
-  - terraform-vpc-module\modules\ec2\main.tf
-
-#### Public EC2
-
-```hcl
+   # terraform-vpc-module\modules\ec2\main.tf
+# Public EC2
 module "public_ec2" {
-```
 
-  - Terraform Registry EC2 Instance Module
-```
+  # Terraform Registry EC2 Instance Module
   source = "terraform-aws-modules/ec2-instance/aws"
   version = "6.4.0"
-```
 
-  - EC2 기본 설정
-```
+  # EC2 기본 설정
   name = var.public_ec2_name
-```
 
-  - Amazon Linux 2023
-#
-  - EC2 Module의 기본 Amazon Linux 2023 SSM Parameter를 명시적으로 지정
-```
+  # Amazon Linux 2023
+  #
+  # EC2 Module의 기본 Amazon Linux 2023 SSM Parameter를 명시적으로 지정
   ami_ssm_parameter = "/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64"
-```
 
-```
   instance_type = var.instance_type
-```
 
-  - Network
-```
+  # Network
   subnet_id = var.public_subnet_id
   associate_public_ip_address = var.public_ec2_public_ip
-```
 
-  - SSH Key
-```
+  # SSH Key
   key_name = module.key_pair.key_pair_name
-```
 
-  - EC2 인스턴스에서 사용할 Security Group을 새로 생성
-```
+  # EC2 인스턴스에서 사용할 Security Group을 새로 생성
   create_security_group = true
-```
 
-  - 생성할 Security Group 이름을 지정
-```
+  # 생성할 Security Group 이름을 지정
   security_group_name = "public-ec2-sg"
-```
 
-  - Security Group 이름 뒤에 임의의 접미사를 붙이지 않고 security_group_name에 지정한 이름을 그대로 사용
-```
+  # Security Group 이름 뒤에 임의의 접미사를 붙이지 않고 security_group_name에 지정한 이름을 그대로 사용
   security_group_use_name_prefix = false
-```
 
-  - Security Group을 생성할 VPC ID를 지정
-  - Root Module에서 전달받은 VPC ID를 사용
-```
+  # Security Group을 생성할 VPC ID를 지정
+  # Root Module에서 전달받은 VPC ID를 사용
   security_group_vpc_id = var.vpc_id
-```
 
-  - Inbound
-```
+  # Inbound
   security_group_ingress_rules = {
 
     ssh = {
@@ -4933,10 +4231,8 @@ module "public_ec2" {
       description = "HTTP"
     }
   }
-```
 
-  - Outbound
-```
+  # Outbound
   security_group_egress_rules = {
 
     all_ipv4 = {
@@ -4945,99 +4241,79 @@ module "public_ec2" {
       description = "Allow all IPv4 traffic"
     }
   }
-```
 
-  - EBS
-```
+  # EBS
   root_block_device = {
     size = 10
     type = "gp3"
     encrypted = true
     delete_on_termination = true
   }
-```
 
-  - User Data
-```bash
+  # User Data
   user_data = <<-EOF
               #!/bin/bash
               dnf install -y nginx
               systemctl start nginx
               systemctl enable nginx
-```
 
-```
               TOKEN=$(curl -s -X PUT \
-                -H "X-aws-ec2-metadata-token-ttl-seconds: 21600" \
+```
+
+- H "X-aws-ec2-metadata-token-ttl-seconds: 21600" \
+
+```
                 http://169.254.169.254/latest/api/token)
-```
 
-```
               INSTANCE_ID=$(curl -s \
-                -H "X-aws-ec2-metadata-token: $TOKEN" \
+```
+
+- H "X-aws-ec2-metadata-token: $TOKEN" \
+
+```hcl
                 http://169.254.169.254/latest/meta-data/instance-id)
-```
 
-```
               HOSTNAME=$(hostname)
-```
 
-```bash
               echo "<h1>Public EC2</h1>" > /usr/share/nginx/html/index.html
               echo "<h2>Instance ID : $INSTANCE_ID</h2>" >> /usr/share/nginx/html/index.html
               echo "<h2>Hostname : $HOSTNAME</h2>" >> /usr/share/nginx/html/index.html
               EOF
-```
 
-```
   tags = {
     Name      = var.public_ec2_name
     ManagedBy = "Terraform"
   }
 }
-```
 
-  - STEP 11. Private EC2 Registry Module 호출
+        # STEP 11. Private EC2 Registry Module 호출
 
-  - terraform-vpc-module\modules\ec2\main.tf
-
-#### Private EC2
-
-```hcl
+   # terraform-vpc-module\modules\ec2\main.tf
+# Private EC2
 module "private_ec2" {
   # Public EC2와 동일한 Terraform Registry Module
   source = "terraform-aws-modules/ec2-instance/aws"
   version = "6.4.0"
-```
 
-  - EC2 기본 설정
-```
+  # EC2 기본 설정
   name = var.private_ec2_name
   ami_ssm_parameter = "/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64"
   instance_type = var.instance_type
-```
 
-  - Network
-```
+  # Network
   subnet_id = var.private_subnet_id
   associate_public_ip_address = var.private_ec2_public_ip
-```
 
-  - SSH Key
-```
+  # SSH Key
   key_name = module.key_pair.key_pair_name
-```
 
-  - Security Group
-```
+  # Security Group
   create_security_group = true
   security_group_name = "private-ec2-sg"
   security_group_use_name_prefix = false
   security_group_vpc_id = var.vpc_id
-```
 
-  - Public EC2 SG에서 SSH 접근 허용
-```
+  # Public EC2 SG에서 SSH 접근 허용
   security_group_ingress_rules = {
     ssh_from_public_ec2 = {
       from_port  = 22
@@ -5047,9 +4323,7 @@ module "private_ec2" {
       description = "SSH from Public EC2"
     }
   }
-```
 
-```
   security_group_egress_rules = {
     all_ipv4 = {
       ip_protocol = "-1"
@@ -5057,137 +4331,103 @@ module "private_ec2" {
       description = "Allow all IPv4 traffic"
     }
   }
-```
 
-  - EBS
-```
+  # EBS
   root_block_device = {
     size = 10
     type = "gp3"
     encrypted = true
     delete_on_termination = true
   }
-```
 
-  - User Data
-```bash
+  # User Data
   user_data = <<-EOF
               #!/bin/bash
               dnf install -y nginx
               systemctl start nginx
               systemctl enable nginx
-```
 
-```
               TOKEN=$(curl -s -X PUT \
-                -H "X-aws-ec2-metadata-token-ttl-seconds: 21600" \
+```
+
+- H "X-aws-ec2-metadata-token-ttl-seconds: 21600" \
+
+```
                 http://169.254.169.254/latest/api/token)
-```
 
-```
               INSTANCE_ID=$(curl -s \
-                -H "X-aws-ec2-metadata-token: $TOKEN" \
+```
+
+- H "X-aws-ec2-metadata-token: $TOKEN" \
+
+```hcl
                 http://169.254.169.254/latest/meta-data/instance-id)
-```
 
-```
               HOSTNAME=$(hostname)
-```
 
-```bash
               echo "<h1>Private EC2</h1>" > /usr/share/nginx/html/index.html
               echo "<h2>Instance ID : $INSTANCE_ID</h2>" >> /usr/share/nginx/html/index.html
               echo "<h2>Hostname : $HOSTNAME</h2>" >> /usr/share/nginx/html/index.html
               EOF
-```
 
-```
   tags = {
     Name      = var.private_ec2_name
     ManagedBy = "Terraform"
   }
 }
-```
 
-  - STEP 11. EC2 Child Module outputs.tf 작성
+        # STEP 11. EC2 Child Module outputs.tf 작성
 
-  - terraform-vpc-module\modules\ec2\outputs.tf
-
-#### Key Pair
-
-```hcl
+   # terraform-vpc-module\modules\ec2\outputs.tf
+# Key Pair
 output "key_pair_name" {
   description = "AWS Key Pair 이름"
   value       = module.key_pair.key_pair_name
 }
-```
 
-#### Public EC2 Instance ID
-
-```hcl
+# Public EC2 Instance ID
 output "public_ec2_instance_id" {
   description = "Public EC2 Instance ID"
   value       = module.public_ec2.id
 }
-```
 
-#### Public EC2 Public IP
-
-```hcl
+# Public EC2 Public IP
 output "public_ec2_public_ip" {
   description = "Public EC2 Public IP"
   value       = module.public_ec2.public_ip
 }
-```
 
-#### Public EC2 Private IP
-
-```hcl
+# Public EC2 Private IP
 output "public_ec2_private_ip" {
   description = "Public EC2 Private IP"
   value       = module.public_ec2.private_ip
 }
-```
 
-#### Public EC2 Public DNS
-
-```hcl
+# Public EC2 Public DNS
 output "public_ec2_public_dns" {
   description = "Public EC2 Public DNS"
   value       = module.public_ec2.public_dns
 }
-```
 
-#### Public EC2 Security Group
-
-```hcl
+# Public EC2 Security Group
 output "public_ec2_security_group_id" {
   description = "Public EC2 Security Group ID"
   value       = module.public_ec2.security_group_id
 }
-```
 
-#### Private EC2 Instance ID
-
-```hcl
+# Private EC2 Instance ID
 output "private_ec2_instance_id" {
   description = "Private EC2 Instance ID"
   value       = module.private_ec2.id
 }
-```
 
-#### Private EC2 Private IP
-
-```hcl
+# Private EC2 Private IP
 output "private_ec2_private_ip" {
   description = "Private EC2 Private IP"
   value       = module.private_ec2.private_ip
 }
-```
 
-#### Private EC2 Security Group
-
-```hcl
+# Private EC2 Security Group
 output "private_ec2_security_group_id" {
   description = "Private EC2 Security Group ID"
   value       = module.private_ec2.security_group_id
@@ -5202,27 +4442,22 @@ output "private_ec2_security_group_id" {
 
   - STEP 15-1. Network Module 정리
 
-```bash
+```hcl
 cd C:\   # terraform-vpc-module\modules\network
-```
 
 Remove-Item -Force test-provider.tf
 Remove-Item -Recurse -Force .terraform
 Remove-Item -Force .terraform.lock.hcl
 
-  - STEP 13 EC2 Module 정리
+        # STEP 13 EC2 Module 정리
 
-```bash
 cd C:\   # terraform-vpc-module\modules\ec2
-```
 
 Remove-Item -Force test-provider.tf
 Remove-Item -Recurse -Force .terraform
 Remove-Item -Force .terraform.lock.hcl
 
-#### 정리 후 Child Module 구조
-
-```
+# 정리 후 Child Module 구조
 modules/
 │
 ├── network/
@@ -5234,55 +4469,39 @@ modules/
     ├── main.tf
     ├── variables.tf
     └── outputs.tf
-```
 
-  - STEP 14 Root variables.tf 작성
+        # STEP 14 Root variables.tf 작성
 
-  - terraform-vpc-module\variables.tf
-
-#### AWS Region
-
-```hcl
+   # terraform-vpc-module\variables.tf
+# AWS Region
 variable "aws_region" {
   description = "AWS Region"
   type        = string
   default     = "ap-northeast-2"
 }
-```
 
-#### AWS Profile
-
-```hcl
+# AWS Profile
 variable "aws_profile" {
   description = "AWS CLI Profile"
   type        = string
   default     = "my-profile"
 }
-```
 
-#### VPC 이름
-
-```hcl
+# VPC 이름
 variable "vpc_name" {
   description = "VPC 이름"
   type        = string
   default     = "my-vpc"
 }
-```
 
-#### VPC CIDR
-
-```hcl
+# VPC CIDR
 variable "vpc_cidr" {
   description = "VPC CIDR"
   type        = string
   default     = "10.0.0.0/16"
 }
-```
 
-#### Availability Zone
-
-```hcl
+# Availability Zone
 variable "availability_zones" {
   description = "Availability Zone 목록"
   type        = list(string)
@@ -5292,11 +4511,8 @@ variable "availability_zones" {
     "ap-northeast-2c"
   ]
 }
-```
 
-#### Subnet
-
-```hcl
+# Subnet
 variable "public_subnets" {
   description = "Public Subnet CIDR 목록"
   type        = list(string)
@@ -5306,11 +4522,8 @@ variable "public_subnets" {
     "10.0.2.0/24"
   ]
 }
-```
 
-#### Private Subnet
-
-```hcl
+# Private Subnet
 variable "private_subnets" {
   description = "Private Subnet CIDR 목록"
   type        = list(string)
@@ -5320,82 +4533,59 @@ variable "private_subnets" {
     "10.0.12.0/24"
   ]
 }
-```
 
-#### NAT Gateway
-
-```hcl
+# NAT Gateway
 variable "enable_nat_gateway" {
   description = "NAT Gateway 생성 여부"
   type        = bool
   default     = true
 }
-```
 
-#### Single NAT
-
-```hcl
+# Single NAT
 variable "single_nat_gateway" {
   description = "Single NAT Gateway 사용 여부"
   type        = bool
   default     = true
 }
-```
 
-#### EC2 Instance Type
-
-```hcl
+# EC2 Instance Type
 variable "instance_type" {
   description = "EC2 Instance Type"
   type        = string
   default     = "t3.micro"
 }
-```
 
-#### SSH Public Key
-
-```hcl
+# SSH Public Key
 variable "pub_key_file_path" {
   description = "SSH Public Key 파일"
   type        = string
   default     = "~/.ssh/my-key.pub"
 }
-```
 
-#### Key Pair 이름
-
-```hcl
+# Key Pair 이름
 variable "key_pair_name" {
   description = "AWS Key Pair 이름"
   type        = string
   default     = "my-key-module"
 }
-```
 
-#### Public EC2
-
-```hcl
+# Public EC2
 variable "public_ec2_name" {
   description = "Public EC2 이름"
   type        = string
   default     = "public-ec2"
 }
-```
 
-#### Private EC2
-
-```hcl
+# Private EC2
 variable "private_ec2_name" {
   description = "Private EC2 이름"
   type        = string
   default     = "private-ec2"
 }
-```
 
-  - STEP 15 Root provider.tf 작성
+        # STEP 15 Root provider.tf 작성
 
-  - terraform-vpc-module\provider.tf
-```hcl
+   # terraform-vpc-module\provider.tf
 terraform {
   required_version = ">= 1.16.0"
 
@@ -5407,29 +4597,22 @@ terraform {
     }
   }
 }
-```
 
-```hcl
 provider "aws" {
   region = var.aws_region
   profile = var.aws_profile
 }
-```
 
-  - STEP 18. Root main.tf - Network Child Module 호출
+        # STEP 18. Root main.tf - Network Child Module 호출
 
-  - terraform-vpc-module\main.tf
+   # terraform-vpc-module\main.tf
+# Network Wrapper Child Module
 
-#### Network Wrapper Child Module
-
-```hcl
 module "network" {
   # 우리가 만든 Local Wrapper Module
   source = "./modules/network"
-```
 
-  - Root --> Child 값 전달
-```bash
+  # Root --> Child 값 전달
   aws_region = var.aws_region
   vpc_name = var.vpc_name
   vpc_cidr = var.vpc_cidr
@@ -5439,230 +4622,157 @@ module "network" {
   enable_nat_gateway = var.enable_nat_gateway
   single_nat_gateway = var.single_nat_gateway
 }
-```
 
-  - STEP 16 Root main.tf - EC2 Child Module 호출
+        # STEP 16 Root main.tf - EC2 Child Module 호출
 
-  - terraform-vpc-module\main.tf
-
-#### EC2 Wrapper Child Module
-
-```hcl
+   # terraform-vpc-module\main.tf
+# EC2 Wrapper Child Module
 module "ec2" {
   source = "./modules/ec2"
-```
 
-  - Network Module에서 생성한 실제 VPC ID 전달
-```
+  # Network Module에서 생성한 실제 VPC ID 전달
   vpc_id = module.network.vpc_id
-```
 
-  - 첫 번째 Public Subnet
-```
+  # 첫 번째 Public Subnet
   public_subnet_id = module.network.public_subnets[0]
-```
 
-  - 첫 번째 Private Subnet
-```
+  # 첫 번째 Private Subnet
   private_subnet_id = module.network.private_subnets[0]
-```
 
-  - EC2 정보
-```
+  # EC2 정보
   instance_type = var.instance_type
   pub_key_file_path = var.pub_key_file_path
   key_pair_name = var.key_pair_name
   public_ec2_name = var.public_ec2_name
   private_ec2_name = var.private_ec2_name
-```
 
-  - Network 전체 구성이 완료된 후 EC2 생성
-```hcl
+  # Network 전체 구성이 완료된 후 EC2 생성
   depends_on = [
     module.network
   ]
 }
-```
 
-  - STEP 17 Root terraform.tfvars 작성
+        # STEP 17 Root terraform.tfvars 작성
 
-  - terraform-vpc-module\terraform.tfvars
-
-#### AWS
-
-```bash
+   # terraform-vpc-module\terraform.tfvars
+# AWS
 aws_region = "ap-northeast-2"
 aws_profile = "my-profile"
-```
 
-#### VPC
-
-```
+# VPC
 vpc_name = "my-vpc"
 vpc_cidr = "10.0.0.0/16"
-```
 
-#### Availability Zone
-
-```
+# Availability Zone
 availability_zones = ["ap-northeast-2a", "ap-northeast-2c"]
-```
 
-#### Public Subnet
-
-```
+# Public Subnet
 public_subnets = ["10.0.1.0/24", "10.0.2.0/24"]
-```
 
-#### Private Subnet
-
-```
+# Private Subnet
 private_subnets = ["10.0.11.0/24", "10.0.12.0/24"]
-```
 
-#### NAT Gateway
-
-```
+# NAT Gateway
 enable_nat_gateway = true
 single_nat_gateway = true
-```
 
-#### EC2
-
-```
+# EC2
 instance_type = "t3.micro"
 pub_key_file_path = "~/.ssh/my-key.pub"
 key_pair_name = "my-key-module"
 public_ec2_name = "public-ec2"
 private_ec2_name = "private-ec2"
-```
 
-  - STEP 18 Root outputs.tf 작성
+        # STEP 18 Root outputs.tf 작성
 
-  - terraform-vpc-module\outputs.tf
-
-#### Network
-
-```hcl
+   # terraform-vpc-module\outputs.tf
+# Network
 output "vpc_id" {
   description = "VPC ID"
   value       = module.network.vpc_id
 }
-```
 
-```hcl
 output "public_subnets" {
   description = "Public Subnet ID 목록"
   value       = module.network.public_subnets
 }
-```
 
-```hcl
 output "private_subnets" {
   description = "Private Subnet ID 목록"
   value       = module.network.private_subnets
 }
-```
 
-```hcl
 output "public_route_table_ids" {
   description = "Public Route Table ID"
   value       = module.network.public_route_table_ids
 }
-```
 
-```hcl
 output "private_route_table_ids" {
   description = "Private Route Table ID"
   value       = module.network.private_route_table_ids
 }
-```
 
-```hcl
 output "nat_gateway_ids" {
   description = "NAT Gateway ID"
   value       = module.network.nat_gateway_ids
 }
-```
 
-```hcl
 output "nat_gateway_public_ips" {
   description = "NAT Gateway Public IP"
   value       = module.network.nat_gateway_public_ips
 }
-```
 
-#### EC2
-
-```hcl
+# EC2
 output "key_pair_name" {
   description = "AWS Key Pair 이름"
   value       = module.ec2.key_pair_name
 }
-```
 
-```hcl
 output "public_ec2_instance_id" {
   description = "Public EC2 Instance ID"
   value       = module.ec2.public_ec2_instance_id
 }
-```
 
-```hcl
 output "public_ec2_public_ip" {
   description = "Public EC2 Public IP"
   value       = module.ec2.public_ec2_public_ip
 }
-```
 
-```hcl
 output "public_ec2_private_ip" {
   description = "Public EC2 Private IP"
   value       = module.ec2.public_ec2_private_ip
 }
-```
 
-```hcl
 output "public_ec2_public_dns" {
   description = "Public EC2 Public DNS"
   value       = module.ec2.public_ec2_public_dns
 }
-```
 
-```hcl
 output "public_ec2_http" {
   description = "Public EC2 HTTP 접속 주소"
 
   value = "http://${module.ec2.public_ec2_public_dns}"
 }
-```
 
-```hcl
 output "private_ec2_instance_id" {
   description = "Private EC2 Instance ID"
   value       = module.ec2.private_ec2_instance_id
 }
-```
 
-```hcl
 output "private_ec2_private_ip" {
   description = "Private EC2 Private IP"
   value       = module.ec2.private_ec2_private_ip
 }
         # STEP 19 Root Terraform 실행
-```
 
-#### 실행 위치 : C:\terraform-vpc-module
+# 실행 위치 : C:\terraform-vpc-module
 
-```hcl
 terraform init
 terraform plan
 terraform apply
-```
 
-  - STEP 20 Output 확인
+        # STEP 20 Output 확인
 
-```hcl
 terraform output
 ```
 
