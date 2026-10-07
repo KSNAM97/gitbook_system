@@ -244,6 +244,7 @@
 * [AWS 디커플링 서비스와 Amazon SQS](aws-이론/09-aws-decoupling-sqs.md)
 * [Amazon SNS](aws-이론/10-aws-sns.md)
 * [Amazon Route 53](aws-이론/11-aws-route53.md)
+* [Amazon CloudFront](aws-이론/12-aws-cloudfront.md)
 
 ### AWS 가이드
 
@@ -260,3 +261,34 @@
 * [SNS FIFO 실습: SQS FIFO 소비자 배포](aws-가이드/11-sns-fifo-sqs-consumer.md)
 * [VPC부터 Route 53까지: 고가용성 웹 서비스 구축](aws-가이드/12-vpc-alb-asg-route53-ha-web-service.md)
 * [Route 53 Health Check와 라우팅 정책 실습](aws-가이드/13-route53-healthcheck-routing-policy-practice.md)
+* [CloudFront 실습: Origin·Behavior·버저닝](aws-가이드/14-cloudfront-origin-behavior-versioning-practice.md)
+
+### AWS 실습 파일
+
+* [AWS EC2 - 실습 파일](aws-실습파일/01-aws-ec2-lab-files.md)
+* [AWS VPC - 실습 파일](aws-실습파일/02-aws-vpc-lab-files.md)
+* [AWS S3 - 실습 파일](aws-실습파일/03-aws-s3-lab-files.md)
+* [AWS RDS - 실습 파일](aws-실습파일/04-aws-rds-lab-files.md)
+* [AWS CloudWatch - 실습 파일](aws-실습파일/06-aws-monitoring-lab-files.md)
+* [AWS 디커플링(SQS · SNS) - 실습 파일](aws-실습파일/07-aws-decoupling-lab-files.md)
+* [Amazon Route 53 - 실습 파일](aws-실습파일/08-aws-route53-lab-files.md)
+* [Amazon CloudFront - 실습 파일](aws-실습파일/09-aws-cloudfront-lab-files.md)
+
+## Terraform
+
+### 환경 구축
+
+* [Terraform 환경 구축 (Windows + AWS CLI + VS Code)](terraform/01-terraform-environment-setup.md)
+
+### 이론 · 실습
+
+* [Terraform - AWS와 Terraform 개요](terraform/02-terraform-aws-overview.md)
+* [Terraform - HCL 문법](terraform/03-terraform-hcl.md)
+* [Terraform - Provider](terraform/04-terraform-provider.md)
+* [Terraform - EC2 · VPC](terraform/05-terraform-ec2-vpc.md)
+* [Terraform - Modules](terraform/06-terraform-modules.md)
+* [Terraform - S3](terraform/07-terraform-s3.md)
+* [Terraform - RDS](terraform/08-terraform-rds.md)
+* [Terraform - ALB · ASG](terraform/09-terraform-alb-asg.md)
+* [Terraform - IAM](terraform/10-terraform-iam.md)
+* [Terraform - 실습 파일 모음](terraform/11-terraform-practice-files.md)
