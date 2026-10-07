@@ -263,6 +263,25 @@
 * [Route 53 Health Check와 라우팅 정책 실습](aws-가이드/13-route53-healthcheck-routing-policy-practice.md)
 * [CloudFront 실습: Origin·Behavior·버저닝](aws-가이드/14-cloudfront-origin-behavior-versioning-practice.md)
 
+### AWS 강의 노트 (HWP 원본)
+
+* [AWS 클라우드 기초 개념 - 강의 노트](aws-원본노트/01-cloud-fundamentals.md)
+* [AWS EC2 - 배포 (1) - 강의 노트](aws-원본노트/02-ec2-deployment-1.md)
+* [AWS EC2 - 배포 (2) - 강의 노트](aws-원본노트/03-ec2-deployment-2.md)
+* [Amazon VPC - 강의 노트](aws-원본노트/04-vpc.md)
+* [VPC Endpoint · EFS - 강의 노트](aws-원본노트/05-endpoint-efs.md)
+* [AWS S3 - 강의 노트](aws-원본노트/06-s3.md)
+* [S3 정책 만들기 - 강의 노트](aws-원본노트/07-s3-policy.md)
+* [AWS RDS - 강의 노트](aws-원본노트/08-rds.md)
+* [3-Tier Architecture 실습 - 강의 노트](aws-원본노트/09-3tier-practice.md)
+* [WordPress 서버 클러스터 구성 - 강의 노트](aws-원본노트/10-wordpress-cluster.md)
+* [Amazon CloudWatch 기초 - 강의 노트](aws-원본노트/11-cloudwatch.md)
+* [AWS 디커플링 서비스 (SQS) - 강의 노트](aws-원본노트/12-decoupling-sqs.md)
+* [AWS 디커플링 서비스 (SNS) - 강의 노트](aws-원본노트/13-decoupling-sns.md)
+* [Amazon Route 53 - 강의 노트](aws-원본노트/14-route53.md)
+* [Route 53 Health Check · Routing Policy - 강의 노트](aws-원본노트/15-route53-healthcheck.md)
+* [Amazon CloudFront - 강의 노트](aws-원본노트/16-cloudfront.md)
+
 ### AWS 실습 파일
 
 * [AWS EC2 - 실습 파일](aws-실습파일/01-aws-ec2-lab-files.md)
